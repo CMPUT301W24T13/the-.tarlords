@@ -3,23 +3,71 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_events">
+    app:startDestination="@id/eventFragment">
 
     <fragment
-        android:id="@+id/nav_events"
-        android:name="com.example.the_tarlords.ui.home.HomeFragment"
-        android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
-
+        android:id="@+id/profileFragment"
+        android:name="com.example.the_tarlords.ui.profile.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_pop"
+            app:popUpTo="@id/profileFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
     <fragment
-        android:id="@+id/nav_login"
-        android:name="com.example.the_tarlords.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_login" />
-
+        android:id="@+id/loginFragment"
+        android:name="com.example.the_tarlords.ui.login.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_pop"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
     <fragment
-        android:id="@+id/nav_profile"
-        android:name="com.example.the_tarlords.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_profile" />
+        android:id="@+id/notificationSettingsFragment"
+        android:name="com.example.the_tarlords.ui.notification.NotificationSettingsFragment"
+        android:label="NotificationSettingsFragment" >
+        <action
+            android:id="@+id/action_notificationSettingsFragment_pop"
+            app:popUpTo="@id/notificationSettingsFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="com.example.the_tarlords.MainActivity"
+        android:label="app_bar_main"
+        tools:layout="@layout/app_bar_main" />
+    <fragment
+        android:id="@+id/notificationFragment"
+        android:name="com.example.the_tarlords.ui.notification.NotificationListFragment"
+        android:label="notification_item_list"
+        tools:layout="@layout/notification_list" >
+        <action
+            android:id="@+id/action_notificationFragment_to_notificationSettingsFragment"
+            app:destination="@id/notificationSettingsFragment" />
+        <action
+            android:id="@+id/action_notificationFragment_pop"
+            app:popUpTo="@id/notificationFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/eventFragment"
+        android:name="com.example.the_tarlords.ui.home.EventListFragment"
+        android:label="fragment_event_list"
+        tools:layout="@layout/fragment_event_list" >
+        <action
+            android:id="@+id/action_eventFragment_to_notificationFragment"
+            app:destination="@id/notificationFragment" />
+        <action
+            android:id="@+id/action_eventFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_eventFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_eventFragment_self"
+            app:destination="@id/eventFragment" />
+    </fragment>
 </navigation>

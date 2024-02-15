@@ -5,13 +5,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.slideshow.SlideshowFragment" >
+    tools:context=".ui.profile.ProfileFragment" >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/editINfo"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@android:color/system_accent3_50"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,7 +27,7 @@
             android:fontFamily="sans-serif-condensed-light"
             android:hint="Name"
             android:inputType="text"
-            android:text="Jane Doe"
+            android:text="John Doe"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -61,8 +60,7 @@
         android:id="@+id/editPhoto"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:background="#64BF68"
-        android:backgroundTint="#CA009688"
+        android:background="@drawable/side_nav_bar"
         android:backgroundTintMode="src_atop"
         android:foregroundGravity="bottom"
         android:rotationX="0"
@@ -75,8 +73,8 @@
 
         <ImageView
             android:id="@+id/editProfilePic"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_marginStart="45dp"
             android:layout_marginTop="36dp"
             android:layout_marginEnd="238dp"
@@ -85,7 +83,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@mipmap/ic_launcher_round" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
