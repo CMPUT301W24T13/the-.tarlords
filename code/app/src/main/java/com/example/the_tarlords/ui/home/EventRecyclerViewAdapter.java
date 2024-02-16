@@ -6,21 +6,21 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.the_tarlords.placeholder.PlaceholderContent.PlaceholderItem;
+import com.example.the_tarlords.placeholder.PlaceholderEventContent.PlaceholderEvent;
 import com.example.the_tarlords.databinding.FragmentEventListItemBinding;
 
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link PlaceholderItem}.
+ * {@link RecyclerView.Adapter} that can display a {@link PlaceholderEvent}.
  * TODO: Replace the implementation with code for your data type.
  */
 public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecyclerViewAdapter.ViewHolder> {
 
-    private final List<PlaceholderItem> mValues;
+    private final List<PlaceholderEvent> mEvents;
 
-    public EventRecyclerViewAdapter(List<PlaceholderItem> items) {
-        mValues = items;
+    public EventRecyclerViewAdapter(List<PlaceholderEvent> items) {
+        mEvents = items;
     }
 
     @Override
@@ -32,30 +32,32 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.mEvent = mEvents.get(position);
+        holder.mTitleView.setText(mEvents.get(position).eventTitle);
+        holder.mDateView.setText(mEvents.get(position).date);
     }
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return mEvents.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final TextView mIdView;
-        public final TextView mContentView;
-        public PlaceholderItem mItem;
+        public final TextView mTitleView;
+        public final TextView mDateView;
+        public final TextView mEventUserStatus;
+        public PlaceholderEvent mEvent;
 
         public ViewHolder(FragmentEventListItemBinding binding) {
             super(binding.getRoot());
-            mIdView = binding.itemNumber;
-            mContentView = binding.content;
+            mTitleView = binding.titleTextView;
+            mDateView = binding.dateTextView;
+            mEventUserStatus = binding.userRoleTextView;
         }
 
         @Override
         public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+            return super.toString() + " '" + mDateView.getText() + "'";
         }
     }
 }

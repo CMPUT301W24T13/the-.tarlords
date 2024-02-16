@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.the_tarlords.R;
-import com.example.the_tarlords.placeholder.PlaceholderContent;
+import com.example.the_tarlords.placeholder.PlaceholderEventContent;
 
 /**
  * A fragment representing a list of Items.
@@ -65,7 +65,7 @@ public class EventListFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new EventRecyclerViewAdapter(PlaceholderContent.ITEMS));
+            recyclerView.setAdapter(new EventRecyclerViewAdapter(PlaceholderEventContent.EVENTS));
         }
         return view;
     }
