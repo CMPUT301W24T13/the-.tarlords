@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6e39a651-b147-4183-b6b6-038bd2bc8d3b" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../doc/CRC-lucy.eddx" beforeDir="false" afterPath="$PROJECT_DIR$/../doc/CRC-lucy.eddx" afterDir="false" />
-    </list>
+    <list default="true" id="6e39a651-b147-4183-b6b6-038bd2bc8d3b" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -37,7 +34,6 @@
     "RunOnceActivity.cidr.known.project.marker": "true",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
-    "git-widget-placeholder": "main",
     "last_opened_file_path": "C:/cmput301W24T13/the-.tarlords/code"
   }
 }]]></component>
