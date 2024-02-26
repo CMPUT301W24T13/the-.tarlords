@@ -128,4 +128,5 @@
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="qr_scan_fab">Scan QR Code</string>
     <string name="edit_profile">edit profile</string>
+    <string name="title_activity_generate_qrcode">GenerateQRCodeActivity</string>
 </resources>
