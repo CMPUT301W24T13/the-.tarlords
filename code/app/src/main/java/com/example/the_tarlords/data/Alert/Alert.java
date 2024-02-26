@@ -1,6 +1,6 @@
 package com.example.the_tarlords.data.Alert;
 
-import com.example.the_tarlords.placeholder.Event;
+import com.example.the_tarlords.data.event.Event;
 
 public class Alert {
     private String message;
