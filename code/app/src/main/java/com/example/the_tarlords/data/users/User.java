@@ -32,6 +32,11 @@ public class User {
     public void setProfile(Profile profile) {
         this.profile = profile;
     }
+    /*
+    public void editProfile() {
+        //to be implemented
+    }
+    */
 
     public EventList getEvents() {
         return events;
