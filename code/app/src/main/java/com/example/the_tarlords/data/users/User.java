@@ -6,7 +6,7 @@ import com.example.the_tarlords.data.event.EventList;
 
 import java.util.ArrayList;
 
-public abstract class User {
+public class User {
     private Integer userId;
     private Profile profile;
     private EventList events;

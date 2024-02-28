@@ -7,11 +7,13 @@ import com.example.the_tarlords.data.event.EventList;
 
 import java.util.ArrayList;
 
-public class Attendee extends User {
+public class Attendee {
     private Event event;
-
-    public Attendee(Integer userId, Profile profile, EventList events, AlertList alerts, Event event) {
-        super(userId, profile, events, alerts);
+    private User user;
+    private Profile profile;
+    public Attendee(User user, Profile profile, Event event) {
+        this.user = user;
+        this.profile = profile;
         this.event = event;
     }
 

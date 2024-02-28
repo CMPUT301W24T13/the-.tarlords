@@ -8,8 +8,8 @@ import com.example.the_tarlords.data.event.EventList;
 import java.util.ArrayList;
 
 public class Organizer extends Attendee implements OrgPerms {
-    public Organizer(Integer userId, Profile profile, EventList events, AlertList alerts, Event event) {
-        super(userId, profile, events, alerts, event);
+    public Organizer(User user, Profile profile, Event event) {
+        super(user, profile, event);
     }
 
     @Override
