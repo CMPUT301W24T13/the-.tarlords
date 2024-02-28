@@ -3,6 +3,8 @@ package com.example.the_tarlords;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
+
+import com.example.the_tarlords.data.QR.ScanQR;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 import androidx.navigation.NavController;
@@ -29,8 +31,8 @@ private ActivityMainBinding binding;
         binding.appBarMain.scanQrButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                ScanQR qr = new ScanQR();
+                qr.getQR(MainActivity.this);
             }
         });
         DrawerLayout drawer = binding.drawerLayout;
