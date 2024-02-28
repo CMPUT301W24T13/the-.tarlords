@@ -13,6 +13,7 @@ public class Attendee {
     private Profile profile;
     public Attendee(User user, Profile profile, Event event) {
         this.user = user;
+        //hey lucy change this vv in android studio...
         this.profile = profile;
         this.event = event;
     }
