@@ -1,6 +1,5 @@
 package com.example.the_tarlords.data.event;
 
-
 import android.widget.ListView;
 
 import java.util.ArrayList;
