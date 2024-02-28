@@ -32,7 +32,7 @@ private ActivityMainBinding binding;
             @Override
             public void onClick(View view) {
                 ScanQR qr = new ScanQR();
-                //qr.method(MainActivity.this);
+                qr.getQR(MainActivity.this);
             }
         });
         DrawerLayout drawer = binding.drawerLayout;
