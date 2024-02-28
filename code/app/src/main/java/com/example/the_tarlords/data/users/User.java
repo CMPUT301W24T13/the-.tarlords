@@ -1,11 +1,8 @@
 package com.example.the_tarlords.data.users;
 
-import android.app.Notification;
-
-import com.example.the_tarlords.placeholder.Alert;
-import com.example.the_tarlords.placeholder.Event;
-import com.example.the_tarlords.placeholder.EventList;
-import com.example.the_tarlords.placeholder.Profile;
+import com.example.the_tarlords.data.Alert.Alert;
+import com.example.the_tarlords.data.Alert.AlertList;
+import com.example.the_tarlords.data.event.EventList;
 
 import java.util.ArrayList;
 
@@ -13,9 +10,9 @@ public abstract class User {
     private Integer userId;
     private Profile profile;
     private EventList events;
-    private ArrayList<Alert> alerts;
+    private AlertList alerts;
 
-    public User(Integer userId, Profile profile, EventList events, ArrayList<Alert> alerts) {
+    public User(Integer userId, Profile profile, EventList events, AlertList alerts) {
         this.userId = userId;
         this.profile = profile;
         this.events = events;
@@ -43,10 +40,10 @@ public abstract class User {
         this.events = events;
     }
 
-    public ArrayList<Alert> getAlerts() {
+    public AlertList getAlerts() {
         return alerts;
     }
-    public void setAlerts(ArrayList<Alert> alerts) {
+    public void setAlerts(AlertList alerts) {
         this.alerts = alerts;
     }
 
