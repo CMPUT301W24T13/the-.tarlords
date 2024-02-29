@@ -1,12 +1,6 @@
 package com.example.the_tarlords.data.Alert;
 
-import android.widget.ListView;
-
-import com.example.the_tarlords.data.event.AddEventFragment;
-import com.example.the_tarlords.data.event.Event;
-
-import java.util.ArrayList;
-
+/*
 public class AlertList implements AddAlertFragment.AddAlertDialogListener {
     private ArrayList<Alert> alertDataList;
     private ListView alertList;
@@ -26,3 +20,4 @@ public class AlertList implements AddAlertFragment.AddAlertDialogListener {
         }
     }
 }
+*/
