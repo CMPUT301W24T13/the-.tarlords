@@ -1,10 +1,18 @@
 package com.example.the_tarlords.data.QR;
 
+import android.graphics.Bitmap;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.fragment.app.FragmentActivity;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
@@ -12,9 +20,11 @@ public class QRCode {
     private final FragmentActivity activity;
     private ActivityResultLauncher<ScanOptions> barcodeLauncher;
 
-    public QRCode(FragmentActivity activity) {
+    public QRCode(FragmentActivity activity, boolean scan) {
         this.activity = activity;
-        initializeBarcodeLauncher();
+        if (scan) {
+            initializeBarcodeLauncher();
+        }
     }
 
     private void initializeBarcodeLauncher() {
@@ -39,5 +49,22 @@ public class QRCode {
     public void scanQR() {
         ScanOptions scanOptions = new ScanOptions();
         barcodeLauncher.launch(scanOptions);
+    }
+
+    public void generateQR(EditText editText, ImageView imageView) {
+        MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
+
+        try {
+            BitMatrix bitMatrix = multiFormatWriter.encode(editText.getText().toString(),
+                    BarcodeFormat.QR_CODE, 500, 500);
+
+            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+            Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
+
+            imageView.setImageBitmap(bitmap);
+
+        } catch (WriterException e) {
+            e.printStackTrace();
+        }
     }
 }

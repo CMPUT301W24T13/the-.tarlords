@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(binding.appBarMain.toolbar);
 
         binding.appBarMain.scanQrButton.setOnClickListener(new View.OnClickListener() {
-            final QRCode myQR = new QRCode(MainActivity.this);
+            final QRCode myQR = new QRCode(MainActivity.this, true);
             @Override
             public void onClick(View view) {
                 myQR.scanQR();
