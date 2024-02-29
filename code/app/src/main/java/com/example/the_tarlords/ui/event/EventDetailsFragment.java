@@ -73,7 +73,6 @@ public class EventDetailsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_event_details, container, false);
 
-        TextView eventIdTextView = view.findViewById(R.id.tv_event_id);
         TextView eventNameTextView = view.findViewById(R.id.tv_event_name);
         TextView eventLocationTextView = view.findViewById(R.id.tv_event_location);
         TextView eventStartDateTextView = view.findViewById(R.id.tv_event_startDate);
@@ -81,7 +80,6 @@ public class EventDetailsFragment extends Fragment {
 
         // Check if event is not null before accessing its attributes
         if (event != null) {
-            eventIdTextView.setText(event.getId());
             eventNameTextView.setText(event.getName());
             eventLocationTextView.setText(event.getLocation());
             eventStartTimeTextView.setText(event.getStartTime());

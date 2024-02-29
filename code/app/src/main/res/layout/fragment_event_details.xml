@@ -1,45 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.event.EventDetailsFragment"
-    android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.event.EventDetailsFragment">
+
 
     <TextView
+        android:id="@+id/tv_event_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Event ID"
-        android:id="@+id/tv_event_id"/>
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="25sp"
+        android:text="event name"
+        android:textAllCaps="true"
+        android:textColor="#0B0B0B"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Name"
-        android:id="@+id/tv_event_name"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Location"
-        android:id="@+id/tv_event_location"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/tv_event_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="25dp"
+        android:id="@+id/ll_time">
         <TextView
             android:layout_width="0dp"
             android:layout_weight="0.5"
+            android:textSize="20sp"
+            android:textStyle="bold"
             android:layout_height="wrap_content"
             android:id="@+id/tv_event_startDate"
-            android:text="StartDate"/>
+            android:text="July 4, 2024"/>
 
         <TextView
             android:layout_width="0dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
             android:layout_weight="0.5"
             android:layout_height="wrap_content"
             android:id="@+id/tv_event_startTime"
-            android:text="StartTime"/>
+            android:text="9:35 PM"/>
 
     </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="My Backyard"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/ll_time"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="25dp"
+        android:id="@+id/tv_event_location"/>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

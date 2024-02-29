@@ -1,5 +1,6 @@
 package com.example.the_tarlords.ui.event;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
@@ -38,7 +39,6 @@ public class EventEditFragment extends Fragment {
     private TextView eventStartTimeTextView;
     private EditText eventLocationEditText;
     private EditText eventNameEditText;
-    private TextView eventIdTextView;
 
 
     public EventEditFragment() {
@@ -72,7 +72,6 @@ public class EventEditFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_event_edit, container, false);
         //Event id is a textview because user should not be able to edit it, assigned when event object created
-        eventIdTextView = view.findViewById(R.id.tv_edit_event_id);
         eventNameEditText = view.findViewById(R.id.et_event_name);
         eventLocationEditText = view.findViewById(R.id.et_event_location);
         eventStartTimeTextView = view.findViewById(R.id.tv_edit_event_startTime);
@@ -81,7 +80,6 @@ public class EventEditFragment extends Fragment {
 
         // Populate UI elements with event details
         if (event != null) {
-            eventIdTextView.setText(event.getId());
             eventNameEditText.setText(event.getName());
             eventLocationEditText.setText(event.getLocation());
             eventStartTimeTextView.setText(event.getStartTime());
@@ -155,11 +153,18 @@ public class EventEditFragment extends Fragment {
              */
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                String sd = String.valueOf(year)+"."+String.valueOf(month)+"."+String.valueOf(dayOfMonth);
-                //update text view
-                eventStartDateTextView.setText(sd);
-                //update event attribute
-                event.setStartDate(sd);
+                // Array of month names
+                String[] monthNames = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+
+                // Format the date components into a string "YYYY.MonthName.DD"
+                @SuppressLint("DefaultLocale")
+                String formattedDate = String.format("%s %02d, %04d", monthNames[month],year, dayOfMonth);
+
+                // Update the text view
+                eventStartDateTextView.setText(formattedDate);
+
+                // Update the event attribute
+                event.setStartDate(formattedDate);
             }
         }, 2024, 0, 15);
         //show the dialog
@@ -176,13 +181,23 @@ public class EventEditFragment extends Fragment {
              */
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                String st = String.valueOf(hourOfDay) + ":" + String.valueOf(minute);
+                String amPm;
+                // Check if the selected hour is in the AM or PM period
+                if (hourOfDay < 12) {
+                    amPm = "AM";
+                } else {
+                    amPm = "PM";
+                    // Adjust the hour for PM
+                    hourOfDay -= 12;
+                }
+                // Use the amPm and adjusted hour to display or process the time
+                String formattedTime = String.format("%02d:%02d %s", hourOfDay, minute, amPm);
                 //update text view
-                eventStartTimeTextView.setText(st);
+                eventStartTimeTextView.setText(formattedTime);
                 //update event attribute
-                event.setStartTime(st);
+                event.setStartTime(formattedTime);
             }
-        }, 7, 30, false);
+        }, 7, 30, true);
         //show the dialog
         dialog.show();
     }
