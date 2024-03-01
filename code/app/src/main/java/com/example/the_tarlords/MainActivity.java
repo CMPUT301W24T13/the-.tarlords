@@ -17,21 +17,29 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.the_tarlords.databinding.ActivityMainBinding;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
+
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
+    public static FirebaseFirestore db;
+
     private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-         binding = ActivityMainBinding.inflate(getLayoutInflater());
-         setContentView(binding.getRoot());
 
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        db = FirebaseFirestore.getInstance();
+
+    
         setSupportActionBar(binding.appBarMain.toolbar);
 
         binding.appBarMain.scanQrButton.setOnClickListener(new View.OnClickListener() {
