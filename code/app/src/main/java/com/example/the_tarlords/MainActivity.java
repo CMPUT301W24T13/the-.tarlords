@@ -19,6 +19,8 @@ import com.example.the_tarlords.databinding.ActivityMainBinding;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
+import java.util.Objects;
+
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
@@ -34,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(binding.appBarMain.toolbar);
 
         binding.appBarMain.scanQrButton.setOnClickListener(new View.OnClickListener() {
-            final QRCode myQR = new QRCode(MainActivity.this, true);
+            QRCode myQR = new QRCode(MainActivity.this, true);
             @Override
             public void onClick(View view) {
                 myQR.scanQR();

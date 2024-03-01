@@ -19,6 +19,7 @@ import com.journeyapps.barcodescanner.ScanOptions;
 public class QRCode {
     private final FragmentActivity activity;
     private ActivityResultLauncher<ScanOptions> barcodeLauncher;
+    private String QRid;
 
     public QRCode(FragmentActivity activity, boolean scan) {
         this.activity = activity;
@@ -31,14 +32,15 @@ public class QRCode {
         if (activity != null) {
             try {
                 barcodeLauncher = activity.registerForActivityResult(
-                        new ScanContract(),
-                        result -> {
-                            if (result.getContents() != null) {
-                                Toast.makeText(activity.getApplicationContext(), "scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
-                            } else {
-                                Toast.makeText(activity.getApplicationContext(), "cancelled", Toast.LENGTH_SHORT).show();
-                            }
+                    new ScanContract(),
+                    result -> {
+                        if (result.getContents() != null) {
+                            Toast.makeText(activity.getApplicationContext(), "scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                            QRid = result.getContents();
+                        } else {
+                            Toast.makeText(activity.getApplicationContext(), "cancelled", Toast.LENGTH_SHORT).show();
                         }
+                    }
                 );
             } catch (Exception e) {
                 e.printStackTrace();
@@ -51,12 +53,11 @@ public class QRCode {
         barcodeLauncher.launch(scanOptions);
     }
 
-    public void generateQR(EditText editText, ImageView imageView) {
+    public void generateQR(String text, ImageView imageView) {
         MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
 
         try {
-            BitMatrix bitMatrix = multiFormatWriter.encode(editText.getText().toString(),
-                    BarcodeFormat.QR_CODE, 500, 500);
+            BitMatrix bitMatrix = multiFormatWriter.encode(text, BarcodeFormat.QR_CODE, 500, 500);
 
             BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
             Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
@@ -66,5 +67,9 @@ public class QRCode {
         } catch (WriterException e) {
             e.printStackTrace();
         }
+    }
+
+    public String getQRid() {
+        return QRid;
     }
 }
