@@ -7,7 +7,6 @@ import java.util.List;
 
 public class Attendee extends User {
     private Event event;
-
     private User user;
     private Profile profile;
     public Attendee(User user, Profile profile, Event event) {
