@@ -7,20 +7,21 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.the_tarlords.placeholder.PlaceholderContent.PlaceholderItem;
+import com.example.the_tarlords.placeholder.PlaceholderContent;
+import com.example.the_tarlords.placeholder.PlaceholderEventContent.PlaceholderEvent;
 import com.example.the_tarlords.databinding.NotificationListItemBinding;
 
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link PlaceholderItem}.
+ * {@link RecyclerView.Adapter} that can display a {@link PlaceholderEvent}.
  * TODO: Replace the implementation with code for your data type.
  */
 public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<NotificationRecyclerViewAdapter.ViewHolder> {
 
-    private final List<PlaceholderItem> mValues;
+    private final List<PlaceholderContent.PlaceholderItem> mValues;
 
-    public NotificationRecyclerViewAdapter(List<PlaceholderItem> items) {
+    public NotificationRecyclerViewAdapter(List<PlaceholderContent.PlaceholderItem> items) {
         mValues = items;
     }
 
@@ -46,12 +47,12 @@ public class NotificationRecyclerViewAdapter extends RecyclerView.Adapter<Notifi
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final TextView mIdView;
         public final TextView mContentView;
-        public PlaceholderItem mItem;
+        public PlaceholderContent.PlaceholderItem mItem;
 
         public ViewHolder(@NonNull NotificationListItemBinding binding) {
             super(binding.getRoot());
-            mIdView = binding.itemNumber;
-            mContentView = binding.content;
+            mIdView = binding.itemNumberTextView;
+            mContentView = binding.notifTypeTextView;
         }
 
         @Override
