@@ -72,3 +72,4 @@ public class QRCode {
     public String getQRid() {
         return QRid;
     }
+}
