@@ -2,8 +2,12 @@ package com.example.the_tarlords.data.event;
 
 import com.example.the_tarlords.data.QR.QRCode;
 
+import java.util.UUID;
+
 /**
  * This class defines an event
+ * UUID type for event attribute makes sure that everytime an event object is created it has a unique id
+ * Not sure how QRcode will work , is it initialized when the event is created, or can it be set after being created
  */
 
 
@@ -19,21 +23,18 @@ public class Event {
     EventPoster poster;
     String startTime;
     String startDate;
-    Integer id;
+    UUID id;
 
-    public Event(String name, String location, Integer id) {
+    public Event(String name, String location) {
         this.name = name;
         this.location = location;
-        this.id = id;
+        this.id = UUID.randomUUID();
     }
 
-    public Integer getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getLocation() {
         return location;
@@ -65,6 +66,22 @@ public class Event {
 
     public void setStartDate(String startDate) {
         this.startDate = startDate;
+    }
+
+    public QRCode getCheckInQR() {
+        return checkInQR;
+    }
+
+    public void setCheckInQR(QRCode checkInQR) {
+        this.checkInQR = checkInQR;
+    }
+
+    public QRCode getPromoQR() {
+        return promoQR;
+    }
+
+    public void setPromoQR(QRCode promoQR) {
+        this.promoQR = promoQR;
     }
 }
 
