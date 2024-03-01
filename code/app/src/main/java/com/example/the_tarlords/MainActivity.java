@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        FirebaseApp.initializeApp(this); // what dependencies are needed ?
         db = FirebaseFirestore.getInstance();
 
     

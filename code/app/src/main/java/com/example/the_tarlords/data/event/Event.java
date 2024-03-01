@@ -1,7 +1,16 @@
 package com.example.the_tarlords.data.event;
 
+import static androidx.fragment.app.FragmentManager.TAG;
+
+import static com.example.the_tarlords.MainActivity.db;
+
+import android.util.Log;
+
+import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.data.QR.QRCode;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -83,5 +92,7 @@ public class Event {
     public void setPromoQR(QRCode promoQR) {
         this.promoQR = promoQR;
     }
+
+
 }
 
