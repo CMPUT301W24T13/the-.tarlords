@@ -1,5 +1,6 @@
 package com.example.the_tarlords.ui.event;
 
+
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
