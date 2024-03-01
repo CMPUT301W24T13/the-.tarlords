@@ -13,8 +13,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.the_tarlords.R;
-import com.example.the_tarlords.data.event.AddAlertFragment;
-import com.example.the_tarlords.data.event.Alert;
 
 import java.io.Serializable;
 
@@ -67,7 +65,7 @@ public class AddAlertFragment extends DialogFragment {
                 positive_button_text = "Add";
             }
             if (alert != null) {
-                // Populate EditText fields with existing book information for editing
+                // Populate EditText fields with existing message information for editing
                 editMessage.setText(alert.getMessage());
             }
         }
