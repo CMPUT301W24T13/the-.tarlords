@@ -1,18 +1,17 @@
 package com.example.the_tarlords.data.users;
 
-import com.example.the_tarlords.data.Alert.Alert;
 import com.example.the_tarlords.data.Alert.AlertList;
-import com.example.the_tarlords.data.event.EventList;
+import com.example.the_tarlords.data.event.Event;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class User {
     private Integer userId;
     private Profile profile;
-    private EventList events;
+    private List<Event> events;
     private AlertList alerts;
 
-    public User(Integer userId, Profile profile, EventList events, AlertList alerts) {
+    public User(Integer userId, Profile profile, List<Event> events, AlertList alerts) {
         this.userId = userId;
         this.profile = profile;
         this.events = events;
@@ -38,10 +37,10 @@ public class User {
     }
     */
 
-    public EventList getEvents() {
+    public List<Event> getEvents() {
         return events;
     }
-    public void setEvents(EventList events) {
+    public void setEvents(List<Event> events) {
         this.events = events;
     }
 

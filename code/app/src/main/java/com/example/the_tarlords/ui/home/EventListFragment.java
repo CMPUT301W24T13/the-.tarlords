@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -11,19 +13,30 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import com.example.the_tarlords.R;
+import com.example.the_tarlords.data.event.Event;
+import com.example.the_tarlords.data.event.EventList;
 import com.example.the_tarlords.placeholder.PlaceholderContent;
+import com.example.the_tarlords.ui.event.EventDetailsFragment;
+
+import java.util.List;
 
 /**
- * A fragment representing a list of Items.
+ * A fragment representing a list of Event items
  */
-public class EventListFragment extends Fragment {
+public class EventListFragment extends Fragment implements EventRecyclerViewAdapter.OnItemClickListener{
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
+    /**
+     * EventListFragment has a list of events called eventsList
+     */
+    private EventList eventsList;
+    private EventRecyclerViewAdapter.OnItemClickListener listener;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -65,8 +78,34 @@ public class EventListFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new EventRecyclerViewAdapter(PlaceholderContent.ITEMS));
+            recyclerView.setAdapter(new EventRecyclerViewAdapter(eventsList, listener));
         }
         return view;
+    }
+
+    /**
+     * This method receives the event the user clicked on in the recycler view
+     * Right now it automatically takes the user to the event details page
+     * assumming the EventList is an attendee type of List
+     * @param event
+     */
+
+    @Override
+    public void onItemClick(Event event) {
+        // Handle item click, switch to a new fragment using FragmentManager
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+        // Create a new fragment and pass the selected Event as an argument
+        EventDetailsFragment newFragment = EventDetailsFragment.newInstance(event);
+
+        // Replace the current fragment with the new one
+        transaction.replace(R.id.nav_host_fragment_content_main, newFragment);
+
+        // Add the transaction to the back stack (optional)
+        transaction.addToBackStack(null);
+
+        // Commit the transaction
+        transaction.commit();
     }
 }
