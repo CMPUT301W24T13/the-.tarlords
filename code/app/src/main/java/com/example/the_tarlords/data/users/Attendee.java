@@ -5,7 +5,7 @@ import com.example.the_tarlords.data.event.Event;
 
 import java.util.List;
 
-public class Attendee extends User {
+public class Attendee {
     private Event event;
     private User user;
     private Profile profile;

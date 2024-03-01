@@ -2,7 +2,9 @@ package com.example.the_tarlords.data.Alert;
 
 import com.example.the_tarlords.data.event.Event;
 
-public class Alert {
+import java.io.Serializable;
+
+public class Alert implements Serializable {
     private String message;
     private Event event;
 

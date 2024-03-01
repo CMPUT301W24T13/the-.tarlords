@@ -10,14 +10,16 @@ public class AlertList implements AddAlertFragment.AddAlertDialogListener {
         alertListAdapter.add(alert);
         alertListAdapter.notifyDataSetChanged();
     }
+    /* is this even right????
+    public void deleteAlert(Alert alert) {
+        alertListAdapter.delete(alert);
+        alsertListAdapter.notifyDataSetChanged();
+    }
+    */
 
     @Override
-    public void editAlert(Alert oldAlert, Alert newAlert) {
-        int index = alertDataList.indexOf(oldAlert);
-        if (index != -1) {
-            alertDataList.set(index , newAlert);
-            alertListAdapter.notifyDataSetChanged();
-        }
+    public void editAlert(Alert oldAlert, String newMessage) {
+        oldAlert.setMessage(newMessage);
     }
 }
 */
