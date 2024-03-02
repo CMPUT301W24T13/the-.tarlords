@@ -1,56 +1,33 @@
 package com.example.the_tarlords.data.QR;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
 import androidx.fragment.app.FragmentActivity;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
-import com.journeyapps.barcodescanner.ScanContract;
-import com.journeyapps.barcodescanner.ScanOptions;
 
 public class QRCode {
-    private final FragmentActivity activity;
-    private ActivityResultLauncher<ScanOptions> barcodeLauncher;
-    private String QRid;
+    private static FragmentActivity activity;
+    private String QRId;
 
-    public QRCode(FragmentActivity activity, boolean scan) {
-        this.activity = activity;
-        if (scan) {
-            initializeBarcodeLauncher();
-        }
+    public QRCode(FragmentActivity activity) {
+        QRCode.activity = activity;
     }
 
-    private void initializeBarcodeLauncher() {
-        if (activity != null) {
-            try {
-                barcodeLauncher = activity.registerForActivityResult(
-                    new ScanContract(),
-                    result -> {
-                        if (result.getContents() != null) {
-                            Toast.makeText(activity.getApplicationContext(), "scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
-                            QRid = result.getContents();
-                        } else {
-                            Toast.makeText(activity.getApplicationContext(), "cancelled", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                );
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public void scanQR() {
-        ScanOptions scanOptions = new ScanOptions();
-        barcodeLauncher.launch(scanOptions);
+    public void scanQr() {
+        IntentIntegrator intentIntegrator = new IntentIntegrator(activity);
+        intentIntegrator.setPrompt("Scan QR code");
+        intentIntegrator.setOrientationLocked(true); // Enable rotation
+        intentIntegrator.initiateScan();
     }
 
     public void generateQR(String text, ImageView imageView) {
@@ -69,6 +46,9 @@ public class QRCode {
         }
     }
 
-    public String getQRid() {
-        return QRid;
+    public void setQRId(String newId) {
+        QRId = newId;
+    }
+    public String getQRId() {
+        return QRId;
     }
