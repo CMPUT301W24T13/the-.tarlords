@@ -33,7 +33,7 @@ public class Attendance {       //could be made into interface
 
     public Attendance(Event event) {
         this.event = event;
-        attendanceRef = MainActivity.db.collection("Events/"+event.getName()+"/Attendees"); // get name should be getId once implemented in event class
+        attendanceRef = MainActivity.db.collection("Events/"+event.getId()+"/Attendees"); // get name should be getId once implemented in event class
     }
 
     /**

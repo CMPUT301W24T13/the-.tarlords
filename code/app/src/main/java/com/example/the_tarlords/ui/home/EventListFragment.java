@@ -18,6 +18,7 @@ import android.widget.AdapterView;
 import com.example.the_tarlords.R;
 import com.example.the_tarlords.placeholder.PlaceholderEventContent;
 import com.example.the_tarlords.data.event.Event;
+import com.example.the_tarlords.data.event.EventList;
 import com.example.the_tarlords.placeholder.PlaceholderContent;
 import com.example.the_tarlords.ui.event.EventDetailsFragment;
 import java.util.List;
@@ -35,7 +36,7 @@ public class EventListFragment extends Fragment implements EventRecyclerViewAdap
     /**
      * EventListFragment has a list of events called eventsList
      */
-    private List<Event> eventsList;
+    private EventList eventsList;
     private EventRecyclerViewAdapter.OnItemClickListener listener;
 
     /**
@@ -85,6 +86,12 @@ public class EventListFragment extends Fragment implements EventRecyclerViewAdap
         return view;
     }
 
+    /**
+     * This method receives the event the user clicked on in the recycler view
+     * Right now it automatically takes the user to the event details page
+     * assumming the EventList is an attendee type of List
+     * @param event
+     */
 
     @Override
     public void onItemClick(Event event) {

@@ -13,6 +13,7 @@ import android.view.View;
 import com.example.the_tarlords.placeholder.PlaceholderEventContent.PlaceholderEvent;
 import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.event.Event;
+import com.example.the_tarlords.data.event.EventList;
 import com.example.the_tarlords.databinding.FragmentEventListItemBinding;
 import com.example.the_tarlords.ui.event.EventDetailsFragment;
 
@@ -25,7 +26,7 @@ import java.util.List;
  */
 public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecyclerViewAdapter.ViewHolder> {
 
-    private final List<Event> events;
+    private final EventList events;
     private final OnItemClickListener clickListener;
 
     public interface OnItemClickListener {
@@ -35,7 +36,7 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
 
 
 
-    public EventRecyclerViewAdapter(List<Event> items, OnItemClickListener listener) {
+    public EventRecyclerViewAdapter(EventList items, OnItemClickListener listener) {
         events = items;
         clickListener = listener;
     }
@@ -48,7 +49,7 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.eventId.setText(events.get(position).getId());
+        //holder.eventId.setText(events.get(position).getId()); //this would display the id but we don't need that
         holder.eventName.setText(events.get(position).getName());
     }
 
@@ -62,12 +63,12 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final TextView eventId;
+        //public final TextView eventId;
         public final TextView eventName;
 
         public ViewHolder(FragmentEventListItemBinding binding) {
             super(binding.getRoot());
-            eventId = binding.textviewEventId;
+            //eventId = binding.textviewEventId;
             eventName = binding.textviewEventName;
 
             itemView.setOnClickListener(view -> {
