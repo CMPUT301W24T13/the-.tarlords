@@ -1,5 +1,7 @@
 package com.example.the_tarlords.data.Alert;
 
+import static com.example.the_tarlords.R.layout.fragment_add_alert;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -49,7 +51,7 @@ public class AddAlertFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getContext()).inflate(fragment_add_alert, null);
-        EditText editMessage = view.findViewById(R.id.edit_text_message);
+        EditText editMessage = view.findViewById(R.id.edit_text_alert_message);
 
         Bundle args = getArguments();
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());

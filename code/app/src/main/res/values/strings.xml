@@ -128,4 +128,8 @@
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="qr_scan_fab">Scan QR Code</string>
     <string name="edit_profile">edit profile</string>
+    <string name="event_name">Event Name</string>
+    <string name="alert_message">Alert Message</string>
+    <string name="hint_my_event">My Event</string>
+    <string name="hint_my_message">My alert message</string>
 </resources>
