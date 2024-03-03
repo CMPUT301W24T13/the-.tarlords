@@ -5,11 +5,14 @@ import com.example.the_tarlords.data.event.Event;
 
 import java.util.List;
 
-public class Attendee extends User {
+public class Attendee {
     private Event event;
-
-    public Attendee(Integer userId, Profile profile, List<Event> events, AlertList alerts, Event event) {
-        super(userId, profile, events, alerts);
+    private User user;
+    private Profile profile;
+    public Attendee(User user, Profile profile, Event event) {
+        this.user = user;
+        //hey lucy change this vv in android studio...
+        this.profile = profile;
         this.event = event;
     }
 
