@@ -3,7 +3,6 @@ import java.util.regex.Pattern.compile
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("com.google.gms.google-services")
 }
 
 android {
@@ -27,8 +26,8 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                    getDefaultProguardFile("proguard-android-optimize.txt"),
+                    "proguard-rules.pro"
             )
         }
     }
@@ -80,7 +79,6 @@ dependencies {
     implementation("com.google.zxing:core:3.5.3")
     implementation(platform("com.google.firebase:firebasebom:32.7.1"))
     implementation("com.google.firebase:firebase-firestore")
-    implementation("com.google.firebase:firebase-auth:22.3.1")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -88,5 +86,9 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+    implementation("com.google.firebase:firebase-bom:32.7.1")
+    implementation("com.google.firebase:firebase-core") // Add this line for Firebase core
+    implementation("com.google.firebase:firebase-firestore") // Already included in your configuration
+
 
 }

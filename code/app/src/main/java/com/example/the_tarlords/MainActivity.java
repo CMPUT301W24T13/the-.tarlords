@@ -3,13 +3,8 @@ package com.example.the_tarlords;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
-import android.widget.Toast;
-
-import com.example.the_tarlords.data.QR.ScanQR;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
-
-import androidx.activity.result.ActivityResultLauncher;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -17,51 +12,27 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.the_tarlords.databinding.ActivityMainBinding;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.journeyapps.barcodescanner.ScanContract;
-import com.journeyapps.barcodescanner.ScanOptions;
-
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
-    public static FirebaseFirestore db;
-
-    private ActivityMainBinding binding;
+private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-        FirebaseApp.initializeApp(this); // what dependencies are needed ?
-        db = FirebaseFirestore.getInstance();
-
+     binding = ActivityMainBinding.inflate(getLayoutInflater());
+     setContentView(binding.getRoot());
 
         setSupportActionBar(binding.appBarMain.toolbar);
-
         binding.appBarMain.scanQrButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ScanOptions scanOptions = new ScanOptions();
-                barcodeLauncher.launch(scanOptions);
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
             }
-
-            private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(
-                    new ScanContract(),
-                    result -> {
-                        if (result.getContents() != null) {
-                            Toast.makeText(getApplicationContext(), "scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
-                        } else {
-                            Toast.makeText(getApplicationContext(), "cancelled", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-            );
         });
-
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
         // Passing each menu ID as a set of Ids because each
@@ -89,5 +60,5 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-    //Testing Version 1 -- Rimsha1111
+    //just testingg - Rimsha
 }
