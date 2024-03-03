@@ -62,12 +62,15 @@ public class EventList {
 
         //Next part used to add event to Firebase
         // Create a Map with event details
+        //How are we storing QR
         Map<String,Object> eventMap = new HashMap<>(); //object means the key can be mapped to any type
         eventMap.put("name", event.getName());
         eventMap.put("location", event.getLocation());
         eventMap.put("id", event.getId().toString());
         eventMap.put("startDate", event.getStartDate());
         eventMap.put("startTime", event.getStartTime());
+        eventMap.put("endTime", event.getEndTime());
+
 
         // Add the event to the Firestore collection
         eventsRef
