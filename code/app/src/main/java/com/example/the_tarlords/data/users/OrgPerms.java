@@ -11,19 +11,21 @@ import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.event.EventPoster;
 import com.example.the_tarlords.data.map.Map;
 
-public interface OrgPerms {
-    Event createEvent(String name, String location, Integer id);
+import java.util.ArrayList;
 
-    QRCode genQRCodeForCheckIns(FragmentActivity activity, boolean scan, String text, ImageView imageView);
+public interface OrgPerms {
+    Event createEvent(String name, String location);
+
+    QRCode genQRCodeForCheckIns(Event event, String text, ImageView imageView);
 
     QRCode reuseQRCode(QRCode qrCode);
 
-    AttendeeCheckInList viewAttendeeCheckIns(Event event);
+    ArrayList<User> viewAttendeeCheckIns(Event event);
 
     //Note for notifs, make sure in the notifs class there is a part that lets org/admin write their own message
     void sendNotifs(AttendeeCheckInList attendeeCheckInList, String notification);
 
-    void uploadEventPoster(EventPoster poster);
+    void uploadEventPoster(Event event);
 
     int count = AttendeeCheckInList.count();
 
@@ -33,7 +35,7 @@ public interface OrgPerms {
 
     void shareQRCodeImage(QRCode qrcode, App shareToThisApp);
 
-    QRCode genUniquePromotionQRCode(FragmentActivity activity, boolean scan, String text, ImageView imageView);
+    QRCode genUniquePromotionQRCode(Event event, String text, ImageView imageView);
 
     Map viewUserCheckInPlace(Attendee attendee, Event event);
 

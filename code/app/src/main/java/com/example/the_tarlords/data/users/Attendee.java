@@ -25,4 +25,5 @@ public class Attendee {
     boolean isOrganizer() {
         return false;
     }
+
 }
