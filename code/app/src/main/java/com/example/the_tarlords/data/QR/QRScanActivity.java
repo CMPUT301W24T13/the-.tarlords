@@ -56,7 +56,7 @@ public class QRScanActivity extends AppCompatActivity {
                     try {
                         if (eventID.equals(QrID.substring(2))) {
                             String EventName = doc.getString("name");
-                            //WHAT ELSE?? SHOULD MAKE AN EVENT OBJECT??
+                            //WHAT ELSE? SHOULD MAKE AN EVENT OBJECT?
                         }
                     } catch (Exception e) {
                         throw new RuntimeException("This is not a valid QR code for this app");
