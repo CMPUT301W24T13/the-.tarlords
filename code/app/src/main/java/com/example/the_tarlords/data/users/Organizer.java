@@ -15,6 +15,7 @@ import com.example.the_tarlords.data.map.Map;
 import java.util.List;
 
 public class Organizer extends Attendee implements OrgPerms {
+
     public Organizer(User user, Profile profile, Event event) {
         super(user, profile, event);
     }

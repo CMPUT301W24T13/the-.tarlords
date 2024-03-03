@@ -1,5 +1,7 @@
 package com.example.the_tarlords.data.Alert;
 
+import static com.example.the_tarlords.R.layout.fragment_add_alert;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -13,14 +15,14 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.the_tarlords.R;
+import com.example.the_tarlords.data.event.Event;
 
 import java.io.Serializable;
 
 public class AddAlertFragment extends DialogFragment {
     interface AddAlertDialogListener {
         void addAlert(Alert alert);
-
-        void editAlert(Alert oldAlert, String newMessage);
+        void editAlert(Alert oldAlert, String newTitle, String newMessage);
     }
 
     private AddAlertFragment.AddAlertDialogListener listener;
@@ -49,7 +51,8 @@ public class AddAlertFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getContext()).inflate(fragment_add_alert, null);
-        EditText editMessage = view.findViewById(R.id.edit_text_message);
+        EditText editTitle = view.findViewById(R.id.edit_text_alert_title);
+        EditText editMessage = view.findViewById(R.id.edit_text_alert_message);
 
         Bundle args = getArguments();
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -73,17 +76,20 @@ public class AddAlertFragment extends DialogFragment {
                 .setView(view)
                 .setNegativeButton("Cancel", null)
                 .setPositiveButton(positive_button_text, (dialog, which) -> {
+                    String title = editTitle.getText().toString();
                     String message = editMessage.getText().toString();
                     if (getArguments() != null && getArguments().containsKey("alert")) {
                         // Editing existing alert
                         Alert oldAlert = (Alert) getArguments().getSerializable("alert");
-                        listener.editAlert(oldAlert, message);
+                        listener.editAlert(oldAlert, title, message);
                     } else {
-                        listener.addAlert(new Alert(message, event));
+                        Alert oldAlert = (Alert) getArguments().getSerializable("alert");
+                        Event event = oldAlert.getEvent();
+                        listener.addAlert(new Alert(title, message, event));
                     }
                 })
                 .create();
     }
 
 }
-}
+

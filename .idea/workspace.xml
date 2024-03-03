@@ -6,6 +6,19 @@
   <component name="ChangeListManager">
     <list default="true" id="9682097e-643c-4c8c-9809-a00ff8c0b1b5" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+      <change beforePath="$PROJECT_DIR$/code/app/src/main/java/com/example/the_tarlords/data/Alert/AlertList.java" beforeDir="false" afterPath="$PROJECT_DIR$/code/app/src/main/java/com/example/the_tarlords/data/Alert/AlertList.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/app/src/main/java/com/example/the_tarlords/data/event/AddEventFragment.java" beforeDir="false" afterPath="$PROJECT_DIR$/code/app/src/main/java/com/example/the_tarlords/data/event/AddEventFragment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/app/src/main/java/com/example/the_tarlords/data/event/Event.java" beforeDir="false" afterPath="$PROJECT_DIR$/code/app/src/main/java/com/example/the_tarlords/data/event/Event.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/app/src/main/java/com/example/the_tarlords/data/users/Attendee.java" beforeDir="false" afterPath="$PROJECT_DIR$/code/app/src/main/java/com/example/the_tarlords/data/users/Attendee.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/app/src/main/java/com/example/the_tarlords/ui/home/EventRecyclerViewAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/code/app/src/main/java/com/example/the_tarlords/ui/home/EventRecyclerViewAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/app/src/main/res/layout/content_events.xml" beforeDir="false" afterPath="$PROJECT_DIR$/code/app/src/main/res/layout/content_events.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/app/src/main/res/layout/fragment_add_event.xml" beforeDir="false" afterPath="$PROJECT_DIR$/code/app/src/main/res/layout/fragment_add_event.xml" afterDir="false" />
+>>>>>>> d2cad0b8429d29c6d062e86c28a81396c77bf2f8
+>>>>>>> main
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,6 +39,10 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> main
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
@@ -33,8 +50,24 @@
     "RunOnceActivity.cidr.known.project.marker": "true",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
+<<<<<<< HEAD
     "git-widget-placeholder": "Rimsha",
     "last_opened_file_path": "C:/Users/rimsh/AndroidStudioProjects/the-.tarlords/code"
+=======
+    "git-widget-placeholder": "lucy",
+    "last_opened_file_path": "C:/cmput301W24T13/the-.tarlords/code"
+=======
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/yagne/Documents/GitHub/the-.tarlords/code&quot;
+>>>>>>> d2cad0b8429d29c6d062e86c28a81396c77bf2f8
+>>>>>>> main
   }
 }]]></component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
