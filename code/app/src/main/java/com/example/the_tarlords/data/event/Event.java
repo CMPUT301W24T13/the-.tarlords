@@ -27,20 +27,23 @@ import java.util.UUID;
 public class Event {
     String name;
     String location;
-    QRCode checkInQR;
-    QRCode promoQR;
-    EventPoster poster;
     String startTime;
     String endTime;
     String startDate;
     UUID id;
+    private QRCode qrCodeCheckIns;
+    private QRCode qrCodePromo;
 
-    public Event(String name, String location,QRCode checkInQR, QRCode promoQR) {
+    private EventPoster poster;
+
+    private Integer maxSignUps;
+
+
+
+    public Event(String name, String location) {
         this.name = name;
         this.location = location;
         this.id = UUID.randomUUID();
-        this.promoQR = promoQR;
-        this.checkInQR = checkInQR;
     }
 
     public UUID getId() {
@@ -80,21 +83,6 @@ public class Event {
         this.startDate = startDate;
     }
 
-    public QRCode getCheckInQR() {
-        return checkInQR;
-    }
-
-    public void setCheckInQR(QRCode checkInQR) {
-        this.checkInQR = checkInQR;
-    }
-
-    public QRCode getPromoQR() {
-        return promoQR;
-    }
-
-    public void setPromoQR(QRCode promoQR) {
-        this.promoQR = promoQR;
-    }
 
     public String getEndTime() {
         return endTime;
@@ -102,5 +90,41 @@ public class Event {
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
+    }
+
+    public void setQrCodeCheckIns(QRCode qrCode) {
+        this.qrCodeCheckIns = qrCode;
+    }
+
+    public void setQrCodePromo(QRCode qrCode) {
+        this.qrCodePromo = qrCode;
+    }
+
+    public QRCode getQrCodeCheckIns() {
+        return qrCodeCheckIns;
+    }
+
+    public QRCode getQrCodePromo() {
+        return qrCodePromo;
+    }
+
+    public EventPoster getPoster() {
+        return poster;
+    }
+
+    public void setPoster(EventPoster poster) {
+        this.poster = poster;
+    }
+
+    public Integer getMaxSignUps() {
+        return maxSignUps;
+    }
+
+    public void setMaxSignUps(Integer maxSignUps) {
+        this.maxSignUps = maxSignUps;
+    }
+
+    public boolean reachedMaxCap() {
+        return true;
     }
 }
