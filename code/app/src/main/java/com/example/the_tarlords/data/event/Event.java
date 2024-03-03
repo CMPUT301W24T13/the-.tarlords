@@ -31,13 +31,16 @@ public class Event {
     QRCode promoQR;
     EventPoster poster;
     String startTime;
+    String endTime;
     String startDate;
     UUID id;
 
-    public Event(String name, String location) {
+    public Event(String name, String location,QRCode checkInQR, QRCode promoQR) {
         this.name = name;
         this.location = location;
         this.id = UUID.randomUUID();
+        this.promoQR = promoQR;
+        this.checkInQR = checkInQR;
     }
 
     public UUID getId() {
@@ -93,6 +96,12 @@ public class Event {
         this.promoQR = promoQR;
     }
 
+    public String getEndTime() {
+        return endTime;
+    }
 
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
 }
 
