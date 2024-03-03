@@ -35,7 +35,7 @@ public class Event {
     String startDate;
     UUID id;
 
-    public Event(String name, String location, QRCode checkInQR, QRCode promoQR) {
+    public Event(String name, String location,QRCode checkInQR, QRCode promoQR) {
         this.name = name;
         this.location = location;
         this.id = UUID.randomUUID();
