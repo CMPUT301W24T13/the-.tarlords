@@ -1,7 +1,16 @@
 package com.example.the_tarlords.data.event;
 
+import static androidx.fragment.app.FragmentManager.TAG;
+
+import static com.example.the_tarlords.MainActivity.db;
+
+import android.util.Log;
+
+import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.data.QR.QRCode;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -22,13 +31,16 @@ public class Event {
     QRCode promoQR;
     EventPoster poster;
     String startTime;
+    String endTime;
     String startDate;
     UUID id;
 
-    public Event(String name, String location) {
+    public Event(String name, String location,QRCode checkInQR, QRCode promoQR) {
         this.name = name;
         this.location = location;
         this.id = UUID.randomUUID();
+        this.promoQR = promoQR;
+        this.checkInQR = checkInQR;
     }
 
     public UUID getId() {
@@ -82,6 +94,14 @@ public class Event {
 
     public void setPromoQR(QRCode promoQR) {
         this.promoQR = promoQR;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 }
 

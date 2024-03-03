@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 import android.view.View;
 
+import com.example.the_tarlords.placeholder.PlaceholderEventContent.PlaceholderEvent;
 import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.event.EventList;
@@ -30,6 +31,7 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
 
     public interface OnItemClickListener {
         void onItemClick(Event event);
+
     }
 
 
@@ -76,6 +78,7 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
                     clickListener.onItemClick(clickedEvent);
                 }
             });
+
         }
 
         @Override
