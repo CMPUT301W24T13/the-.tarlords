@@ -95,7 +95,6 @@ public class Organizer extends Attendee implements OrgPerms {
 
 
 
-
     /**
      * NOT DONE!! This allows the organizer to get event poster from event and upload it to the app
      * @param event
@@ -130,7 +129,7 @@ public class Organizer extends Attendee implements OrgPerms {
     }
 
 
-    // need Grace's finished QR code class to export
+    // need Grace's finished QR code class for exporting
     @Override
     public void shareQRCodeImage(QRCode qrcode, App shareToThisApp) {
 
