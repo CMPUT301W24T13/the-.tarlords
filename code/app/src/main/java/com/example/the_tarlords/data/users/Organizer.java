@@ -14,17 +14,37 @@ import com.example.the_tarlords.data.map.Map;
 
 import java.util.List;
 
+/**
+ * This is the Organizer Class, which is subclass of Attendee but with more permissions
+ */
 public class Organizer extends Attendee implements OrgPerms {
 
+    /**
+     * This is the constructor for Organizer class
+     * @param user
+     * @param profile
+     * @param event
+     */
     public Organizer(User user, Profile profile, Event event) {
         super(user, profile, event);
     }
 
+    /**
+     * This checks if the user is an Organizer, because every organizer starts off as an Attendee
+     * @return true if it is an organizer, false otherwise
+     */
     @Override
     boolean isOrganizer() {
         return true;
     }
 
+    /**
+     * This creates a new Event
+     * @param name
+     * @param location
+     * @param id
+     * @return
+     */
     @Override
     public Event createEvent(String name, String location, Integer id) {
         Event event = new Event(name, location, id);
@@ -43,7 +63,6 @@ public class Organizer extends Attendee implements OrgPerms {
     public QRCode reuseQRCode(QRCode qrCode) {
         return qrCode;
     }
-
 
 
     // commenting this out, cuz I need iz's attendee list, or I could create a new getAttendanceCheckInList method in event class
@@ -103,8 +122,6 @@ public class Organizer extends Attendee implements OrgPerms {
     public int specificAttendeeCount(Attendee attendee, Event event) {
         return 0;
     }
-
-
 
     //need iz's attendeelist
     @Override
