@@ -128,5 +128,16 @@
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="qr_scan_fab">Scan QR Code</string>
     <string name="edit_profile">edit profile</string>
-    <string name="title_activity_generate_qrcode">GenerateQRCodeActivity</string>
+
+    <!-- Strings related to addAlert -->
+    <string name="event_name">Event Name</string>
+    <string name="alert_message">Alert Message</string>
+    <string name="alert_message_hint">
+        "My alert message"
+        "
+        "
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt"
+        "ut labore et dolore magna aliqua."
+    </string>
+    <string name="alert_title">Alert Title</string>
 </resources>

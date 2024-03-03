@@ -1,13 +1,12 @@
 package com.example.the_tarlords.data.users;
 
-import com.example.the_tarlords.data.Alert.Alert;
 import com.example.the_tarlords.data.Alert.AlertList;
-import com.example.the_tarlords.data.event.EventList;
+import com.example.the_tarlords.data.event.Event;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class Admin extends User implements AdminPerms {
-    public Admin(Integer userId, Profile profile, EventList events, AlertList alerts) {
+    public Admin(Integer userId, Profile profile, List<Event> events, AlertList alerts) {
         super(userId, profile, events, alerts);
     }
 

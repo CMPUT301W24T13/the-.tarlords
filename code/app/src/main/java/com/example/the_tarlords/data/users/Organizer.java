@@ -5,15 +5,15 @@ import com.example.the_tarlords.data.Alert.AlertList;
 import com.example.the_tarlords.data.QR.QRCode;
 import com.example.the_tarlords.data.app.App;
 import com.example.the_tarlords.data.event.Event;
-import com.example.the_tarlords.data.event.EventList;
 import com.example.the_tarlords.data.event.EventPoster;
 import com.example.the_tarlords.data.map.Map;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class Organizer extends Attendee implements OrgPerms {
-    public Organizer(Integer userId, Profile profile, EventList events, AlertList alerts, Event event) {
-        super(userId, profile, events, alerts, event);
+
+    public Organizer(User user, Profile profile, Event event) {
+        super(user, profile, event);
     }
 
     @Override
