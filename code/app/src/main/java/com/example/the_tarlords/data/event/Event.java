@@ -104,4 +104,3 @@ public class Event {
         this.endTime = endTime;
     }
 }
-
