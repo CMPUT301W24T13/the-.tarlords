@@ -24,25 +24,31 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:layout_width="0dp"
+        android:layout_weight="0.5"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_event_startDate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_event_name"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="25dp"
+        android:text="July 4, 2024"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/tv_event_name"
+        app:layout_constraintTop_toBottomOf="@id/tv_event_startDate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="25dp"
         android:layout_marginTop="3dp"
         android:layout_marginEnd="25dp"
         android:id="@+id/ll_time">
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="0.5"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_height="wrap_content"
-            android:id="@+id/tv_event_startDate"
-            android:text="July 4, 2024"/>
 
         <TextView
             android:layout_width="0dp"
