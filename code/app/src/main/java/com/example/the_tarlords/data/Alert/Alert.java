@@ -5,12 +5,21 @@ import com.example.the_tarlords.data.event.Event;
 import java.io.Serializable;
 
 public class Alert implements Serializable {
+    private String title;
     private String message;
     private Event event;
 
-    public Alert(String message, Event event) {
+    public Alert(String title, String message, Event event) {
+        this.title = title;
         this.message = message;
         this.event = event;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getMessage() {

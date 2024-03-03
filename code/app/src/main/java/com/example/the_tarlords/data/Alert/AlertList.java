@@ -1,6 +1,10 @@
 package com.example.the_tarlords.data.Alert;
 
-/*
+
+import android.widget.ListView;
+
+import java.util.ArrayList;
+
 public class AlertList implements AddAlertFragment.AddAlertDialogListener {
     private ArrayList<Alert> alertDataList;
     private ListView alertList;
@@ -10,16 +14,15 @@ public class AlertList implements AddAlertFragment.AddAlertDialogListener {
         alertListAdapter.add(alert);
         alertListAdapter.notifyDataSetChanged();
     }
-    /* is this even right????
+
     public void deleteAlert(Alert alert) {
-        alertListAdapter.delete(alert);
-        alsertListAdapter.notifyDataSetChanged();
+        alertListAdapter.remove(alert);
+        alertListAdapter.notifyDataSetChanged();
     }
-    */
 
     @Override
-    public void editAlert(Alert oldAlert, String newMessage) {
+    public void editAlert(Alert oldAlert, String newTitle, String newMessage) {
+        oldAlert.setTitle(newTitle);
         oldAlert.setMessage(newMessage);
     }
 }
-*/
