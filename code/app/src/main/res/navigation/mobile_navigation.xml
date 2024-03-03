@@ -66,8 +66,5 @@
         <action
             android:id="@+id/action_eventFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
-        <action
-            android:id="@+id/action_eventFragment_self"
-            app:destination="@id/eventFragment" />
     </fragment>
 </navigation>

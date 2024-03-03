@@ -38,14 +38,14 @@ public class PlaceholderContent {
     }
 
     private static PlaceholderItem createPlaceholderItem(int position) {
-        return new PlaceholderItem(String.valueOf(position), "Item " + position, makeDetails(position));
+        return new PlaceholderItem(String.valueOf(position), "Notification " + position, makeDetails(position));
     }
 
     private static String makeDetails(int position) {
         StringBuilder builder = new StringBuilder();
         builder.append("Details about Item: ").append(position);
         for (int i = 0; i < position; i++) {
-            builder.append("\nMore details information here.");
+            builder.append("\nMore details.");
         }
         return builder.toString();
     }

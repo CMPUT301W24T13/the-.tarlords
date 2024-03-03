@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.example.the_tarlords.R;
 import com.example.the_tarlords.placeholder.PlaceholderContent;
+import com.example.the_tarlords.placeholder.PlaceholderEventContent;
 
 /**
  * A fragment representing a list of Items.
