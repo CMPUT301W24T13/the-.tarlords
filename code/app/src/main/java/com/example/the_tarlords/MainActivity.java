@@ -1,28 +1,13 @@
 package com.example.the_tarlords;
 
-<<<<<<< Updated upstream
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-=======
-import android.content.Intent;
->>>>>>> Stashed changes
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
 
-<<<<<<< Updated upstream
-import com.example.the_tarlords.data.QR.QRCode;
-import com.google.android.material.navigation.NavigationView;
-
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-=======
 import com.example.the_tarlords.data.QR.QRScanActivity;
 import com.google.android.material.navigation.NavigationView;
 
->>>>>>> Stashed changes
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -30,21 +15,11 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.the_tarlords.databinding.ActivityMainBinding;
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.journeyapps.barcodescanner.ScanContract;
-import com.journeyapps.barcodescanner.ScanOptions;
-import java.util.Objects;
-=======
+
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
->>>>>>> Stashed changes
-=======
-import com.google.firebase.firestore.FirebaseFirestore;
->>>>>>> Stashed changes
 
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -74,16 +49,8 @@ public class MainActivity extends AppCompatActivity {
         binding.appBarMain.scanQrButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-<<<<<<< Updated upstream
-                if (checkSelfPermission(android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CAMERA);
-                } else {
-                    scanQr();
-                }
-=======
                 Intent intent = new Intent(MainActivity.this, QRScanActivity.class);
                 startActivity(intent);
->>>>>>> Stashed changes
             }
         });
 
