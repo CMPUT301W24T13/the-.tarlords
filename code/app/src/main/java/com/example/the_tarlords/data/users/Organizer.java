@@ -37,6 +37,7 @@ public class Organizer extends Attendee implements OrgPerms {
         return qrCode;
     }
 
+    //ask grace
     @Override
     public QRCode reuseQRCode(QRCode qrCode) {
         return qrCode;
@@ -57,22 +58,27 @@ public class Organizer extends Attendee implements OrgPerms {
 
     }
 
-    //need Khushi's eventlist to add all the uploaded events to that list (easier to make listview of it as well for xml)
+    //need lucy's photo class
     @Override
     public void uploadEventPoster(EventPoster poster) {
 
     }
 
+    //need iz's attendance
     @Override
     public int trackAttendance(int count) {
         return count;
     }
 
+
+    //leave for later; ask jayden
     @Override
     public Alert receiveAlerts(Alert alert) {
         return alert;
     }
 
+
+    //grace plsss do this
     @Override
     public void shareQRCodeImage(QRCode qrcode, App shareToThisApp) {
 
@@ -85,13 +91,13 @@ public class Organizer extends Attendee implements OrgPerms {
         return qrCode;
     }
 
-    //geolocation stuff we are not done yet
+    //geolocation stuff we are not done yet; leave for later
     @Override
     public Map viewUserCheckInPlace(Attendee attendee, Event event) {
         return null;
     }
 
-    //how many times an attendee has checked into an event
+    //how many times an attendee has checked into an event; need iz's attendance
     @Override
     public int specificAttendeeCount(Attendee attendee, Event event) {
         return 0;
@@ -105,7 +111,7 @@ public class Organizer extends Attendee implements OrgPerms {
         return null;
     }
 
-    //need iz's attendeelist
+    //need iz's attendeelist; either iz's part or me
     @Override
     public void setLimitOnSignUps(int signUpLimit, Event event) {
 
