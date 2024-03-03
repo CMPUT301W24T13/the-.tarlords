@@ -3,9 +3,12 @@ package com.example.the_tarlords.data.QR;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.widget.ImageView;
+<<<<<<< Updated upstream
 import android.widget.Toast;
 
 import androidx.fragment.app.FragmentActivity;
+=======
+>>>>>>> Stashed changes
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
@@ -16,6 +19,7 @@ import com.google.zxing.integration.android.IntentResult;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 public class QRCode {
+<<<<<<< Updated upstream
     private static FragmentActivity activity;
     private String QRId;
 
@@ -30,6 +34,8 @@ public class QRCode {
         intentIntegrator.initiateScan();
     }
 
+=======
+>>>>>>> Stashed changes
     public void generateQR(String text, ImageView imageView) {
         MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
 
@@ -45,6 +51,7 @@ public class QRCode {
             e.printStackTrace();
         }
     }
+<<<<<<< Updated upstream
 
     public void setQRId(String newId) {
         QRId = newId;
@@ -53,4 +60,6 @@ public class QRCode {
     public String getQRId() {
         return QRId;
     }
+=======
+>>>>>>> Stashed changes
 }
