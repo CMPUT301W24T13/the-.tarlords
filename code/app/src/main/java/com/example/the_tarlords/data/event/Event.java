@@ -1,6 +1,7 @@
 package com.example.the_tarlords.data.event;
 
 import com.example.the_tarlords.data.QR.QRCode;
+import com.example.the_tarlords.data.users.AttendeeCheckInList;
 
 /**
  * This class defines an event
@@ -66,5 +67,8 @@ public class Event {
     public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
+
+    private AttendeeCheckInList attendeeCheckInList;
+
 }
 

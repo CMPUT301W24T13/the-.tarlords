@@ -7,13 +7,11 @@ public class AttendeeCheckInList {
 
 
     public ArrayList<Attendee> getAttendeeCheckInList() {
-
         return attendeeCheckInList;
 
     }
 
     public void addAttendee(Attendee attendee) {
-
         attendeeCheckInList.add(attendee);
 
     }

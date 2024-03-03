@@ -1,5 +1,9 @@
 package com.example.the_tarlords.data.users;
 
+import android.widget.ImageView;
+
+import androidx.fragment.app.FragmentActivity;
+
 import com.example.the_tarlords.data.Alert.Alert;
 import com.example.the_tarlords.data.QR.QRCode;
 import com.example.the_tarlords.data.app.App;
@@ -8,9 +12,9 @@ import com.example.the_tarlords.data.event.EventPoster;
 import com.example.the_tarlords.data.map.Map;
 
 public interface OrgPerms {
-    Event createEvent(Event event);
+    Event createEvent(String name, String location, Integer id);
 
-    QRCode genQRCodeForCheckIns(QRCode qrCode);
+    QRCode genQRCodeForCheckIns(FragmentActivity activity, boolean scan, String text, ImageView imageView);
 
     QRCode reuseQRCode(QRCode qrCode);
 
@@ -23,15 +27,16 @@ public interface OrgPerms {
 
     int count = AttendeeCheckInList.count();
 
-    void trackAttendance(int count);
+    int trackAttendance(int count);
 
     Alert receiveAlerts(Alert alert);
 
     void shareQRCodeImage(QRCode qrcode, App shareToThisApp);
 
-    QRCode genUniquePromotionQRCode(QRCode qrCode);
+    QRCode genUniquePromotionQRCode(FragmentActivity activity, boolean scan, String text, ImageView imageView);
 
     Map viewUserCheckInPlace(Attendee attendee, Event event);
+
 
     int specificAttendeeCount(Attendee attendee, Event event);
 
