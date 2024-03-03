@@ -23,7 +23,7 @@ public class AnnouncementArrayAdapter extends ArrayAdapter<Announcement> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View view;
         if (convertView == null){
-            view = LayoutInflater.from(getContext()).inflate(R.layout.content_announcements,parent,false);
+            view = LayoutInflater.from(getContext()).inflate(R.layout.content_alerts,parent,false);
 
         } else{
             view = convertView;

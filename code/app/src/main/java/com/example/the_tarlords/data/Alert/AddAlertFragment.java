@@ -20,18 +20,15 @@ import com.example.the_tarlords.data.event.Event;
 import java.io.Serializable;
 
 public class AddAlertFragment extends DialogFragment {
-    interface AddAlertDialogListener {
-        void addAlert(Alert alert);
-        void editAlert(Alert oldAlert, String newTitle, String newMessage);
-    }
 
-    private AddAlertFragment.AddAlertDialogListener listener;
+
+    private AddAlertDialogListener listener;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (context instanceof AddAlertFragment.AddAlertDialogListener) {
-            listener = (AddAlertFragment.AddAlertDialogListener)context;
+        if (context instanceof AddAlertDialogListener) {
+            listener = (AddAlertDialogListener)context;
         } else {
             throw new RuntimeException(context + "must implement AddAlertListener");
         }

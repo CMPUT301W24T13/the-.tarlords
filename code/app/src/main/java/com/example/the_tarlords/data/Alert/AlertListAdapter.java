@@ -16,8 +16,11 @@ import com.example.the_tarlords.data.event.Event;
 import java.util.ArrayList;
 
 public class AlertListAdapter extends ArrayAdapter<Alert> {
-    public AlertListAdapter(Context context, ArrayList<Alert> alerts) {
+
+    private int layoutResource;
+    public AlertListAdapter(Context context, ArrayList<Alert> alerts, int layoutResource) { // layout resource is something like R.layout....
         super(context, 0, alerts);
+        this.layoutResource = layoutResource;
     }
 
     public AlertListAdapter(@NonNull Context context, int resource) {
@@ -28,16 +31,21 @@ public class AlertListAdapter extends ArrayAdapter<Alert> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent){
         View view;
         if (convertView == null) {
-            view = LayoutInflater.from(super.getContext()).inflate(R.layout.content_alerts, parent, false);
+            view = LayoutInflater.from(super.getContext()).inflate(layoutResource, parent, false);
         } else {
             view = convertView;
         }
         Alert alert = super.getItem(position);
         TextView event = view.findViewById(R.id.event_text);
         TextView message = view.findViewById(R.id.message_text);
+        TextView title = view.findViewById(R.id.title_text);
+        TextView ldt = view.findViewById(R.id.ldt_text);
 
         event.setText(alert.getEvent().getName());
         message.setText(alert.getMessage());
+        title.setText(alert.getTitle());
+        ldt.setText(alert.getCurrentDateTime());
+
 
         return view;
     }

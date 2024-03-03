@@ -2,9 +2,12 @@ package com.example.the_tarlords.data.announcement;
 
 import android.widget.ListView;
 
+import com.example.the_tarlords.data.Alert.AddAlertDialogListener;
+import com.example.the_tarlords.data.Alert.AlertList;
+
 import java.util.ArrayList;
 
-public class AnnouncementPage implements AddAnnouncementFragment.AddAnnouncementDialogListener{
+public class AnnouncementPage extends AlertList implements AddAlertDialogListener{
 
     private ArrayList<Announcement> datalist;
     private ListView announcementList;
