@@ -49,6 +49,8 @@ public class QRCode {
     public void setQRId(String newId) {
         QRId = newId;
     }
+
     public String getQRId() {
         return QRId;
     }
+}
