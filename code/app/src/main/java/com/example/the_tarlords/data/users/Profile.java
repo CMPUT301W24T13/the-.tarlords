@@ -10,11 +10,10 @@ public class Profile {
     private String phoneNum;
     private String email;
 
-    public Profile(User user, String firstName, String lastName, Photo profilePhoto, String phoneNum, String email) {
+    public Profile(User user, String firstName, String lastName, String phoneNum, String email) {
         this.user = user;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.profilePhoto = profilePhoto;
         this.phoneNum = phoneNum;
         this.email = email;
     }
@@ -36,11 +35,11 @@ public class Profile {
     public Photo getProfilePhoto() {
         return profilePhoto;
     }
-    /* how exactly to make this happen?
-    public void setAutoProfilePhoto() {
-        this.profilePhoto = generateAutoProfilePhoto();
+
+    public Photo setAutoProfilePhoto() {
+        //needs to be implemented
+        this.profilePhoto = Photo.generateAutoProfilePhoto();
     }
-    */
     public void setProfilePhoto(Photo profilePhoto) {
         this.profilePhoto = profilePhoto;
     }
