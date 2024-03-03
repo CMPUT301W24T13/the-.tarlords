@@ -36,7 +36,7 @@ public class Profile {
         return profilePhoto;
     }
 
-    public Photo setAutoProfilePhoto() {
+    public void setAutoProfilePhoto() {
         //needs to be implemented
         this.profilePhoto = Photo.generateAutoProfilePhoto();
     }
