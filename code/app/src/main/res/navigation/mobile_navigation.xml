@@ -16,16 +16,6 @@
             app:popUpToInclusive="true" />
     </fragment>
     <fragment
-        android:id="@+id/loginFragment"
-        android:name="com.example.the_tarlords.ui.login.LoginFragment"
-        android:label="fragment_login"
-        tools:layout="@layout/fragment_login" >
-        <action
-            android:id="@+id/action_loginFragment_pop"
-            app:popUpTo="@id/loginFragment"
-            app:popUpToInclusive="true" />
-    </fragment>
-    <fragment
         android:id="@+id/notificationSettingsFragment"
         android:name="com.example.the_tarlords.ui.notification.NotificationSettingsFragment"
         android:label="NotificationSettingsFragment" >
@@ -61,10 +51,12 @@
             android:id="@+id/action_eventFragment_to_notificationFragment"
             app:destination="@id/notificationFragment" />
         <action
-            android:id="@+id/action_eventFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
-        <action
             android:id="@+id/action_eventFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/attendanceFragment"
+        android:name="com.example.the_tarlords.ui.attendance_page.AttendanceFragment"
+        android:label="fragment_attendance_list"
+        tools:layout="@layout/fragment_attendance_list" />
 </navigation>
