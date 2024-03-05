@@ -13,6 +13,8 @@ public abstract class Photo {
         this.fileName = fileName;
     }
 
-    public abstract Photo autoGenerate() throws IOException;
+    public void autoGenerate() throws IOException {
+        //tee hee
+    }
 
 }
