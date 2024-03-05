@@ -69,6 +69,11 @@ public class QRScanActivity extends AppCompatActivity {
                     String eventID = doc.getId();
                     try {
                         if (eventID.equals(QrID.substring(2))) {
+                            if (QrID.equals("CI" + eventID)) {
+                                //This is a CheckIn QR
+                            } else {
+                                //This is a EventInfo QR
+                            }
                             String EventName = doc.getString("name");
                             String EventLocation = doc.getString("location");
                             event = new Event(EventName, EventLocation);
