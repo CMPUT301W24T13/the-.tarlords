@@ -3,6 +3,8 @@ package com.example.the_tarlords.data.users;
 import com.example.the_tarlords.data.photo.Photo;
 import com.example.the_tarlords.data.photo.ProfilePhoto;
 
+import java.io.IOException;
+
 public class Profile {
     private User user;
     private String firstName;
@@ -37,9 +39,9 @@ public class Profile {
         return profilePhoto;
     }
 
-    public void setAutoProfilePhoto() {
-        //needs to be implemented
-        this.profilePhoto = ProfilePhoto.autoGenerate();
+    public void setAutoProfilePhoto() throws IOException {
+        ProfilePhoto profilePhoto = null;
+        profilePhoto.autoGenerate();
     }
     public void setProfilePhoto(ProfilePhoto profilePhoto) {
         this.profilePhoto = profilePhoto;

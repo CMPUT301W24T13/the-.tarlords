@@ -1,17 +1,18 @@
 package com.example.the_tarlords.data.photo;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.text.TextPaint;
 
-import androidx.core.content.ContextCompat;
 
-import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.users.Profile;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 
 public class ProfilePhoto extends Photo {
     private Profile profile;
@@ -22,11 +23,11 @@ public class ProfilePhoto extends Photo {
     }
 
     @Override
-    public Photo autoGenerate() {
+    public void autoGenerate() throws IOException {
         //get profile info - using initials for photo
         String firstInitial = this.profile.getFirstName().substring(0,1);
         String lastInitial = this.profile.getLastName().substring(0,1);
-        String initials = firstInitial + " " + lastInitial;
+        String initials = firstInitial + lastInitial;
         //get semi-random color
         int color = ColorGenerator.getRandomColor();
 
@@ -36,13 +37,19 @@ public class ProfilePhoto extends Photo {
         canvas.drawColor(color);
         Paint paint = new Paint();
         paint.setTextAlign(Paint.Align.CENTER);
-        paint.setTypeface(Typeface.Builder builder
-                .setWeight(700)
-                .setItalic(false)
-                .set
-        )
-        paint.setTextSize();
+        paint.setTypeface(Typeface.createFromFile("code/app/src/main/res/font/helvetica_bold.ttf");
+        paint.setTextSize(90);
         paint.setColor(Color.WHITE);
-        canvas.drawText
+        int x = canvas.getWidth()/2;
+        int y = (int) ((canvas.getHeight()/2) - ((paint.descent() + paint.ascent())/2));
+        canvas.drawText(initials,x,y,paint);
+
+        String path = "code/app/src/main/res/drawable";
+        OutputStream fOut = null;
+        File photoFile = new File(path, "profilePhoto.png");
+        fOut = new FileOutputStream(photoFile);
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+        fOut.flush();
+        fOut.close();
     }
 }

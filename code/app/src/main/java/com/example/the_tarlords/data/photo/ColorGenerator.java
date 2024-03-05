@@ -14,10 +14,10 @@ public class ColorGenerator {
         colors = new Stack<>();
         recycler = new Stack<>();
         recycler.addAll(Arrays.asList(
-                0xfff44336, 0xffe91e63, 0xff9c27b0, 0xff673ab7,
-                0xff3f51b5, 0xff2196f3, 0xff03a9f4, 0xff009688,
-                0xff4caf50, 0xff8bc34a, 0xffffc107, 0xffff9800,
-                0xffff5722, 0xff795548, 0xff607d8b, 0xff333333));
+                0xffb44336, 0xffa91e63, 0xff9c27b0, 0xff573398,
+                0xff3f51b5, 0xff1c77bd, 0xff049ade, 0xff009688,
+                0xff418eff, 0xff79a841, 0xffe4ae08, 0xffdd8400,
+                0xffcf5722, 0xff795548, 0xff607d8b, 0xff333333));
     }
 
     public static Integer getRandomColor() {

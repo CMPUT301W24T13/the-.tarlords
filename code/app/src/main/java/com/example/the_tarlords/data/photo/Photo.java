@@ -3,6 +3,7 @@ package com.example.the_tarlords.data.photo;
 import android.graphics.Color;
 import android.os.Build;
 
+import java.io.IOException;
 import java.util.Random;
 
 public abstract class Photo {
@@ -12,6 +13,6 @@ public abstract class Photo {
         this.fileName = fileName;
     }
 
-    public abstract Photo autoGenerate();
+    public abstract Photo autoGenerate() throws IOException;
 
 }
