@@ -13,6 +13,7 @@ import com.example.the_tarlords.data.event.EventPoster;
 import com.example.the_tarlords.data.map.Map;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 //Notes for myself(Rimsha): Finish the methods once others are done their parts
 // ask lucy if she is putting event details page and event poster together or not. If they are separate, then create one more method.
@@ -52,11 +53,39 @@ public class Organizer extends Attendee implements OrgPerms {
     @Override
     public Event createEvent(String name, String location) {
         Event event = new Event(name, location);
+        if (setLimit()) {
+            int maxLimit = maxLimitFunction();
+            event.setMaxNumOfSignUps(maxLimit);
+        }
         return event;
     }
 
+
     /**
-     * This allows organizer to generate a QR code linked to attendee check in list for that event.
+     * This asks the organizer if they want to set a limit on total number of sign ups.
+     * @return true
+     */
+    @Override
+    public boolean setLimit() {
+        return true;
+    }
+
+
+    /**
+     * This asks the organizer for the max limit they want to set on total number of sign ups.
+     * @return maxLimit
+     */
+    @Override
+    public int maxLimitFunction() {
+        Scanner scanner = new Scanner(System.in);
+        int maxLimit = scanner.nextInt();
+        return maxLimit;
+    }
+
+
+
+    /**
+     * NOT DONE!! This allows organizer to generate a QR code linked to attendee check in list for that event.
      * It also connects the generated QRcode to a specific event.
      * @param event
      * @param text
@@ -69,6 +98,7 @@ public class Organizer extends Attendee implements OrgPerms {
         qrCode.generateQR(text, imageView);
         event.setQrCodeCheckIns(qrCode);
         return qrCode;
+
     }
 
     /**
@@ -83,17 +113,30 @@ public class Organizer extends Attendee implements OrgPerms {
 
 
     /**
-     * NOT DONE!! This allows the organizer to view the attendee check in list
+     * This allows the organizer to view the list of attendees who have checked in to the event.
      * @param event
      * @return attendeeCheckInList
      */
     @Override
     public ArrayList<Attendee> viewAttendeeCheckIns(Event event) {
-        ArrayList<Attendee> attendeeCheckInList = event.getAttendanceList();
+
+        //this gets ALL the attendees signed up for event (including those checkedIn and not checkedIn)
+        ArrayList<Attendee> allAttendees = event.getAttendanceList();
+
+        //new list to return only the attendees whose checkedInStatus is true
+        ArrayList<Attendee> attendeeCheckInList = new ArrayList<>();
+        for (Attendee attendee : allAttendees) {
+            if (attendee.getCheckInStatus()) {
+                attendeeCheckInList.add(attendee);
+            }
+        }
         return attendeeCheckInList;
     }
 
-
+    // Not needed for this part.
+    @Override
+    public void sendNotifs(AttendeeCheckInList attendeeCheckInList, String notification) {
+    }
 
     /**
      * NOT DONE!! This allows the organizer to get event poster from event and upload it to the app
@@ -107,19 +150,18 @@ public class Organizer extends Attendee implements OrgPerms {
 
     }
 
-
-    // Not needed for this part.
+    /**
+     * This allows organizer to track real-time Attendance as in the number of attendees checkedinto the event.
+     * @param event
+     * @return
+     */
     @Override
-    public void sendNotifs(AttendeeCheckInList attendeeCheckInList, String notification) {
+    public int trackAttendance(Event event) {
+        ArrayList<Attendee> attendeeCheckInList = viewAttendeeCheckIns(event);
+        return attendeeCheckInList.size();
     }
 
 
-
-    // need iz's attendance list count method
-    @Override
-    public int trackAttendance(int count) {
-        return count;
-    }
 
 
     // Not sure if we are leaving it; need Jayden's alert class
@@ -136,7 +178,7 @@ public class Organizer extends Attendee implements OrgPerms {
     }
 
     /**
-     * This allows organizer to generate a unique promotion QR code linked to the specific event's details pageg.
+     * NOT DONE!!!! This allows organizer to generate a unique promotion QR code linked to the specific event's details pageg.
      * It also connects the generated QRcode to a specific event
      * @param event
      * @param text
@@ -149,6 +191,7 @@ public class Organizer extends Attendee implements OrgPerms {
         qrCode.generateQR(text, imageView);
         event.setQrCodePromo(qrCode);
         return qrCode;
+        //Grace is getting a generator class to allow org to generate this stuff
     }
 
     // Not needed for this part.
@@ -157,28 +200,34 @@ public class Organizer extends Attendee implements OrgPerms {
         return null;
     }
 
-    // need iz's attendance list method
+    /**
+     * This allows organizer to see how many times an attendee has checked into an event.
+     * @param givenAttendee
+     * @param event
+     * @return
+     */
     @Override
-    public int specificAttendeeCount(Attendee attendee, Event event) {
-        return 0;
-    }
-
-    //need iz's attendance list; This code is incorrect, I will change it
-    @Override
-    public AttendeeSignUpList viewAttendeeSignUps(Event event) {
-        return null;
+    public int specificAttendeeCount(Attendee givenAttendee, Event event) {
+        ArrayList<Attendee> attendeeCheckInList = viewAttendeeCheckIns(event);
+        int attendeeCheckInCount = 0;
+        for (Attendee attendee : attendeeCheckInList) {
+            if (attendee.equals(givenAttendee)) {
+                attendeeCheckInCount++;
+            }
+        }
+        return attendeeCheckInCount;
     }
 
     /**
-     * This allows organizer to set a limit on how many people can signup for an event
-     * @param maxSignUps
+     * This allows organizer to see who is signed up to attend the event.
      * @param event
+     * @return
      */
     @Override
-    public void setLimitOnSignUps(int maxSignUps, Event event) {
-        event.setMaxSignUps(maxSignUps);
-        /* for iz: can use the reachedMaxCap() method from event in SignUp() method from Attendance
-            to check if we have reached max, there can be*/
-
+    public ArrayList<Attendee> viewAttendeeSignUps(Event event) {
+        //this gets ALL the attendees signed up for event (including those checkedIn and not checkedIn)
+        ArrayList<Attendee> attendeeSignUpList = event.getAttendanceList();
+        return attendeeSignUpList;
     }
+
 }

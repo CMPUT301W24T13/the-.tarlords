@@ -7,6 +7,8 @@ import static com.example.the_tarlords.MainActivity.db;
 import android.util.Log;
 
 import com.example.the_tarlords.MainActivity;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,7 +17,7 @@ import java.util.UUID;
 
 /**
  * This class has an List of events
- * Each List of events could have a name , 2 constructors can have one without a name
+ * Each List of events could have a name, 2 constructors can have one without a name
  * Handles adding an event to a List
  * These events also have a unique id
  */
@@ -35,7 +37,6 @@ public class EventList {
         this.events = new ArrayList<>();
         this.name = "Event Name";
         this.id = UUID.randomUUID();
-
     }
 
     public ArrayList<Event> getEvents() {

@@ -12,6 +12,7 @@ import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.data.QR.QRCode;
 import com.example.the_tarlords.data.attendance.Attendance;
 import com.example.the_tarlords.data.users.Attendee;
+import com.example.the_tarlords.data.users.Organizer;
 import com.example.the_tarlords.data.users.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -49,12 +50,9 @@ public class Event implements Attendance {
     private QRCode qrCodePromo;
 
     private EventPoster poster;
-
-    private Integer maxSignUps;
-
+    private int maxNumOfSignUps;
     private CollectionReference attendanceRef = MainActivity.db.collection("Events/"+ id +"/Attendees");
     private CollectionReference usersRef = MainActivity.db.collection("Users");
-
 
 
     public Event(String name, String location) {
@@ -132,21 +130,17 @@ public class Event implements Attendance {
         this.poster = poster;
     }
 
-    public Integer getMaxSignUps() {
-        return maxSignUps;
+    public int getMaxNumOfSignUps() {
+        return maxNumOfSignUps;
     }
 
-    public void setMaxSignUps(Integer maxSignUps) {
-        this.maxSignUps = maxSignUps;
-    }
-
-    public boolean reachedMaxCap() {
-        return true;
+    public void setMaxNumOfSignUps(int maxNumOfSignUps) {
+        this.maxNumOfSignUps = maxNumOfSignUps;
     }
 
     /**
-     * Returns a list of Attendee objects attending the event.
-     *
+     * Returns a list of Attendee objects attending the event. This is the default "signup" list
+     * Updates the user's checked in status if they check in or not.
      * @return list of User objects
      */
     public ArrayList<Attendee> getAttendanceList() {
@@ -259,4 +253,8 @@ public class Event implements Attendance {
                     }
                 });
     }
+
+
+
+
 }
