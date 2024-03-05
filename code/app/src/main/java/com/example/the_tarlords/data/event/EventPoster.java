@@ -8,4 +8,13 @@ import com.example.the_tarlords.data.photo.Photo;
  */
 public class EventPoster extends Photo {
     private Event event;
+
+    public EventPoster(String fileName) {
+        super(fileName);
+    }
+
+    @Override
+    public Photo autoGenerate() {
+        return null;
+    }
 }
