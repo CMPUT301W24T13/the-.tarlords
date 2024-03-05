@@ -1,11 +1,12 @@
 package com.example.the_tarlords;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
 import android.widget.Toast;
 
-import com.example.the_tarlords.data.QR.QRCode;
+import com.example.the_tarlords.data.QR.QRScanActivity;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -22,8 +23,6 @@ import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
 
-import java.util.Objects;
-
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
@@ -38,20 +37,16 @@ public class MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-        FirebaseApp.initializeApp(this); // what dependencies are needed ?
         db = FirebaseFirestore.getInstance();
 
-    
+
         setSupportActionBar(binding.appBarMain.toolbar);
 
         binding.appBarMain.scanQrButton.setOnClickListener(new View.OnClickListener() {
-            QRCode myQR = new QRCode(MainActivity.this, true);
             @Override
             public void onClick(View view) {
-                myQR.scanQR();
+                Intent intent = new Intent(MainActivity.this, QRScanActivity.class);
+                startActivity(intent);
             }
         });
 

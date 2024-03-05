@@ -40,6 +40,9 @@ public class EventEditFragment extends Fragment {
     private EditText eventLocationEditText;
     private EditText eventNameEditText;
     private TextView eventEndTimeTextView;
+    //add the event poster to be able to edit the poster
+    //event poster doenst need to be connected to event details. Make poster connected to event so
+    //when QR -> event <- event detials
 
 
     public EventEditFragment() {
