@@ -8,11 +8,12 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class Alert implements Serializable {
+public class Alert implements Comparable{
     private String title;
     private String message;
     private Event event;
     private String currentDateTime;
+    private LocalDateTime ldt;
 
 
     public Alert(String title, String message, Event event) {
@@ -20,9 +21,17 @@ public class Alert implements Serializable {
         this.message = message;
         this.event = event;
 
-        LocalDateTime ldt = LocalDateTime.now();
+        ldt = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         this.currentDateTime = ldt.format(formatter);
+    }
+
+    public LocalDateTime getLdt() {
+        return ldt;
+    }
+
+    public void setLdt(LocalDateTime ldt) {
+        this.ldt = ldt;
     }
 
     public String getTitle() {
@@ -53,5 +62,13 @@ public class Alert implements Serializable {
     }
     public void setEvent(Event event) {
         this.event = event;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        Alert obj = (Alert) o;
+        return obj.getLdt().compareTo(this.ldt);
+
+
     }
 }

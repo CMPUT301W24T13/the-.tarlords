@@ -32,9 +32,9 @@ public class AddAlertFragment extends DialogFragment {
             this.ldtTemp = alert.getCurrentDateTime();
             this.oldAlert = alert;
         }else{
-            this.titleTemp = "alert.getTitle()";
-            this.messageTemp = "alert.getMessage()";
-            this.ldtTemp = "alert.getCurrentDateTime()";
+            this.titleTemp = "title";
+            this.messageTemp = "message";
+            this.ldtTemp = "ldt";
 
         }
 
@@ -56,6 +56,9 @@ public class AddAlertFragment extends DialogFragment {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_add_alert, null);
         EditText editTitle = view.findViewById(R.id.edit_text_alert_title);
         EditText editMessage = view.findViewById(R.id.edit_text_alert_message);
+
+        editTitle.setText(titleTemp);
+        editMessage.setText(messageTemp);
 
         Bundle args = getArguments();
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -79,10 +82,12 @@ public class AddAlertFragment extends DialogFragment {
                 .setView(view)
                 .setNegativeButton("Cancel", null)
                 .setPositiveButton("add", (dialog, which) -> {
+
+
                     String title = editTitle.getText().toString();
                     String message = editMessage.getText().toString();
 
-                    listener.addAlert(new Alert(titleTemp,messageTemp,new Event("asdf event","location",null,null)));
+                    listener.addAlert(new Alert(title,message,new Event("asdf event","location",null,null)));
                     /*
                     if (getArguments() != null && getArguments().containsKey("alert")) {
                         // Editing existing alert

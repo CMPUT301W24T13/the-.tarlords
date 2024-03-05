@@ -5,12 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.example.the_tarlords.R;
-import com.example.the_tarlords.data.announcement.Announcement;
 import com.example.the_tarlords.data.event.Event;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
-
+// ignore
 public class AlertActivity_TEST extends AppCompatActivity implements AddAlertDialogListener {
     AlertList alertList;
     @Override

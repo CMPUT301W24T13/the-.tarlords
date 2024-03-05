@@ -7,6 +7,7 @@ import android.widget.ListView;
 import com.example.the_tarlords.R;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class AlertList implements AddAlertDialogListener {
     private ArrayList<Alert> alertDataList;
@@ -33,16 +34,24 @@ public class AlertList implements AddAlertDialogListener {
     public void addAlert(Alert alert) {
         //alertListAdapter.add(alert);
         alertDataList.add(alert);
-        alertListAdapter.notifyDataSetChanged();
+
+        refreshList();
     }
     @Override
     public void deleteAlert(Alert alert) {
         alertListAdapter.remove(alert);
-        alertListAdapter.notifyDataSetChanged();
+        refreshList();
     }
     @Override
     public void editAlert(Alert oldAlert, String newTitle, String newMessage) {
         oldAlert.setTitle(newTitle);
         oldAlert.setMessage(newMessage);
+        refreshList();
+    }
+    public void refreshList(){
+        Collections.sort(alertDataList);
+        alertListAdapter.notifyDataSetChanged();
+
+
     }
 }
