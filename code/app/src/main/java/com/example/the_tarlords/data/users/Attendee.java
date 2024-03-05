@@ -9,11 +9,14 @@ public class Attendee {
     private Event event;
     private User user;
     private Profile profile;
+
+    private Boolean checkInStatus;
     public Attendee(User user, Profile profile, Event event) {
         this.user = user;
         //hey lucy change this vv in android studio...
         this.profile = profile;
         this.event = event;
+        this.checkInStatus = false;
     }
 
     public Event getEvent() {
@@ -25,5 +28,10 @@ public class Attendee {
     boolean isOrganizer() {
         return false;
     }
+    public  Profile getProfile(){
+        return profile;
+    }
+    public Boolean getCheckInStatus() { return checkInStatus; }
+    public void setCheckInStatus(Boolean checkInStatus) { this.checkInStatus = checkInStatus; }
 
 }

@@ -20,7 +20,7 @@ public interface OrgPerms {
 
     QRCode reuseQRCode(QRCode qrCode);
 
-    ArrayList<User> viewAttendeeCheckIns(Event event);
+    ArrayList<Attendee> viewAttendeeCheckIns(Event event);
 
     //Note for notifs, make sure in the notifs class there is a part that lets org/admin write their own message
     void sendNotifs(AttendeeCheckInList attendeeCheckInList, String notification);

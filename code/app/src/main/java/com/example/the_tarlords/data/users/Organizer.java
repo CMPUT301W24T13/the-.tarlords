@@ -88,8 +88,8 @@ public class Organizer extends Attendee implements OrgPerms {
      * @return attendeeCheckInList
      */
     @Override
-    public ArrayList<User> viewAttendeeCheckIns(Event event) {
-        ArrayList<User> attendeeCheckInList = Attendance.getAttendanceList();
+    public ArrayList<Attendee> viewAttendeeCheckIns(Event event) {
+        ArrayList<Attendee> attendeeCheckInList = event.getAttendanceList();
         return attendeeCheckInList;
     }
 

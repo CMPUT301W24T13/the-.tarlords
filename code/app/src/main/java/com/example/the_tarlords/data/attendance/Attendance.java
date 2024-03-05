@@ -26,129 +26,38 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Attendance {       //could be made into interface
-    private Event event;
-    private CollectionReference attendanceRef;
-    private CollectionReference usersRef = MainActivity.db.collection("Users");
-
-    public Attendance(Event event) {
-        this.event = event;
-        attendanceRef = MainActivity.db.collection("Events/"+event.getName()+"/Attendees"); // get name should be getId once implemented in event class
-    }
+public interface Attendance {       //could be made into interface
 
     /**
-     * Returns a list of users attending the event.
+     * Returns a list of Attendee objects attending the event.
      *
      * @return list of User objects
      */
-    public ArrayList<User> getAttendanceList() {
-        ArrayList<User> attendees = new ArrayList<User>();
-        attendanceRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot attendeeDoc : task.getResult()) {
-                        DocumentSnapshot userDoc = usersRef.document(attendeeDoc.getId()).get().getResult();
-                        User user = userDoc.toObject(User.class);
-                        // TODO: pass checked in status into User object (requires setCheckedIn method in User class)
-                        attendees.add(user);
-                    }
-                    Log.d("firestore", attendees.toString());
-                } else {
-                    Log.d("firestore", "Error getting documents: ", task.getException());
-                }
-            }
-        });
-        return attendees;
-    }
+    public ArrayList<Attendee> getAttendanceList();
 
     /**
      * Signs up a user to attend an event by adding their name to the attendance list.
      *
      * @param user to add
      */
-    public void signUp(User user) {
-        attendanceRef
-                .document(user.getId().toString())
-                .set(false)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("Firestore", "DocumentSnapshot successfully written!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d("Firestore", e.getMessage());
-                    }
-                });
-    }
+    public void signUp(User user);
 
     /**
      * Removes a user from the attendance list of an event.
      *
      * @param user to remove
      */
-    public void removeSignUp(User user) {
-        attendanceRef
-                .document(user.getId().toString())
-                .delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("Firestore", "DocumentSnapshot successfully written!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d("Firestore", e.getMessage());
-                    }
-                });
-    }
+    public void removeSignUp(User user);
 
     /**
      * Checks in a user for an event by updating the checked in status for that event.
      * @param user to check in
      */
-    public void checkIn(User user) {
-        attendanceRef
-                .document(user.getId().toString())
-                .set(true)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("Firestore", "DocumentSnapshot successfully written!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d("Firestore", e.getMessage());
-                    }
-                });
-    }
+    public void checkIn(User user);
 
     /**
      * Removes user's checked in status for an event. Possibly unnecessary.
      * @param user to un check in
      */
-    public void removeCheckIn(User user) {
-        attendanceRef
-                .document(user.getId().toString())
-                .set(false)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("Firestore", "DocumentSnapshot successfully written!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d("Firestore", e.getMessage());
-                    }
-                });
-    }
+    public void removeCheckIn(User user);
 }
