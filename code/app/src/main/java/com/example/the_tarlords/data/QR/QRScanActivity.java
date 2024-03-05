@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.example.the_tarlords.data.attendance.Attendance;
 import com.example.the_tarlords.data.event.Event;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -68,15 +69,20 @@ public class QRScanActivity extends AppCompatActivity {
                 for (QueryDocumentSnapshot doc: querySnapshots) {
                     String eventID = doc.getId();
                     try {
+
                         if (eventID.equals(QrID.substring(2))) {
+
+                            String EventName = doc.getString("name");
+                            String EventLocation = doc.getString("location");
+                            Event event = new Event(EventName, EventLocation);
+
                             if (QrID.equals("CI" + eventID)) {
                                 //This is a CheckIn QR
+
                             } else {
                                 //This is a EventInfo QR
                             }
-                            String EventName = doc.getString("name");
-                            String EventLocation = doc.getString("location");
-                            event = new Event(EventName, EventLocation);
+
                         }
                     } catch (Exception e) {
                         throw new RuntimeException("This is not a valid QR code for this app");
