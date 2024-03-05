@@ -44,4 +44,9 @@
         "ut labore et dolore magna aliqua."
     </string>
     <string name="alert_title">Alert Title</string>
+    <string name="name">Name</string>
+    <string name="phone_number">phone number</string>
+    <string name="email">email</string>
+    <string name="profile_picture">profile picture</string>
+    <string name="upload_photo">upload photo</string>
 </resources>
