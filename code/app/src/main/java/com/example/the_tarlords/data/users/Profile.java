@@ -39,6 +39,7 @@ public class Profile {
         return profilePhoto;
     }
 
+    //perhaps this is an action that needs to happen in the controller...
     public void setAutoProfilePhoto() throws IOException {
         ProfilePhoto profilePhoto = null;
         profilePhoto.autoGenerate();
