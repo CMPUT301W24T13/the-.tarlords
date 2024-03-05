@@ -5,7 +5,7 @@ import com.example.the_tarlords.data.event.Event;
 
 import java.util.List;
 
-public abstract class User {
+public class User {
     private Integer userId;
     private Profile profile;
     private List<Event> events;
@@ -31,6 +31,11 @@ public abstract class User {
     public void setProfile(Profile profile) {
         this.profile = profile;
     }
+    /*
+    public void editProfile() {
+        //to be implemented
+    }
+    */
 
     public List<Event> getEvents() {
         return events;

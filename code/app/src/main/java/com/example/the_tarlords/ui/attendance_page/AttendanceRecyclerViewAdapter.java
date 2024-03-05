@@ -3,11 +3,14 @@ package com.example.the_tarlords.ui.attendance_page;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.example.the_tarlords.data.users.Attendee;
+import com.example.the_tarlords.databinding.FragmentAttendanceListItemBinding;
 import com.example.the_tarlords.ui.attendance_page.placeholder.PlaceholderContent.PlaceholderItem;
-import com.example.the_tarlords.databinding.FragmentAttendanceBinding;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,45 +19,61 @@ import java.util.List;
  */
 public class AttendanceRecyclerViewAdapter extends RecyclerView.Adapter<AttendanceRecyclerViewAdapter.ViewHolder> {
 
-    private final List<PlaceholderItem> mValues;
+    private final ArrayList<Attendee> attendees;
 
-    public AttendanceRecyclerViewAdapter(List<PlaceholderItem> items) {
-        mValues = items;
+    public AttendanceRecyclerViewAdapter(ArrayList<Attendee> attendees) {
+        this.attendees = attendees;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-    return new ViewHolder(FragmentAttendanceBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+    return new ViewHolder(FragmentAttendanceListItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
 
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.attendee = attendees.get(position);
+        holder.firstName.setText(attendees.get(position).getProfile().getFirstName());
+        holder.lastName.setText(attendees.get(position).getProfile().getLastName());
+        holder.checkInStatus.setChecked(attendees.get(position).getCheckInStatus());
     }
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return attendees.size();
     }
+
+    public int getCheckInCount() {
+        int checkInCount = 0;
+        for (Attendee a: attendees) {
+            if (a.getCheckInStatus() == true) {
+                checkInCount += 1;
+            }
+        }
+        return checkInCount;
+    }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final TextView mIdView;
-        public final TextView mContentView;
-        public PlaceholderItem mItem;
+        public final TextView firstName;
+        public final TextView lastName;
+        public final CheckBox checkInStatus;
 
-    public ViewHolder(FragmentAttendanceBinding binding) {
-      super(binding.getRoot());
-      mIdView = binding.itemNumber;
-      mContentView = binding.content;
-    }
+        public Attendee attendee;
 
-        @Override
+        public ViewHolder(FragmentAttendanceListItemBinding binding) {
+          super(binding.getRoot());
+          firstName = binding.itemFirstName;
+          lastName = binding.itemLastName;
+          checkInStatus = binding.itemCheckInBox;
+        }
+
+   /*     @Override
         public String toString() {
             return super.toString() + " '" + mContentView.getText() + "'";
         }
+    */
     }
 }

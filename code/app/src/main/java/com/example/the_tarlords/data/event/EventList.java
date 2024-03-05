@@ -7,6 +7,8 @@ import static com.example.the_tarlords.MainActivity.db;
 import android.util.Log;
 
 import com.example.the_tarlords.MainActivity;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,7 +17,7 @@ import java.util.UUID;
 
 /**
  * This class has an List of events
- * Each List of events could have a name , 2 constructors can have one without a name
+ * Each List of events could have a name, 2 constructors can have one without a name
  * Handles adding an event to a List
  * These events also have a unique id
  */
@@ -35,7 +37,6 @@ public class EventList {
         this.events = new ArrayList<>();
         this.name = "Event Name";
         this.id = UUID.randomUUID();
-
     }
 
     public ArrayList<Event> getEvents() {
@@ -62,12 +63,15 @@ public class EventList {
 
         //Next part used to add event to Firebase
         // Create a Map with event details
+        //How are we storing QR
         Map<String,Object> eventMap = new HashMap<>(); //object means the key can be mapped to any type
         eventMap.put("name", event.getName());
         eventMap.put("location", event.getLocation());
         eventMap.put("id", event.getId().toString());
         eventMap.put("startDate", event.getStartDate());
         eventMap.put("startTime", event.getStartTime());
+        eventMap.put("endTime", event.getEndTime());
+
 
         // Add the event to the Firestore collection
         eventsRef

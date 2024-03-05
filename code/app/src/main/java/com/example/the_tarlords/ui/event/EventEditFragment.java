@@ -39,6 +39,10 @@ public class EventEditFragment extends Fragment {
     private TextView eventStartTimeTextView;
     private EditText eventLocationEditText;
     private EditText eventNameEditText;
+    private TextView eventEndTimeTextView;
+    //add the event poster to be able to edit the poster
+    //event poster doenst need to be connected to event details. Make poster connected to event so
+    //when QR -> event <- event detials
 
 
     public EventEditFragment() {
@@ -76,6 +80,8 @@ public class EventEditFragment extends Fragment {
         eventLocationEditText = view.findViewById(R.id.et_event_location);
         eventStartTimeTextView = view.findViewById(R.id.tv_edit_event_startTime);
         eventStartDateTextView = view.findViewById(R.id.tv_edit_event_startDate);
+        eventEndTimeTextView = view.findViewById(R.id.tv_edit_event_endTime);
+
         //add more attributes
 
         // Populate UI elements with event details
@@ -84,6 +90,7 @@ public class EventEditFragment extends Fragment {
             eventLocationEditText.setText(event.getLocation());
             eventStartTimeTextView.setText(event.getStartTime());
             eventStartDateTextView.setText(event.getStartDate());
+            eventEndTimeTextView.setText(event.getEndTime());
             // Populate more attributes
         }
         /**
@@ -133,7 +140,10 @@ public class EventEditFragment extends Fragment {
         eventStartDateTextView.setOnClickListener(v -> showDatePickerDialog());
 
         // Set an OnClickListener for the eventStartTimeTextView
-        eventStartTimeTextView.setOnClickListener(v -> showTimePickerDialog());
+        eventStartTimeTextView.setOnClickListener(v -> showTimePickerDialog("start"));
+
+        // Set an OnClickListener for the eventEndDateTextView
+        eventEndTimeTextView.setOnClickListener(v -> showTimePickerDialog("end"));
 
         return view;
     }
@@ -170,7 +180,7 @@ public class EventEditFragment extends Fragment {
         //show the dialog
         dialog.show();
     }
-    private void showTimePickerDialog(){
+    private void showTimePickerDialog(String s){
         // logic for showing a time picker dialog
         TimePickerDialog dialog = new TimePickerDialog(requireContext(), new TimePickerDialog.OnTimeSetListener() {
             /**
@@ -192,10 +202,18 @@ public class EventEditFragment extends Fragment {
                 }
                 // Use the amPm and adjusted hour to display or process the time
                 String formattedTime = String.format("%02d:%02d %s", hourOfDay, minute, amPm);
-                //update text view
-                eventStartTimeTextView.setText(formattedTime);
-                //update event attribute
-                event.setStartTime(formattedTime);
+                if(s == "start"){
+                    //update text view
+                    eventStartTimeTextView.setText(formattedTime);
+                    //update event attribute
+                    event.setStartTime(formattedTime);
+                }else{
+                    //update text view
+                    eventEndTimeTextView.setText(formattedTime);
+                    //update event attribute
+                    event.setEndTime(formattedTime);
+                }
+
             }
         }, 7, 30, true);
         //show the dialog
