@@ -78,6 +78,7 @@ public class EventDetailsFragment extends Fragment {
         TextView eventLocationTextView = view.findViewById(R.id.tv_event_location);
         TextView eventStartDateTextView = view.findViewById(R.id.tv_event_startDate);
         TextView eventStartTimeTextView = view.findViewById(R.id.tv_event_startTime);
+        TextView eventEndTimeTextView = view.findViewById(R.id.tv_event_endTime);
 
         // Check if event is not null before accessing its attributes
         if (event != null) {
@@ -85,6 +86,7 @@ public class EventDetailsFragment extends Fragment {
             eventLocationTextView.setText(event.getLocation());
             eventStartTimeTextView.setText(event.getStartTime());
             eventStartDateTextView.setText(event.getStartDate());
+            eventEndTimeTextView.setText(event.getEndTime());
             // Set other attributes similarly
         }
 

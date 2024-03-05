@@ -10,7 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.example.the_tarlords.R;
+import com.example.the_tarlords.data.attendance.Attendance;
+import com.example.the_tarlords.data.event.Event;
+import com.example.the_tarlords.data.users.Attendee;
 import com.example.the_tarlords.ui.attendance_page.placeholder.PlaceholderContent;
+
+import java.util.ArrayList;
 
 /**
  * A fragment representing a list of Items.
@@ -19,6 +24,7 @@ public class AttendanceFragment extends Fragment {
 
     // TODO: Customize parameters
     private int mColumnCount = 1;
+    private Event event;
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -46,6 +52,7 @@ public class AttendanceFragment extends Fragment {
 
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
+            event = (Event) getArguments().get("event-name");
         }
     }
 
@@ -63,7 +70,8 @@ public class AttendanceFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new AttendanceRecyclerViewAdapter(PlaceholderContent.ITEMS));
+
+            recyclerView.setAdapter(new AttendanceRecyclerViewAdapter(event.getAttendanceList()));
         }
         return view;
     }
