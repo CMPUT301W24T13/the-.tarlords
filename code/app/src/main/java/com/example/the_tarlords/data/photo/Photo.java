@@ -17,4 +17,7 @@ public abstract class Photo {
         //tee hee
     }
 
+    public void upload() {
+        //upload this ass
+    }
 }

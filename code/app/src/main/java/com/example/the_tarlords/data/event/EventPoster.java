@@ -16,6 +16,8 @@ public class EventPoster extends Photo {
     }
 
     @Override
-    public void autoGenerate() throws IOException {
+    public void upload() {
+        super.upload();
     }
+
 }

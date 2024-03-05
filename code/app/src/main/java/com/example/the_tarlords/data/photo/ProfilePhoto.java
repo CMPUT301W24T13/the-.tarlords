@@ -22,6 +22,15 @@ public class ProfilePhoto extends Photo {
         this.profile = profile;
     }
 
+    public void takePhoto() {
+        //don't try me i'll literally end it all
+    }
+    
+    @Override
+    public void upload() {
+        super.upload();
+    }
+
     @Override
     public void autoGenerate() throws IOException {
         //get profile info - using initials for photo
