@@ -30,11 +30,11 @@ import com.journeyapps.barcodescanner.BarcodeEncoder;
 public class QRCode {
     private FirebaseFirestore db;
     private CollectionReference eventsRef;
-    private String newDocID;
+    //private String newDocID;
 
     //NEED TO JAVADOC
-    //Generates a new doc id for the new event
-    public String makeNewDocID() {
+    //Generates a new doc id for the new event  //   Put into Event
+    /*public String makeNewDocID() {
         db = FirebaseFirestore.getInstance();
         eventsRef = db.collection("Events");
 
@@ -62,7 +62,7 @@ public class QRCode {
             }
         });
         return newDocID;
-    }
+    } */
 
     /**
      * Generates a QR code from the provided text and sets it to the specified ImageView.
