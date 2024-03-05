@@ -102,6 +102,26 @@ public class Organizer extends Attendee implements OrgPerms {
     }
 
     /**
+     * This allows organizer to generate the two kinds of QR codes. One for the attedee check-in which attendees will use to check in,
+     * and the other is for event details. They are distinguishable by their text; check-ins text must be CI# with # being a number,
+     * and event details text must be EI#
+     * @param event
+     * @param text
+     * @param imageView
+     * @return generated qrCode
+     */
+    public QRCode generateQRCode(Event event, String text, ImageView imageView) {
+        QRCode qrCode = new QRCode();
+        qrCode.generateQR(text, imageView);
+        if (text.charAt(0) == 'C') {     // this is for checkins
+            event.setQrCodeCheckIns(qrCode);
+        } else if (text.charAt(0) == 'E') {   // this is for event details
+            event.setQrCodePromo(qrCode);
+        }
+        return qrCode;
+    }
+
+    /**
      * This allows organizer to reuse a previous QR code
      * @param qrCode
      * @return previous QRCode as a new one now
@@ -135,7 +155,7 @@ public class Organizer extends Attendee implements OrgPerms {
 
     // Not needed for this part.
     @Override
-    public void sendNotifs(AttendeeCheckInList attendeeCheckInList, String notification) {
+    public void sendNotifs(ArrayList<Attendee> attendeeCheckInList, String notification) {
     }
 
     /**
@@ -177,22 +197,6 @@ public class Organizer extends Attendee implements OrgPerms {
 
     }
 
-    /**
-     * NOT DONE!!!! This allows organizer to generate a unique promotion QR code linked to the specific event's details pageg.
-     * It also connects the generated QRcode to a specific event
-     * @param event
-     * @param text
-     * @param imageView
-     * @return
-     */
-    @Override
-    public QRCode genUniquePromotionQRCode(Event event, String text, ImageView imageView) {
-        QRCode qrCode = new QRCode();
-        qrCode.generateQR(text, imageView);
-        event.setQrCodePromo(qrCode);
-        return qrCode;
-        //Grace is getting a generator class to allow org to generate this stuff
-    }
 
     // Not needed for this part.
     @Override
