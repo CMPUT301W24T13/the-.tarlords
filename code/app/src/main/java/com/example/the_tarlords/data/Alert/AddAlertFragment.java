@@ -1,6 +1,5 @@
 package com.example.the_tarlords.data.Alert;
 
-import static com.example.the_tarlords.R.layout.fragment_add_alert;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -17,13 +16,29 @@ import androidx.fragment.app.DialogFragment;
 import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.event.Event;
 
-import java.io.Serializable;
-
 public class AddAlertFragment extends DialogFragment {
 
 
+    private String titleTemp;
+    private String messageTemp;
+    private String ldtTemp;
+    private Alert oldAlert;
     private AddAlertDialogListener listener;
 
+    public AddAlertFragment(Alert alert){
+        if(alert != null){
+            this.titleTemp = alert.getTitle();
+            this.messageTemp = alert.getMessage();
+            this.ldtTemp = alert.getCurrentDateTime();
+            this.oldAlert = alert;
+        }else{
+            this.titleTemp = "alert.getTitle()";
+            this.messageTemp = "alert.getMessage()";
+            this.ldtTemp = "alert.getCurrentDateTime()";
+
+        }
+
+    }
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -34,20 +49,11 @@ public class AddAlertFragment extends DialogFragment {
         }
     }
 
-    static AddAlertFragment newInstance(Alert alert, boolean isEditing) {
-        Bundle args = new Bundle();
-        args.putSerializable("alert", (Serializable) alert); //serializable cast might be a problem
-        args.putBoolean("isEditing", isEditing);
-
-        AddAlertFragment fragment = new AddAlertFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        View view = LayoutInflater.from(getContext()).inflate(fragment_add_alert, null);
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_add_alert, null);
         EditText editTitle = view.findViewById(R.id.edit_text_alert_title);
         EditText editMessage = view.findViewById(R.id.edit_text_alert_message);
 
@@ -72,18 +78,22 @@ public class AddAlertFragment extends DialogFragment {
         return builder
                 .setView(view)
                 .setNegativeButton("Cancel", null)
-                .setPositiveButton(positive_button_text, (dialog, which) -> {
+                .setPositiveButton("add", (dialog, which) -> {
                     String title = editTitle.getText().toString();
                     String message = editMessage.getText().toString();
+
+                    listener.addAlert(new Alert(titleTemp,messageTemp,new Event("asdf event","location",null,null)));
+                    /*
                     if (getArguments() != null && getArguments().containsKey("alert")) {
                         // Editing existing alert
                         Alert oldAlert = (Alert) getArguments().getSerializable("alert");
                         listener.editAlert(oldAlert, title, message);
                     } else {
-                        Alert oldAlert = (Alert) getArguments().getSerializable("alert");
                         Event event = oldAlert.getEvent();
                         listener.addAlert(new Alert(title, message, event));
                     }
+
+                     */
                 })
                 .create();
     }

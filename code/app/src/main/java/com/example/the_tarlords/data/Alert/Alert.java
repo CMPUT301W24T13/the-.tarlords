@@ -1,5 +1,7 @@
 package com.example.the_tarlords.data.Alert;
 
+
+
 import com.example.the_tarlords.data.event.Event;
 
 import java.io.Serializable;

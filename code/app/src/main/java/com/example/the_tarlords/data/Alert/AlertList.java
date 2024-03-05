@@ -1,7 +1,10 @@
 package com.example.the_tarlords.data.Alert;
 
 
+import android.content.Context;
 import android.widget.ListView;
+
+import com.example.the_tarlords.R;
 
 import java.util.ArrayList;
 
@@ -9,10 +12,27 @@ public class AlertList implements AddAlertDialogListener {
     private ArrayList<Alert> alertDataList;
     private ListView alertList;
     private AlertListAdapter alertListAdapter;
+    private int layout;
+
+    /**
+     * contructor of an AlertList
+     * @param context
+     * @param alertDataList
+     * @param listView
+     */
+    public AlertList(Context context, ArrayList<Alert> alertDataList, ListView listView){
+        this.alertList = listView;
+        this.alertDataList = alertDataList;
+        alertListAdapter = new AlertListAdapter(context,alertDataList, R.layout.activity_alert);
+        alertList.setAdapter(alertListAdapter);
+
+    }
+
 
     @Override
     public void addAlert(Alert alert) {
-        alertListAdapter.add(alert);
+        //alertListAdapter.add(alert);
+        alertDataList.add(alert);
         alertListAdapter.notifyDataSetChanged();
     }
     @Override
@@ -20,7 +40,6 @@ public class AlertList implements AddAlertDialogListener {
         alertListAdapter.remove(alert);
         alertListAdapter.notifyDataSetChanged();
     }
-
     @Override
     public void editAlert(Alert oldAlert, String newTitle, String newMessage) {
         oldAlert.setTitle(newTitle);

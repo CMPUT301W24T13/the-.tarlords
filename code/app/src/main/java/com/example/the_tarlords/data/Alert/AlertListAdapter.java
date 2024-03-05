@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.the_tarlords.R;
-import com.example.the_tarlords.data.event.Event;
 
 import java.util.ArrayList;
 
@@ -31,11 +30,12 @@ public class AlertListAdapter extends ArrayAdapter<Alert> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent){
         View view;
         if (convertView == null) {
-            view = LayoutInflater.from(super.getContext()).inflate(layoutResource, parent, false);
+            view = LayoutInflater.from(super.getContext()).inflate(R.layout.content_alerts, parent, false);
         } else {
             view = convertView;
         }
         Alert alert = super.getItem(position);
+
         TextView event = view.findViewById(R.id.event_text);
         TextView message = view.findViewById(R.id.message_text);
         TextView title = view.findViewById(R.id.title_text);
@@ -45,6 +45,8 @@ public class AlertListAdapter extends ArrayAdapter<Alert> {
         message.setText(alert.getMessage());
         title.setText(alert.getTitle());
         ldt.setText(alert.getCurrentDateTime());
+
+
 
 
         return view;
