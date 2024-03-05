@@ -1,10 +1,12 @@
 package com.example.the_tarlords;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
 import android.widget.Toast;
 
+import com.example.the_tarlords.data.QR.QRScanActivity;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -42,11 +44,13 @@ public class MainActivity extends AppCompatActivity {
         binding.appBarMain.scanQrButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ScanOptions scanOptions = new ScanOptions();
-                barcodeLauncher.launch(scanOptions);
+                //ScanOptions scanOptions = new ScanOptions();
+                //barcodeLauncher.launch(scanOptions);
+                Intent intent = new Intent(MainActivity.this, QRScanActivity.class);
+                startActivity(intent);
             }
 
-            private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(
+            /*private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(
                     new ScanContract(),
                     result -> {
                         if (result.getContents() != null) {
@@ -55,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(getApplicationContext(), "cancelled", Toast.LENGTH_SHORT).show();
                         }
                     }
-            );
+            );*/
         });
 
         DrawerLayout drawer = binding.drawerLayout;
