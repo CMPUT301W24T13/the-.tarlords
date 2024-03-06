@@ -30,7 +30,7 @@ public class Notification {
                 .setContentText(body)
                 .setPriority(importance);
         notificationManager.createNotificationChannel(notificationChannel);
-        notificationManager.notify(1,builder.build());
+        notificationManager.notify(1,builder.build()); // need to get notification permissions from device
     }
 
 }

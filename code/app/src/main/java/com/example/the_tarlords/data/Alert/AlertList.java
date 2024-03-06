@@ -17,9 +17,9 @@ public class AlertList implements AddAlertDialogListener {
 
     /**
      * contructor of an AlertList
-     * @param context
-     * @param alertDataList
-     * @param listView
+     * @param context --> Context
+     * @param alertDataList --> array list of alerts
+     * @param listView --> list view to be used
      */
     public AlertList(Context context, ArrayList<Alert> alertDataList, ListView listView){
         this.alertList = listView;

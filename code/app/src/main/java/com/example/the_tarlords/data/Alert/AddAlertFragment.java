@@ -25,6 +25,10 @@ public class AddAlertFragment extends DialogFragment {
     private Alert oldAlert;
     private AddAlertDialogListener listener;
 
+    /**
+     * Constructor for the AddAlertFragment. used for receiving data from the array list
+     * @param alert --> Alert object, put null if adding a new object
+     */
     public AddAlertFragment(Alert alert) {
         if (alert != null) {
             this.titleTemp = alert.getTitle();
@@ -40,6 +44,10 @@ public class AddAlertFragment extends DialogFragment {
 
     }
 
+    /**
+     * Sets the listener for the dialog listnener
+     * @param listener
+     */
     public void setAddAlertDialogListener(AddAlertDialogListener listener) {
         this.listener = listener;
     }
@@ -57,7 +65,13 @@ public class AddAlertFragment extends DialogFragment {
 
      */
 
-
+    /**
+     *
+     * @param savedInstanceState The last saved instance state of the Fragment,
+     * or null if this is a freshly created Fragment.
+     *
+     * @return the dialog after building
+     */
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
