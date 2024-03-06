@@ -25,13 +25,13 @@ public class AddAlertFragment extends DialogFragment {
     private Alert oldAlert;
     private AddAlertDialogListener listener;
 
-    public AddAlertFragment(Alert alert){
-        if(alert != null){
+    public AddAlertFragment(Alert alert) {
+        if (alert != null) {
             this.titleTemp = alert.getTitle();
             this.messageTemp = alert.getMessage();
             this.ldtTemp = alert.getCurrentDateTime();
             this.oldAlert = alert;
-        }else{
+        } else {
             this.titleTemp = "title";
             this.messageTemp = "message";
             this.ldtTemp = "ldt";
@@ -39,8 +39,14 @@ public class AddAlertFragment extends DialogFragment {
         }
 
     }
+
+    public void setAddAlertDialogListener(AddAlertDialogListener listener) {
+        this.listener = listener;
+    }
+    /*
     @Override
     public void onAttach(@NonNull Context context) {
+        context = getContext();
         super.onAttach(context);
         if (context instanceof AddAlertDialogListener) {
             listener = (AddAlertDialogListener)context;
@@ -48,6 +54,8 @@ public class AddAlertFragment extends DialogFragment {
             throw new RuntimeException(context + "must implement AddAlertListener");
         }
     }
+
+     */
 
 
     @NonNull
@@ -59,7 +67,6 @@ public class AddAlertFragment extends DialogFragment {
 
         editTitle.setText(titleTemp);
         editMessage.setText(messageTemp);
-
         Bundle args = getArguments();
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         String positive_button_text = "Add";
@@ -82,12 +89,11 @@ public class AddAlertFragment extends DialogFragment {
                 .setView(view)
                 .setNegativeButton("Cancel", null)
                 .setPositiveButton("add", (dialog, which) -> {
-
-
                     String title = editTitle.getText().toString();
                     String message = editMessage.getText().toString();
 
-                    listener.addAlert(new Alert(title,message,new Event("asdf event","location",null,null)));
+                    // placeholder event
+                    listener.addAlert(new Alert(title, message, new Event("placeholder event", "location", null, null)));
                     /*
                     if (getArguments() != null && getArguments().containsKey("alert")) {
                         // Editing existing alert
@@ -102,6 +108,4 @@ public class AddAlertFragment extends DialogFragment {
                 })
                 .create();
     }
-
 }
-
