@@ -14,6 +14,7 @@ import androidx.core.app.ActivityCompat;
 import com.example.the_tarlords.data.attendance.Attendance;
 import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.users.Attendee;
+import com.example.the_tarlords.ui.event.EventDetailsFragment;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
