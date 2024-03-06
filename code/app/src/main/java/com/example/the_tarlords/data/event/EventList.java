@@ -105,7 +105,7 @@ public class EventList {
 
     //this finds an event in the events list by event id
     public Event get(int position) {
-        eventsRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        /*eventsRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 events.clear(); // Clear the existing events list
@@ -114,7 +114,7 @@ public class EventList {
                     events.add(event);
                 }
             }
-        });
+        });*/
         return events.get(position);
 
     }

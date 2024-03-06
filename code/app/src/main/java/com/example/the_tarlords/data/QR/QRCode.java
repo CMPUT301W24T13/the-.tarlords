@@ -24,6 +24,17 @@ import com.google.zxing.common.BitMatrix;
 
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
+import android.graphics.Bitmap;
+import android.widget.ImageView;
+
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
+
 /**
  * The QRCode class provides a method to generate a QR code from a given text and display it in an ImageView.
  */
@@ -91,4 +102,3 @@ public class QRCode {
         }
     }
 }
-

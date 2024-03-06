@@ -88,23 +88,15 @@ public class Organizer extends Attendee implements OrgPerms {
 
 
 
-    /**
-     * This allows organizer to generate the two kinds of QR codes. One for the attedee check-in which attendees will use to check in,
-     * and the other is for event details. They are distinguishable by their text; check-ins text must be CI# with # being a number,
-     * and event details text must be EI#
-     * @param event
-     * @param text
-     * @param imageView
-     * @return generated qrCode
-     */
-    public QRCode generateQRCode(Event event, String text, ImageView imageView) {
+
+   public QRCode generateQRCode(Event event, String text, ImageView imageView) {
         QRCode qrCode = new QRCode();
         qrCode.generateQR(text, imageView);
         //DO SOMETHING ABOUT THE IMAGEVIEW
         if (text.charAt(0) == 'C') {     // this is for checkins
-            event.setCheckInQR(qrCode.toString());
+            event.setCheckInQR(qrCode);
         } else if (text.charAt(0) == 'E') {   // this is for event details
-            event.setEventInfoQR(qrCode.toString());
+            event.setEventInfoQR(qrCode);
         }
         return qrCode;
     }

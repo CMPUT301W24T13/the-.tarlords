@@ -99,5 +99,4 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-    //Testing Version 1 -- Rimsha1111
 }

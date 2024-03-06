@@ -59,22 +59,22 @@ public class Event implements Attendance, Parcelable {
     String organizerId;
     private QRCode qrCodeCheckIns;
     private QRCode qrCodePromo;
-    private String checkInQR;
-    private String eventInfoQR;
+    private QRCode checkInQR;
+    private QRCode eventInfoQR;
 
     private EventPoster poster;
 
     private Integer maxNumOfSignUps;
 
     //this is accessing the same FirebaseFirestore from mainactivity's static db
-    private FirebaseFirestore db = MainActivity.db;
+    //private FirebaseFirestore db = MainActivity.db;
     private CollectionReference attendanceRef = MainActivity.db.collection("Events/"+ id +"/Attendees");
     private CollectionReference usersRef = MainActivity.db.collection("Users");
 
     //this is static so that all instances of the Event class have the same eventsRef. So Im not including this ref in the constructors
     private static CollectionReference eventsRef = MainActivity.db.collection("Events");
 
-    public Event(String name, String location, String id, String startTime, String endTime, String startDate) {
+    /*public Event(String name, String location, String id, String startTime, String endTime, String startDate) {
         this.name = name;
         this.location = location;
         this.id = id;
@@ -85,6 +85,11 @@ public class Event implements Attendance, Parcelable {
         this.usersRef = db.collection("Users");
     }
 
+    public Event(String name, String location) {
+        this.name = name;
+        this.location = location;
+        this.id = makeNewDocID();
+    }
     public Event (Parcel in) {
         name = in.readString();
         location = in.readString();
@@ -106,16 +111,7 @@ public class Event implements Attendance, Parcelable {
     public String getOrganizerId() {
         return organizerId;
     }
-    public void setId(String id) {
-        this.id = id;
-    }
 
-    public void setOrganizerId(String organizerId) {
-        this.organizerId = organizerId;
-    }
-    public String getOrganizerId() {
-        return organizerId;
-    }
     public String getId() {
         eventsRef
                 .document(id).get()
@@ -470,6 +466,130 @@ public class Event implements Attendance, Parcelable {
                         Log.d("Event", e.getMessage());
                     }
                 });
+    }*/
+
+
+    public Event(String name, String location, String id, String startTime, String endTime, String startDate) {
+        this.name = name;
+        this.location = location;
+        this.id = id;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.startDate = startDate;
+    }
+
+    public Event(String name, String location) {
+        this.name = name;
+        this.location = location;
+        this.id = makeNewDocID();
+    }
+
+    public Event(String name, String location, String id) {
+        this.name = name;
+        this.location = location;
+        this.id = id;
+
+    }
+    public Event (Parcel in) {
+        name = in.readString();
+        location = in.readString();
+        id = in.readString();
+        startTime = in.readString();
+        endTime = in.readString();
+        startDate = in.readString();
+    }
+    public Event (){
+    };
+
+    public void setOrganizerId(String organizerId) {
+        this.organizerId = organizerId;
+    }
+    public String getOrganizerId() {
+        return organizerId;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+
+    public QRCode getCheckInQR() {
+        return checkInQR;
+    }
+
+    public void setCheckInQR(QRCode checkInQR) {
+        this.checkInQR = checkInQR;
+    }
+
+    public QRCode getEventInfoQR() {
+        return eventInfoQR;
+    }
+
+    public void setEventInfoQR(QRCode eventInfoQR) {
+        this.eventInfoQR = eventInfoQR;
+    }
+
+    //DO firebase for these after poster is done
+    public EventPoster getPoster() {
+        return poster;
+    }
+
+    public void setPoster(EventPoster poster) {
+        this.poster = poster;
+    }
+
+
+    public int getMaxNumOfSignUps() {
+        return maxNumOfSignUps;
+    }
+
+    public void setMaxNumOfSignUps(int maxNumOfSignUps) {
+        this.maxNumOfSignUps = maxNumOfSignUps;
     }
 
 
