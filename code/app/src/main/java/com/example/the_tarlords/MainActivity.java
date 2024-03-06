@@ -2,14 +2,21 @@ package com.example.the_tarlords;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.the_tarlords.data.QR.QRScanActivity;
+import com.example.the_tarlords.data.Alert.AlertList;
+import com.example.the_tarlords.data.event.Event;
+import com.example.the_tarlords.data.users.Profile;
+import com.example.the_tarlords.data.users.User;
 import com.google.android.material.navigation.NavigationView;
+import com.example.the_tarlords.data.QR.QRScanActivity;
 
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -22,11 +29,16 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
+import java.util.ArrayList;
+
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
-    public static FirebaseFirestore db;
+    public static FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    //TODO: shouldn't be hardcoded by end
+    public static User user = new User("1","john","doe","780-111-1111","john.doe@ualberta.ca");
 
     private ActivityMainBinding binding;
 
@@ -37,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        db = FirebaseFirestore.getInstance();
 
 
         setSupportActionBar(binding.appBarMain.toolbar);
@@ -50,12 +61,24 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        /**
+         * slide out nav bar set-up
+         * **/
+
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
+        View hView = navigationView.getHeaderView(0);
+        TextView name = hView.findViewById(R.id.profileName);
+        TextView phoneNum = hView.findViewById(R.id.phoneNumber);
+        TextView email = hView.findViewById(R.id.email);
+        //TODO: implement profile picture
+        name.setText(MainActivity.user.getFirstName()+" "+MainActivity.user.getLastName());
+        phoneNum.setText(MainActivity.user.getPhoneNum());
+        email.setText(MainActivity.user.getEmail());
+
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_events, R.id.nav_login, R.id.profileFragment)
+        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.nav_host_fragment_content_main, R.id.eventFragment, R.id.profileFragment)
                 .setOpenableLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
@@ -66,9 +89,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.activity_main_drawer, menu);
         return true;
     }
+
+    /*@Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item){
+        switch (item.getItemId()){
+            case R.id.action
+        }
+    }*/
 
     @Override
     public boolean onSupportNavigateUp() {

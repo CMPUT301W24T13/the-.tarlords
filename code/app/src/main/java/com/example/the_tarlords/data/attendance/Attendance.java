@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.data.Alert.AlertList;
 import com.example.the_tarlords.data.event.Event;
-import com.example.the_tarlords.data.event.EventList;
 import com.example.the_tarlords.data.users.Attendee;
 import com.example.the_tarlords.data.users.Profile;
 import com.example.the_tarlords.data.users.User;
@@ -50,14 +49,9 @@ public interface Attendance {       //could be made into interface
     public void removeSignUp(User user);
 
     /**
-     * Checks in a user for an event by updating the checked in status for that event.
+     * Sets check in status of a user to bool status for an event.
      * @param user to check in
      */
-    public void checkIn(User user);
+    public void setCheckIn(User user, Boolean status);
 
-    /**
-     * Removes user's checked in status for an event. Possibly unnecessary.
-     * @param user to un check in
-     */
-    public void removeCheckIn(User user);
 }
