@@ -6,11 +6,14 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+
+import com.example.the_tarlords.MainActivity;
 
 import java.util.Objects;
 
@@ -37,11 +40,16 @@ public class TakePhotoActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        try {
+            Bitmap photo = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
 
-        Bitmap photo = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
-
-        //ImageView imageView = findViewById(R.id.img);
-        //imageView.setImageBitmap(photo);
+            //ImageView imageView = findViewById(R.id.img);
+            //imageView.setImageBitmap(photo);
+        } catch (Exception e) {
+            //WHICH SCREEN DO WE START?? SHOULD JUST BE ABLE TO LINK BACK
+            Intent intent = new Intent(TakePhotoActivity.this, MainActivity.class);
+            startActivity(intent);
+        }
     }
 
     @Override
