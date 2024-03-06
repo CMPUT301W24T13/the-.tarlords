@@ -140,4 +140,6 @@
         "ut labore et dolore magna aliqua."
     </string>
     <string name="alert_title">Alert Title</string>
+    <string name="total_attendee_count">Total: 10</string>
+    <string name="checked_in_attendee_count">Checked In: 2</string>
 </resources>

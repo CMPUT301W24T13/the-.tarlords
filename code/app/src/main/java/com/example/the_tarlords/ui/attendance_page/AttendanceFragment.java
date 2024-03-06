@@ -1,7 +1,11 @@
 package com.example.the_tarlords.ui.attendance_page;
 
+import static com.example.the_tarlords.databinding.FragmentAttendanceListBinding.inflate;
+
 import android.content.Context;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -9,10 +13,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
 import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.attendance.Attendance;
 import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.users.Attendee;
+import com.example.the_tarlords.databinding.FragmentAttendanceListBinding;
 import com.example.the_tarlords.ui.attendance_page.placeholder.PlaceholderContent;
 
 import java.util.ArrayList;
@@ -22,9 +29,11 @@ import java.util.ArrayList;
  */
 public class AttendanceFragment extends Fragment {
 
+    FragmentAttendanceListBinding binding;
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private Event event;
+    private AttendanceRecyclerViewAdapter adapter;
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -51,7 +60,7 @@ public class AttendanceFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
+            mColumnCount = getArguments().getInt("column-count");
             event = (Event) getArguments().get("event-name");
         }
     }
@@ -60,7 +69,7 @@ public class AttendanceFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_attendance_list, container, false);
-
+        binding = FragmentAttendanceListBinding.inflate(inflater, container, false);
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
@@ -70,9 +79,19 @@ public class AttendanceFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-
-            recyclerView.setAdapter(new AttendanceRecyclerViewAdapter(event.getAttendanceList()));
+            adapter = new AttendanceRecyclerViewAdapter(event.getAttendanceList());
+            recyclerView.setAdapter(adapter);
         }
-        return view;
+
+
+        return binding.getRoot();
+    }
+
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        TextView totalCount = binding.attendeeCount;
+        TextView checkInCount = binding.attendeeCheckinCount;
+        totalCount.setText("Total: "+adapter.getItemCount());
+        checkInCount.setText("Checked In: "+adapter.getCheckInCount());
     }
 }
