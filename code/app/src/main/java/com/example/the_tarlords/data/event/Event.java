@@ -56,12 +56,18 @@ public class Event implements Attendance, Parcelable {
     private QRCode qrCodePromo;
 
     private EventPoster poster;
-    private int maxNumOfSignUps;
+
+    private Integer maxNumOfSignUps;
+
     private CollectionReference attendanceRef = MainActivity.db.collection("Events/"+ id +"/Attendees");
     private CollectionReference usersRef = MainActivity.db.collection("Users");
 
     private static CollectionReference eventsRef = eventsRef = MainActivity.db.collection("Events");
 
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 
     public Event(String name, String location, String id, String startTime, String endTime, String startDate) {
         this.name = name;
@@ -71,6 +77,7 @@ public class Event implements Attendance, Parcelable {
         this.endTime = endTime;
         this.startDate = startDate;
     }
+<<<<<<< Updated upstream
 
     public Event(String name, String location, String id, String startTime, String endTime, String startDate) {
         this.name = name;
@@ -80,6 +87,8 @@ public class Event implements Attendance, Parcelable {
         this.endTime = endTime;
         this.startDate = startDate;
     }
+=======
+>>>>>>> Stashed changes
     public Event(String name, String location) {
         this.name = name;
         this.location = location;
