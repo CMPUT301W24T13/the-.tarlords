@@ -8,8 +8,9 @@
     android:layout_marginLeft="4dp"
     android:layout_marginTop="2dp"
     android:layout_marginRight="4dp"
-    tools:context=".ui.home.EventListFragment" >
-
+    android:background="@color/white"
+    tools:context=".ui.home.EventListFragment">
+    <!--TODO : Move FAB (QR button) into fragment_event_list instead of app_bar_main-->
     <ListView
         android:id="@+id/eventListView"
         android:layout_width="match_parent"

@@ -100,6 +100,15 @@ public class Event implements Attendance, Parcelable {
         this.usersRef = db.collection("Users");
     };
 
+    public void setOrganizerId(String organizerId) {
+        this.organizerId = organizerId;
+    }
+    public String getOrganizerId() {
+        return organizerId;
+    }
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public void setOrganizerId(String organizerId) {
         this.organizerId = organizerId;
