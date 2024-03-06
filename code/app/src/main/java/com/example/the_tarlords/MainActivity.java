@@ -5,8 +5,6 @@ import android.view.View;
 import android.view.Menu;
 import android.widget.Toast;
 
-import com.example.the_tarlords.data.QR.ScanQR;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -17,20 +15,27 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.the_tarlords.databinding.ActivityMainBinding;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
+
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
+    public static FirebaseFirestore db;
+
     private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-         binding = ActivityMainBinding.inflate(getLayoutInflater());
-         setContentView(binding.getRoot());
+
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        db = FirebaseFirestore.getInstance();
+
 
         setSupportActionBar(binding.appBarMain.toolbar);
 
@@ -42,14 +47,14 @@ public class MainActivity extends AppCompatActivity {
             }
 
             private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(
-                new ScanContract(),
-                result -> {
-                    if (result.getContents() != null) {
-                        Toast.makeText(getApplicationContext(), "scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
-                    } else {
-                        Toast.makeText(getApplicationContext(), "cancelled", Toast.LENGTH_SHORT).show();
+                    new ScanContract(),
+                    result -> {
+                        if (result.getContents() != null) {
+                            Toast.makeText(getApplicationContext(), "scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(getApplicationContext(), "cancelled", Toast.LENGTH_SHORT).show();
+                        }
                     }
-                }
             );
         });
 

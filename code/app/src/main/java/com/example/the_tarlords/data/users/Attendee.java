@@ -22,8 +22,8 @@ public class Attendee {
     public void setEvent(Event event) {
         this.event = event;
     }
-
     boolean isOrganizer() {
         return false;
     }
+
 }
