@@ -50,7 +50,7 @@ public class EventListFragment extends Fragment implements EventRecyclerViewAdap
     private int mColumnCount = 1;
     private FragmentEventListBinding binding;
     private CollectionReference eventsRef = MainActivity.db.collection("Events");
-    Event event1 = new Event("test","home");
+    Event event1 = new Event("test","home","1","9:00","12:00","Mar 6");
     ArrayList<Event> events = new ArrayList<>();
 
     /**
