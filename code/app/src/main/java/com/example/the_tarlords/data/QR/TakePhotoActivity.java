@@ -17,6 +17,10 @@ import com.example.the_tarlords.MainActivity;
 
 import java.util.Objects;
 
+/**
+ * The TakePhotoActivity class facilitates capturing photos using the device's camera.
+ * It handles camera permissions, initiates the camera intent, and processes the captured photo.
+ */
 public class TakePhotoActivity extends AppCompatActivity {
     private static final int REQUEST_CAMERA_PERMISSION = 1;
 
@@ -25,6 +29,7 @@ public class TakePhotoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_qr);
 
+        // Check camera permission and initiate photo capture if permission is granted
         if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(TakePhotoActivity.this, new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
         } else {
@@ -32,6 +37,9 @@ public class TakePhotoActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Initiate device's camera to capture a photo.
+     */
     public void takePicture() {
         Intent open_camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(open_camera, 100);
@@ -41,6 +49,7 @@ public class TakePhotoActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         try {
+            // Retrieve the captured photo from the camera intent
             Bitmap photo = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
 
             //ImageView imageView = findViewById(R.id.img);
@@ -57,8 +66,10 @@ public class TakePhotoActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_CAMERA_PERMISSION) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Retry takePicture() after receiving camera permission
                 takePicture();
             } else {
+                // Inform the user to enable camera permissions and finish the activity
                 Toast.makeText(this, "Enable Camera", Toast.LENGTH_SHORT).show();
                 finish();
             }

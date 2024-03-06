@@ -53,6 +53,7 @@ public class QRScanActivity extends AppCompatActivity {
 
     /**
      * Converts a scanned QR code value to an Event object by querying the Firestore database.
+     * Additionally, determines the type of QR code (CheckIn or EventInfo) for further differentiation into functions
      *
      * @param QrID The QR code string value to be converted to an Event.
      */
@@ -113,8 +114,10 @@ public class QRScanActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_CAMERA_PERMISSION) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Retry scanQr() after receiving camera permission
                 scanQr();
             } else {
+                // Inform user to enable camera permissions and finish the activity
                 Toast.makeText(this, "Enable Camera", Toast.LENGTH_SHORT).show();
                 finish();
             }
