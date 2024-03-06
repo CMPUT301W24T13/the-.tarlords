@@ -45,7 +45,7 @@ public class Event implements Attendance {
     String startTime;
     String endTime;
     String startDate;
-    UUID id;
+    String id;
     private QRCode qrCodeCheckIns;
     private QRCode qrCodePromo;
 
@@ -55,13 +55,26 @@ public class Event implements Attendance {
     private CollectionReference usersRef = MainActivity.db.collection("Users");
 
 
+    public Event(String name, String location, String id, String startTime, String endTime, String startDate) {
+        this.name = name;
+        this.location = location;
+        this.id = id;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.startDate = startDate;
+    }
+
     public Event(String name, String location) {
         this.name = name;
         this.location = location;
-        this.id = UUID.randomUUID();
+        this.id = UUID.randomUUID().toString();
     }
 
-    public UUID getId() {
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getId() {
         return id;
     }
 

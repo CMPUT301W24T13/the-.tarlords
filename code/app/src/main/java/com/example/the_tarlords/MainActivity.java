@@ -6,8 +6,12 @@ import android.view.View;
 import android.view.Menu;
 import android.widget.Toast;
 
-import com.example.the_tarlords.data.QR.QRScanActivity;
+import com.example.the_tarlords.data.Alert.AlertList;
+import com.example.the_tarlords.data.event.Event;
+import com.example.the_tarlords.data.users.Profile;
+import com.example.the_tarlords.data.users.User;
 import com.google.android.material.navigation.NavigationView;
+import com.example.the_tarlords.data.QR.QRScanActivity;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.navigation.NavController;

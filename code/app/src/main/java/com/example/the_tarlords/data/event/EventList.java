@@ -4,11 +4,15 @@ import static androidx.fragment.app.FragmentManager.TAG;
 
 import static com.example.the_tarlords.MainActivity.db;
 
-import android.util.Log;
+import androidx.annotation.NonNull;
 
 import com.example.the_tarlords.MainActivity;
+import com.example.the_tarlords.data.users.User;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,6 +41,8 @@ public class EventList {
         this.events = new ArrayList<>();
         this.name = "Event Name";
         this.id = UUID.randomUUID();
+        eventsRef = MainActivity.db.collection("Events");
+        
     }
 
     public ArrayList<Event> getEvents() {
