@@ -75,7 +75,7 @@ public class Event implements Attendance, Parcelable {
     public Event(String name, String location) {
         this.name = name;
         this.location = location;
-        this.id = UUID.randomUUID().toString();
+        this.id = makeNewDocID();
     }
     public Event(String name, String location, String id) {
         this.name = name;
@@ -108,6 +108,7 @@ public class Event implements Attendance, Parcelable {
     public void setId(String id) {
         this.id = id;
     }
+
 
     public String getId() {
         return id;
@@ -300,6 +301,39 @@ public class Event implements Attendance, Parcelable {
         dest.writeString(startTime);
         dest.writeString(endTime);
         dest.writeString(startDate);
+    }
+    //NEED TO JAVADOC
+    //Generates a new doc id for the new event, IMPORTANT FOR THE QRCode stuff
+
+    private String newDocID;
+    public String makeNewDocID() {
+        db = FirebaseFirestore.getInstance();
+        eventsRef = db.collection("Events");
+
+        eventsRef.addSnapshotListener((querySnapshots, error) -> {
+            if (error != null) {
+                Log.e("Firestore", error.toString());
+                return;
+            }
+            if (querySnapshots != null) {
+                for (QueryDocumentSnapshot doc: querySnapshots) {
+                    AggregateQuery countQuery = eventsRef.count();
+                    countQuery.get(AggregateSource.SERVER).addOnCompleteListener(new OnCompleteListener<AggregateQuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AggregateQuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                // Count fetched successfully
+                                AggregateQuerySnapshot snapshot = task.getResult();
+                                newDocID = String.valueOf((int)snapshot.getCount() + 1);
+                            } else {
+                                throw new RuntimeException("Could not find number of documents in FireBase");
+                            }
+                        }
+                    });
+                }
+            }
+        });
+        return newDocID;
     }
 
 
