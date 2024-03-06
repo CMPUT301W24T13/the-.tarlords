@@ -28,13 +28,13 @@ public class AlertListAdapter extends ArrayAdapter<Alert> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent){
         View view;
         if (convertView == null) {
-            view = LayoutInflater.from(super.getContext()).inflate(R.layout.content_alerts, parent, false);
+            view = LayoutInflater.from(super.getContext()).inflate(R.layout.content_announcements, parent, false);
         } else {
             view = convertView;
         }
         Alert alert = super.getItem(position);
         TextView event = view.findViewById(R.id.event_text);
-        TextView message = view.findViewById(R.id.message_text);
+        TextView message = view.findViewById(R.id.alert_event_date);
 
         event.setText(alert.getEvent().getName());
         message.setText(alert.getMessage());

@@ -13,11 +13,14 @@ import android.view.View;
 import com.example.the_tarlords.placeholder.PlaceholderEventContent.PlaceholderEvent;
 import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.event.Event;
-import com.example.the_tarlords.data.event.EventList;
 import com.example.the_tarlords.databinding.FragmentEventListItemBinding;
 import com.example.the_tarlords.ui.event.EventDetailsFragment;
 
+import org.checkerframework.checker.units.qual.A;
+
 import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,8 +29,9 @@ import java.util.List;
  */
 public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecyclerViewAdapter.ViewHolder> {
 
-    private final EventList events;
-    private final OnItemClickListener clickListener;
+    //private EventList events = new EventList();
+    private ArrayList<Event> events = new ArrayList<>();
+    //private final OnItemClickListener clickListener;
 
     public interface OnItemClickListener {
         void onItemClick(Event event);
@@ -36,9 +40,9 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
 
 
 
-    public EventRecyclerViewAdapter(EventList items, OnItemClickListener listener) {
-        events = items;
-        clickListener = listener;
+    public EventRecyclerViewAdapter(ArrayList<Event> events) { //, OnItemClickListener listener
+        this.events = events;
+        //this.clickListener = listener;
     }
 
     @Override
@@ -51,33 +55,37 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
     public void onBindViewHolder(final ViewHolder holder, int position) {
         //holder.eventId.setText(events.get(position).getId()); //this would display the id but we don't need that
         holder.eventName.setText(events.get(position).getName());
+        holder.eventLocation.setText(events.get(position).getLocation());
     }
 
     @Override
     public int getItemCount() {
-        return events.size();
+        if (events ==null) {
+            return 0;
+        }
+        else {
+            return events.size();
+        }
     }
-
-
-
-
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         //public final TextView eventId;
         public final TextView eventName;
+        public final TextView eventLocation;
 
         public ViewHolder(FragmentEventListItemBinding binding) {
             super(binding.getRoot());
             //eventId = binding.textviewEventId;
-            eventName = binding.textviewEventName;
+            eventName = binding.titleTextView;
+            eventLocation = binding.dateTextView;
 
-            itemView.setOnClickListener(view -> {
+            /*itemView.setOnClickListener(view -> {
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION) {
                     Event clickedEvent = events.get(position);
                     clickListener.onItemClick(clickedEvent);
                 }
-            });
+            });*/
 
         }
 

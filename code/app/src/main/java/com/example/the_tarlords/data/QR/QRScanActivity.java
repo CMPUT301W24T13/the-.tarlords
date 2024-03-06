@@ -1,5 +1,7 @@
 package com.example.the_tarlords.data.QR;
 
+import static java.lang.Boolean.TRUE;
+
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -11,8 +13,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.data.attendance.Attendance;
 import com.example.the_tarlords.data.event.Event;
+import com.example.the_tarlords.data.users.Attendee;
+import com.example.the_tarlords.ui.event.EventDetailsFragment;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -23,10 +28,14 @@ import com.google.zxing.integration.android.IntentResult;
  * The QRScanActivity class handles QR code scanning functionality and processing the scanned QR code.
  */
 public class QRScanActivity extends AppCompatActivity {
+    private String userId;
+    private String firstName;
+    private String lastName;
+    private String phoneNum;
+    private String email;
     private static final int REQUEST_CAMERA_PERMISSION = 1;
     private FirebaseFirestore db;
     private CollectionReference eventsRef;
-    private Event event;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +62,7 @@ public class QRScanActivity extends AppCompatActivity {
 
     /**
      * Converts a scanned QR code value to an Event object by querying the Firestore database.
+     * Additionally, determines the type of QR code (CheckIn or EventInfo) for further differentiation into functions
      *
      * @param QrID The QR code string value to be converted to an Event.
      */
@@ -78,9 +88,15 @@ public class QRScanActivity extends AppCompatActivity {
 
                             if (QrID.equals("CI" + eventID)) {
                                 //This is a CheckIn QR
+                                Attendee attendee = new Attendee(userId, firstName, lastName, phoneNum, email, event);
+                                attendee.setCheckInStatus(TRUE);
+                                Intent intent = new Intent(QRScanActivity.this, MainActivity.class);
+                                startActivity(intent);
 
                             } else {
                                 //This is a EventInfo QR
+                                Intent intent = new Intent(QRScanActivity.this, EventDetailsFragment.class);
+                                startActivity(intent);
                             }
 
                         }
@@ -113,8 +129,10 @@ public class QRScanActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_CAMERA_PERMISSION) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Retry scanQr() after receiving camera permission
                 scanQr();
             } else {
+                // Inform user to enable camera permissions and finish the activity
                 Toast.makeText(this, "Enable Camera", Toast.LENGTH_SHORT).show();
                 finish();
             }
