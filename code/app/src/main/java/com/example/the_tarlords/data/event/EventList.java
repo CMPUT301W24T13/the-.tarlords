@@ -4,7 +4,7 @@ import static androidx.fragment.app.FragmentManager.TAG;
 
 import static com.example.the_tarlords.MainActivity.db;
 
-import android.util.Log;
+import androidx.annotation.NonNull;
 
 import androidx.annotation.NonNull;
 
@@ -23,7 +23,7 @@ import java.util.UUID;
 
 /**
  * This class has an List of events
- * Each List of events could have a name , 2 constructors can have one without a name
+ * Each List of events could have a name, 2 constructors can have one without a name
  * Handles adding an event to a List
  * These events also have a unique id
  */

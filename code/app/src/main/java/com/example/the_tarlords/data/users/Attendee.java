@@ -48,6 +48,6 @@ public class Attendee extends User{
         return profile;
     }*/
     public Boolean getCheckInStatus() { return checkInStatus; }
-    public void setCheckInStatus(Boolean checkInStatus) { this.checkInStatus = checkInStatus; }
+    public void setCheckInStatus(boolean checkInStatus) { this.checkInStatus = checkInStatus; }
 
 }

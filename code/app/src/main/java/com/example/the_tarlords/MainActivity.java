@@ -1,5 +1,6 @@
 package com.example.the_tarlords;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,6 +13,7 @@ import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.users.Profile;
 import com.example.the_tarlords.data.users.User;
 import com.google.android.material.navigation.NavigationView;
+import com.example.the_tarlords.data.QR.QRScanActivity;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
@@ -22,6 +24,7 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.the_tarlords.databinding.ActivityMainBinding;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
@@ -53,20 +56,9 @@ public class MainActivity extends AppCompatActivity {
         binding.appBarMain.scanQrButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ScanOptions scanOptions = new ScanOptions();
-                barcodeLauncher.launch(scanOptions);
+                Intent intent = new Intent(MainActivity.this, QRScanActivity.class);
+                startActivity(intent);
             }
-
-            private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(
-                    new ScanContract(),
-                    result -> {
-                        if (result.getContents() != null) {
-                            Toast.makeText(getApplicationContext(), "scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
-                        } else {
-                            Toast.makeText(getApplicationContext(), "cancelled", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-            );
         });
 
         /**
