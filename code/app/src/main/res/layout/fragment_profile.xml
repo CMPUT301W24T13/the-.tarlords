@@ -61,7 +61,7 @@
         app:layout_constraintTop_toBottomOf="@id/profile_top_bar">
 
         <EditText
-            android:id="@+id/edit_text_name"
+            android:id="@+id/edit_text_first_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
@@ -70,14 +70,31 @@
             android:clickable="false"
             android:ems="10"
             android:fontFamily="sans-serif-condensed-light"
-            android:hint="@string/name"
+            android:hint="@string/first_name"
             android:inputType="text"
-            android:text="John Doe"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+            <!--android:text="John Doe"/> -->
+        <EditText
+            android:id="@+id/edit_text_last_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="25dp"
+            android:clickable="false"
+            android:ems="10"
+            android:fontFamily="sans-serif-condensed-light"
+            android:hint="@string/last_name"
+            android:inputType="text"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/edit_text_first_name" />
 
         <EditText
             android:id="@+id/exit_text_phone"
@@ -91,12 +108,12 @@
             android:fontFamily="sans-serif-condensed-light"
             android:hint="@string/phone_number"
             android:inputType="phone"
-            android:text="(780) - 123 - 4567"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_text_name" />
+            app:layout_constraintTop_toBottomOf="@+id/edit_text_last_name" />
+            <!--android:text="(780) - 123 - 4567"/> -->
 
         <EditText
             android:id="@+id/edit_text_email"
@@ -105,19 +122,19 @@
             android:layout_marginStart="25dp"
             android:layout_marginTop="3dp"
             android:layout_marginEnd="25dp"
-            android:layout_marginBottom="354dp"
+            android:layout_marginBottom="310dp"
             android:clickable="false"
             android:ems="10"
             android:fontFamily="sans-serif-condensed-light"
             android:hint="@string/email"
             android:inputType="textEmailAddress"
-            android:text="j.doe@ualberta.ca"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
+
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/exit_text_phone" />
+            <!--android:text="j.doe@ualberta.ca"/> -->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
