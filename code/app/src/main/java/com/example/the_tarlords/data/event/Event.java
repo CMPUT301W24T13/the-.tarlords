@@ -101,18 +101,12 @@ public class Event implements Attendance, Parcelable {
     };
 
 
-    public static final Creator<Event> CREATOR = new Creator<Event>() {
-        @Override
-        public Event createFromParcel(Parcel in) {
-            return new Event(in);
-        }
-
-        @Override
-        public Event[] newArray(int size) {
-            return new Event[size];
-        }
-    };
-
+    public void setOrganizerId(String organizerId) {
+        this.organizerId = organizerId;
+    }
+    public String getOrganizerId() {
+        return organizerId;
+    }
     public String getId() {
         eventsRef
                 .document(id).get()
