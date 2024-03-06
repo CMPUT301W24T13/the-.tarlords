@@ -20,7 +20,7 @@ public interface OrgPerms {
 
     public int maxLimitFunction();
 
-    QRCode genQRCodeForCheckIns(Event event, String text, ImageView imageView);
+    public QRCode generateQRCode(Event event, String text, ImageView imageView);
 
     QRCode reuseQRCode(QRCode qrCode);
 
