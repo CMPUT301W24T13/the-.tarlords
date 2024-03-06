@@ -8,6 +8,8 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import androidx.annotation.NonNull;
+
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.data.users.User;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -23,7 +25,7 @@ import java.util.UUID;
 
 /**
  * This class has an List of events
- * Each List of events could have a name , 2 constructors can have one without a name
+ * Each List of events could have a name, 2 constructors can have one without a name
  * Handles adding an event to a List
  * These events also have a unique id
  */

@@ -14,6 +14,7 @@ import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.data.QR.QRCode;
 import com.example.the_tarlords.data.attendance.Attendance;
 import com.example.the_tarlords.data.users.Attendee;
+import com.example.the_tarlords.data.users.Organizer;
 import com.example.the_tarlords.data.users.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -57,14 +58,12 @@ public class Event implements Attendance, Parcelable {
 
     private EventPoster poster;
 
-    private Integer maxSignUps;
+    private Integer maxNumOfSignUps;
 
     private CollectionReference attendanceRef = MainActivity.db.collection("Events/"+ id +"/Attendees");
     private CollectionReference usersRef = MainActivity.db.collection("Users");
 
     private static CollectionReference eventsRef = eventsRef = MainActivity.db.collection("Events");
-
-
 
     public Event(String name, String location, String id, String startTime, String endTime, String startDate) {
         this.name = name;
@@ -77,7 +76,7 @@ public class Event implements Attendance, Parcelable {
     public Event(String name, String location) {
         this.name = name;
         this.location = location;
-        this.id = UUID.randomUUID().toString();
+        this.id = makeNewDocID();
     }
     public Event(String name, String location, String id) {
         this.name = name;
@@ -100,9 +99,11 @@ public class Event implements Attendance, Parcelable {
     public String getOrganizerId() {
         return organizerId;
     }
+
     public void setId(String id) {
         this.id = id;
     }
+
 
     public String getId() {
         return id;
@@ -173,22 +174,18 @@ public class Event implements Attendance, Parcelable {
         this.poster = poster;
     }
 
-    public Integer getMaxSignUps() {
-        return maxSignUps;
+    public int getMaxNumOfSignUps() {
+        return maxNumOfSignUps;
     }
 
-    public void setMaxSignUps(Integer maxSignUps) {
-        this.maxSignUps = maxSignUps;
-    }
-
-    public boolean reachedMaxCap() {
-        return true;
+    public void setMaxNumOfSignUps(int maxNumOfSignUps) {
+        this.maxNumOfSignUps = maxNumOfSignUps;
     }
 
 
     /**
-     * Returns a list of Attendee objects attending the event.
-     *
+     * Returns a list of Attendee objects attending the event. This is the default "signup" list
+     * Updates the user's checked in status if they check in or not.
      * @return list of User objects
      */
     public ArrayList<Attendee> getAttendanceList() {
@@ -300,4 +297,41 @@ public class Event implements Attendance, Parcelable {
         dest.writeString(endTime);
         dest.writeString(startDate);
     }
+    //NEED TO JAVADOC
+    //Generates a new doc id for the new event, IMPORTANT FOR THE QRCode stuff
+
+    private String newDocID;
+    public String makeNewDocID() {
+        db = FirebaseFirestore.getInstance();
+        eventsRef = db.collection("Events");
+
+        eventsRef.addSnapshotListener((querySnapshots, error) -> {
+            if (error != null) {
+                Log.e("Firestore", error.toString());
+                return;
+            }
+            if (querySnapshots != null) {
+                for (QueryDocumentSnapshot doc: querySnapshots) {
+                    AggregateQuery countQuery = eventsRef.count();
+                    countQuery.get(AggregateSource.SERVER).addOnCompleteListener(new OnCompleteListener<AggregateQuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AggregateQuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                // Count fetched successfully
+                                AggregateQuerySnapshot snapshot = task.getResult();
+                                newDocID = String.valueOf((int)snapshot.getCount() + 1);
+                            } else {
+                                throw new RuntimeException("Could not find number of documents in FireBase");
+                            }
+                        }
+                    });
+                }
+            }
+        });
+        return newDocID;
+    }
+
+
+
+
 }
