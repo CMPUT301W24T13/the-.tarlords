@@ -3,6 +3,9 @@ package com.example.the_tarlords.ui.home;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -10,17 +13,29 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ListView;
 
+import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
+import com.example.the_tarlords.databinding.FragmentEventListBinding;
 import com.example.the_tarlords.placeholder.PlaceholderEventContent;
 import com.example.the_tarlords.data.event.Event;
-import com.example.the_tarlords.data.event.EventList;
 import com.example.the_tarlords.placeholder.PlaceholderContent;
 import com.example.the_tarlords.ui.event.EventDetailsFragment;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -33,27 +48,21 @@ public class EventListFragment extends Fragment implements EventRecyclerViewAdap
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
+    private FragmentEventListBinding binding;
+    private CollectionReference eventsRef = MainActivity.db.collection("Events");
+    Event event1 = new Event("test","home");
+    ArrayList<Event> events = new ArrayList<>();
+
     /**
      * EventListFragment has a list of events called eventsList
      */
-    private EventList eventsList;
-    private EventRecyclerViewAdapter.OnItemClickListener listener;
+    //private EventRecyclerViewAdapter adapter;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
     public EventListFragment() {
-    }
-
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
-    public static EventListFragment newInstance(int columnCount) {
-        EventListFragment fragment = new EventListFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
@@ -63,29 +72,89 @@ public class EventListFragment extends Fragment implements EventRecyclerViewAdap
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_event_list, container, false);
+        binding = FragmentEventListBinding.inflate(inflater, container, false);
 
-        // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-
-            recyclerView.setAdapter(new EventRecyclerViewAdapter(eventsList, listener));
-
-        }
-        return view;
+        return binding.getRoot();
     }
 
+    public void onViewCreated(@NonNull View v, Bundle savedInstanceState) {
+        super.onViewCreated(v, savedInstanceState);
+        ListView eventListView = v.findViewById(R.id.eventListView);
+        Log.d("events list", events.toString()+"hello");
+        //events.add(event1);
+        EventArrayAdapter adapter = new EventArrayAdapter(getContext(),events);
+        eventListView.setAdapter(adapter);
+
+        eventsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot querySnapshots,
+                                @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    Log.e("Firestore", error.toString());
+                    return;
+                }
+                if (querySnapshots != null) {
+                    events.clear();
+                    eventsRef
+                            .get()
+                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        for (QueryDocumentSnapshot document : task.getResult()) {
+                                            MainActivity.db.collection("Events/"+document.getId()+"/Attendance")
+                                                    .whereEqualTo("user", MainActivity.user.getId()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                            if (task.isSuccessful()) {
+                                                                for (QueryDocumentSnapshot doc : task.getResult()) {
+                                                                    events.add(document.toObject(Event.class));
+                                                                    adapter.notifyDataSetChanged();
+                                                                    Log.d("query events", doc.getId() + " => " + doc.getData());
+                                                                    Log.d("events list", events.toString()+"hellllllo");
+                                                                    Log.d("query events", document.getId() + " =>=> " + document.getData());
+                                                                }
+                                                            }
+                                                        }
+                                                    });
+                                            Log.d("query events", document.getId() + " => " + document.getData());
+                                        }
+                                    } else {
+                                        Log.d("query events", "Error getting documents: ", task.getException());
+                                    }
+                                }
+                            });
+                }
+            }
+        });
+
+        eventListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Event event = events.get(position);
+                // Handle item click, switch to a new fragment using FragmentManager
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+                // Create a new fragment and pass the selected Event as an argument
+                EventDetailsFragment newFragment = EventDetailsFragment.newInstance(event);
+
+                // Replace the current fragment with the new one
+                transaction.replace(R.id.nav_host_fragment_content_main, newFragment);
+
+                // Add the transaction to the back stack (optional)
+                transaction.addToBackStack(null);
+                // Commit the transaction
+                transaction.commit();
+            }
+        });
+    }
     /**
      * This method receives the event the user clicked on in the recycler view
      * Right now it automatically takes the user to the event details page
@@ -110,5 +179,11 @@ public class EventListFragment extends Fragment implements EventRecyclerViewAdap
 
         // Commit the transaction
         transaction.commit();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }

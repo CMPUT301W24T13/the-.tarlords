@@ -42,7 +42,7 @@ public class EventDetailsFragment extends Fragment {
     public static EventDetailsFragment newInstance(Event event) {
         EventDetailsFragment fragment = new EventDetailsFragment();
         Bundle args = new Bundle();
-        args.putParcelable("event", (Parcelable) event); //When getting the event cast to Event again
+        args.putParcelable("event", event); //When getting the event cast to Event again
         fragment.setArguments(args);
         return fragment;
     }

@@ -27,7 +27,7 @@ public interface OrgPerms {
     ArrayList<Attendee> viewAttendeeCheckIns(Event event);
 
     //Note for notifs, make sure in the notifs class there is a part that lets org/admin write their own message
-    void sendNotifs(AttendeeCheckInList attendeeCheckInList, String notification);
+    void sendNotifs(ArrayList<Attendee> attendeeCheckInList, String notification);
 
     void uploadEventPoster(Event event);
 
@@ -38,7 +38,6 @@ public interface OrgPerms {
 
     void shareQRCodeImage(QRCode qrcode, App shareToThisApp);
 
-    QRCode genUniquePromotionQRCode(Event event, String text, ImageView imageView);
 
     Map viewUserCheckInPlace(Attendee attendee, Event event);
 

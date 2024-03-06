@@ -4,6 +4,8 @@ import static androidx.fragment.app.FragmentManager.TAG;
 
 import static com.example.the_tarlords.MainActivity.db;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -20,8 +22,12 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.Filter;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import org.checkerframework.common.returnsreceiver.qual.This;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,29 +45,72 @@ import java.util.UUID;
 
     2. Need to connect event location to the Map Class.
 */
-public class Event implements Attendance {
+public class Event implements Attendance, Parcelable {
     String name;
     String location;
     String startTime;
     String endTime;
     String startDate;
-    UUID id;
+    String id;
     private QRCode qrCodeCheckIns;
     private QRCode qrCodePromo;
 
     private EventPoster poster;
-    private int maxNumOfSignUps;
+
+    private Integer maxNumOfSignUps;
+
     private CollectionReference attendanceRef = MainActivity.db.collection("Events/"+ id +"/Attendees");
     private CollectionReference usersRef = MainActivity.db.collection("Users");
 
+    private static CollectionReference eventsRef = eventsRef = MainActivity.db.collection("Events");
 
+    public Event(String name, String location, String id, String startTime, String endTime, String startDate) {
+        this.name = name;
+        this.location = location;
+        this.id = id;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.startDate = startDate;
+    }
     public Event(String name, String location) {
         this.name = name;
         this.location = location;
-        this.id = UUID.randomUUID();
+        this.id = makeNewDocID();
+    }
+    public Event(String name, String location, String id) {
+        this.name = name;
+        this.location = location;
+        this.id = id;
+    }
+    public Event (Parcel in) {
+        name = in.readString();
+        location = in.readString();
+        id = in.readString();
+        startTime = in.readString();
+        endTime = in.readString();
+        startDate = in.readString();
+    }
+    public Event (){};
+
+
+    public static final Creator<Event> CREATOR = new Creator<Event>() {
+        @Override
+        public Event createFromParcel(Parcel in) {
+            return new Event(in);
+        }
+
+        @Override
+        public Event[] newArray(int size) {
+            return new Event[size];
+        }
+    };
+
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public UUID getId() {
+
+    public String getId() {
         return id;
     }
 
@@ -138,6 +187,7 @@ public class Event implements Attendance {
         this.maxNumOfSignUps = maxNumOfSignUps;
     }
 
+
     /**
      * Returns a list of Attendee objects attending the event. This is the default "signup" list
      * Updates the user's checked in status if they check in or not.
@@ -151,9 +201,15 @@ public class Event implements Attendance {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot attendeeDoc : task.getResult()) {
                         DocumentSnapshot userDoc = usersRef.document(attendeeDoc.getId()).get().getResult();
-                        User user = userDoc.toObject(User.class);
-                        Attendee attendee = new Attendee(user, user.getProfile(),Event.this);
-                        attendee.setCheckInStatus(userDoc.getBoolean("checkedInStatus"));
+                        String id = userDoc.getId();
+                        String firstName = userDoc.get("firstName").toString();
+                        String lastName = userDoc.get("lastName").toString();
+                        String email = userDoc.get("email").toString();
+                        String phoneNum = userDoc.get("phoneNum").toString();
+
+                        //User user = userDoc.toObject(User.class);
+                        Attendee attendee = new Attendee(id, firstName,lastName,phoneNum,email,Event.this);
+                        attendee.setCheckInStatus(attendeeDoc.getBoolean("checkedInStatus"));
                         attendees.add(attendee);
                     }
                     Log.d("firestore", attendees.toString());
@@ -211,13 +267,13 @@ public class Event implements Attendance {
     }
 
     /**
-     * Checks in a user for an event by updating the checked in status for that event.
-     * @param user to check in
+     * Sets check in status of a user for an event.
+     * @param user to check in, status to set (boolean)
      */
-    public void checkIn(User user) {
+    public void setCheckIn(User user, Boolean status) {
         attendanceRef
                 .document(user.getId().toString())
-                .set(true)
+                .set(status)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -232,26 +288,52 @@ public class Event implements Attendance {
                 });
     }
 
-    /**
-     * Removes user's checked in status for an event. Possibly unnecessary.
-     * @param user to un check in
-     */
-    public void removeCheckIn(User user) {
-        attendanceRef
-                .document(user.getId().toString())
-                .set(false)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("Firestore", "DocumentSnapshot successfully written!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d("Firestore", e.getMessage());
-                    }
-                });
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeString(location);
+        dest.writeString(id);
+        dest.writeString(startTime);
+        dest.writeString(endTime);
+        dest.writeString(startDate);
+    }
+    //NEED TO JAVADOC
+    //Generates a new doc id for the new event, IMPORTANT FOR THE QRCode stuff
+
+    private String newDocID;
+    public String makeNewDocID() {
+        db = FirebaseFirestore.getInstance();
+        eventsRef = db.collection("Events");
+
+        eventsRef.addSnapshotListener((querySnapshots, error) -> {
+            if (error != null) {
+                Log.e("Firestore", error.toString());
+                return;
+            }
+            if (querySnapshots != null) {
+                for (QueryDocumentSnapshot doc: querySnapshots) {
+                    AggregateQuery countQuery = eventsRef.count();
+                    countQuery.get(AggregateSource.SERVER).addOnCompleteListener(new OnCompleteListener<AggregateQuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AggregateQuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                // Count fetched successfully
+                                AggregateQuerySnapshot snapshot = task.getResult();
+                                newDocID = String.valueOf((int)snapshot.getCount() + 1);
+                            } else {
+                                throw new RuntimeException("Could not find number of documents in FireBase");
+                            }
+                        }
+                    });
+                }
+            }
+        });
+        return newDocID;
     }
 
 
