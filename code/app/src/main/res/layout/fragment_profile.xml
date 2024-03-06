@@ -25,7 +25,7 @@
             android:layout_marginEnd="25dp"
             android:ems="10"
             android:fontFamily="sans-serif-condensed-light"
-            android:hint="Name"
+            android:hint="@string/name"
             android:inputType="text"
             android:text="John Doe"
             android:textSize="20sp"
@@ -43,7 +43,7 @@
             android:layout_marginEnd="25dp"
             android:ems="10"
             android:fontFamily="sans-serif-condensed-light"
-            android:hint="phone number"
+            android:hint="@string/phone_number"
             android:inputType="phone"
             android:text="(780) - 123 - 4567"
             android:textSize="20sp"
@@ -62,7 +62,7 @@
             android:layout_marginBottom="354dp"
             android:ems="10"
             android:fontFamily="sans-serif-condensed-light"
-            android:hint="email"
+            android:hint="@string/email"
             android:inputType="textEmailAddress"
             android:text="j.doe@ualberta.ca"
             android:textSize="20sp"
@@ -97,12 +97,23 @@
             android:layout_marginTop="36dp"
             android:layout_marginEnd="238dp"
             android:layout_marginBottom="36dp"
-            android:contentDescription="profile picture"
+            android:contentDescription="@string/profile_picture"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@mipmap/ic_launcher_round" />
+
+        <Button
+            android:id="@+id/upload_profile_photo_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/upload_photo"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/editProfilePic"
+            app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

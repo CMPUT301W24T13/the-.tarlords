@@ -1,12 +1,15 @@
 package com.example.the_tarlords.data.users;
 
-import com.example.the_tarlords.placeholder.Photo;
+import com.example.the_tarlords.data.photo.Photo;
+import com.example.the_tarlords.data.photo.ProfilePhoto;
+
+import java.io.IOException;
 
 public class Profile {
     private User user;
     private String firstName;
     private String lastName;
-    private Photo profilePhoto;
+    private ProfilePhoto profilePhoto;
     private String phoneNum;
     private String email;
 
@@ -36,11 +39,12 @@ public class Profile {
         return profilePhoto;
     }
 
-    public void setAutoProfilePhoto() {
-        //needs to be implemented
-        this.profilePhoto = Photo.generateAutoProfilePhoto();
+    //perhaps this is an action that needs to happen in the controller...
+    public void setAutoProfilePhoto() throws IOException {
+        ProfilePhoto profilePhoto = null;
+        profilePhoto.autoGenerate();
     }
-    public void setProfilePhoto(Photo profilePhoto) {
+    public void setProfilePhoto(ProfilePhoto profilePhoto) {
         this.profilePhoto = profilePhoto;
     }
 
