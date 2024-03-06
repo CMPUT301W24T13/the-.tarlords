@@ -16,12 +16,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import com.example.the_tarlords.R;
+import com.example.the_tarlords.placeholder.PlaceholderEventContent;
 import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.event.EventList;
 import com.example.the_tarlords.placeholder.PlaceholderContent;
 import com.example.the_tarlords.ui.event.EventDetailsFragment;
-
 import java.util.List;
+
 
 /**
  * A fragment representing a list of Event items
@@ -78,7 +79,9 @@ public class EventListFragment extends Fragment implements EventRecyclerViewAdap
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
+
             recyclerView.setAdapter(new EventRecyclerViewAdapter(eventsList, listener));
+
         }
         return view;
     }

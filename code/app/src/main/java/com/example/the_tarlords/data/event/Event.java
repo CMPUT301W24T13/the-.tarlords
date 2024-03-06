@@ -1,7 +1,16 @@
 package com.example.the_tarlords.data.event;
 
+import static androidx.fragment.app.FragmentManager.TAG;
+
+import static com.example.the_tarlords.MainActivity.db;
+
+import android.util.Log;
+
+import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.data.QR.QRCode;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -18,12 +27,18 @@ import java.util.UUID;
 public class Event {
     String name;
     String location;
-    QRCode checkInQR;
-    QRCode promoQR;
-    EventPoster poster;
     String startTime;
+    String endTime;
     String startDate;
     UUID id;
+    private QRCode qrCodeCheckIns;
+    private QRCode qrCodePromo;
+
+    private EventPoster poster;
+
+    private Integer maxSignUps;
+
+
 
     public Event(String name, String location) {
         this.name = name;
@@ -68,20 +83,48 @@ public class Event {
         this.startDate = startDate;
     }
 
-    public QRCode getCheckInQR() {
-        return checkInQR;
+
+    public String getEndTime() {
+        return endTime;
     }
 
-    public void setCheckInQR(QRCode checkInQR) {
-        this.checkInQR = checkInQR;
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 
-    public QRCode getPromoQR() {
-        return promoQR;
+    public void setQrCodeCheckIns(QRCode qrCode) {
+        this.qrCodeCheckIns = qrCode;
     }
 
-    public void setPromoQR(QRCode promoQR) {
-        this.promoQR = promoQR;
+    public void setQrCodePromo(QRCode qrCode) {
+        this.qrCodePromo = qrCode;
+    }
+
+    public QRCode getQrCodeCheckIns() {
+        return qrCodeCheckIns;
+    }
+
+    public QRCode getQrCodePromo() {
+        return qrCodePromo;
+    }
+
+    public EventPoster getPoster() {
+        return poster;
+    }
+
+    public void setPoster(EventPoster poster) {
+        this.poster = poster;
+    }
+
+    public Integer getMaxSignUps() {
+        return maxSignUps;
+    }
+
+    public void setMaxSignUps(Integer maxSignUps) {
+        this.maxSignUps = maxSignUps;
+    }
+
+    public boolean reachedMaxCap() {
+        return true;
     }
 }
-
