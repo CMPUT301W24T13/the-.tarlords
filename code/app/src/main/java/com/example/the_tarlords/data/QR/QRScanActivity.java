@@ -45,34 +45,11 @@ public class QRScanActivity extends AppCompatActivity {
     /**
      * Initiates the QR code scanning process using the ZXing library.
      */
-    public void scanQr(Attendee attendee, Event event, QRCode generatedQRCode) {
+    public void scanQr() {
         IntentIntegrator intentIntegrator = new IntentIntegrator(this);
         intentIntegrator.setPrompt("Scan QR code");
         intentIntegrator.setOrientationLocked(true); // Enable rotation
         intentIntegrator.initiateScan();
-
-        /*
-        I use QRCode class to generate the two QR codes required in Organizer class and then I
-        attached each of them to their corresponding method so like for CI1 qrcode I did
-        event.setQrCodeCheckIns(CI1);  dont worry about that part, it works its just linking
-        qrcode to event details/checkin.
-
-        For the "checkin" functin you asked me to do, I tried the thing below but Idk. Like idk
-        how you check if attendee has scanned the qrcode. I also added the attendee, event,
-        generatedQRCode parameters in this function (you didnt have them originally).
-        Once you figure out how to check if attendee has scanned, you just need to set attendee's
-        checkinstatus to true and the Attendance list automatically gets updated.
-         */
-
-        if (attendee "scans" event.getQrCodeCheckIns())
-        attendee.setCheckInStatus(true);
-
-        /*
-        I guess one way you can check if attendee has "scanned" the qrcode is checking if the
-        generatedQRCode for the event matches the Attendee's QRCode for which you would have to
-        create a getQRCode() and setQRCode() methods in Attendee Class. I am not sure how your
-        scan works ;-;
-         */
     }
 
     /**

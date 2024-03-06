@@ -64,11 +64,6 @@ public class Event implements Attendance, Parcelable {
 
     private static CollectionReference eventsRef = eventsRef = MainActivity.db.collection("Events");
 
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
-
     public Event(String name, String location, String id, String startTime, String endTime, String startDate) {
         this.name = name;
         this.location = location;
@@ -77,18 +72,6 @@ public class Event implements Attendance, Parcelable {
         this.endTime = endTime;
         this.startDate = startDate;
     }
-<<<<<<< Updated upstream
-
-    public Event(String name, String location, String id, String startTime, String endTime, String startDate) {
-        this.name = name;
-        this.location = location;
-        this.id = id;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.startDate = startDate;
-    }
-=======
->>>>>>> Stashed changes
     public Event(String name, String location) {
         this.name = name;
         this.location = location;
@@ -108,6 +91,19 @@ public class Event implements Attendance, Parcelable {
         startDate = in.readString();
     }
     public Event (){};
+
+
+    public static final Creator<Event> CREATOR = new Creator<Event>() {
+        @Override
+        public Event createFromParcel(Parcel in) {
+            return new Event(in);
+        }
+
+        @Override
+        public Event[] newArray(int size) {
+            return new Event[size];
+        }
+    };
 
     public void setId(String id) {
         this.id = id;

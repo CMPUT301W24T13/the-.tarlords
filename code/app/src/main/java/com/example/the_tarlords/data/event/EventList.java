@@ -4,6 +4,8 @@ import static androidx.fragment.app.FragmentManager.TAG;
 
 import static com.example.the_tarlords.MainActivity.db;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import androidx.annotation.NonNull;
