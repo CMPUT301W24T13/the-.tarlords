@@ -94,17 +94,7 @@ public class AddAlertFragment extends DialogFragment {
 
                     // placeholder event
                     listener.addAlert(new Alert(title, message, new Event("placeholder event", "location", null, null)));
-                    /*
-                    if (getArguments() != null && getArguments().containsKey("alert")) {
-                        // Editing existing alert
-                        Alert oldAlert = (Alert) getArguments().getSerializable("alert");
-                        listener.editAlert(oldAlert, title, message);
-                    } else {
-                        Event event = oldAlert.getEvent();
-                        listener.addAlert(new Alert(title, message, event));
-                    }
 
-                     */
                 })
                 .create();
     }
