@@ -56,6 +56,9 @@ public class Event implements Attendance, Parcelable {
     String endTime;
     String startDate;
     String id;
+    String organizerId;
+    private QRCode qrCodeCheckIns;
+    private QRCode qrCodePromo;
     private String checkInQR;
     private String eventInfoQR;
 
