@@ -28,6 +28,11 @@ import com.google.zxing.integration.android.IntentResult;
  * The QRScanActivity class handles QR code scanning functionality and processing the scanned QR code.
  */
 public class QRScanActivity extends AppCompatActivity {
+    private String userId;
+    private String firstName;
+    private String lastName;
+    private String phoneNum;
+    private String email;
     private static final int REQUEST_CAMERA_PERMISSION = 1;
     private FirebaseFirestore db;
     private CollectionReference eventsRef;
@@ -83,7 +88,7 @@ public class QRScanActivity extends AppCompatActivity {
 
                             if (QrID.equals("CI" + eventID)) {
                                 //This is a CheckIn QR
-                                Attendee attendee = new Attendee(user, profile, event);
+                                Attendee attendee = new Attendee(userId, firstName, lastName, phoneNum, email, event);
                                 attendee.setCheckInStatus(TRUE);
                                 Intent intent = new Intent(QRScanActivity.this, MainActivity.class);
                                 startActivity(intent);
