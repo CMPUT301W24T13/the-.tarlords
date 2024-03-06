@@ -2,7 +2,6 @@ package com.example.the_tarlords.ui.profile;
 
 import androidx.lifecycle.ViewModelProvider;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.example.the_tarlords.R;
@@ -28,9 +28,13 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
-        ImageView imageView = view.findViewById(R.id.editProfilePic);
+
+        ImageView profilePhotoImageView = view.findViewById(R.id.image_view_profile);
+        EditText nameEditText = view.findViewById(R.id.edit_text_name);
+        EditText phoneEditText = view.findViewById(R.id.exit_text_phone);
+        EditText emailEditText = view.findViewById(R.id.edit_text_email);
         //imageView.setImageBitmap(bitmap); lord help me jesus i fear i am on my last straw
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+        return view;
     }
 
     @Override
