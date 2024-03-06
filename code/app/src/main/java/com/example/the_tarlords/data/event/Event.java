@@ -20,9 +20,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.AggregateQuery;
+import com.google.firebase.firestore.AggregateQuerySnapshot;
+import com.google.firebase.firestore.AggregateSource;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Filter;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -55,23 +59,20 @@ public class Event implements Attendance, Parcelable {
     String organizerId;
     private QRCode qrCodeCheckIns;
     private QRCode qrCodePromo;
+    private String checkInQR;
+    private String eventInfoQR;
 
     private EventPoster poster;
-    private int maxNumOfSignUps;
+
+    private Integer maxNumOfSignUps;
+
+    //this is accessing the same FirebaseFirestore from mainactivity's static db
+    private FirebaseFirestore db = MainActivity.db;
     private CollectionReference attendanceRef = MainActivity.db.collection("Events/"+ id +"/Attendees");
     private CollectionReference usersRef = MainActivity.db.collection("Users");
 
-    private static CollectionReference eventsRef = eventsRef = MainActivity.db.collection("Events");
-
-
-    public Event(String name, String location, String id, String startTime, String endTime, String startDate) {
-        this.name = name;
-        this.location = location;
-        this.id = id;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.startDate = startDate;
-    }
+    //this is static so that all instances of the Event class have the same eventsRef. So Im not including this ref in the constructors
+    private static CollectionReference eventsRef = MainActivity.db.collection("Events");
 
     public Event(String name, String location, String id, String startTime, String endTime, String startDate) {
         this.name = name;
@@ -80,17 +81,10 @@ public class Event implements Attendance, Parcelable {
         this.startTime = startTime;
         this.endTime = endTime;
         this.startDate = startDate;
+        this.attendanceRef = db.collection("Events").document(id).collection("Attendees");
+        this.usersRef = db.collection("Users");
     }
-    public Event(String name, String location) {
-        this.name = name;
-        this.location = location;
-        this.id = UUID.randomUUID().toString();
-    }
-    public Event(String name, String location, String id) {
-        this.name = name;
-        this.location = location;
-        this.id = id;
-    }
+
     public Event (Parcel in) {
         name = in.readString();
         location = in.readString();
@@ -98,8 +92,13 @@ public class Event implements Attendance, Parcelable {
         startTime = in.readString();
         endTime = in.readString();
         startDate = in.readString();
+        this.attendanceRef = db.collection("Events").document(id).collection("Attendees");
+        this.usersRef = db.collection("Users");
     }
-    public Event (){};
+    public Event (){
+        this.attendanceRef = db.collection("Events").document(id).collection("Attendees");
+        this.usersRef = db.collection("Users");
+    };
 
     public void setOrganizerId(String organizerId) {
         this.organizerId = organizerId;
@@ -111,67 +110,321 @@ public class Event implements Attendance, Parcelable {
         this.id = id;
     }
 
+    public void setOrganizerId(String organizerId) {
+        this.organizerId = organizerId;
+    }
+    public String getOrganizerId() {
+        return organizerId;
+    }
     public String getId() {
+        eventsRef
+                .document(id).get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        id = documentSnapshot.getString("id");
+                        Log.d("Event", id);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("Event", e.getMessage());
+                    }
+                });
+
         return id;
     }
 
+    public void setId(String id) {
+        eventsRef
+                .document(id).update("id", id)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Event.this.id = id;
+                        Log.d("Event", "Event id successfully set");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("Event", e.getMessage());
+                    }
+                });
+
+    }
+
     public String getLocation() {
+        eventsRef
+                .document(id).get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        location = documentSnapshot.getString("location");
+                        Log.d("Event", location);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("Event", e.getMessage());
+                    }
+                });
+
         return location;
     }
 
+
     public void setLocation(String location) {
-        this.location = location;
+        eventsRef
+                .document(id).update("location", location)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Event.this.location = location;
+                        Log.d("Event", "Event location successfully set");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("Event", e.getMessage());
+                    }
+                });
+
     }
 
     public String getName() {
+        eventsRef
+                .document(id).get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        name = documentSnapshot.getString("name");
+                        Log.d("Event", name);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("Event", e.getMessage());
+                    }
+                });
+
         return name;
     }
 
     public void setName(String name) {
-        this.name = name;
+        eventsRef
+                .document(id).update("name", name)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Event.this.name = name;
+                        Log.d("Event", "Event name successfully set");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("Event", e.getMessage());
+                    }
+                });
     }
 
     public String getStartTime() {
+        eventsRef
+                .document(id).get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        startTime = documentSnapshot.getString("startTime");
+                        Log.d("Event", startTime);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("Event", e.getMessage());
+                    }
+                });
+
         return startTime;
     }
 
     public void setStartTime(String startTime) {
-        this.startTime = startTime;
+        eventsRef
+                .document(id).update("startTime", startTime)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Event.this.startTime = startTime;
+                        Log.d("Event", "Event startTime successfully set");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("Event", e.getMessage());
+                    }
+                });
     }
-
-    public String getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
-    }
-
 
     public String getEndTime() {
+        eventsRef
+                .document(id).get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        endTime = documentSnapshot.getString("endTime");
+                        Log.d("Event", endTime);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("Event", e.getMessage());
+                    }
+                });
+
         return endTime;
     }
 
     public void setEndTime(String endTime) {
-        this.endTime = endTime;
+        eventsRef
+                .document(id).update("endTime", endTime)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Event.this.endTime = endTime;
+                        Log.d("Event", "Event endTime successfully set");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("Event", e.getMessage());
+                    }
+                });
     }
 
-    public void setQrCodeCheckIns(QRCode qrCode) {
-        this.qrCodeCheckIns = qrCode;
+    public String getStartDate() {
+        eventsRef
+                .document(id).get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        startDate = documentSnapshot.getString("startDate");
+                        Log.d("Event", startDate);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("Event", e.getMessage());
+                    }
+                });
+
+        return startDate;
     }
 
-    public void setQrCodePromo(QRCode qrCode) {
-        this.qrCodePromo = qrCode;
+    public void setStartDate(String startDate) {
+        eventsRef
+                .document(id).update("startDate", startDate)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Event.this.startDate = startDate;
+                        Log.d("Event", "Event startDate successfully set");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("Event", e.getMessage());
+                    }
+                });
     }
 
-    public QRCode getQrCodeCheckIns() {
-        return qrCodeCheckIns;
+
+    public String getCheckInQR() {
+        eventsRef
+                .document(id).get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        checkInQR = documentSnapshot.getString("checkInQR");
+                        Log.d("Event", checkInQR);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("Event", e.getMessage());
+                    }
+                });
+
+        return checkInQR;
     }
 
-    public QRCode getQrCodePromo() {
-        return qrCodePromo;
+    public void setCheckInQR(String checkInQR) {
+        eventsRef
+                .document(id).update("checkInQR", checkInQR)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Event.this.checkInQR = checkInQR;
+                        Log.d("Event", "Event checkInQR successfully set");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("Event", e.getMessage());
+                    }
+                });
     }
 
+    public String getEventInfoQR() {
+        eventsRef
+                .document(id).get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        eventInfoQR = documentSnapshot.getString("eventInfoQR");
+                        Log.d("Event", eventInfoQR);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("Event", e.getMessage());
+                    }
+                });
+
+        return eventInfoQR;
+    }
+
+    public void setEventInfoQR(String eventInfoQR) {
+        eventsRef
+                .document(id).update("eventInfoQR", eventInfoQR)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Event.this.eventInfoQR = eventInfoQR;
+                        Log.d("Event", "Event eventInfoQR successfully set");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("Event", e.getMessage());
+                    }
+                });
+    }
+
+    //DO firebase for these after poster is done
     public EventPoster getPoster() {
         return poster;
     }
@@ -180,12 +433,43 @@ public class Event implements Attendance, Parcelable {
         this.poster = poster;
     }
 
+
     public int getMaxNumOfSignUps() {
+        eventsRef
+                .document(id).get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        maxNumOfSignUps = Integer.valueOf(documentSnapshot.getString("maxNumOfSignUps"));
+                        Log.d("Event", String.valueOf(maxNumOfSignUps));
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("Event", e.getMessage());
+                    }
+                });
+
         return maxNumOfSignUps;
     }
 
     public void setMaxNumOfSignUps(int maxNumOfSignUps) {
-        this.maxNumOfSignUps = maxNumOfSignUps;
+        eventsRef
+                .document(id).update("maxNumOfSignUps", maxNumOfSignUps)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Event.this.maxNumOfSignUps = maxNumOfSignUps;
+                        Log.d("Event", "Event maxNumOfSignUps successfully set");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("Event", e.getMessage());
+                    }
+                });
     }
 
 
@@ -302,6 +586,39 @@ public class Event implements Attendance, Parcelable {
         dest.writeString(startTime);
         dest.writeString(endTime);
         dest.writeString(startDate);
+    }
+    //NEED TO JAVADOC
+    //Generates a new doc id for the new event, IMPORTANT FOR THE QRCode stuff
+
+    private String newDocID;
+    public String makeNewDocID() {
+        db = FirebaseFirestore.getInstance();
+        eventsRef = db.collection("Events");
+
+        eventsRef.addSnapshotListener((querySnapshots, error) -> {
+            if (error != null) {
+                Log.e("Firestore", error.toString());
+                return;
+            }
+            if (querySnapshots != null) {
+                for (QueryDocumentSnapshot doc: querySnapshots) {
+                    AggregateQuery countQuery = eventsRef.count();
+                    countQuery.get(AggregateSource.SERVER).addOnCompleteListener(new OnCompleteListener<AggregateQuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AggregateQuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                // Count fetched successfully
+                                AggregateQuerySnapshot snapshot = task.getResult();
+                                newDocID = String.valueOf((int)snapshot.getCount() + 1);
+                            } else {
+                                throw new RuntimeException("Could not find number of documents in FireBase");
+                            }
+                        }
+                    });
+                }
+            }
+        });
+        return newDocID;
     }
 
 

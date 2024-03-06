@@ -26,8 +26,12 @@ import java.util.Scanner;
 public class Organizer extends Attendee implements OrgPerms {
 
     /**
-     * This is the constructor for Organizer class
-     * @param user
+     * This is the constructor for organizer class
+     * @param id
+     * @param firstName
+     * @param lastName
+     * @param phoneNum
+     * @param email
      * @param profile
      * @param event
      */
@@ -51,8 +55,8 @@ public class Organizer extends Attendee implements OrgPerms {
      * @return a new event
      */
     @Override
-    public Event createEvent(String name, String location) {
-        Event event = new Event(name, location);
+    public Event createEvent(String name, String location, String id, String startTime, String endTime, String startDate) {
+        Event event = new Event(name, location, id, startTime, endTime, startDate);
         if (setLimit()) {
             int maxLimit = maxLimitFunction();
             event.setMaxNumOfSignUps(maxLimit);
@@ -85,23 +89,6 @@ public class Organizer extends Attendee implements OrgPerms {
 
 
     /**
-     * NOT DONE!! This allows organizer to generate a QR code linked to attendee check in list for that event.
-     * It also connects the generated QRcode to a specific event.
-     * @param event
-     * @param text
-     * @param imageView
-     * @return
-     */
-    @Override
-    public QRCode genQRCodeForCheckIns(Event event, String text, ImageView imageView) {
-        QRCode qrCode = new QRCode();
-        qrCode.generateQR(text, imageView);
-        event.setQrCodeCheckIns(qrCode);
-        return qrCode;
-
-    }
-
-    /**
      * This allows organizer to generate the two kinds of QR codes. One for the attedee check-in which attendees will use to check in,
      * and the other is for event details. They are distinguishable by their text; check-ins text must be CI# with # being a number,
      * and event details text must be EI#
@@ -113,10 +100,11 @@ public class Organizer extends Attendee implements OrgPerms {
     public QRCode generateQRCode(Event event, String text, ImageView imageView) {
         QRCode qrCode = new QRCode();
         qrCode.generateQR(text, imageView);
+        //DO SOMETHING ABOUT THE IMAGEVIEW
         if (text.charAt(0) == 'C') {     // this is for checkins
-            event.setQrCodeCheckIns(qrCode);
+            event.setCheckInQR(qrCode.toString());
         } else if (text.charAt(0) == 'E') {   // this is for event details
-            event.setQrCodePromo(qrCode);
+            event.setEventInfoQR(qrCode.toString());
         }
         return qrCode;
     }

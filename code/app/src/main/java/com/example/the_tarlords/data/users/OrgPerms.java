@@ -14,13 +14,13 @@ import com.example.the_tarlords.data.map.Map;
 import java.util.ArrayList;
 
 public interface OrgPerms {
-    Event createEvent(String name, String location);
+    Event createEvent(String name, String location, String id, String startTime, String endTime, String startDate);
 
     public boolean setLimit();
 
     public int maxLimitFunction();
 
-    QRCode genQRCodeForCheckIns(Event event, String text, ImageView imageView);
+    public QRCode generateQRCode(Event event, String text, ImageView imageView);
 
     QRCode reuseQRCode(QRCode qrCode);
 

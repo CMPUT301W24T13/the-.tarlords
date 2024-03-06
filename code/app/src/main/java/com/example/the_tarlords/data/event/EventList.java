@@ -4,6 +4,8 @@ import static androidx.fragment.app.FragmentManager.TAG;
 
 import static com.example.the_tarlords.MainActivity.db;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import androidx.annotation.NonNull;
@@ -11,8 +13,11 @@ import androidx.annotation.NonNull;
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.data.users.User;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -48,6 +53,7 @@ public class EventList {
 
     }
 
+
     public ArrayList<Event> getEvents() {
         return events;
     }
@@ -76,7 +82,10 @@ public class EventList {
                                                         String id = document.getId();
                                                         String name = document.get("name").toString();
                                                         String location = document.get("location").toString();
-                                                        events.add(new Event(name, location, id));
+                                                        String startTime = document.get("startTime").toString();
+                                                        String endTime = document.get("endTime").toString();
+                                                        String startDate = document.get("startDate").toString();
+                                                        events.add(new Event(name, location, id, startTime, endTime, startDate));
                                                         Log.d("query events", doc.getId() + " => " + doc.getData());
                                                         Log.d("events list", events.toString()+"hi");
                                                         Log.d("query events", document.getId() + " =>=> " + document.getData());
@@ -94,8 +103,20 @@ public class EventList {
         return events;
     }
 
+    //this finds an event in the events list by event id
     public Event get(int position) {
+        eventsRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                events.clear(); // Clear the existing events list
+                for (DocumentSnapshot document : queryDocumentSnapshots) {
+                    Event event = document.toObject(Event.class);
+                    events.add(event);
+                }
+            }
+        });
         return events.get(position);
+
     }
 
     //public int size() {return events.size();}
