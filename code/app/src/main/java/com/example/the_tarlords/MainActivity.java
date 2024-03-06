@@ -43,29 +43,10 @@ public class MainActivity extends AppCompatActivity {
 
     //TODO: shouldn't be hardcoded by end
     public static User user = new User("1","john","doe","780-111-1111","john.doe@ualberta.ca");
-    /**
-     * This next bit is a way to get the same user everytime
-     */
-    // Check if the user ID is already generated and stored
-    SharedPreferences preferences = getSharedPreferences("MyPreferences", MODE_PRIVATE);
-    String userId = preferences.getString("user_id", null);
 
-    if (userId == null) {
-        // Generate a new user ID (you can use any logic to generate a unique ID)
-        userId = generateNewUserId();
-
-        // Save the user ID locally
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString("user_id", userId);
-        editor.apply();
-    }
-    public String generateNewUserId(){
-        //replace with USER logic to generate an id 
-        return UUID.randomUUID().toString();
-    }
 
     /**
-     * These next to overrides can be used in each fragment to restore the data when the close and open the app again
+     * These next 2 overrides can be used in each fragment to restore the data when the close and open the app again
      */
     // Fetch the stored data in onResume() Because this is what will be called when the app opens again
 
@@ -121,6 +102,24 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        /**
+         * This next bit is a way to get the same user everytime
+         */
+        // Check if the user ID is already generated and stored
+        SharedPreferences preferences = getSharedPreferences("MyPreferences", MODE_PRIVATE);
+        //you can get the user id if the user already has used the app once before , do what you need with it
+        String userId = preferences.getString("user_id", null);
+
+        if (userId == null) {
+            // Generate a new user ID (you can use any logic to generate a unique ID)
+            userId = generateNewUserId();
+
+            // Save the user ID locally
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString("user_id", userId);
+            editor.apply();
+        }
+
 
         /**
          * slide out nav bar set-up
@@ -145,6 +144,12 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+    }
+    
+    // User id generator for the sharedPreferences stuff
+    private String generateNewUserId() {
+        // Replace with your user logic to generate an ID
+        return UUID.randomUUID().toString();
     }
 
     @Override
