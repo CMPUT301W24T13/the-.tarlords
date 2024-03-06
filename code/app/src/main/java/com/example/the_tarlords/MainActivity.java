@@ -1,7 +1,10 @@
 package com.example.the_tarlords;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
@@ -30,6 +33,7 @@ import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -39,6 +43,63 @@ public class MainActivity extends AppCompatActivity {
 
     //TODO: shouldn't be hardcoded by end
     public static User user = new User("1","john","doe","780-111-1111","john.doe@ualberta.ca");
+    /**
+     * This next bit is a way to get the same user everytime
+     */
+    // Check if the user ID is already generated and stored
+    SharedPreferences preferences = getSharedPreferences("MyPreferences", MODE_PRIVATE);
+    String userId = preferences.getString("user_id", null);
+
+    if (userId == null) {
+        // Generate a new user ID (you can use any logic to generate a unique ID)
+        userId = generateNewUserId();
+
+        // Save the user ID locally
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("user_id", userId);
+        editor.apply();
+    }
+    public String generateNewUserId(){
+        //replace with USER logic to generate an id 
+        return UUID.randomUUID().toString();
+    }
+
+    /**
+     * These next to overrides can be used in each fragment to restore the data when the close and open the app again
+     */
+    // Fetch the stored data in onResume() Because this is what will be called when the app opens again
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Fetching the stored data from the SharedPreference
+        SharedPreferences sh = getSharedPreferences("MySharedPref", MODE_PRIVATE);
+        //This is an example we will put our own data
+        //String s1 = sh.getString("name", "");
+        int a = sh.getInt("age", 0);
+
+        // Setting the fetched data in the EditTexts
+        name.setText(s1);
+        age.setText(String.valueOf(a));
+    }
+
+    // Store the data in the SharedPreference in the onPause() method
+    // When the user closes the application onPause() will be called and data will be stored
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Creating a shared pref object with a file name "MySharedPref" in private mode
+        SharedPreferences sharedPreferences = getSharedPreferences("MySharedPref", MODE_PRIVATE);
+        SharedPreferences.Editor myEdit = sharedPreferences.edit();
+
+        // write all the data entered by the user in SharedPreference and apply
+        //This is an example
+        myEdit.putString("name", name.getText().toString());
+        myEdit.putInt("age", Integer.parseInt(age.getText().toString()));
+        myEdit.apply();
+    }
+
+
 
     private ActivityMainBinding binding;
 
