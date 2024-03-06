@@ -7,10 +7,11 @@
     android:layout_height="match_parent"
     tools:context=".ui.profile.ProfileFragment" >
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:id="@+id/editINfo"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -18,29 +19,30 @@
 
         <EditText
             android:id="@+id/nameEditText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
             android:layout_marginStart="25dp"
-            android:layout_marginTop="27dp"
+            android:layout_marginTop="25dp"
             android:layout_marginEnd="25dp"
+            android:layout_marginBottom="0dp"
             android:ems="10"
             android:fontFamily="sans-serif-condensed-light"
             android:hint="Name"
             android:inputType="text"
             android:text="John Doe"
+            android:textColor="@color/black"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:visibility="gone" />
 
         <EditText
             android:id="@+id/phoneEditText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
             android:layout_marginStart="25dp"
-            android:layout_marginTop="3dp"
+            android:layout_marginTop="25dp"
             android:layout_marginEnd="25dp"
+            android:layout_marginBottom="0dp"
             android:ems="10"
             android:fontFamily="sans-serif-condensed-light"
             android:hint="phone number"
@@ -48,18 +50,16 @@
             android:text="(780) - 123 - 4567"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/nameEditText" />
+            android:visibility="gone" />
 
         <EditText
             android:id="@+id/emailEditText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
             android:layout_marginStart="25dp"
-            android:layout_marginTop="3dp"
+            android:layout_marginTop="25dp"
             android:layout_marginEnd="25dp"
-            android:layout_marginBottom="354dp"
+            android:layout_marginBottom="0dp"
             android:ems="10"
             android:fontFamily="sans-serif-condensed-light"
             android:hint="email"
@@ -67,12 +67,51 @@
             android:text="j.doe@ualberta.ca"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/phoneEditText" />
+            android:visibility="gone" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/nameTextView"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="27dp"
+            android:layout_marginEnd="25dp"
+            android:ems="10"
+            android:fontFamily="sans-serif-condensed-light"
+            android:text="TextView"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/phoneTextView"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="27dp"
+            android:layout_marginEnd="25dp"
+            android:ems="10"
+            android:fontFamily="sans-serif-condensed-light"
+            android:text="TextView"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/emailTextView"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="27dp"
+            android:layout_marginEnd="25dp"
+            android:ems="10"
+            android:fontFamily="sans-serif-condensed-light"
+            android:text="TextView"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/editPhoto"
@@ -103,6 +142,40 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@mipmap/ic_launcher_round" />
+
+        <ImageButton
+            android:id="@+id/editButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="207dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="25dp"
+            android:layout_marginBottom="147dp"
+            android:background="#00FFFFFF"
+            android:contentDescription="edit"
+            android:src="@drawable/baseline_edit_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/editProfilePic"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/saveButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="207dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="25dp"
+            android:layout_marginBottom="147dp"
+            android:background="#00FFFFFF"
+            android:contentDescription="save"
+            android:src="@drawable/baseline_save_24"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/editProfilePic"
+            app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

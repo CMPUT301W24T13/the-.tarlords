@@ -35,8 +35,8 @@ public class AttendanceRecyclerViewAdapter extends RecyclerView.Adapter<Attendan
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.attendee = attendees.get(position);
-        holder.firstName.setText(attendees.get(position).getProfile().getFirstName());
-        holder.lastName.setText(attendees.get(position).getProfile().getLastName());
+        holder.firstName.setText(attendees.get(position).getFirstName());
+        holder.lastName.setText(attendees.get(position).getLastName());
         holder.checkInStatus.setChecked(attendees.get(position).getCheckInStatus());
     }
 

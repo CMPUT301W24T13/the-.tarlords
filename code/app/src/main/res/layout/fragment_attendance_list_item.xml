@@ -28,11 +28,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
                 android:adjustViewBounds="true"
-                android:src="@tools:sample/avatars"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/item_first_name"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:srcCompat="@mipmap/ic_launcher_round" />
 
             <TextView
                 android:id="@+id/item_first_name"

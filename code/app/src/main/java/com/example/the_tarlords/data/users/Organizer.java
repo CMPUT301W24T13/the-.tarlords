@@ -30,8 +30,8 @@ public class Organizer extends Attendee implements OrgPerms {
      * @param profile
      * @param event
      */
-    public Organizer(User user, Profile profile, Event event) {
-        super(user, profile, event);
+    public Organizer(String id, String firstName, String lastName, String phoneNum, String email, Profile profile, Event event) {
+        super(id, firstName, lastName, phoneNum, email , event);
     }
 
     /**
