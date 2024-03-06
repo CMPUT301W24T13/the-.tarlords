@@ -1,5 +1,5 @@
 package com.example.the_tarlords.ui.profile;
-
+/*
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
@@ -31,8 +31,57 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+*/
+
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.hardware.camera2.CameraAccessException;
+import android.hardware.camera2.CameraCaptureSession;
+import android.hardware.camera2.CameraDevice;
+import android.hardware.camera2.CaptureRequest;
+import android.hardware.camera2.params.OutputConfiguration;
+import android.media.Image;
+import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
+import android.view.Surface;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
+import com.google.zxing.integration.android.IntentIntegrator;
+
+import java.util.List;
 
 public class UploadPfpActivity extends AppCompatActivity {
+    private static final int REQUEST_CAMERA_PERMISSION = 1;
+    private FirebaseFirestore db;
+    private CollectionReference profilesRef;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(UploadPfpActivity.this, new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
+        } else {
+            takePhoto();
+        }
+    }
+
+    public void takePhoto() {
+
+    }
+
+    /*
     Bitmap myBitmap;
     Uri photoUri;
 
@@ -84,7 +133,7 @@ public class UploadPfpActivity extends AppCompatActivity {
      * Create chooser intent to select source from which to get image.
      * Source either Camera ACTION_IMAGE_CAPTURE or Gallery ACTION_GET_CONTENT.
      * Both possible sources are shown in intent chooser
-     */
+     *
     public Intent getPickImageChooserIntent() {
         Uri outputFileUri = getCaptureImageOutputUri();
 
@@ -131,7 +180,7 @@ public class UploadPfpActivity extends AppCompatActivity {
 
     /**
      * URI to image received from camera capture.
-     */
+     *
     private Uri getCaptureImageOutputUri() {
         Uri outputFileUri = null;
         File getImage = getExternalCacheDir();
@@ -165,7 +214,7 @@ public class UploadPfpActivity extends AppCompatActivity {
 
     /**
      * Rotate image if orientation is not aligned.
-     */
+     *
     private static Bitmap rotateImageIfRequired(Bitmap image, Uri selectedImage) throws IOException {
         ExifInterface exifInterface = new ExifInterface(selectedImage.getPath());
         int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
@@ -210,6 +259,7 @@ public class UploadPfpActivity extends AppCompatActivity {
      * @param data the returned data from the activity result
      * @return URI uri reference of selected image
      */
+    /*
     public Uri getPickImageResultUri(Intent data) {
         boolean isCamera = true;
         if (data != null) {
@@ -222,7 +272,7 @@ public class UploadPfpActivity extends AppCompatActivity {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState, @NonNull PersistableBundle outPersistentState) {
         super.onSaveInstanceState(outState, outPersistentState);
-        // save file url in bundle, will be null on screen orientation changes
+        / save file url in bundle, will be null on screen orientation changes
         outState.putParcelable("photo_uri", photoUri);
     }
 
@@ -244,4 +294,5 @@ public class UploadPfpActivity extends AppCompatActivity {
         }
         return result;
     }
+    */
 }
