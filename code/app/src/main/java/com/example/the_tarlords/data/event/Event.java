@@ -52,6 +52,7 @@ public class Event implements Attendance, Parcelable {
     String endTime;
     String startDate;
     String id;
+    String organizerId;
     private QRCode qrCodeCheckIns;
     private QRCode qrCodePromo;
 
@@ -92,18 +93,12 @@ public class Event implements Attendance, Parcelable {
     }
     public Event (){};
 
-
-    public static final Creator<Event> CREATOR = new Creator<Event>() {
-        @Override
-        public Event createFromParcel(Parcel in) {
-            return new Event(in);
-        }
-
-        @Override
-        public Event[] newArray(int size) {
-            return new Event[size];
-        }
-    };
+    public void setOrganizerId(String organizerId) {
+        this.organizerId = organizerId;
+    }
+    public String getOrganizerId() {
+        return organizerId;
+    }
 
     public void setId(String id) {
         this.id = id;
