@@ -1,5 +1,7 @@
 package com.example.the_tarlords.data.QR;
 
+import static java.lang.Boolean.TRUE;
+
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -11,8 +13,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.data.attendance.Attendance;
 import com.example.the_tarlords.data.event.Event;
+import com.example.the_tarlords.data.users.Attendee;
+import com.example.the_tarlords.ui.event.EventDetailsFragment;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -26,7 +31,6 @@ public class QRScanActivity extends AppCompatActivity {
     private static final int REQUEST_CAMERA_PERMISSION = 1;
     private FirebaseFirestore db;
     private CollectionReference eventsRef;
-    private Event event;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,9 +83,15 @@ public class QRScanActivity extends AppCompatActivity {
 
                             if (QrID.equals("CI" + eventID)) {
                                 //This is a CheckIn QR
+                                Attendee attendee = new Attendee(user, profile, event);
+                                attendee.setCheckInStatus(TRUE);
+                                Intent intent = new Intent(QRScanActivity.this, MainActivity.class);
+                                startActivity(intent);
 
                             } else {
                                 //This is a EventInfo QR
+                                Intent intent = new Intent(QRScanActivity.this, EventDetailsFragment.class);
+                                startActivity(intent);
                             }
 
                         }
