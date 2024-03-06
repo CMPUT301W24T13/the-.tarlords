@@ -52,6 +52,7 @@ public class Event implements Attendance, Parcelable {
     String endTime;
     String startDate;
     String id;
+    String organizerId;
     private QRCode qrCodeCheckIns;
     private QRCode qrCodePromo;
 
@@ -100,6 +101,12 @@ public class Event implements Attendance, Parcelable {
     }
     public Event (){};
 
+    public void setOrganizerId(String organizerId) {
+        this.organizerId = organizerId;
+    }
+    public String getOrganizerId() {
+        return organizerId;
+    }
     public void setId(String id) {
         this.id = id;
     }
