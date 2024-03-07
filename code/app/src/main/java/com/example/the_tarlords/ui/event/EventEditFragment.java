@@ -114,8 +114,6 @@ public class EventEditFragment extends Fragment implements MenuProvider {
                 // Update the text view
                 eventStartDateTextView.setText(formattedDate);
 
-                // Update the event attribute
-                event.setStartDate(formattedDate);
             }
         }, 2024, 0, 15);
         //show the dialog
@@ -146,13 +144,9 @@ public class EventEditFragment extends Fragment implements MenuProvider {
                 if(s == "start"){
                     //update text view
                     eventStartTimeTextView.setText(formattedTime);
-                    //update event attribute
-                    event.setStartTime(formattedTime);
                 }else{
                     //update text view
                     eventEndTimeTextView.setText(formattedTime);
-                    //update event attribute
-                    event.setEndTime(formattedTime);
                 }
 
             }
@@ -172,13 +166,20 @@ public class EventEditFragment extends Fragment implements MenuProvider {
         //add more attributes
 
         // Populate UI elements with event details
-        if (event != null) {
+        if (event.getId() != null) {
             eventNameEditText.setText(event.getName());
             eventLocationEditText.setText(event.getLocation());
             eventStartTimeTextView.setText(event.getStartTime());
             eventStartDateTextView.setText(event.getStartDate());
             eventEndTimeTextView.setText(event.getEndTime());
             // Populate more attributes
+        }
+        else {
+            eventNameEditText.setHint("Event Name");
+            eventLocationEditText.setHint("Location");
+            eventStartDateTextView.setText("Date");
+            eventStartTimeTextView.setText("Start time");
+            eventEndTimeTextView.setText("End Time");
         }
         /**
          * A Text Change Listener updates the event attributes when the edit text field is changed
@@ -248,6 +249,19 @@ public class EventEditFragment extends Fragment implements MenuProvider {
         if (menuItem.getItemId() == R.id.saveOptionsMenu || menuItem.getItemId() == R.id.cancelOptionsMenu){
             if (menuItem.getItemId() == R.id.saveOptionsMenu){
 
+                // Update the event attribute
+                event.setStartDate(eventStartDateTextView.getText().toString());
+                //update event attribute
+                event.setStartTime(eventStartTimeTextView.getText().toString());
+                //update event attribute
+                event.setEndTime(eventEndTimeTextView.getText().toString());
+
+                event.setName(eventNameEditText.getText().toString());
+                event.setLocation(eventLocationEditText.getText().toString());
+
+
+                //TODO : update firebase info
+                //TODO : check valid input
             }
             Bundle args = new Bundle();
             args.putParcelable("event",event);

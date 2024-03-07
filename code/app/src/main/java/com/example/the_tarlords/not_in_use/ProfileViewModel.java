@@ -1,4 +1,4 @@
-package com.example.the_tarlords.ui.profile;
+package com.example.the_tarlords.not_in_use;
 
 import androidx.lifecycle.ViewModel;
 

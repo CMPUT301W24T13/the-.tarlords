@@ -1,4 +1,4 @@
-package com.example.the_tarlords.ui.attendance_page;
+package com.example.the_tarlords.not_in_use;
 
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,7 +11,6 @@ import com.example.the_tarlords.databinding.FragmentAttendanceListItemBinding;
 import com.example.the_tarlords.ui.attendance_page.placeholder.PlaceholderContent.PlaceholderItem;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link PlaceholderItem}.

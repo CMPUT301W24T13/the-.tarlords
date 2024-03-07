@@ -1,3 +1,4 @@
+/*
 package com.example.the_tarlords.ui.event;
 
 import android.content.Context;
@@ -40,3 +41,4 @@ public class EventOrganizerArrayAdapter extends ArrayAdapter<Event> {
         return view;
     }
 }
+*/

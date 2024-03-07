@@ -1,4 +1,4 @@
-package com.example.the_tarlords.data.event;
+package com.example.the_tarlords.not_in_use;
 
 import static androidx.fragment.app.FragmentManager.TAG;
 
@@ -9,6 +9,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.example.the_tarlords.MainActivity;
+import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.users.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;

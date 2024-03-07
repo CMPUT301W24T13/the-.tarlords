@@ -107,7 +107,7 @@ public class AddAlertFragment extends DialogFragment {
                     String message = editMessage.getText().toString();
 
                     // placeholder event
-                    listener.addAlert(new Alert(title, message, new Event("placeholder event", "location", null, null)));
+                    //listener.addAlert(new Alert(title, message, new Event("placeholder event", "location", null, null)));
 
                 })
                 .create();

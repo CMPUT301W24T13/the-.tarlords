@@ -1,3 +1,4 @@
+/*
 package com.example.the_tarlords.data.Alert;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -50,4 +51,4 @@ public class AlertActivity_TEST extends AppCompatActivity implements AddAlertDia
 
     }
 
-}
+}*/

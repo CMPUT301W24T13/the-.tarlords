@@ -51,12 +51,6 @@
         <action
             android:id="@+id/action_eventDetailsFragment_to_attendanceFragment"
             app:destination="@id/attendanceFragment" />
-        <argument
-            android:name="event"
-            app:argType="com.example.the_tarlords.data.event.Event" />
-        <argument
-            android:name="isOrganizer"
-            app:argType="boolean" />
     </fragment>
     <fragment
         android:id="@+id/eventEditFragment"
@@ -71,10 +65,13 @@
             android:id="@+id/eventOrganizerListFragment"
             android:name="com.example.the_tarlords.ui.event.EventOrganizerListFragment"
             android:label="fragment_event_organizer_list"
-            tools:layout="@layout/fragment_event_organizer_list">
+            tools:layout="@layout/fragment_event_list">
             <action
                 android:id="@+id/action_eventOrganizerListFragment_to_eventDetailsFragment"
                 app:destination="@id/eventDetailsFragment" />
+            <action
+                android:id="@+id/action_eventOrganizerListFragment_to_eventEditFragment"
+                app:destination="@id/eventEditFragment" />
         </fragment>
 
 </navigation>

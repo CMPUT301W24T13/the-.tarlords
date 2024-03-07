@@ -23,7 +23,6 @@ import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.databinding.FragmentEventListBinding;
-import com.example.the_tarlords.databinding.FragmentEventOrganizerListBinding;
 import com.example.the_tarlords.ui.home.EventArrayAdapter;
 import com.example.the_tarlords.ui.home.EventListFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -42,7 +41,7 @@ public class EventOrganizerListFragment extends Fragment implements MenuProvider
     // TODO: Customize parameters
     private int mColumnCount = 1;
     //private FragmentEventOrganizerListBinding binding;
-    private FragmentEventOrganizerListBinding binding;
+    private FragmentEventListBinding binding;
     private CollectionReference eventsRef = MainActivity.db.collection("Events");
     private CollectionReference usersRef = MainActivity.db.collection("Users");
     ArrayList<Event> events = new ArrayList<>();
@@ -68,14 +67,14 @@ public class EventOrganizerListFragment extends Fragment implements MenuProvider
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentEventOrganizerListBinding.inflate(inflater, container, false);
+        binding = FragmentEventListBinding.inflate(inflater, container, false);
         requireActivity().addMenuProvider(this);
         return binding.getRoot();
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ListView eventListView = view.findViewById(R.id.eventOrganizerListView);
+        ListView eventListView = view.findViewById(R.id.eventListView);
         Log.d("events list", events.toString()+"hello");
         //set adapter
         EventArrayAdapter adapter = new EventArrayAdapter(getContext(),events);
@@ -136,10 +135,20 @@ public class EventOrganizerListFragment extends Fragment implements MenuProvider
     @Override
     public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
         menu.clear();
+        menuInflater.inflate(R.menu.options_menu, menu);
+        menu.findItem(R.id.addOptionsMenu).setVisible(true);
     }
 
     @Override
     public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+        if (menuItem.getItemId() == R.id.addOptionsMenu){
+            Event myEvent = new Event(); //TODO: generate random id
+            Bundle args = new Bundle();
+            args.putParcelable("event",myEvent);
+            args.putBoolean("isOrganizer", true);
+            NavHostFragment.findNavController(EventOrganizerListFragment.this)
+                    .navigate(R.id.action_eventOrganizerListFragment_to_eventEditFragment,args);
+        }
         return false;
     }
 
