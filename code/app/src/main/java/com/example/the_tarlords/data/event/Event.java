@@ -1,7 +1,5 @@
 package com.example.the_tarlords.data.event;
 
-import static androidx.fragment.app.FragmentManager.TAG;
-
 import static com.example.the_tarlords.MainActivity.db;
 
 import android.os.Parcel;
@@ -14,25 +12,21 @@ import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.data.QR.QRCode;
 import com.example.the_tarlords.data.attendance.Attendance;
 import com.example.the_tarlords.data.users.Attendee;
-import com.example.the_tarlords.data.users.Organizer;
 import com.example.the_tarlords.data.users.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.AggregateQuery;
+import com.google.firebase.firestore.AggregateQuerySnapshot;
+import com.google.firebase.firestore.AggregateSource;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.Filter;
-import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import org.checkerframework.common.returnsreceiver.qual.This;
-
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 
 /**
  * This class defines an event
