@@ -88,8 +88,8 @@ public class MainActivity extends AppCompatActivity {
         // Check if the device id is already generated and stored
         SharedPreferences preferences = getSharedPreferences("MyPreferences", MODE_PRIVATE);
         //you can get the user id if the user already has used the app once before , do what you need with it
-        //userId = preferences.getString("user_id", null);
-        userId = null;
+        userId = preferences.getString("user_id", null);
+        
         if (userId == null) {
             // user has not used app before
             // Generate a new user ID (you can use any logic to generate a unique ID)
