@@ -3,6 +3,7 @@ package com.example.the_tarlords.data.event;
 import static androidx.fragment.app.FragmentManager.TAG;
 
 import static com.example.the_tarlords.MainActivity.db;
+import static com.google.firebase.firestore.FirebaseFirestore.*;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -20,9 +21,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.AggregateQuery;
+import com.google.firebase.firestore.AggregateQuerySnapshot;
+import com.google.firebase.firestore.AggregateSource;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Filter;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -92,6 +97,18 @@ public class Event implements Attendance, Parcelable {
         startDate = in.readString();
     }
     public Event (){};
+
+    public static final Creator<Event> CREATOR = new Creator<Event>() {
+        @Override
+        public Event createFromParcel(Parcel in) {
+            return new Event(in);
+        }
+
+        @Override
+        public Event[] newArray(int size) {
+            return new Event[size];
+        }
+    };
 
     public void setOrganizerId(String organizerId) {
         this.organizerId = organizerId;
@@ -302,7 +319,7 @@ public class Event implements Attendance, Parcelable {
 
     private String newDocID;
     public String makeNewDocID() {
-        db = FirebaseFirestore.getInstance();
+        db = getInstance();
         eventsRef = db.collection("Events");
 
         eventsRef.addSnapshotListener((querySnapshots, error) -> {
