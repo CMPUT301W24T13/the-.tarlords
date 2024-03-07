@@ -37,13 +37,8 @@ public class AlertListAdapter extends ArrayAdapter<Alert> {
         TextView message = view.findViewById(R.id.alert_event_date);
 
         event.setText(alert.getEvent().getName());
-
-
         message.setText(alert.getMessage());
-
 
         return view;
     }
-
-
 }

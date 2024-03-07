@@ -6,7 +6,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -16,9 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -46,7 +42,7 @@ import java.util.List;
 /**
  * A fragment representing a list of Event items
  */
-public class EventListFragment extends Fragment implements MenuProvider {
+public class EventListFragment extends Fragment implements EventRecyclerViewAdapter.OnItemClickListener{
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -54,7 +50,7 @@ public class EventListFragment extends Fragment implements MenuProvider {
     private int mColumnCount = 1;
     private FragmentEventListBinding binding;
     private CollectionReference eventsRef = MainActivity.db.collection("Events");
-    Event event1 = new Event("test","home","1","9:00","12:00","Mar 6");
+    Event event1 = new Event("test","home");
     ArrayList<Event> events = new ArrayList<>();
 
     /**
@@ -89,7 +85,6 @@ public class EventListFragment extends Fragment implements MenuProvider {
 
     public void onViewCreated(@NonNull View v, Bundle savedInstanceState) {
         super.onViewCreated(v, savedInstanceState);
-        requireActivity().addMenuProvider(this);
         ListView eventListView = v.findViewById(R.id.eventListView);
         Log.d("events list", events.toString()+"hello");
         //events.add(event1);
@@ -106,7 +101,6 @@ public class EventListFragment extends Fragment implements MenuProvider {
                 }
                 if (querySnapshots != null) {
                     events.clear();
-                    //TODO: tried putting this in a different class but it wasn't working, maybe someone else will have better luck?
                     eventsRef
                             .get()
                             .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -122,14 +116,14 @@ public class EventListFragment extends Fragment implements MenuProvider {
                                                                 for (QueryDocumentSnapshot doc : task.getResult()) {
                                                                     events.add(document.toObject(Event.class));
                                                                     adapter.notifyDataSetChanged();
+                                                                    Log.d("query events", doc.getId() + " => " + doc.getData());
+                                                                    Log.d("events list", events.toString()+"hellllllo");
+                                                                    Log.d("query events", document.getId() + " =>=> " + document.getData());
                                                                 }
-                                                                Log.d("query events", document.getId() + " => " + document.getData());
-                                                            }
-                                                            else {
-                                                                Log.d("query events", "Error getting documents: ", task.getException());
                                                             }
                                                         }
                                                     });
+                                            Log.d("query events", document.getId() + " => " + document.getData());
                                         }
                                     } else {
                                         Log.d("query events", "Error getting documents: ", task.getException());
@@ -149,7 +143,7 @@ public class EventListFragment extends Fragment implements MenuProvider {
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
 
                 // Create a new fragment and pass the selected Event as an argument
-                EventDetailsFragment newFragment = EventDetailsFragment.newInstance(event,false);
+                EventDetailsFragment newFragment = EventDetailsFragment.newInstance(event);
 
                 // Replace the current fragment with the new one
                 transaction.replace(R.id.nav_host_fragment_content_main, newFragment);
@@ -168,14 +162,14 @@ public class EventListFragment extends Fragment implements MenuProvider {
      * @param event
      */
 
-    //@Override
+    @Override
     public void onItemClick(Event event) {
         // Handle item click, switch to a new fragment using FragmentManager
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
 
         // Create a new fragment and pass the selected Event as an argument
-        EventDetailsFragment newFragment = EventDetailsFragment.newInstance(event, false);
+        EventDetailsFragment newFragment = EventDetailsFragment.newInstance(event);
 
         // Replace the current fragment with the new one
         transaction.replace(R.id.nav_host_fragment_content_main, newFragment);
@@ -191,15 +185,5 @@ public class EventListFragment extends Fragment implements MenuProvider {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-    }
-
-    @Override
-    public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
-        menu.clear();
-    }
-
-    @Override
-    public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
-        return false;
     }
 }
