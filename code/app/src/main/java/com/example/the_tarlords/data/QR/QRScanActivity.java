@@ -83,8 +83,8 @@ public class QRScanActivity extends AppCompatActivity {
 
                             if (QrID.equals("CI" + eventID)) {
                                 //This is a CheckIn QR
-                                Attendee attendee = new Attendee(user, profile, event);
-                                attendee.setCheckInStatus(TRUE);
+                                //Attendee attendee = new Attendee(user, profile, event);
+                                //attendee.setCheckInStatus(TRUE);
                                 Intent intent = new Intent(QRScanActivity.this, MainActivity.class);
                                 startActivity(intent);
 
