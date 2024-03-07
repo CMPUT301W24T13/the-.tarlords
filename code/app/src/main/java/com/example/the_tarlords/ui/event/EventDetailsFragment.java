@@ -119,6 +119,8 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
         menu.clear();
         if (isOrganizer) {
             menuInflater.inflate(R.menu.options_menu, menu);
+            menu.findItem(R.id.editOptionsMenu).setVisible(true);
+            menu.findItem(R.id.attendanceOptionsMenu).setVisible(true);
         }
     }
 
