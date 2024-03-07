@@ -32,43 +32,6 @@ import java.util.ArrayList;
  * Not sure how QRcode will work , is it initialized when the event is created, or can it be set after being created
  */
 
-/*NOTE FOR EVERYONE:
-    Firebase integration is a pain. I couldnt do the getter and setter methods normally like
-    public String getId() {return id}
-
-    I had to use success and failure listners and pass it in the params of
-    public void getId(success listener, failure listener)
-
-    basically "return id" is too fast for firebase, it cant wait for firebase to finish fetching
-    the data from firestore so it either returns null or the previous stored value of id.
-    I have already created the methods: I just want to show you how to use these methods whenever you want to call
-    them.
-    Example, you make an event in some other class:
-    Event event = new Event("Sample Event", "Sample Location", "sample_id", "start_time", "end_time", "start_date");
-
-    if you wanna get the event id, do thiS:
-
-    event.getId(
-                id -> {                                // successlistener; here now you have access to returned id and you can do other things with it
-                    Log.d("Event", id);
-                    //do other things here with id whatever you wanted the id for
-                }
-        );
-
-    If you wanna set the event id, do this: and you need all three arguments or it will throw error
-
-    event.setId(
-                "idnumber",
-                success -> Log.d("Event", "ID successfully set")
-                failure -> Log.e("Event", "Error message")
-        );
-
-);
-);
-
-*/
-
-
 /* NOTE FOR KHUSHI AND GRACE:
 
     2. Need to connect event location to the Map Class.
@@ -347,9 +310,6 @@ public class Event implements Attendance, Parcelable {
     }
 
 
-    public void setMaxNumOfSignUps(int maxLimit) {
-        this.maxSignUps = maxLimit;
-    }
 }
 
 

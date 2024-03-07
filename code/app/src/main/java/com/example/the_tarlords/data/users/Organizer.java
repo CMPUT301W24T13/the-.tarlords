@@ -56,7 +56,7 @@ public class Organizer extends Attendee implements OrgPerms {
         Event event = new Event(name, location, id, startTime, endTime, startDate);
         if (setLimit()) {
             int maxLimit = maxLimitFunction();
-            event.setMaxNumOfSignUps(maxLimit);
+            event.setMaxSignUps(maxLimit);
         }
         return event;
     }
@@ -152,7 +152,7 @@ public class Organizer extends Attendee implements OrgPerms {
 
 
 
-    // need iz's attendance list count method
+    // ne
     @Override
     public int trackAttendance(int count) {
         return count;
@@ -206,8 +206,6 @@ public class Organizer extends Attendee implements OrgPerms {
     @Override
     public void setLimitOnSignUps(int maxSignUps, Event event) {
         event.setMaxSignUps(maxSignUps);
-        /* for iz: can use the reachedMaxCap() method from event in SignUp() method from Attendance
-            to check if we have reached max, there can be*/
 
     }
 }
