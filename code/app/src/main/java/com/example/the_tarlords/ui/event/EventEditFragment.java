@@ -137,6 +137,10 @@ public class EventEditFragment extends Fragment implements MenuProvider {
                 if (event != null) {
                     event.setLocation(s.toString());
                 }
+
+//                if (event != null) {
+//                    event.setLocation(s.toString(), aVoid -> {});
+//                }
             }
 
             @Override

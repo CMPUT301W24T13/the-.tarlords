@@ -96,6 +96,7 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
         // Check if event is not null before accessing its attributes
         if (event != null) {
             eventNameTextView.setText(event.getName());
+
             eventLocationTextView.setText(event.getLocation());
             eventStartTimeTextView.setText(event.getStartTime());
             eventStartDateTextView.setText(event.getStartDate());

@@ -41,7 +41,7 @@ public class EventOrganizerListFragment extends Fragment implements MenuProvider
     private FragmentEventListBinding binding;
     private CollectionReference eventsRef = MainActivity.db.collection("Events");
     private CollectionReference usersRef = MainActivity.db.collection("Users");
-    Event event1 = new Event("test","home");
+    Event event1 = new Event("test","home","1", "startTime", "endtime", "starDate");
     ArrayList<Event> events = new ArrayList<>();
 
 

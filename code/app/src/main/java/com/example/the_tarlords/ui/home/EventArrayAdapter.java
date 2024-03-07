@@ -33,8 +33,10 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
         Event event = (Event) getItem(position);
         TextView name = view.findViewById(R.id.titleTextView);
         name.setText(event.getName());
+
         TextView location = view.findViewById(R.id.dateTextView);
         location.setText(event.getLocation());
+
         TextView status = view.findViewById(R.id.userRoleTextView);
         status.setText("Attendee");
         return view;

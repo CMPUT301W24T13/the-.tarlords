@@ -8,16 +8,11 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import androidx.annotation.NonNull;
-
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.data.users.User;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -28,7 +23,7 @@ import java.util.UUID;
 
 /**
  * This class has an List of events
- * Each List of events could have a name, 2 constructors can have one without a name
+ * Each List of events could have a name , 2 constructors can have one without a name
  * Handles adding an event to a List
  * These events also have a unique id
  */
@@ -52,7 +47,6 @@ public class EventList {
         eventsRef = MainActivity.db.collection("Events");
 
     }
-
 
     public ArrayList<Event> getEvents() {
         return events;
@@ -103,20 +97,8 @@ public class EventList {
         return events;
     }
 
-    //this finds an event in the events list by event id
     public Event get(int position) {
-        /*eventsRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                events.clear(); // Clear the existing events list
-                for (DocumentSnapshot document : queryDocumentSnapshots) {
-                    Event event = document.toObject(Event.class);
-                    events.add(event);
-                }
-            }
-        });*/
         return events.get(position);
-
     }
 
     //public int size() {return events.size();}
@@ -133,14 +115,19 @@ public class EventList {
 
         //Next part used to add event to Firebase
         // Create a Map with event details
-        //How are we storing QR
+
+        // Method without firebase
         Map<String,Object> eventMap = new HashMap<>(); //object means the key can be mapped to any type
+
         eventMap.put("name", event.getName());
         eventMap.put("location", event.getLocation());
         eventMap.put("id", event.getId().toString());
         eventMap.put("startDate", event.getStartDate());
         eventMap.put("startTime", event.getStartTime());
         eventMap.put("endTime", event.getEndTime());
+
+
+
 
 
         // Add the event to the Firestore collection
@@ -151,6 +138,7 @@ public class EventList {
                     //Documents id is not the same as event id
                     Log.d("Firestore", "Event added with ID: " + event.getId());
                 });
+
     }
 
     /**
@@ -164,6 +152,7 @@ public class EventList {
         VERY IMPORTANT NEED TO INFORM THE ARRAY ADAPTER/RECYCLER VIEW
          */
         //Next part used to remove event from Firebase
+
         eventsRef
                 .whereEqualTo("id", event.getId())
                 .get()
@@ -187,7 +176,6 @@ public class EventList {
                         // Handle query failure, didn't get the right document
                         Log.e("Firestore", "Error getting documents with event ID " + event.getId(), task.getException());
                     }
-    });
+                });
 
-
-}}
+    }}
