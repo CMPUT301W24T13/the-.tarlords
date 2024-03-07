@@ -11,41 +11,41 @@ import java.util.Map;
  * <p>
  * TODO: Replace all uses of this class before publishing your app.
  */
-public class PlaceholderContent {
+public class PlaceholderEventContent {
 
     /**
      * An array of sample (placeholder) items.
      */
-    public static final List<PlaceholderItem> ITEMS = new ArrayList<PlaceholderItem>();
+    public static final ArrayList<PlaceholderEvent> EVENTS = new ArrayList<PlaceholderEvent>();
 
     /**
      * A map of sample (placeholder) items, by ID.
      */
-    public static final Map<String, PlaceholderItem> ITEM_MAP = new HashMap<String, PlaceholderItem>();
+    public static final Map<String, PlaceholderEvent> ITEM_MAP = new HashMap<String, PlaceholderEvent>();
 
     private static final int COUNT = 25;
 
     static {
         // Add some sample items.
         for (int i = 1; i <= COUNT; i++) {
-            addItem(createPlaceholderItem(i));
+            addItem(createPlaceholderEvent(i));
         }
     }
 
-    private static void addItem(PlaceholderItem item) {
-        ITEMS.add(item);
+    private static void addItem(PlaceholderEvent item) {
+        EVENTS.add(item);
         ITEM_MAP.put(item.id, item);
     }
 
-    private static PlaceholderItem createPlaceholderItem(int position) {
-        return new PlaceholderItem(String.valueOf(position), "Notification " + position, makeDetails(position));
+    private static PlaceholderEvent createPlaceholderEvent(int position) {
+        return new PlaceholderEvent(String.valueOf(position), "Event " + position, "Attendee",makeDetails(position));
     }
 
     private static String makeDetails(int position) {
         StringBuilder builder = new StringBuilder();
-        builder.append("Details about Item: ").append(position);
+        builder.append("February ").append(position).append(", 2024 @2pm");
         for (int i = 0; i < position; i++) {
-            builder.append("\nMore details.");
+            builder.append("");
         }
         return builder.toString();
     }
@@ -53,20 +53,22 @@ public class PlaceholderContent {
     /**
      * A placeholder item representing a piece of content.
      */
-    public static class PlaceholderItem {
+    public static class PlaceholderEvent {
         public final String id;
-        public final String content;
-        public final String details;
+        public final String eventTitle;
+        public final String userRole;
+        public final String date;
 
-        public PlaceholderItem(String id, String content, String details) {
+        public PlaceholderEvent(String id, String eventTitle, String eventUserStatus, String date) {
             this.id = id;
-            this.content = content;
-            this.details = details;
+            this.eventTitle = eventTitle;
+            this.userRole = eventUserStatus;
+            this.date = date;
         }
 
         @Override
         public String toString() {
-            return content;
+            return eventTitle;
         }
     }
 }

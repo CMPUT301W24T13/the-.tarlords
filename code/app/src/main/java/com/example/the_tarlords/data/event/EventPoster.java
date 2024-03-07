@@ -20,4 +20,5 @@ public class EventPoster extends Photo {
         super.upload();
     }
 
+
 }

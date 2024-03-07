@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1050548536276",
+    "project_id": "the-tarlords",
+    "storage_bucket": "the-tarlords.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1050548536276:android:2da2c87e6e9fd7a2c68c41",
+        "android_client_info": {
+          "package_name": "com.example.the_tarlords"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDvn6NXKm-DFWBDJsDhDuFpYlAQkXW3oI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

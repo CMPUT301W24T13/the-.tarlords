@@ -6,11 +6,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.media.Image;
-import android.view.View;
-
-
-import androidx.camera.core.ImageCapture;
 
 import com.example.the_tarlords.data.users.Profile;
 
@@ -25,20 +20,6 @@ public class ProfilePhoto extends Photo {
     public ProfilePhoto(String fileName, Profile profile) {
         super(fileName);
         this.profile = profile;
-    }
-
-    public void takePhoto() {
-        //don't try me i'll literally end it all
-        View view;
-        ImageCapture imageCapture = new ImageCapture.Builder()
-                .setTargetRotation(view.getDisplay().getRotation())
-                .setCaptureMode(ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY)
-                .build();
-    }
-
-    @Override
-    public void upload() {
-        super.upload();
     }
 
     @Override

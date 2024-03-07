@@ -1,41 +1,40 @@
 package com.example.the_tarlords.ui.profile;
 
-import static androidx.core.app.ActivityCompat.startActivityForResult;
-
-import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
-import com.example.the_tarlords.MainActivity;
+import com.example.the_tarlords.Manifest;
 import com.example.the_tarlords.R;
 
+import java.net.URI;
 import java.util.Objects;
 
-/**
- * The UploadPhotoActivity class facilitates uploading photos from the device's photo library.
- * It handles photo library permissions, initiates the photoAlbumFragment, and processes the
- * chosen photo.
- */
-public class UploadPhotoActivity {
-    private static final int REQUEST_ALBUM_PERMISSION = 1;
-
+public class UploadPhotoActivity extends AppCompatActivity {
+    private static final int REQUEST_GALLERY_PERMISSION = 1;
+    private Uri imageUri;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_qr);
+        setContentView(R.layout.fragment_profile);
 
-        // Check camera permission and initiate photo capture if permission is granted
-        if (checkSelfPermission(Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(com.example.the_tarlords.ui.profile.UploadPhotoActivity.this, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, REQUEST_ALBUM_PERMISSION);
+        if (checkSelfPermission(android.Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(UploadPhotoActivity.this, new String[]{android.Manifest.permission.READ_MEDIA_IMAGES}, REQUEST_GALLERY_PERMISSION);
         } else {
             uploadPicture();
         }
@@ -44,30 +43,37 @@ public class UploadPhotoActivity {
     /**
      * Initiate device's camera to capture a photo.
      */
-    public void UploadPicture() {
-        Intent open_album = new Intent(MediaStore.ACTION_PICK_IMAGES);
-        startActivityForResult(open_album, 100);
-    }
+    public void uploadPicture() {
+        //from android studio official references site:
+        //using PickVisualMedia opens photo picker in half-screen mode.
+        // Registers a photo picker activity launcher in single-select mode.
+        ActivityResultLauncher<PickVisualMediaRequest> pickMedia = registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
+            // Callback is invoked after the user selects a media item or closes the photo picker
+            if (uri != null) {
+                Log.d("PhotoPicker", "Selected URI: " + uri);
+                imageUri = (Uri) uri;
+            } else {
+                Log.d("PhotoPicker", "No image selected");
+                imageUri = null;
+            }
+        });
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        try {
-            // Retrieve the chosen photo from the album intent
-            Bitmap photo = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
-            ImageView imageView = findViewById(R.id.editProfilePic);
-            imageView.setImageBitmap(photo);
-        } catch (Exception e) {
-            //WHICH SCREEN DO WE START?? SHOULD JUST BE ABLE TO LINK BACK
-            Intent intent = new Intent(com.example.the_tarlords.ui.profile.UploadPhotoActivity.this, MainActivity.class);
-            startActivity(intent);
-        }
+        // Launch the photo picker and let the user choose only images (no video).
+        pickMedia.launch(new PickVisualMediaRequest.Builder()
+                .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                .build());
+
+        // Retrieve the captured photo from the camera intent
+        Log.e("image name", imageUri.getPath());
+        Bitmap capturedPhoto = BitmapFactory.decodeFile(imageUri.getPath());;
+        ImageView imageView = findViewById(R.id.profilePic);
+        imageView.setImageBitmap(capturedPhoto);
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_ALBUM_PERMISSION) {
+        if (requestCode == REQUEST_GALLERY_PERMISSION) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Retry takePicture() after receiving camera permission
                 uploadPicture();

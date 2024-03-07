@@ -4,9 +4,17 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.util.Log;
+
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -17,6 +25,7 @@ import androidx.core.app.ActivityCompat;
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
 
+import java.io.File;
 import java.util.Objects;
 
 /**
@@ -29,7 +38,7 @@ public class TakePhotoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_qr);
+        setContentView(R.layout.fragment_profile);
 
         // Check camera permission and initiate photo capture if permission is granted
         if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -44,6 +53,9 @@ public class TakePhotoActivity extends AppCompatActivity {
      */
     public void takePicture() {
         Intent open_camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        ////File f = new File(Environment.getExternalStorageDirectory(), "profile_photo.png");
+        //Uri cameraImageUri = getOutputMediaFileUri(1);
+        //getIntent().putExtra(MediaStore.EXTRA_OUTPUT, cameraImageUri);
         startActivityForResult(open_camera, 100);
     }
 
@@ -51,11 +63,22 @@ public class TakePhotoActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         try {
+            /*
+            File f = new File(Environment.getExternalStorageDirectory().toString());
+            for (File temp : f.listFiles()) {
+                if (temp.getName().equals("profile_photo.png")) {
+                    f = temp;
+                    String imagePath = f.getAbsolutePath();
+                    Bitmap capturedPhoto = BitmapFactory.decodeFile(f.getAbsolutePath(), options);
+                }
+            }
+            */
             // Retrieve the captured photo from the camera intent
-            Bitmap photo = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
-
-            ImageView imageView = findViewById(R.id.editProfilePic);
-            imageView.setImageBitmap(photo);
+            //Log.e("image name", cameraImageUri.getPath());
+            //Bitmap capturedPhoto = BitmapFactory.decodeFile(cameraImageUri.getPath());
+            Bitmap capturedPhoto = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
+            ImageView imageView = findViewById(R.id.profilePic);
+            imageView.setImageBitmap(capturedPhoto);
         } catch (Exception e) {
             //WHICH SCREEN DO WE START?? SHOULD JUST BE ABLE TO LINK BACK
             Intent intent = new Intent(TakePhotoActivity.this, MainActivity.class);
@@ -77,4 +100,14 @@ public class TakePhotoActivity extends AppCompatActivity {
             }
         }
     }
+    
+    /*
+    private static Uri getOutputMediaFileUri(int type) {
+        return Uri.fromFile(getOutputMediaFile(type));
+    }
+    private static File getOutputMediaFile(int type) {
+        File mediaStore = new File(Environment.getExternalStoragePublicDirectory(), Environment.DIRECTORY_PICTURES);
+
+    }
+    */
 }

@@ -28,7 +28,7 @@
             android:layout_height="match_parent">
 
             <ImageButton
-                android:id="@+id/edit_profile_button"
+                android:id="@+id/button_edit_profile"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="246dp"
