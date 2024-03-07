@@ -74,15 +74,22 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        /**
+         * Please do not move these next 3 lines BELOW THE USER STUFF
+         */
+        DrawerLayout drawer = binding.drawerLayout;
+        NavigationView navigationView = binding.navView;
+        hView = navigationView.getHeaderView(0);
 
         /**
-         * This next bit is a way to get the same user everytime
+         * THIS IS THE USER STUFF
+         * It uses the device id to check if a new user needs to be generated or not
          */
         // Check if the device id is already generated and stored
         SharedPreferences preferences = getSharedPreferences("MyPreferences", MODE_PRIVATE);
         //you can get the user id if the user already has used the app once before , do what you need with it
-        userId = preferences.getString("user_id", null);
-
+        //userId = preferences.getString("user_id", null);
+        userId = null;
         if (userId == null) {
             // user has not used app before
             // Generate a new user ID (you can use any logic to generate a unique ID)
@@ -92,30 +99,31 @@ public class MainActivity extends AppCompatActivity {
             SharedPreferences.Editor editor = preferences.edit();
             editor.putString("user_id", userId);
             editor.apply();
-            Log.d("debug", "coming here");
             // the profile fields are going to have to be filled with some default info the first time, but the ID is the one we generated
-            user = new User(userId,"khushi","lad","780-111-1111","john.doe@ualberta.ca");
+            user = new User(userId,"Khushi","Test","780-999-9999","khushi.test@ualberta.ca");
+            //upload default user info , with our user ID to fire base
+            addUserToFireStore(user);
             // Update UI with default user information
             updateNavigationDrawerHeader();
             // If it's the first launch, navigate to a different fragment
             navigateToYourFirstFragment();
         }else{
             //user has been here before
-            Log.d("debug", "user has been here before");
             String finalUserId = userId;
-            usersRef.whereEqualTo("userId", "1").get()
+            Log.d("debug", userId);
+            usersRef.whereEqualTo("userId", userId).get()
                     .addOnSuccessListener(querySnapshot -> {
                         if (!querySnapshot.isEmpty()) {
                             // User found, documentSnapshot contains user data
                             DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
                             user = documentSnapshot.toObject(User.class);
-                            Log.d("debug", "found a user");
                             // Now you can use 'user' object
                             // Update UI with default user information
                             updateNavigationDrawerHeader();
                         } else {
                             Log.d("debug", "didn't find a user");
-                            user = new User(finalUserId,"khushi","doe","780-111-1111","john.doe@ualberta.ca");
+                            // This is a case where user has used app on device but user info is not on firebase yet (my case, developer)
+                            user = new User(finalUserId,"khushi","lad","780-111-1111","john.doe@ualberta.ca");
                             // Update UI with default user information
                             updateNavigationDrawerHeader();
                         }
@@ -133,9 +141,7 @@ public class MainActivity extends AppCompatActivity {
          * slide out nav bar set-up
          * **/
 
-        DrawerLayout drawer = binding.drawerLayout;
-        NavigationView navigationView = binding.navView;
-        hView = navigationView.getHeaderView(0);
+
         //TextView name = hView.findViewById(R.id.profileName);
         //TextView phoneNum = hView.findViewById(R.id.phoneNumber);
         //TextView email = hView.findViewById(R.id.email);
@@ -168,6 +174,19 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.nav_host_fragment_content_main, fragment); // R.id.fragment_container is the ID of your fragment container
         fragmentTransaction.addToBackStack(null); // Optional: adds the transaction to the back stack
         fragmentTransaction.commit();
+    }
+    private void addUserToFireStore(User user){
+        // Add the new user document to Firestore
+        //MAJOR NOTE THIS AUTOMATICALLY SETS THE DOC ID TO USER ID AND I DONT KNOW IF THAT WOULD BE A PROBLEM
+        usersRef.document(userId).set(user)
+                .addOnSuccessListener(aVoid -> {
+                    // Document successfully added
+                    Log.d("debug", "User added successfully to Firestore");
+                })
+                .addOnFailureListener(e -> {
+                    // Handle the failure
+                    Log.e("debug", "Error adding user to Firestore", e);
+                });
     }
 
     @Override
