@@ -5,19 +5,12 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
@@ -28,7 +21,6 @@ import android.widget.TimePicker;
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.event.Event;
-import com.example.the_tarlords.ui.attendance_page.AttendanceFragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,7 +30,7 @@ import com.example.the_tarlords.ui.attendance_page.AttendanceFragment;
  * linked to fragment_event_edit.xml
  * Will also take in an event as a parameter
  */
-public class EventEditFragment extends Fragment implements MenuProvider {
+public class EventEditFragment extends Fragment {
 
     // the fragment initialization parameters
     private static Event event;
@@ -137,10 +129,6 @@ public class EventEditFragment extends Fragment implements MenuProvider {
                 if (event != null) {
                     event.setLocation(s.toString());
                 }
-
-//                if (event != null) {
-//                    event.setLocation(s.toString(), aVoid -> {});
-//                }
             }
 
             @Override
@@ -230,45 +218,5 @@ public class EventEditFragment extends Fragment implements MenuProvider {
         }, 7, 30, true);
         //show the dialog
         dialog.show();
-    }
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState){
-        requireActivity().addMenuProvider(this);
-    }
-
-    @Override
-    public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
-        menu.clear();
-        menuInflater.inflate(R.menu.options_menu, menu);
-        menu.findItem(R.id.editOptionsMenu).setVisible(false);
-        menu.findItem(R.id.attendanceOptionsMenu).setVisible(false);
-        menu.findItem(R.id.saveOptionsMenu).setVisible(true);
-        menu.findItem(R.id.cancelOptionsMenu).setVisible(true);
-    }
-
-    @Override
-    public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
-        if (menuItem.getItemId() == R.id.saveOptionsMenu || menuItem.getItemId() == R.id.cancelOptionsMenu){
-            if (menuItem.getItemId() == R.id.saveOptionsMenu){
-
-            }
-            // Handle item click, switch to a new fragment using FragmentManager
-            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-            FragmentTransaction transaction = fragmentManager.beginTransaction();
-
-            // Create a new fragment and pass the selected Event as an argument
-            EventDetailsFragment newFragment = EventDetailsFragment.newInstance(event, true);
-
-            // Replace the current fragment with the new one
-            transaction.replace(R.id.eventEditFragment, newFragment);
-
-            // Add the transaction to the back stack (optional)
-            transaction.addToBackStack(null);
-
-            // Commit the transaction
-            transaction.commit();
-            return true;
-        }
-
-        return false;
     }
 }

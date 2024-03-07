@@ -1,7 +1,5 @@
 package com.example.the_tarlords.data.users;
 
-import android.util.Log;
-
 import com.example.the_tarlords.data.Alert.AlertList;
 import com.example.the_tarlords.data.event.Event;
 
@@ -19,5 +17,4 @@ public class Admin extends User implements AdminPerms {
     boolean isAdmin() {
         return true;
     }
-
 }

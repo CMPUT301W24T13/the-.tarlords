@@ -9,17 +9,14 @@
         android:icon="@drawable/events"
         android:title="Events Attending" />
     <item
-        android:id="@+id/eventOrganizerListFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:enabled="true"
-        android:icon="@drawable/event_organizing"
         android:title="Events Organizing" />
     <item
         android:id="@+id/profileFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:enabled="true"
-        android:icon="@drawable/profile_icon"
         android:title="Profile" />
 </menu>

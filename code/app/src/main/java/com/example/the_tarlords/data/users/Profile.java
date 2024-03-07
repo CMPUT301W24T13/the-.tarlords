@@ -10,14 +10,14 @@ public interface Profile {
     private String phoneNum;
     private String email;*/
 
-    /* public Profile(User user, String firstName, String lastName, String phoneNum, String email) {
-         this.user = user;
-         this.firstName = firstName;
-         this.lastName = lastName;
-         this.phoneNum = phoneNum;
-         this.email = email;
-     }
- */
+   /* public Profile(User user, String firstName, String lastName, String phoneNum, String email) {
+        this.user = user;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNum = phoneNum;
+        this.email = email;
+    }
+*/
     public String getFirstName(); // {return firstName;}
     public void setFirstName(String firstName);// {this.firstName = firstName;}
 
@@ -27,10 +27,10 @@ public interface Profile {
     public Photo getProfilePhoto();// {return profilePhoto;}
 
     public void setAutoProfilePhoto();
-    /*    {
-        //needs to be implemented
-            this.profilePhoto = Photo.generateAutoProfilePhoto();
-        }*/
+/*    {
+    //needs to be implemented
+        this.profilePhoto = Photo.generateAutoProfilePhoto();
+    }*/
     public void setProfilePhoto(Photo profilePhoto); /*{
         this.profilePhoto = profilePhoto;
     }*/

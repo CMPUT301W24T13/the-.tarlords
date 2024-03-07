@@ -6,15 +6,11 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -25,14 +21,13 @@ import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.users.Attendee;
 import com.example.the_tarlords.databinding.FragmentAttendanceListBinding;
 import com.example.the_tarlords.ui.attendance_page.placeholder.PlaceholderContent;
-import com.example.the_tarlords.ui.event.EventDetailsFragment;
 
 import java.util.ArrayList;
 
 /**
  * A fragment representing a list of Items.
  */
-public class AttendanceFragment extends Fragment implements MenuProvider {
+public class AttendanceFragment extends Fragment {
 
     FragmentAttendanceListBinding binding;
     // TODO: Customize parameters
@@ -45,10 +40,10 @@ public class AttendanceFragment extends Fragment implements MenuProvider {
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static AttendanceFragment newInstance(Event event) {
+    public static AttendanceFragment newInstance(int columnCount) {
         AttendanceFragment fragment = new AttendanceFragment();
         Bundle args = new Bundle();
-        args.putParcelable("event", event); //When getting the event cast to Event again
+        args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
         return fragment;
     }
@@ -94,20 +89,9 @@ public class AttendanceFragment extends Fragment implements MenuProvider {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        requireActivity().addMenuProvider(this);
         TextView totalCount = binding.attendeeCount;
         TextView checkInCount = binding.attendeeCheckinCount;
         totalCount.setText("Total: "+adapter.getItemCount());
         checkInCount.setText("Checked In: "+adapter.getCheckInCount());
-    }
-
-    @Override
-    public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
-        menu.clear();
-    }
-
-    @Override
-    public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
-        return false;
     }
 }
