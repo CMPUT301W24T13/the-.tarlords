@@ -52,6 +52,9 @@ public class EventEditFragment extends Fragment implements MenuProvider {
     private EditText eventNameEditText;
     private TextView eventEndTimeTextView;
     private FragmentEventEditBinding binding;
+    //add the event poster to be able to edit the poster
+    //event poster doenst need to be connected to event details. Make poster connected to event so
+    //when QR -> event <- event detials
 
 
     public EventEditFragment() {
