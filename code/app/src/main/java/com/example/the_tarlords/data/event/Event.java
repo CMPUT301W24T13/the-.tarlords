@@ -347,6 +347,9 @@ public class Event implements Attendance, Parcelable {
     }
 
 
+    public void setMaxNumOfSignUps(int maxLimit) {
+        this.maxSignUps = maxLimit;
+    }
 }
 
 
