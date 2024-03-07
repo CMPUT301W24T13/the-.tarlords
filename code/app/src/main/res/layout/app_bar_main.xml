@@ -22,7 +22,7 @@
   </com.google.android.material.appbar.AppBarLayout>
 
   <include layout="@layout/content_main"/>
-
+<!--TODO : Move FAB (QR button) into fragment_event_list instead-->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/scan_qr_button"
         android:layout_width="wrap_content"

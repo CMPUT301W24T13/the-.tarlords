@@ -1,18 +1,28 @@
 package com.example.the_tarlords.ui.event;
 
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Lifecycle;
 
 import android.os.Parcelable;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.event.Event;
+import com.example.the_tarlords.ui.attendance_page.AttendanceFragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -22,9 +32,10 @@ import com.example.the_tarlords.data.event.Event;
  * from the attendee/homepage list view.
  * The nav bar should handle going back to the listview????
  */
-public class EventDetailsFragment extends Fragment {
+public class EventDetailsFragment extends Fragment implements MenuProvider {
 
     private static Event event;
+    private boolean isOrganizer;
 
     public EventDetailsFragment() {
         // Required empty public constructor
@@ -39,10 +50,11 @@ public class EventDetailsFragment extends Fragment {
      * @return A new instance of fragment EventDetailsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static EventDetailsFragment newInstance(Event event) {
+    public static EventDetailsFragment newInstance(Event event, boolean isOrganizer) {
         EventDetailsFragment fragment = new EventDetailsFragment();
         Bundle args = new Bundle();
         args.putParcelable("event", event); //When getting the event cast to Event again
+        args.putBoolean("isOrganizer", isOrganizer);
         fragment.setArguments(args);
         return fragment;
     }
@@ -50,9 +62,10 @@ public class EventDetailsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        //TODO: If organizer status == true, setMenuVisibility(true)
         if (getArguments() != null) {
             event = getArguments().getParcelable("event");
+            isOrganizer = getArguments().getBoolean("isOrganizer");
         }
     }
 
@@ -83,6 +96,7 @@ public class EventDetailsFragment extends Fragment {
         // Check if event is not null before accessing its attributes
         if (event != null) {
             eventNameTextView.setText(event.getName());
+
             eventLocationTextView.setText(event.getLocation());
             eventStartTimeTextView.setText(event.getStartTime());
             eventStartDateTextView.setText(event.getStartDate());
@@ -92,4 +106,64 @@ public class EventDetailsFragment extends Fragment {
 
         return view;
     }
+
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        requireActivity().addMenuProvider(this);
+    }
+
+    @Override
+    public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+        menu.clear();
+        if (isOrganizer) {
+            menuInflater.inflate(R.menu.options_menu, menu);
+        }
+    }
+
+    @SuppressLint("NonConstantResourceId")
+    @Override
+    public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+        // Handle item click, switch to a new fragment using FragmentManager
+        FragmentManager fragmentManager;
+        FragmentTransaction transaction;
+        if (menuItem.getItemId() == R.id.editOptionsMenu) {
+            // Handle item click, switch to a new fragment using FragmentManager
+            fragmentManager = requireActivity().getSupportFragmentManager();
+            transaction = fragmentManager.beginTransaction();
+
+            // Create a new fragment and pass the selected Event as an argument
+            EventEditFragment newEditFragment = EventEditFragment.newInstance(event);
+
+            // Replace the current fragment with the new one
+            transaction.replace(R.id.eventDetailsFragment, newEditFragment);
+
+            // Add the transaction to the back stack (optional)
+            transaction.addToBackStack(null);
+
+            // Commit the transaction
+            transaction.commit();
+            return true;
+        }
+        else if (menuItem.getItemId()==R.id.attendanceOptionsMenu) {
+            // Handle item click, switch to a new fragment using FragmentManager
+            fragmentManager = requireActivity().getSupportFragmentManager();
+            transaction = fragmentManager.beginTransaction();
+
+            // Create a new fragment and pass the selected Event as an argument
+            AttendanceFragment newAttendanceFragment = AttendanceFragment.newInstance(event);
+
+            // Replace the current fragment with the new one
+            transaction.replace(R.id.eventDetailsFragment, newAttendanceFragment);
+
+            // Add the transaction to the back stack (optional)
+            transaction.addToBackStack(null);
+
+            // Commit the transaction
+            transaction.commit();
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
 }

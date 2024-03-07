@@ -54,8 +54,12 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         //holder.eventId.setText(events.get(position).getId()); //this would display the id but we don't need that
+
         holder.eventName.setText(events.get(position).getName());
         holder.eventLocation.setText(events.get(position).getLocation());
+
+
+
     }
 
     @Override
