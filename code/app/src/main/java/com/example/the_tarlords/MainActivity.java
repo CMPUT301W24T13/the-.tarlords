@@ -37,6 +37,8 @@ import com.journeyapps.barcodescanner.ScanOptions;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 
@@ -89,7 +91,8 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences("MyPreferences", MODE_PRIVATE);
         //you can get the user id if the user already has used the app once before , do what you need with it
         userId = preferences.getString("user_id", null);
-        
+        //to test null case
+        //userId = null;
         if (userId == null) {
             // user has not used app before
             // Generate a new user ID (you can use any logic to generate a unique ID)
@@ -178,7 +181,14 @@ public class MainActivity extends AppCompatActivity {
     private void addUserToFireStore(User user){
         // Add the new user document to Firestore
         //MAJOR NOTE THIS AUTOMATICALLY SETS THE DOC ID TO USER ID AND I DONT KNOW IF THAT WOULD BE A PROBLEM
-        usersRef.document(userId).set(user)
+        //trying to use a hashmap instead
+        Map<String, Object> docData = new HashMap<>();
+        docData.put("userId", user.getId());
+        docData.put("firstName", user.getFirstName());
+        docData.put("lastName", user.getLastName());
+        docData.put("phoneNum", user.getPhoneNum());
+        docData.put("email", user.getEmail());
+        usersRef.document(userId).set(docData)
                 .addOnSuccessListener(aVoid -> {
                     // Document successfully added
                     Log.d("debug", "User added successfully to Firestore");
