@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/list"
+    android:id="@+id/eventList"
     android:name="com.example.the_tarlords.ui.attendance.AttendanceFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,8 +14,8 @@
     tools:context=".ui.attendance_page.AttendanceFragment"
     tools:listitem="@layout/fragment_attendance_list_item">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+    <ListView
+        android:id="@+id/attendanceListView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/attendee_count"
@@ -38,7 +38,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/attendee_checkin_count"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
+        app:layout_constraintTop_toBottomOf="@+id/attendanceListView" />
 
     <TextView
         android:id="@+id/attendee_checkin_count"
@@ -54,6 +54,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@id/attendee_count"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
+        app:layout_constraintTop_toBottomOf="@+id/attendanceListView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

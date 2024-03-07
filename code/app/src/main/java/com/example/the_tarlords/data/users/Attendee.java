@@ -29,6 +29,26 @@ public class Attendee extends User{
 
     public Attendee(){}
 
+    @Override
+    public String getFirstName() {
+        return super.getFirstName();
+    }
+
+    @Override
+    public void setFirstName(String firstName) {
+        super.setFirstName(firstName);
+    }
+
+    @Override
+    public String getLastName() {
+        return super.getLastName();
+    }
+
+    @Override
+    public void setLastName(String lastName) {
+        super.setLastName(lastName);
+    }
+
     public Event getEvent() {
         return event;
     }

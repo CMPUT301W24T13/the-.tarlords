@@ -10,6 +10,9 @@ import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -48,13 +51,10 @@ import java.util.List;
  */
 public class EventListFragment extends Fragment implements MenuProvider {
 
-    // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
     private int mColumnCount = 1;
     private FragmentEventListBinding binding;
     private CollectionReference eventsRef = MainActivity.db.collection("Events");
-    Event event1 = new Event("test","home");
     ArrayList<Event> events = new ArrayList<>();
 
     /**
@@ -83,14 +83,13 @@ public class EventListFragment extends Fragment implements MenuProvider {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentEventListBinding.inflate(inflater, container, false);
-
         return binding.getRoot();
     }
 
-    public void onViewCreated(@NonNull View v, Bundle savedInstanceState) {
-        super.onViewCreated(v, savedInstanceState);
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         requireActivity().addMenuProvider(this);
-        ListView eventListView = v.findViewById(R.id.eventListView);
+        ListView eventListView = view.findViewById(R.id.eventListView);
         Log.d("events list", events.toString()+"hello");
         //events.add(event1);
         EventArrayAdapter adapter = new EventArrayAdapter(getContext(),events);
@@ -144,47 +143,13 @@ public class EventListFragment extends Fragment implements MenuProvider {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Event event = events.get(position);
-                // Handle item click, switch to a new fragment using FragmentManager
-                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-
-                // Create a new fragment and pass the selected Event as an argument
-                EventDetailsFragment newFragment = EventDetailsFragment.newInstance(event,false);
-
-                // Replace the current fragment with the new one
-                transaction.replace(R.id.nav_host_fragment_content_main, newFragment);
-
-                // Add the transaction to the back stack (optional)
-                transaction.addToBackStack(null);
-                // Commit the transaction
-                transaction.commit();
+                Bundle args = new Bundle();
+                args.putParcelable("event",event);
+                args.putBoolean("isOrganizer", false);
+                NavHostFragment.findNavController(EventListFragment.this)
+                        .navigate(R.id.action_eventFragment_to_eventDetailsFragment,args);
             }
         });
-    }
-    /**
-     * This method receives the event the user clicked on in the recycler view
-     * Right now it automatically takes the user to the event details page
-     * assumming the EventList is an attendee type of List
-     * @param event
-     */
-
-    //@Override
-    public void onItemClick(Event event) {
-        // Handle item click, switch to a new fragment using FragmentManager
-        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-
-        // Create a new fragment and pass the selected Event as an argument
-        EventDetailsFragment newFragment = EventDetailsFragment.newInstance(event, false);
-
-        // Replace the current fragment with the new one
-        transaction.replace(R.id.nav_host_fragment_content_main, newFragment);
-
-        // Add the transaction to the back stack (optional)
-        transaction.addToBackStack(null);
-
-        // Commit the transaction
-        transaction.commit();
     }
 
     @Override
