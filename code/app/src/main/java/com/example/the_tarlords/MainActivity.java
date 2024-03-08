@@ -145,11 +145,6 @@ public class MainActivity extends AppCompatActivity {
         /**
          * slide out nav bar set-up
          * **/
-<<<<<<< HEAD
-        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.eventListFragment, R.id.eventOrganizerListFragment, R.id.profileFragment)
-=======
-
-
         //TextView name = hView.findViewById(R.id.profileName);
         //TextView phoneNum = hView.findViewById(R.id.phoneNumber);
         //TextView email = hView.findViewById(R.id.email);
@@ -161,7 +156,6 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.eventListFragment, R.id.eventOrganizerListFragment, R.id.eventBrowseFragment,R.id.profileFragment)
->>>>>>> e960844bbbb688614466bb40d56bccbb68e71308
                 .setOpenableLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
@@ -200,20 +194,6 @@ public class MainActivity extends AppCompatActivity {
                 .navigate(R.id.action_eventListFragment_to_profileFragment);
     }
 
-<<<<<<< HEAD
-    @SuppressLint("HardwareIds")
-    private String generateNewUserId() {
-        // Replace with your user logic to generate an ID
-        return Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-    }
-    private void navigateToYourFirstFragment() {
-        // Replace 'YourFirstFragment' with the actual name of your first fragment
-        Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-                //.navigate(R.id.action_eventListFragment_to_profileFragment);
-    }
-=======
->>>>>>> e960844bbbb688614466bb40d56bccbb68e71308
-
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
@@ -234,15 +214,6 @@ public class MainActivity extends AppCompatActivity {
             Log.e("debug", "User object is null");
             // Handle the case where the User object is null
             user = new User(userId,"khushi","null","780-111-1111","john.doe@ualberta.ca");
-        } else {
-            Log.e("debug", "User object is null");
-            // Handle the case where the User object is null
-            user = new User(userId,"khushi","null","780-111-1111","john.doe@ualberta.ca");
         }
     }
-<<<<<<< HEAD
-    //Testing Version 1 -- Rimsha1111
-=======
-
->>>>>>> e960844bbbb688614466bb40d56bccbb68e71308
 }
