@@ -55,16 +55,16 @@
 
         <TextView
             android:id="@+id/tv_edit_event_startTime"
-            android:layout_width="20dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.1"
+            android:layout_weight="0.45"
             android:hint="Start Time"
             android:textSize="20sp" />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.04"
+            android:layout_weight="0.10"
             android:text=" to"
             android:textSize="20sp"
             android:textStyle="normal" />
@@ -73,7 +73,7 @@
             android:id="@+id/tv_edit_event_endTime"
             android:layout_width="20dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.2"
+            android:layout_weight="0.45"
             android:hint="End Time"
             android:textSize="20sp" />
 
