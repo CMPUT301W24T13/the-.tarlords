@@ -1,5 +1,6 @@
 package com.example.the_tarlords.ui.profile;
 
+import androidx.core.view.MenuProvider;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
@@ -9,6 +10,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -16,12 +20,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.example.the_tarlords.R;
-import com.example.the_tarlords.data.users.Profile;
+import com.example.the_tarlords.data.users.User;
 import com.example.the_tarlords.not_in_use.ProfileViewModel;
 
-public class ProfileFragment extends Fragment {
-    private Profile profile;
-    private ProfileViewModel mViewModel;
+public class ProfileFragment extends Fragment implements MenuProvider {
+    private User user;
 
     public static ProfileFragment newInstance() {
         return new ProfileFragment();
@@ -38,21 +41,23 @@ public class ProfileFragment extends Fragment {
         EditText phoneEditText = view.findViewById(R.id.edit_text_phone);
         EditText emailEditText = view.findViewById(R.id.edit_text_email);
 
-        if (profile != null) {
-            profilePhotoImageView.setImageBitmap(profile.getProfilePhoto().getBitmap());
-            firstNameEditText.setText(profile.getFirstName());
-            lastNameEditText.setText(profile.getLastName());
-            phoneEditText.setText(profile.getPhoneNum());
-            emailEditText.setText(profile.getEmail());
+        if (user != null) {
+            profilePhotoImageView.setImageBitmap(user.getProfilePhoto().getBitmap());
+            firstNameEditText.setText(user.getFirstName());
+            lastNameEditText.setText(user.getLastName());
+            phoneEditText.setText(user.getPhoneNum());
+            emailEditText.setText(user.getEmail());
         }
         return view;
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
-        // TODO: Use the ViewModel
+    public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+
     }
 
+    @Override
+    public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+        return false;
+    }
 }
