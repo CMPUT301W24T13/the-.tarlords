@@ -105,7 +105,10 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
             eventStartTimeTextView.setText(event.getStartTime());
             eventStartDateTextView.setText(event.getStartDate());
             eventEndTimeTextView.setText(event.getEndTime());
-            eventMaxAttendees.setText("Max Attendees: "+event.getMaxSignUps().toString());
+            try {
+                eventMaxAttendees.setText("Max Attendees: " + event.getMaxSignUps().toString());
+            } catch (Exception ignored) {
+            }
             // Set other attributes similarly
         }
         if (isOrganizer == true) {
@@ -116,8 +119,8 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
                 ImageView eventInfoQr = view.findViewById(R.id.iv_info_details);
                 checkInQr.setVisibility(view.VISIBLE);
                 eventInfoQr.setVisibility(view.VISIBLE);
-                QRCode.generateQR("Checkin"+event.getId(),checkInQr);
-                QRCode.generateQR("EventInfo"+event.getId(),eventInfoQr);
+                QRCode.generateQR("CI"+event.getId(),checkInQr);
+                QRCode.generateQR("EI"+event.getId(),eventInfoQr);
             }
         }
     }

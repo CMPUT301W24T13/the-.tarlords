@@ -200,8 +200,8 @@ public class EventEditFragment extends Fragment implements MenuProvider {
             checkInQR.setVisibility(view.GONE);
             eventInfoQR.setVisibility(view.GONE);
         } else {
-            QRCode.generateQR("Checkin" + event.getId(), checkInQR);
-            QRCode.generateQR("EventInfo" + event.getId(), eventInfoQR);
+            QRCode.generateQR("CI" + event.getId(), checkInQR);
+            QRCode.generateQR("EI" + event.getId(), eventInfoQR);
         }
 
 
@@ -249,11 +249,10 @@ public class EventEditFragment extends Fragment implements MenuProvider {
                 if (event.getId() == null) {
                     event.makeNewDocID();
                     //generate check in QR
-                    event.setQrCodeCheckIns("Checkin" + event.getId());
-                    //QRCode.generateQR("Checkin"+event.getId(), checkInQR);
+                    event.setQrCodeCheckIns("CI" + event.getId());
                     //generate event info QR
-                    event.setQrCodePromo("EventInfo" + event.getId());
-                    //QRCode.generateQR("EventInfo"+event.getId(),eventInfoQR);
+                    event.setQrCodePromo("EI" + event.getId());
+
                 }
 
                 event.sendToFirebase();

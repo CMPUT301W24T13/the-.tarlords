@@ -13,8 +13,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.the_tarlords.data.event.Event;
+import com.example.the_tarlords.data.users.Profile;
 import com.example.the_tarlords.data.users.User;
 import com.example.the_tarlords.ui.event.EventDetailsFragment;
+import com.example.the_tarlords.ui.profile.ProfileFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.example.the_tarlords.data.QR.QRScanActivity;
 
@@ -152,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
         }
         synchronized (lock) {
             try {
-                lock.wait(400);
+                lock.wait(500);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -207,8 +209,14 @@ public class MainActivity extends AppCompatActivity {
     }
     private void navigateFirstTimeUserToProfileFragment() {
         // Replace 'YourFirstFragment' with the actual name of your first fragment
-        Navigation.findNavController(this, R.id.nav_host_fragment_content_main)
-                .navigate(R.id.action_eventListFragment_to_profileFragment);
+        ProfileFragment fragment = ProfileFragment.newInstance();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.nav_host_fragment_content_main, fragment); // R.id.fragment_container is the ID of your fragment container
+        fragmentTransaction.addToBackStack(null); // Optional: adds the transaction to the back stack
+        fragmentTransaction.commit();
+        //Navigation.findNavController(this, R.id.nav_host_fragment_content_main)
+                //.navigate(R.id.action_eventListFragment_to_profileFragment);
     }
 
 
