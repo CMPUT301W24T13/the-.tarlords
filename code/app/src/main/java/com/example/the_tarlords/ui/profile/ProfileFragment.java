@@ -3,6 +3,7 @@ package com.example.the_tarlords.ui.profile;
 import androidx.core.view.MenuProvider;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -33,7 +34,12 @@ public class ProfileFragment extends Fragment implements MenuProvider {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        return inflater.inflate(R.layout.fragment_profile, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
         ImageView profilePhotoImageView = view.findViewById(R.id.image_view_profile);
         EditText firstNameEditText = view.findViewById(R.id.edit_text_first_name);
@@ -48,12 +54,11 @@ public class ProfileFragment extends Fragment implements MenuProvider {
             phoneEditText.setText(user.getPhoneNum());
             emailEditText.setText(user.getEmail());
         }
-        return view;
     }
 
     @Override
     public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
-
+        menu.clear();
     }
 
     @Override

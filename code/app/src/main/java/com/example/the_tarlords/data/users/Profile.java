@@ -14,8 +14,6 @@ public interface Profile {
 
 
     public Photo getProfilePhoto();
-    //perhaps this is an action that needs to happen in the controller...
-    public void setAutoProfilePhoto() throws IOException;
     public void setProfilePhoto(ProfilePhoto profilePhoto);
 
     public String getPhoneNum();

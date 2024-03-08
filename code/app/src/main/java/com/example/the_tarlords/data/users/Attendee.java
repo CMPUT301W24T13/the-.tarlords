@@ -3,28 +3,17 @@ package com.example.the_tarlords.data.users;
 import com.example.the_tarlords.data.Alert.AlertList;
 import com.example.the_tarlords.data.event.Event;
 
+import java.io.IOException;
 import java.util.List;
 
 public class Attendee extends User{
     private Event event;
-    //private User user;
-    //private Profile profile;
-
     private Boolean checkInStatus;
-   /* public Attendee(User user, Event event) {  // public Attendee(User user, Profile profile, Event event)
-        this.user = user;
-        //hey lucy change this vv in android studio...
-        //this.profile = profile;
-        this.event = event;
-        this.checkInStatus = false;
-    }*/
 
-    public Attendee(String userId, String firstName, String lastName, String phoneNum, String email, Event event) {  // public Attendee(User user, Profile profile, Event event)
-        super(userId, firstName, lastName,phoneNum, email);
-        //hey lucy change this vv in android studio...
-        //this.profile = profile;
+
+    public Attendee(String userId, String firstName, String lastName, String phoneNum, String email, Event event) {
+        super(userId, firstName, lastName, phoneNum, email);
         this.event = event;
-        this.checkInStatus = false;
     }
 
     @Override

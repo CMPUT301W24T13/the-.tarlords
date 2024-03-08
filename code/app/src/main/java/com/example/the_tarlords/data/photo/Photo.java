@@ -23,7 +23,7 @@ public abstract class Photo {
         this.bitmap = bitmap;
     }
 
-    public void autoGenerate() throws IOException {
+    public void autoGenerate() {
         //tee hee
     }
 }

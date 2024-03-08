@@ -22,7 +22,7 @@ public class ProfilePhoto extends Photo {
     }
 
     @Override
-    public void autoGenerate() throws IOException {
+    public void autoGenerate() {
         //get profile info - using initials for photo
         String firstInitial = this.user.getFirstName().substring(0,1);
         String lastInitial = this.user.getLastName().substring(0,1);
@@ -42,12 +42,13 @@ public class ProfilePhoto extends Photo {
         int y = (int) ((canvas.getHeight()/2) - ((paint.descent() + paint.ascent())/2));
         canvas.drawText(initials,x,y,paint);
 
-        String path = "code/app/src/main/res/drawable";
-        OutputStream fOut = null;
-        File photoFile = new File(path, "profilePhoto.png");
-        fOut = new FileOutputStream(photoFile);
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
-        fOut.flush();
-        fOut.close();
+        this.setBitmap(bitmap);
+        //String path = "code/app/src/main/res/drawable";
+        //OutputStream fOut = null;
+        //File photoFile = new File(path, "profilePhoto.png");
+        //fOut = new FileOutputStream(photoFile);
+        //bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+        //fOut.flush();
+        //fOut.close();
     }
 }
