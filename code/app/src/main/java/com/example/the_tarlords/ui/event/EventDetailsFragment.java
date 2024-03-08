@@ -1,32 +1,26 @@
 package com.example.the_tarlords.ui.event;
 
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Lifecycle;
 import androidx.navigation.fragment.NavHostFragment;
 
-import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.the_tarlords.R;
+import com.example.the_tarlords.data.QR.QRCode;
 import com.example.the_tarlords.data.event.Event;
-import com.example.the_tarlords.databinding.FragmentAttendanceListBinding;
 import com.example.the_tarlords.databinding.FragmentEventDetailsBinding;
-import com.example.the_tarlords.ui.attendance_page.AttendanceFragment;
-import com.example.the_tarlords.ui.home.EventListFragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -102,6 +96,7 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
         TextView eventStartDateTextView = view.findViewById(R.id.tv_event_startDate);
         TextView eventStartTimeTextView = view.findViewById(R.id.tv_event_startTime);
         TextView eventEndTimeTextView = view.findViewById(R.id.tv_event_endTime);
+        TextView eventMaxAttendees = view.findViewById(R.id.tv_max_attendees);
 
         // Check if event is not null before accessing its attributes
         if (event != null) {
@@ -110,7 +105,20 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
             eventStartTimeTextView.setText(event.getStartTime());
             eventStartDateTextView.setText(event.getStartDate());
             eventEndTimeTextView.setText(event.getEndTime());
+            eventMaxAttendees.setText("Max Attendees: "+event.getMaxSignUps().toString());
             // Set other attributes similarly
+        }
+        if (isOrganizer == true) {
+            if (event.getQrCodeCheckIns()!=null){
+                view.findViewById(R.id.tv_checkin_details).setVisibility(view.VISIBLE);
+                view.findViewById(R.id.tv_info_details).setVisibility(view.VISIBLE);
+                ImageView checkInQr = view.findViewById(R.id.iv_checkin_details);
+                ImageView eventInfoQr = view.findViewById(R.id.iv_info_details);
+                checkInQr.setVisibility(view.VISIBLE);
+                eventInfoQr.setVisibility(view.VISIBLE);
+                QRCode.generateQR("Checkin"+event.getId(),checkInQr);
+                QRCode.generateQR("EventInfo"+event.getId(),eventInfoQr);
+            }
         }
     }
 

@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences("MyPreferences", MODE_PRIVATE);
         //you can get the user id if the user already has used the app once before , do what you need with it
         userId = preferences.getString("user_id", null);
-        //userId = null;
+        //userId = "1";
         if (userId == null) {
             // user has not used app before
             // Generate a new user ID (you can use any logic to generate a unique ID)
@@ -169,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        binding.appBarMain.scanQrButton.setOnClickListener(new View.OnClickListener() {
+        /*binding.appBarMain.scanQrButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ScanOptions scanOptions = new ScanOptions();
@@ -186,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
             );
-        });
+        });*/
     }
 
     private void navigateToEventDetailsFragment(Event event) {

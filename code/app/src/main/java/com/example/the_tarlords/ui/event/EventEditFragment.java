@@ -1,23 +1,19 @@
 package com.example.the_tarlords.ui.event;
 
-import static com.example.the_tarlords.MainActivity.db;
+import static java.math.MathContext.UNLIMITED;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.res.Resources;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.os.Parcelable;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,16 +22,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
+import com.example.the_tarlords.data.QR.QRCode;
 import com.example.the_tarlords.data.event.Event;
-import com.example.the_tarlords.databinding.FragmentAttendanceListBinding;
+import com.example.the_tarlords.data.users.Organizer;
 import com.example.the_tarlords.databinding.FragmentEventEditBinding;
-import com.example.the_tarlords.ui.attendance_page.AttendanceFragment;
-import com.google.firebase.firestore.DocumentReference;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -56,6 +52,8 @@ public class EventEditFragment extends Fragment implements MenuProvider {
     private EditText eventNameEditText;
     private TextView eventEndTimeTextView;
     private EditText maxAttendees;
+    private ImageView checkInQR;
+    private ImageView eventInfoQR;
     private FragmentEventEditBinding binding;
     //add the event poster to be able to edit the poster
     //event poster doenst need to be connected to event details. Make poster connected to event so
@@ -68,6 +66,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
 
     /**
      * This is used to create a new instance of EditEventFragment
+     *
      * @param event , an object of event class
      * @return the fragment to parent
      */
@@ -117,7 +116,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
 
                 // Format the date components into a string "YYYY.MonthName.DD"
                 @SuppressLint("DefaultLocale")
-                String formattedDate = String.format("%s %02d, %04d", monthNames[month],year, dayOfMonth);
+                String formattedDate = String.format("%s %02d, %04d", monthNames[month], year, dayOfMonth);
 
                 // Update the text view
                 eventStartDateTextView.setText(formattedDate);
@@ -127,7 +126,8 @@ public class EventEditFragment extends Fragment implements MenuProvider {
         //show the dialog
         dialog.show();
     }
-    private void showTimePickerDialog(String s){
+
+    private void showTimePickerDialog(String s) {
         // logic for showing a time picker dialog
         TimePickerDialog dialog = new TimePickerDialog(requireContext(), new TimePickerDialog.OnTimeSetListener() {
             /**
@@ -149,10 +149,10 @@ public class EventEditFragment extends Fragment implements MenuProvider {
                 }
                 // Use the amPm and adjusted hour to display or process the time
                 String formattedTime = String.format("%02d:%02d %s", hourOfDay, minute, amPm);
-                if(s == "start"){
+                if (s == "start") {
                     //update text view
                     eventStartTimeTextView.setText(formattedTime);
-                }else{
+                } else {
                     //update text view
                     eventEndTimeTextView.setText(formattedTime);
                 }
@@ -162,7 +162,8 @@ public class EventEditFragment extends Fragment implements MenuProvider {
         //show the dialog
         dialog.show();
     }
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState){
+
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         requireActivity().addMenuProvider(this);
         //Event id is a textview because user should not be able to edit it, assigned when event object created
         eventNameEditText = view.findViewById(R.id.et_event_name);
@@ -171,6 +172,8 @@ public class EventEditFragment extends Fragment implements MenuProvider {
         eventStartDateTextView = view.findViewById(R.id.tv_edit_event_startDate);
         eventEndTimeTextView = view.findViewById(R.id.tv_edit_event_endTime);
         maxAttendees = view.findViewById(R.id.et_max_attendees);
+        checkInQR = view.findViewById(R.id.iv_checkin);
+        eventInfoQR = view.findViewById(R.id.iv_info);
 
         //add more attributes
 
@@ -181,15 +184,24 @@ public class EventEditFragment extends Fragment implements MenuProvider {
             eventStartTimeTextView.setText(event.getStartTime());
             eventStartDateTextView.setText(event.getStartDate());
             eventEndTimeTextView.setText(event.getEndTime());
-            maxAttendees.setText((event.getMaxSignUps()));
+            maxAttendees.setText(event.getMaxSignUps().toString());
+
             // Populate more attributes
-        }
-        else {
+        } else {
             eventNameEditText.setHint("Event Name");
             eventLocationEditText.setHint("Location");
             eventStartDateTextView.setText("Date");
             eventStartTimeTextView.setText("Start time");
             eventEndTimeTextView.setText("End Time");
+        }
+        if (event.getQrCodeCheckIns() == null) {
+            view.findViewById(R.id.tv_checkin).setVisibility(view.GONE);
+            view.findViewById(R.id.tv_info).setVisibility(view.GONE);
+            checkInQR.setVisibility(view.GONE);
+            eventInfoQR.setVisibility(view.GONE);
+        } else {
+            QRCode.generateQR("Checkin" + event.getId(), checkInQR);
+            QRCode.generateQR("EventInfo" + event.getId(), eventInfoQR);
         }
 
 
@@ -215,8 +227,8 @@ public class EventEditFragment extends Fragment implements MenuProvider {
 
     @Override
     public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
-        if (menuItem.getItemId() == R.id.saveOptionsMenu || menuItem.getItemId() == R.id.cancelOptionsMenu){
-            if (menuItem.getItemId() == R.id.saveOptionsMenu){
+        if (menuItem.getItemId() == R.id.saveOptionsMenu || menuItem.getItemId() == R.id.cancelOptionsMenu) {
+            if (menuItem.getItemId() == R.id.saveOptionsMenu) {
 
                 // Update the event attribute
                 event.setStartDate(eventStartDateTextView.getText().toString());
@@ -228,10 +240,20 @@ public class EventEditFragment extends Fragment implements MenuProvider {
                 event.setName(eventNameEditText.getText().toString());
                 event.setLocation(eventLocationEditText.getText().toString());
                 event.setOrganizerId(MainActivity.user.getUserId());
-                event.setMaxSignUps(Integer.valueOf(maxAttendees.getText().toString()));
+                try {
+                    event.setMaxSignUps(Integer.valueOf(maxAttendees.getText().toString()));
+                } catch (IllegalStateException e) {
+                    //event.setMaxSignUps(0);
+                }
 
                 if (event.getId() == null) {
                     event.makeNewDocID();
+                    //generate check in QR
+                    event.setQrCodeCheckIns("Checkin" + event.getId());
+                    //QRCode.generateQR("Checkin"+event.getId(), checkInQR);
+                    //generate event info QR
+                    event.setQrCodePromo("EventInfo" + event.getId());
+                    //QRCode.generateQR("EventInfo"+event.getId(),eventInfoQR);
                 }
 
                 event.sendToFirebase();
@@ -239,10 +261,10 @@ public class EventEditFragment extends Fragment implements MenuProvider {
                 //TODO : check valid input
             }
             Bundle args = new Bundle();
-            args.putParcelable("event",event);
+            args.putParcelable("event", event);
             args.putBoolean("isOrganizer", true);
             NavHostFragment.findNavController(EventEditFragment.this)
-                    .navigate(R.id.action_eventEditFragment_to_eventDetailsFragment,args);
+                    .navigate(R.id.action_eventEditFragment_to_eventDetailsFragment, args);
 
             return true;
         }
