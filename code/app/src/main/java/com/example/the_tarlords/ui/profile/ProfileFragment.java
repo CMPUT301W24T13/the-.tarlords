@@ -61,8 +61,8 @@ public class ProfileFragment extends Fragment implements MenuProvider {
             emailEditText.setText(user.getEmail());
         }
 
-        Button addPhotoButton = view.findViewById(R.id.button_add_profile_photo);
-        addPhotoButton.setOnClickListener(v -> {
+        //Button addPhotoButton = view.findViewById(R.id.button_add_profile_photo);
+        /*addPhotoButton.setOnClickListener(v -> {
             new AlertDialog.Builder(this.getContext())
                     .setTitle("Where would you like to upload a profile photo from?")
                     .setPositiveButton("Camera", new DialogInterface.OnClickListener() {
@@ -80,7 +80,7 @@ public class ProfileFragment extends Fragment implements MenuProvider {
                     .setNegativeButton("Cancel", null)
                     .create()
                     .show();
-        });
+        });*/
     }
 
     @Override

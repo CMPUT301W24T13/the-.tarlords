@@ -41,18 +41,12 @@ public class Attendee extends User{
     public void setEvent(Event event) {
         this.event = event;
     }
-  /*  public User getUser() {return user;}
 
-    public void setUser(User user) {
-        this.user = user;
-    }*/
 
     boolean isOrganizer() {
         return false;
     }
-    /*public  Profile getProfile(){
-        return profile;
-    }*/
+
     public Boolean getCheckInStatus() { return checkInStatus; }
     public void setCheckInStatus(Boolean checkInStatus) { this.checkInStatus = checkInStatus; }
 
