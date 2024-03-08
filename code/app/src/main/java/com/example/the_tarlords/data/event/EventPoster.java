@@ -1,5 +1,8 @@
 package com.example.the_tarlords.data.event;
 
+import android.graphics.Bitmap;
+import android.net.Uri;
+
 import com.example.the_tarlords.data.photo.Photo;
 
 import java.io.IOException;
@@ -11,8 +14,9 @@ import java.io.IOException;
 public class EventPoster extends Photo {
     private Event event;
 
-    public EventPoster(String fileName) {
-        super(fileName);
+    public EventPoster(String fileName, Uri uri, Bitmap bitmap, Event event) {
+        super(fileName, uri, bitmap);
+        this.event = event;
     }
 
     @Override

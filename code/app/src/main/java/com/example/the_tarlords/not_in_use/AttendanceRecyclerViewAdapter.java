@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.example.the_tarlords.data.users.Attendee;
 import com.example.the_tarlords.databinding.FragmentAttendanceListItemBinding;
-import com.example.the_tarlords.ui.attendance_page.placeholder.PlaceholderContent.PlaceholderItem;
+import com.example.the_tarlords.placeholder.PlaceholderContent.PlaceholderItem;
 
 import java.util.ArrayList;
 

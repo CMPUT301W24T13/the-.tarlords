@@ -6,8 +6,9 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.net.Uri;
 
-import com.example.the_tarlords.data.users.Profile;
+import com.example.the_tarlords.data.users.User;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -15,18 +16,18 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 public class ProfilePhoto extends Photo {
-    private Profile profile;
+    private User user;
 
-    public ProfilePhoto(String fileName, Profile profile) {
-        super(fileName);
-        this.profile = profile;
+    public ProfilePhoto(String fileName, Uri uri, Bitmap bitmap, User user) {
+        super(fileName, uri, bitmap);
+        this.user = user;
     }
 
     @Override
     public void autoGenerate() throws IOException {
         //get profile info - using initials for photo
-        String firstInitial = this.profile.getFirstName().substring(0,1);
-        String lastInitial = this.profile.getLastName().substring(0,1);
+        String firstInitial = this.user.getFirstName().substring(0,1);
+        String lastInitial = this.user.getLastName().substring(0,1);
         String initials = firstInitial + lastInitial;
         //get semi-random color
         int color = ColorGenerator.getRandomColor();

@@ -1,4 +1,4 @@
-package com.example.the_tarlords.ui.profile;
+package com.example.the_tarlords.not_in_use;
 /*
 import android.app.Activity;
 import android.content.ComponentName;
@@ -33,21 +33,9 @@ import java.util.List;
 */
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.hardware.camera2.CameraAccessException;
-import android.hardware.camera2.CameraCaptureSession;
-import android.hardware.camera2.CameraDevice;
-import android.hardware.camera2.CaptureRequest;
-import android.hardware.camera2.params.OutputConfiguration;
-import android.media.Image;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
-import android.view.Surface;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -56,9 +44,6 @@ import androidx.core.app.ActivityCompat;
 //import com.google.firebase.firestore.FirebaseFirestore;
 //import com.google.firebase.firestore.QueryDocumentSnapshot;
 
-import com.google.zxing.integration.android.IntentIntegrator;
-
-import java.util.List;
 
 public class UploadPfpActivity extends AppCompatActivity {
     private static final int REQUEST_CAMERA_PERMISSION = 1;

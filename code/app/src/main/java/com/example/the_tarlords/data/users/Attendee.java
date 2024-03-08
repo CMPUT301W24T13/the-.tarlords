@@ -27,8 +27,6 @@ public class Attendee extends User{
         this.checkInStatus = false;
     }
 
-    public Attendee(){}
-
     @Override
     public String getFirstName() {
         return super.getFirstName();

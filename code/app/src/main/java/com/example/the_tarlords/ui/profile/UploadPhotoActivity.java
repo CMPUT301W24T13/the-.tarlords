@@ -19,7 +19,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
-import com.example.the_tarlords.Manifest;
 import com.example.the_tarlords.R;
 
 import java.net.URI;
