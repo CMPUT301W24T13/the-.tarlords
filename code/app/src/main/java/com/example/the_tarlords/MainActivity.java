@@ -8,13 +8,14 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
-import android.view.Menu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.the_tarlords.data.users.User;
 import com.google.android.material.navigation.NavigationView;
 import com.example.the_tarlords.data.QR.QRScanActivity;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -25,9 +26,8 @@ import com.example.the_tarlords.databinding.ActivityMainBinding;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.HashMap;
-import java.util.Map;
+import com.journeyapps.barcodescanner.ScanContract;
+import com.journeyapps.barcodescanner.ScanOptions;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
             // Update UI with default user information
             updateNavigationDrawerHeader();
             // If it's the first launch, navigate to a different fragment
-            navigateToYourFirstFragment();
+            navigateFirstTimeUserToProfileFragment();
         }else{
             //user has been here before
             String finalUserId = userId;
@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
         }
         synchronized (lock) {
             try {
-                lock.wait(300);
+                lock.wait(400);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -152,12 +152,31 @@ public class MainActivity extends AppCompatActivity {
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.eventListFragment, R.id.eventOrganizerListFragment, R.id.profileFragment)
+        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.eventListFragment, R.id.eventOrganizerListFragment, R.id.eventBrowseFragment,R.id.profileFragment)
                 .setOpenableLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        binding.appBarMain.scanQrButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ScanOptions scanOptions = new ScanOptions();
+                barcodeLauncher.launch(scanOptions);
+            }
+
+            private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(
+                    new ScanContract(),
+                    result -> {
+                        if (result.getContents() != null) {
+                            Toast.makeText(getApplicationContext(), "scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(getApplicationContext(), "cancelled", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+            );
+        });
     }
     
     // User id generator for the sharedPreferences stuff
@@ -166,44 +185,12 @@ public class MainActivity extends AppCompatActivity {
         // Replace with your user logic to generate an ID
         return Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
     }
-    private void navigateToYourFirstFragment() {
+    private void navigateFirstTimeUserToProfileFragment() {
         // Replace 'YourFirstFragment' with the actual name of your first fragment
         Navigation.findNavController(this, R.id.nav_host_fragment_content_main)
                 .navigate(R.id.action_eventListFragment_to_profileFragment);
     }
-    /*private void addUserToFireStore(User user){
-        // Add the new user document to Firestore
-        //MAJOR NOTE THIS AUTOMATICALLY SETS THE DOC ID TO USER ID AND I DONT KNOW IF THAT WOULD BE A PROBLEM
-        Map<String, Object> docData = new HashMap<>();
-        docData.put("userId", user.getUserId());
-        docData.put("firstName", user.getFirstName());
-        docData.put("lastName", user.getLastName());
-        docData.put("email", user.getEmail());
-        docData.put("phoneNum", user.getPhoneNum());
-        usersRef.document(userId).set(docData)
-                .addOnSuccessListener(aVoid -> {
-                    // Document successfully added
-                    Log.d("debug", "User added successfully to Firestore");
-                })
-                .addOnFailureListener(e -> {
-                    // Handle the failure
-                    Log.e("debug", "Error adding user to Firestore", e);
-                });
-    }*/
 
-    /*@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.options_menu, menu);
-        return true;
-    }*/
-
-    /*@Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item){
-        switch (item.getItemId()){
-            case R.id.action
-        }
-    }*/
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -228,5 +215,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //Testing Version 1 -- Rimsha1111
 }
