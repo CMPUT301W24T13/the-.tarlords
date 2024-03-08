@@ -1,12 +1,10 @@
 package com.example.the_tarlords.data.photo;
 
-import android.app.Presentation;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.net.Uri;
 
 import com.example.the_tarlords.data.users.User;
 
@@ -18,8 +16,8 @@ import java.io.OutputStream;
 public class ProfilePhoto extends Photo {
     private User user;
 
-    public ProfilePhoto(String fileName, Uri uri, Bitmap bitmap, User user) {
-        super(fileName, uri, bitmap);
+    public ProfilePhoto(String fileName, Bitmap bitmap, User user) {
+        super(fileName, bitmap);
         this.user = user;
     }
 
@@ -32,7 +30,6 @@ public class ProfilePhoto extends Photo {
         //get semi-random color
         int color = ColorGenerator.getRandomColor();
 
-        //ok nittygritty time ;-;
         Bitmap bitmap = Bitmap.createBitmap(200, 200, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         canvas.drawColor(color);
