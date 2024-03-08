@@ -12,6 +12,8 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.example.the_tarlords.MainActivity;
+import com.example.the_tarlords.data.Alert.Alert;
+import com.example.the_tarlords.data.Alert.AlertCallback;
 import com.example.the_tarlords.data.QR.QRCode;
 import com.example.the_tarlords.data.attendance.Attendance;
 import com.example.the_tarlords.data.users.Attendee;
@@ -64,12 +66,16 @@ public class Event implements Attendance, Parcelable {
 
     private EventPoster poster;
 
-    private Integer maxNumOfSignUps;
+    private Integer maxSignUps;
 
     private CollectionReference attendanceRef = MainActivity.db.collection("Events/"+ id +"/Attendees");
     private CollectionReference usersRef = MainActivity.db.collection("Users");
 
     private static CollectionReference eventsRef = eventsRef = MainActivity.db.collection("Events");
+
+
+
+
 
     public Event(String name, String location, String id, String startTime, String endTime, String startDate) {
         this.name = name;
@@ -192,15 +198,58 @@ public class Event implements Attendance, Parcelable {
         this.poster = poster;
     }
 
-    public int getMaxNumOfSignUps() {
-        return maxNumOfSignUps;
+    public Integer getMaxSignUps() {
+        return maxSignUps;
     }
 
-    public void setMaxSignUps(int maxNumOfSignUps) {
-        this.maxNumOfSignUps = maxNumOfSignUps;
+    public void setMaxSignUps(Integer maxSignUps) {
+        this.maxSignUps = maxSignUps;
     }
 
+    public boolean reachedMaxCap() {
+        return true;
+    }
 
+    public ArrayList<Alert> getAlertList(AlertCallback callback){
+        CollectionReference alertRef = MainActivity.db.collection("Events/"+ id +"/alerts");
+        ArrayList<Alert> alertList = new ArrayList<>();
+        alertRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot alertDoc : task.getResult()) {
+                        Alert alert = new Alert(alertDoc.getString("title"), alertDoc.getString("message"), alertDoc.getString("currentDateTime"));
+                        //alert.setCurrentDateTime(alertDoc.getString("currentDateTime"));
+                        Log.d("km", alertDoc.getString("title"));
+                        alertList.add(alert);
+                        Log.d("returned not yet", String.valueOf(alertList.size()));
+
+                    }
+                    Log.d("firestore", alertList.toString());
+                    callback.onAlertsLoaded(alertList);
+                } else {
+                    Log.d("firestore", "Error getting documents: ", task.getException());
+                }
+            }
+        });
+        ArrayList<Alert> abc = new ArrayList<>();
+        // temp data
+        alertList.add(new Alert("if seeing 3 alerts then its working","message 1",null));
+    return alertList;
+
+    }
+
+    //test, used to write alerts to firebase
+    public void setAlert(Alert alert) {
+        CollectionReference alertRef = MainActivity.db.collection("Events/"+ id +"/alerts");
+        Map<String, Object> alertMap = new HashMap<>();
+        alertMap.put("title", alert.getTitle());
+        alertMap.put("message", alert.getMessage());
+        alertMap.put("currentDateTime", alert.getCurrentDateTime());
+        alertRef.add(alertMap);
+
+        Log.d("alert adding","working");
+    }
     /**
      * Returns a list of Attendee objects attending the event. This is the default "signup" list
      * Updates the user's checked in status if they check in or not.

@@ -4,6 +4,7 @@ package com.example.the_tarlords.data.Alert;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,9 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.event.Event;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class AddAlertFragment extends DialogFragment {
 
@@ -102,13 +106,13 @@ public class AddAlertFragment extends DialogFragment {
         return builder
                 .setView(view)
                 .setNegativeButton("Cancel", null)
-                .setPositiveButton("add", (dialog, which) -> {
-                    String title = editTitle.getText().toString();
-                    String message = editMessage.getText().toString();
-
-                    // placeholder event
-                    //listener.addAlert(new Alert(title, message, new Event("placeholder event", "location", null, null)));
-
+                .setPositiveButton("add", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String title = editTitle.getText().toString();
+                        String message = editMessage.getText().toString();
+                        AlertFragment.event.setAlert(new Alert(title, message, LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))));
+                    }
                 })
                 .create();
     }

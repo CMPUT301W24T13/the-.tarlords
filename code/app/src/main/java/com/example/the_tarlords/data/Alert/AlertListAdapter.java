@@ -57,13 +57,10 @@ public class AlertListAdapter extends ArrayAdapter<Alert> {
         }
         Alert alert = super.getItem(position);
 
-        TextView event = view.findViewById(R.id.event_text);
-
         TextView message = view.findViewById(R.id.message_text);
         TextView title = view.findViewById(R.id.title_text);
         TextView ldt = view.findViewById(R.id.ldt_text);
 
-        event.setText(alert.getEvent().getName());
         message.setText(alert.getMessage());
         title.setText(alert.getTitle());
         ldt.setText(alert.getCurrentDateTime());

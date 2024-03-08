@@ -121,6 +121,7 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
             menuInflater.inflate(R.menu.options_menu, menu);
             menu.findItem(R.id.editOptionsMenu).setVisible(true);
             menu.findItem(R.id.attendanceOptionsMenu).setVisible(true);
+            menu.findItem(R.id.showAnouncementsMenu).setVisible(true);
         }
     }
 
@@ -137,6 +138,13 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
             args.putParcelable("event",event);
             NavHostFragment.findNavController(EventDetailsFragment.this)
                     .navigate(R.id.action_eventDetailsFragment_to_attendanceFragment,args);
+        }else if (menuItem.getItemId()==R.id.showAnouncementsMenu){
+            Bundle args = new Bundle();
+            args.putParcelable("event",event);
+            NavHostFragment.findNavController(EventDetailsFragment.this)
+                    .navigate(R.id.action_eventDetailsFragment_to_alertFragment,args);
+
+
         }
         return false;
 

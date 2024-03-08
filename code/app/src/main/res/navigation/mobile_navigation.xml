@@ -60,6 +60,9 @@
         <action
             android:id="@+id/action_eventDetailsFragment_to_attendanceFragment"
             app:destination="@id/attendanceFragment" />
+        <action
+            android:id="@+id/action_eventDetailsFragment_to_alertFragment"
+            app:destination="@id/alertFragment" />
     </fragment>
     <fragment
         android:id="@+id/eventEditFragment"
@@ -92,5 +95,15 @@
                 app:destination="@id/profileFragment"
                 app:popUpTo="@id/profileFragment" />
         </fragment>
-
+    <fragment
+        android:id="@+id/alertFragment"
+        android:name="com.example.the_tarlords.data.Alert.AlertFragment"
+        android:label="fragment_alert"
+        tools:layout="@layout/fragment_alert">
+        <action
+            android:id="@+id/action_alertFragment_to_eventDetailsFragment"
+            app:destination="@id/eventDetailsFragment"
+            app:popUpTo="@id/alertFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>

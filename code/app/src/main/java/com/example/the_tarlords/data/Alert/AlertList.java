@@ -27,6 +27,7 @@ public class AlertList implements AddAlertDialogListener {
         alertListAdapter = new AlertListAdapter(context,alertDataList, R.layout.fragment_alert);
         alertList.setAdapter(alertListAdapter);
 
+
     }
 
 
