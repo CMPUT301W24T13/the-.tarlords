@@ -12,12 +12,17 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.the_tarlords.MainActivity;
+import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.attendance.Attendance;
+import com.example.the_tarlords.data.users.User;
 import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.users.Attendee;
 import com.example.the_tarlords.ui.event.EventDetailsFragment;
+import com.example.the_tarlords.ui.profile.ProfileFragment;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -40,7 +45,13 @@ public class QRScanActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_qr);
+        setContentView(R.layout.content_main);
+
+        userId = getIntent().getStringExtra("userID");
+        firstName = getIntent().getStringExtra("firstName");
+        lastName = getIntent().getStringExtra("lastName");
+        phoneNum = getIntent().getStringExtra("phoneNum");
+        email = getIntent().getStringExtra("email");
 
         // Check camera permission and initiate QR code scanning if permission is granted
         if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -48,6 +59,7 @@ public class QRScanActivity extends AppCompatActivity {
         } else {
             scanQr();
         }
+        //QrtoEvent("EI1");
     }
 
     /**
@@ -94,18 +106,30 @@ public class QRScanActivity extends AppCompatActivity {
                                 //This is a CheckIn QR
                                 Attendee attendee = new Attendee(userId, firstName, lastName, phoneNum, email, event);
                                 attendee.setCheckInStatus(TRUE);
-                                Intent intent = new Intent(QRScanActivity.this, MainActivity.class);
-                                startActivity(intent);
+                                Log.e("QrCode", "In CI" + eventID);
+                                Log.e("QrCode", "EventName is " + eventName);
+                                finish();
 
                             } else {
                                 //This is a EventInfo QR
-                                Intent intent = new Intent(QRScanActivity.this, EventDetailsFragment.class);
+                                Log.e("QrCode", "In EI" + eventID);
+
+                                //Go to EventDetails Fragment through main
+                                Intent intent = new Intent(QRScanActivity.this, MainActivity.class);
+                                intent.putExtra("eventName", eventName);
+                                intent.putExtra("eventLocation", eventLocation);
+                                intent.putExtra("eventId", eventId);
+                                intent.putExtra("eventStartTime", eventStartTime);
+                                intent.putExtra("eventEndTime", eventEndTime);
+                                intent.putExtra("eventStartDate", eventStartDate);
                                 startActivity(intent);
                             }
 
                         }
                     } catch (Exception e) {
-                        throw new RuntimeException("This is not a valid QR code for this app");
+                        Toast.makeText(this, "Invalid QR", Toast.LENGTH_SHORT).show();
+                        finish();
+                        //throw new RuntimeException("This is not a valid QR code for this app");
                     }
                 }
             }

@@ -12,11 +12,15 @@ import android.view.Menu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.users.User;
+import com.example.the_tarlords.ui.event.EventDetailsFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.example.the_tarlords.data.QR.QRScanActivity;
 
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -58,13 +62,39 @@ public class MainActivity extends AppCompatActivity {
 
 
         setSupportActionBar(binding.appBarMain.toolbar);
+        try {
+            String name = getIntent().getStringExtra("eventName");
+            String location = getIntent().getStringExtra("eventLocation");
+            String id = getIntent().getStringExtra("eventId");
+            String startTime = getIntent().getStringExtra("eventStartTime");
+            String endTime = getIntent().getStringExtra("eventEndTime");
+            String startDate = getIntent().getStringExtra("eventStartDate");
+            Event event = new Event(name, location, id, startTime, endTime, startDate);
+            navigateToEventDetailsFragment(event);
+        } catch (Exception ignored) {}
 
         binding.appBarMain.scanQrButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, QRScanActivity.class);
+                intent.putExtra("userID", user.getUserId());
+                intent.putExtra("firstName", user.getFirstName());
+                intent.putExtra("lastName", user.getLastName());
+                intent.putExtra("phoneNum", user.getPhoneNum());
+                intent.putExtra("email", user.getEmail());
                 startActivity(intent);
             }
+
+            /*private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(
+                    new ScanContract(),
+                    result -> {
+                        if (result.getContents() != null) {
+                            Toast.makeText(getApplicationContext(), "scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(getApplicationContext(), "cancelled", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+            );*/
         });
         /**
          * Please do not move these next 3 lines BELOW THE USER STUFF
@@ -183,6 +213,16 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void navigateToEventDetailsFragment(Event event) {
+        Log.e("QrCode", "here");
+        EventDetailsFragment fragment = EventDetailsFragment.newInstance(event, false);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.nav_host_fragment_content_main, fragment); // R.id.fragment_container is the ID of your fragment container
+        fragmentTransaction.addToBackStack(null); // Optional: adds the transaction to the back stack
+        fragmentTransaction.commit();
+    }
+
     // User id generator for the sharedPreferences stuff
     @SuppressLint("HardwareIds")
     private String generateNewUserId() {
@@ -252,5 +292,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //Testing Version 1 -- Rimsha1111
-    //what if I just wanna sing and a popstar :( - Rxmsha
+    //what if I just wanna sing and be a popstar :( - Rxmsha
+    //i just wanna be a duck tbh
 }
