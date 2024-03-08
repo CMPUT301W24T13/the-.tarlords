@@ -27,6 +27,7 @@ import android.widget.ImageView;
 
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
+import com.example.the_tarlords.data.photo.ProfilePhoto;
 import com.example.the_tarlords.data.users.User;
 
 public class ProfileFragment extends Fragment implements MenuProvider {
@@ -56,11 +57,28 @@ public class ProfileFragment extends Fragment implements MenuProvider {
         EditText emailEditText = view.findViewById(R.id.edit_text_email);
 
         if (user != null) {
-            profilePhotoImageView.setImageBitmap(user.getProfilePhoto().getBitmap());
+            //profilePhotoImageView.setImageBitmap(user.getProfilePhoto().getBitmap());
+            //firstNameEditText.setText(user.getFirstName());
+            //lastNameEditText.setText(user.getLastName());
+            //phoneEditText.setText(user.getPhoneNum());
+            //emailEditText.setText(user.getEmail());
+            //}
             firstNameEditText.setText(user.getFirstName());
             lastNameEditText.setText(user.getLastName());
             phoneEditText.setText(user.getPhoneNum());
             emailEditText.setText(user.getEmail());
+
+            if (user.getProfilePhoto() != null) {
+                profilePhotoImageView.setImageBitmap(user.getProfilePhoto().getBitmap());
+
+            } else {
+                ProfilePhoto profilePhoto = new ProfilePhoto(user.getFirstName() + user.getLastName(),
+                        null, user.getFirstName(), user.getLastName());
+                profilePhoto.autoGenerate();
+                user.setProfilePhoto(profilePhoto);
+                profilePhotoImageView.setImageBitmap(profilePhoto.getBitmap());
+
+            }
         }
 
         //Button addPhotoButton = view.findViewById(R.id.button_add_profile_photo);

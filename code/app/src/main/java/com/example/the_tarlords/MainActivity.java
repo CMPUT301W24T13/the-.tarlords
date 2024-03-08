@@ -203,7 +203,6 @@ public class MainActivity extends AppCompatActivity {
     public static void updateNavigationDrawerHeader() {
         // Set navigation drawer header information based on the user object
         if (user != null) {
-            ImageView profilePhoto = hView.findViewById(R.id.profilePic);
             TextView name = hView.findViewById(R.id.profileName);
             TextView phoneNum = hView.findViewById(R.id.phoneNumber);
             TextView email = hView.findViewById(R.id.email);
@@ -211,7 +210,6 @@ public class MainActivity extends AppCompatActivity {
             name.setText(user.getFirstName() + " " + user.getLastName());
             phoneNum.setText(user.getPhoneNum());
             email.setText(user.getEmail());
-            profilePhoto.setImageBitmap(user.getProfilePhoto().getBitmap());
         } else {
             Log.e("debug", "User object is null");
             // Handle the case where the User object is null
