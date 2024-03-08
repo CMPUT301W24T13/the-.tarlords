@@ -3,10 +3,17 @@ package com.example.the_tarlords.ui.profile;
 import androidx.core.view.MenuProvider;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -17,15 +24,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
+import com.example.the_tarlords.data.photo.ProfilePhoto;
+import com.example.the_tarlords.data.users.User;
 
 public class ProfileFragment extends Fragment implements MenuProvider {
+    private User user = MainActivity.user;
 
-    //private View view;
+    public ProfileFragment(){
+    }
 
     public static ProfileFragment newInstance() {
         return new ProfileFragment();
@@ -41,23 +52,60 @@ public class ProfileFragment extends Fragment implements MenuProvider {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         requireActivity().addMenuProvider(this);
-        TextView nameTV = view.findViewById(R.id.nameTextView);
-        TextView phoneTV = view.findViewById(R.id.phoneTextView);
-        TextView emailTV = view.findViewById(R.id.emailTextView);
+        ImageView profilePhotoImageView = view.findViewById(R.id.image_view_profile);
+        EditText firstNameEditText = view.findViewById(R.id.edit_text_first_name);
+        EditText lastNameEditText = view.findViewById(R.id.edit_text_last_name);
+        EditText phoneEditText = view.findViewById(R.id.edit_text_phone);
+        EditText emailEditText = view.findViewById(R.id.edit_text_email);
 
-        nameTV.setText(MainActivity.user.getFirstName()+" "+MainActivity.user.getLastName());
-        phoneTV.setText(MainActivity.user.getPhoneNum());
-        emailTV.setText(MainActivity.user.getEmail());
+        if (user != null) {
+            //profilePhotoImageView.setImageBitmap(user.getProfilePhoto().getBitmap());
+            //firstNameEditText.setText(user.getFirstName());
+            //lastNameEditText.setText(user.getLastName());
+            //phoneEditText.setText(user.getPhoneNum());
+            //emailEditText.setText(user.getEmail());
+            //}
+            firstNameEditText.setText(user.getFirstName());
+            lastNameEditText.setText(user.getLastName());
+            phoneEditText.setText(user.getPhoneNum());
+            emailEditText.setText(user.getEmail());
 
-        EditText nameET = view.findViewById(R.id.nameEditText);
-        EditText phoneET = view.findViewById(R.id.phoneEditText);
-        EditText emailET = view.findViewById(R.id.emailEditText);
+            if (user.getProfilePhoto() != null) {
+                profilePhotoImageView.setImageBitmap(user.getProfilePhoto().getBitmap());
 
-        nameET.setText(MainActivity.user.getFirstName()+" "+MainActivity.user.getLastName());
-        phoneET.setText(MainActivity.user.getPhoneNum());
-        emailET.setText(MainActivity.user.getEmail());
+            } else {
+                ProfilePhoto profilePhoto = new ProfilePhoto(user.getFirstName() + user.getLastName(),
+                        null, user.getFirstName(), user.getLastName());
+                profilePhoto.autoGenerate();
+                user.setProfilePhoto(profilePhoto);
+                profilePhotoImageView.setImageBitmap(profilePhoto.getBitmap());
 
+            }
+        }
 
+        Button addPhotoButton = view.findViewById(R.id.button_add_profile_photo);
+        addPhotoButton.setOnClickListener(v -> {
+            new AlertDialog.Builder(this.getContext())
+                    .setTitle("Where would you like to upload a profile photo from?")
+                    .setPositiveButton("Camera", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(getActivity(), TakePhotoActivity.class);
+                            startActivity(intent);
+                        }
+                    })
+                    .setNegativeButton("Gallery", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(getActivity(), UploadPhotoActivity.class);
+                            startActivity(intent);
+
+                        }
+                    })
+                    .setNeutralButton("Cancel", null)
+                    .create()
+                    .show();
+        });
     }
 
     @Override
@@ -67,13 +115,12 @@ public class ProfileFragment extends Fragment implements MenuProvider {
         menu.findItem(R.id.editOptionsMenu).setVisible(true);
     }
     @Override
-    public void onPrepareMenu(@NonNull Menu menu){
-        if (getView().findViewById(R.id.nameTextView).getVisibility()== getView().GONE){
+    public void onPrepareMenu(@NonNull Menu menu) {
+        if(getView().findViewById(R.id.button_add_profile_photo).getVisibility() != getView().GONE) {
             menu.findItem(R.id.editOptionsMenu).setVisible(false);
             menu.findItem(R.id.saveOptionsMenu).setVisible(true);
             menu.findItem(R.id.cancelOptionsMenu).setVisible(true);
-        }
-        else {
+        } else {
             menu.findItem(R.id.editOptionsMenu).setVisible(true);
             menu.findItem(R.id.saveOptionsMenu).setVisible(false);
             menu.findItem(R.id.cancelOptionsMenu).setVisible(false);
@@ -82,47 +129,41 @@ public class ProfileFragment extends Fragment implements MenuProvider {
     @Override
     public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
         View view = getView();
-        TextView nameTV = view.findViewById(R.id.nameTextView);
-        TextView phoneTV = view.findViewById(R.id.phoneTextView);
-        TextView emailTV = view.findViewById(R.id.emailTextView);
+        ImageView profilePhotoImageView = view.findViewById(R.id.image_view_profile);
+        Button addProfilePhotoButton = view.findViewById(R.id.button_add_profile_photo);
+        EditText firstNameEditText = view.findViewById(R.id.edit_text_first_name);
+        EditText lastNameEditText = view.findViewById(R.id.edit_text_last_name);
+        EditText phoneEditText = view.findViewById(R.id.edit_text_phone);
+        EditText emailEditText = view.findViewById(R.id.edit_text_email);
 
-        EditText nameET = view.findViewById(R.id.nameEditText);
-        EditText phoneET = view.findViewById(R.id.phoneEditText);
-        EditText emailET = view.findViewById(R.id.emailEditText);
-
-        if (menuItem.getItemId() == R.id.editOptionsMenu){
-
-            nameTV.setVisibility(view.GONE);
-            phoneTV.setVisibility(view.GONE);
-            emailTV.setVisibility(view.GONE);
-
-            nameET.setVisibility(view.VISIBLE);
-            phoneET.setVisibility(view.VISIBLE);
-            emailET.setVisibility(view.VISIBLE);
+        if (menuItem.getItemId() == R.id.editOptionsMenu) {
+            profilePhotoImageView.setVisibility(View.INVISIBLE);
+            addProfilePhotoButton.setVisibility(View.VISIBLE);
+            firstNameEditText.setClickable(true);
+            lastNameEditText.setClickable(true);
+            phoneEditText.setClickable(true);
+            emailEditText.setClickable(true);
 
             requireActivity().invalidateMenu();
             return true;
-        }
-        else if (menuItem.getItemId() == R.id.saveOptionsMenu || menuItem.getItemId()== R.id.cancelOptionsMenu){
-            nameTV.setVisibility(view.VISIBLE);
-            phoneTV.setVisibility(view.VISIBLE);
-            emailTV.setVisibility(view.VISIBLE);
-
-            nameET.setVisibility(view.GONE);
-            phoneET.setVisibility(view.GONE);
-            emailET.setVisibility(view.GONE);
+        } else {
+            profilePhotoImageView.setVisibility(View.VISIBLE);
+            addProfilePhotoButton.setVisibility(View.GONE);
+            firstNameEditText.setClickable(false);
+            lastNameEditText.setClickable(false);
+            phoneEditText.setClickable(false);
+            emailEditText.setClickable(false);
 
             requireActivity().invalidateMenu();
 
-            if (menuItem.getItemId() == R.id.saveOptionsMenu){
-                MainActivity.user.setFirstName(nameET.getText().toString().split(" ")[0]);
-                MainActivity.user.setLastName(nameET.getText().toString().split(" ")[1]);
-                MainActivity.user.setPhoneNum(phoneET.getText().toString());
-                MainActivity.user.setEmail(emailET.getText().toString());
+            if (menuItem.getItemId() == R.id.saveOptionsMenu) {
+                user.setFirstName(firstNameEditText.getText().toString());
+                user.setLastName(lastNameEditText.getText().toString());
+                user.setPhoneNum(phoneEditText.getText().toString());
+                user.setEmail(emailEditText.getText().toString());
 
-                nameTV.setText(MainActivity.user.getFirstName()+" "+MainActivity.user.getLastName());
-                phoneTV.setText(MainActivity.user.getPhoneNum());
-                emailTV.setText(MainActivity.user.getEmail());
+                Bitmap bitmap = ((BitmapDrawable)profilePhotoImageView.getDrawable()).getBitmap();
+                user.getProfilePhoto().setBitmap(bitmap);
 
                 MainActivity.user.sendToFireStore();
 
@@ -135,7 +176,6 @@ public class ProfileFragment extends Fragment implements MenuProvider {
             return true;
 
         }
-
-        return false;
+        //return false;
     }
 }

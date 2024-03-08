@@ -33,7 +33,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:fontFamily="sans-serif-black"
-        android:text="@string/attendee_total_count"
+        android:text="@string/attendee_count"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/attendee_checkin_count"

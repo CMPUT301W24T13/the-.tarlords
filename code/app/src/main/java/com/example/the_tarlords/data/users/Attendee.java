@@ -3,6 +3,7 @@ package com.example.the_tarlords.data.users;
 import com.example.the_tarlords.data.Alert.AlertList;
 import com.example.the_tarlords.data.event.Event;
 
+import java.io.IOException;
 import java.util.List;
 
 public class Attendee extends User{
@@ -19,10 +20,8 @@ public class Attendee extends User{
         this.checkInStatus = false;
     }*/
 
-    public Attendee(String userId, String firstName, String lastName, String phoneNum, String email, Event event) {  // public Attendee(User user, Profile profile, Event event)
-        super(userId, firstName, lastName,phoneNum, email);
-        //hey lucy change this vv in android studio...
-        //this.profile = profile;
+    public Attendee(String userId, String firstName, String lastName, String phoneNum, String email, Event event) throws IOException {
+        super(userId, firstName, lastName, phoneNum, email);
         this.event = event;
         this.checkInStatus = false;
     }

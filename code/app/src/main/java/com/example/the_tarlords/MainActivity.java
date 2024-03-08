@@ -3,12 +3,14 @@ package com.example.the_tarlords;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -239,10 +241,15 @@ public class MainActivity extends AppCompatActivity {
             TextView name = hView.findViewById(R.id.profileName);
             TextView phoneNum = hView.findViewById(R.id.phoneNumber);
             TextView email = hView.findViewById(R.id.email);
+            ImageView profilePic = hView.findViewById(R.id.profilePic);
 
             name.setText(user.getFirstName() + " " + user.getLastName());
             phoneNum.setText(user.getPhoneNum());
             email.setText(user.getEmail());
+            if (user != null && user.getProfilePhoto() != null && user.getProfilePhoto().getBitmap()!=null) {
+                Bitmap bitmap = user.getProfilePhoto().getBitmap();
+                profilePic.setImageBitmap(bitmap);
+            }
         } else {
             Log.e("debug", "User object is null");
             // Handle the case where the User object is null
