@@ -190,8 +190,8 @@ public class MainActivity extends AppCompatActivity {
     }
     private void navigateFirstTimeUserToProfileFragment() {
         // Replace 'YourFirstFragment' with the actual name of your first fragment
-        Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-                //.navigate(R.id.action_eventListFragment_to_profileFragment);
+        Navigation.findNavController(this, R.id.nav_host_fragment_content_main)
+                .navigate(R.id.action_eventListFragment_to_profileFragment);
     }
 
     @Override
@@ -203,6 +203,7 @@ public class MainActivity extends AppCompatActivity {
     public static void updateNavigationDrawerHeader() {
         // Set navigation drawer header information based on the user object
         if (user != null) {
+            ImageView profilePhoto = hView.findViewById(R.id.profilePic);
             TextView name = hView.findViewById(R.id.profileName);
             TextView phoneNum = hView.findViewById(R.id.phoneNumber);
             TextView email = hView.findViewById(R.id.email);
@@ -210,6 +211,7 @@ public class MainActivity extends AppCompatActivity {
             name.setText(user.getFirstName() + " " + user.getLastName());
             phoneNum.setText(user.getPhoneNum());
             email.setText(user.getEmail());
+            profilePhoto.setImageBitmap(user.getProfilePhoto().getBitmap());
         } else {
             Log.e("debug", "User object is null");
             // Handle the case where the User object is null

@@ -32,6 +32,9 @@ import com.example.the_tarlords.data.users.User;
 public class ProfileFragment extends Fragment implements MenuProvider {
     private User user = MainActivity.user;
 
+    public ProfileFragment(){
+    }
+
     public static ProfileFragment newInstance() {
         return new ProfileFragment();
     }

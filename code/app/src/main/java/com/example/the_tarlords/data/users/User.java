@@ -29,10 +29,11 @@ public class User implements Profile {
     private String phoneNum;
     private String email;
     private CollectionReference usersRef = MainActivity.db.collection("Users");
-    //private Profile profile;
-    //private ArrayList<Event> events;
-    //private AlertList alerts;
+
     //TODO : need UID generator
+
+    public User() {
+    }
 
     public User(String userId, String firstName, String lastName, String phoneNum, String email) {
         this.userId = userId;
