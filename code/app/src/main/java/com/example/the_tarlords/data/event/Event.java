@@ -232,9 +232,7 @@ public class Event implements Attendance, Parcelable {
                 }
             }
         });
-        ArrayList<Alert> abc = new ArrayList<>();
-        // temp data
-        alertList.add(new Alert("if seeing 3 alerts then its working","message 1",null));
+
     return alertList;
 
     }

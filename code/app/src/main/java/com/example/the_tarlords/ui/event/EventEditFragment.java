@@ -263,7 +263,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
             args.putParcelable("event", event);
             args.putBoolean("isOrganizer", true);
             NavHostFragment.findNavController(EventEditFragment.this)
-                    .navigate(R.id.action_eventEditFragment_to_eventDetailsFragment, args);
+                    .navigate(R.id.action_eventEditFragment_pop, args);
 
             return true;
         }

@@ -142,4 +142,6 @@
     <string name="alert_title">Alert Title</string>
     <string name="total_attendee_count">Total: 10</string>
     <string name="checked_in_attendee_count">Checked In: 2</string>
+    <string name="attendee_total_count">0</string>
+    <string name="attendee_checkin_count">0</string>
 </resources>

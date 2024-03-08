@@ -128,12 +128,12 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
     @Override
     public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
         menu.clear();
+        menuInflater.inflate(R.menu.options_menu, menu);
         if (isOrganizer) {
-            menuInflater.inflate(R.menu.options_menu, menu);
             menu.findItem(R.id.editOptionsMenu).setVisible(true);
             menu.findItem(R.id.attendanceOptionsMenu).setVisible(true);
-            menu.findItem(R.id.showAnouncementsMenu).setVisible(true);
         }
+        menu.findItem(R.id.showAnouncementsMenu).setVisible(true);
     }
 
     @Override
