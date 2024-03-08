@@ -193,24 +193,24 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        binding.appBarMain.scanQrButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ScanOptions scanOptions = new ScanOptions();
-                barcodeLauncher.launch(scanOptions);
-            }
-
-            private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(
-                    new ScanContract(),
-                    result -> {
-                        if (result.getContents() != null) {
-                            Toast.makeText(getApplicationContext(), "scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
-                        } else {
-                            Toast.makeText(getApplicationContext(), "cancelled", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-            );
-        });
+//        binding.appBarMain.scanQrButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                ScanOptions scanOptions = new ScanOptions();
+//                barcodeLauncher.launch(scanOptions);
+//            }
+//
+//            private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(
+//                    new ScanContract(),
+//                    result -> {
+//                        if (result.getContents() != null) {
+//                            Toast.makeText(getApplicationContext(), "scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+//                        } else {
+//                            Toast.makeText(getApplicationContext(), "cancelled", Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//            );
+//        });
     }
 
     private void navigateToEventDetailsFragment(Event event) {

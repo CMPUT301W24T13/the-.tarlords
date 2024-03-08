@@ -27,7 +27,7 @@
 
         </activity>
 
-
+        <activity android:name=".data.QR.QRScanActivity" />
     </application>
 
 </manifest>
