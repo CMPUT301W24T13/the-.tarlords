@@ -1,6 +1,7 @@
 package com.example.the_tarlords.data.users;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import com.example.the_tarlords.data.Alert.AlertList;
 import com.example.the_tarlords.data.event.Event;
@@ -15,7 +16,7 @@ public class User implements Profile{
     private String userId;
     private String firstName;
     private String lastName;
-    private Photo profilePhoto;
+    private ProfilePhoto profilePhoto;
     private String phoneNum;
     private String email;
     //private Profile profile;
@@ -23,12 +24,13 @@ public class User implements Profile{
     //private AlertList alerts;
     //TODO : need UID generator
 
-    public User(String userId, String firstName, String lastName, String phoneNum, String email) throws IOException {
+    public User(String userId, String firstName, String lastName, String phoneNum, String email) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNum = phoneNum;
         this.email = email;
+        this.profilePhoto = new ProfilePhoto(firstName+lastName, null, firstName, lastName);
         this.profilePhoto.autoGenerate();
         //TODO: add firebase integration for new users and for all update data methods
     }

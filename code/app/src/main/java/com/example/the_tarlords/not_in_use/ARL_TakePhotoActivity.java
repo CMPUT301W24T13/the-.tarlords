@@ -1,23 +1,13 @@
-package com.example.the_tarlords.ui.profile;
+package com.example.the_tarlords.not_in_use;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.Camera;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.util.Log;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.camera.core.AspectRatio;
-import androidx.camera.core.CameraX;
-import androidx.camera.core.CameraXConfig;
 import androidx.camera.core.AspectRatio;
 import androidx.camera.core.ImageCapture;
 import androidx.camera.core.ImageCaptureException;

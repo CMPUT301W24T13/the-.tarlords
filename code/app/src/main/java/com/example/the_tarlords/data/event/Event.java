@@ -28,6 +28,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import org.checkerframework.common.returnsreceiver.qual.This;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -206,7 +207,12 @@ public class Event implements Attendance, Parcelable {
                         String phoneNum = userDoc.get("phoneNum").toString();
 
                         //User user = userDoc.toObject(User.class);
-                        Attendee attendee = new Attendee(id, firstName,lastName,phoneNum,email,Event.this);
+                        Attendee attendee = null;
+                        try {
+                            attendee = new Attendee(id, firstName,lastName,phoneNum,email, Event.this);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                         attendee.setCheckInStatus(attendeeDoc.getBoolean("checkedInStatus"));
                         attendees.add(attendee);
                     }

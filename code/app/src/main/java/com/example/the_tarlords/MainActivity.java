@@ -31,15 +31,7 @@ public class MainActivity extends AppCompatActivity {
     public static FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     //TODO: shouldn't be hardcoded by end
-    public static User user;
-
-    static {
-        try {
-            user = new User("1","john","doe","780-111-1111","john.doe@ualberta.ca");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    public static User user = new User("1","john","doe","780-111-1111","john.doe@ualberta.ca");
 
     private ActivityMainBinding binding;
 

@@ -10,8 +10,7 @@ public class Attendee extends User{
     private Event event;
     private Boolean checkInStatus;
 
-
-    public Attendee(String userId, String firstName, String lastName, String phoneNum, String email, Event event) {
+    public Attendee(String userId, String firstName, String lastName, String phoneNum, String email, Event event) throws IOException {
         super(userId, firstName, lastName, phoneNum, email);
         this.event = event;
     }

@@ -22,8 +22,4 @@ public abstract class Photo {
     public void setBitmap(Bitmap bitmap) {
         this.bitmap = bitmap;
     }
-
-    public void autoGenerate() {
-        //tee hee
-    }
 }

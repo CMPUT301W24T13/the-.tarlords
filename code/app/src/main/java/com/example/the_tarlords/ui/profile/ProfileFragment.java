@@ -59,6 +59,7 @@ public class ProfileFragment extends Fragment implements MenuProvider {
     @Override
     public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
         menu.clear();
+        menuInflater.inflate(R.menu.options_menu, menu);
     }
 
     @Override

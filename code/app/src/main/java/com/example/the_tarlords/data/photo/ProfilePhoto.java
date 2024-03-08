@@ -14,18 +14,19 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 public class ProfilePhoto extends Photo {
-    private User user;
+    private String firstName;
+    private String lastName;
 
-    public ProfilePhoto(String fileName, Bitmap bitmap, User user) {
+    public ProfilePhoto(String fileName, Bitmap bitmap, String firstName, String lastName) {
         super(fileName, bitmap);
-        this.user = user;
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
-    @Override
     public void autoGenerate() {
         //get profile info - using initials for photo
-        String firstInitial = this.user.getFirstName().substring(0,1);
-        String lastInitial = this.user.getLastName().substring(0,1);
+        String firstInitial = firstName.substring(0,1);
+        String lastInitial = lastName.substring(0,1);
         String initials = firstInitial + lastInitial;
         //get semi-random color
         int color = ColorGenerator.getRandomColor();

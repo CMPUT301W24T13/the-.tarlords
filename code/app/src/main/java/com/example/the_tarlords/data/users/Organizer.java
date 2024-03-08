@@ -12,6 +12,7 @@ import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.event.EventPoster;
 import com.example.the_tarlords.data.map.Map;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 //Notes for myself(Rimsha): Finish the methods once others are done their parts
@@ -27,11 +28,10 @@ public class Organizer extends Attendee implements OrgPerms {
     /**
      * This is the constructor for Organizer class
      * @param user
-     * @param profile
      * @param event
      */
-    public Organizer(String id, String firstName, String lastName, String phoneNum, String email, Profile profile, Event event) {
-        super(id, firstName, lastName, phoneNum, email , event);
+    public Organizer(String userId, String firstName, String lastName, String phoneNum, String email, Event event) throws IOException {
+        super(userId, firstName, lastName, phoneNum, email, event);
     }
 
     /**
