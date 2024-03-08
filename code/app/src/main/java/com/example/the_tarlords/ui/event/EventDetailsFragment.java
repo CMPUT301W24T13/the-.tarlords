@@ -1,18 +1,32 @@
 package com.example.the_tarlords.ui.event;
 
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Lifecycle;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.os.Parcelable;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.event.Event;
+import com.example.the_tarlords.databinding.FragmentAttendanceListBinding;
+import com.example.the_tarlords.databinding.FragmentEventDetailsBinding;
+import com.example.the_tarlords.ui.attendance_page.AttendanceFragment;
+import com.example.the_tarlords.ui.home.EventListFragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -22,9 +36,11 @@ import com.example.the_tarlords.data.event.Event;
  * from the attendee/homepage list view.
  * The nav bar should handle going back to the listview????
  */
-public class EventDetailsFragment extends Fragment {
+public class EventDetailsFragment extends Fragment implements MenuProvider {
 
     private static Event event;
+    private boolean isOrganizer;
+    private FragmentEventDetailsBinding binding;
 
     public EventDetailsFragment() {
         // Required empty public constructor
@@ -39,10 +55,11 @@ public class EventDetailsFragment extends Fragment {
      * @return A new instance of fragment EventDetailsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static EventDetailsFragment newInstance(Event event) {
+    public static EventDetailsFragment newInstance(Event event, boolean isOrganizer) {
         EventDetailsFragment fragment = new EventDetailsFragment();
         Bundle args = new Bundle();
-        args.putParcelable("event", (Parcelable) event); //When getting the event cast to Event again
+        args.putParcelable("event", event); //When getting the event cast to Event again
+        args.putBoolean("isOrganizer", isOrganizer);
         fragment.setArguments(args);
         return fragment;
     }
@@ -50,9 +67,10 @@ public class EventDetailsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        //TODO: If organizer status == true, setMenuVisibility(true)
         if (getArguments() != null) {
             event = getArguments().getParcelable("event");
+            isOrganizer = getArguments().getBoolean("isOrganizer");
         }
     }
 
@@ -72,8 +90,13 @@ public class EventDetailsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_event_details, container, false);
+        binding = FragmentEventDetailsBinding.inflate(inflater, container, false);
 
+        return binding.getRoot();
+    }
+
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        requireActivity().addMenuProvider(this);
         TextView eventNameTextView = view.findViewById(R.id.tv_event_name);
         TextView eventLocationTextView = view.findViewById(R.id.tv_event_location);
         TextView eventStartDateTextView = view.findViewById(R.id.tv_event_startDate);
@@ -89,7 +112,35 @@ public class EventDetailsFragment extends Fragment {
             eventEndTimeTextView.setText(event.getEndTime());
             // Set other attributes similarly
         }
-
-        return view;
     }
+
+    @Override
+    public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+        menu.clear();
+        if (isOrganizer) {
+            menuInflater.inflate(R.menu.options_menu, menu);
+            menu.findItem(R.id.editOptionsMenu).setVisible(true);
+            menu.findItem(R.id.attendanceOptionsMenu).setVisible(true);
+        }
+    }
+
+    @SuppressLint("NonConstantResourceId")
+    @Override
+    public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+        if (menuItem.getItemId() == R.id.editOptionsMenu) {
+            Bundle args = new Bundle();
+            args.putParcelable("event",event);
+            NavHostFragment.findNavController(EventDetailsFragment.this)
+                    .navigate(R.id.action_eventDetailsFragment_to_eventEditFragment,args);
+        }
+        else if (menuItem.getItemId()==R.id.attendanceOptionsMenu) {
+            Bundle args = new Bundle();
+            args.putParcelable("event",event);
+            NavHostFragment.findNavController(EventDetailsFragment.this)
+                    .navigate(R.id.action_eventDetailsFragment_to_attendanceFragment,args);
+        }
+        return false;
+
+    }
+
 }

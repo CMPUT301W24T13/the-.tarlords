@@ -1,4 +1,4 @@
-package com.example.the_tarlords.data.event;
+package com.example.the_tarlords.not_in_use;
 
 import static androidx.fragment.app.FragmentManager.TAG;
 
@@ -6,7 +6,16 @@ import static com.example.the_tarlords.MainActivity.db;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.example.the_tarlords.MainActivity;
+import com.example.the_tarlords.data.event.Event;
+import com.example.the_tarlords.data.users.User;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,18 +32,20 @@ public class EventList {
     private ArrayList<Event> events;
     private String name;
     private UUID id;
-    private CollectionReference eventsRef = db.collection("Events");
+    private CollectionReference eventsRef;
 
     public EventList(String name) {
         this.events = new ArrayList<>();
         this.name = name;
         this.id = UUID.randomUUID();
+        eventsRef = MainActivity.db.collection("Events");
     }
 
     public EventList() {
         this.events = new ArrayList<>();
         this.name = "Event Name";
         this.id = UUID.randomUUID();
+        eventsRef = MainActivity.db.collection("Events");
 
     }
 
@@ -42,13 +53,53 @@ public class EventList {
         return events;
     }
 
+    /**
+     * Gets list of events associated with a user from firebase
+     * @param user
+     */
+    public static ArrayList<Event> getEventsList(User user) {
+        ArrayList<Event> events = new ArrayList<>();
+        CollectionReference eventsRef = db.collection("Events");
+
+        eventsRef
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                MainActivity.db.collection("Events/"+document.getId()+"/Attendance")
+                                        .whereEqualTo("user", user.getId()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                if (task.isSuccessful()) {
+                                                    for (QueryDocumentSnapshot doc : task.getResult()) {
+                                                        String id = document.getId();
+                                                        String name = document.get("name").toString();
+                                                        String location = document.get("location").toString();
+                                                        events.add(new Event(name, location, id));
+                                                        Log.d("query events", doc.getId() + " => " + doc.getData());
+                                                        Log.d("events list", events.toString()+"hi");
+                                                        Log.d("query events", document.getId() + " =>=> " + document.getData());
+                                                    }
+                                                }
+                                            }
+                                        });
+                                Log.d("query events", document.getId() + " => " + document.getData());
+                            }
+                        } else {
+                            Log.d("query events", "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+        return events;
+    }
+
     public Event get(int position) {
         return events.get(position);
     }
 
-    public int size() {
-        return events.size();
-    }
+    //public int size() {return events.size();}
 
     /**
      * This method adds an event to the event List , as well as Firebase collection "Events"

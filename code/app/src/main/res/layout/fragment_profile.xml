@@ -77,7 +77,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-            <!--android:text="John Doe"/> -->
+        <!--android:text="John Doe"/> -->
         <EditText
             android:id="@+id/edit_text_last_name"
             android:layout_width="0dp"
@@ -113,7 +113,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/edit_text_last_name" />
-            <!--android:text="(780) - 123 - 4567"/> -->
+        <!--android:text="(780) - 123 - 4567"/> -->
 
         <EditText
             android:id="@+id/edit_text_email"
@@ -134,7 +134,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/exit_text_phone" />
-            <!--android:text="j.doe@ualberta.ca"/> -->
+        <!--android:text="j.doe@ualberta.ca"/> -->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

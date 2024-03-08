@@ -1,32 +1,28 @@
+/*
 package com.example.the_tarlords.ui.home;
 
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.TextView;
-import android.view.View;
 
-import com.example.the_tarlords.placeholder.PlaceholderEventContent.PlaceholderEvent;
-import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.event.Event;
-import com.example.the_tarlords.data.event.EventList;
 import com.example.the_tarlords.databinding.FragmentEventListItemBinding;
-import com.example.the_tarlords.ui.event.EventDetailsFragment;
 
-import java.io.Serializable;
-import java.util.List;
+import java.util.ArrayList;
 
+*/
 /**
  * {@link RecyclerView.Adapter} that can display a Event.
  * TODO: Replace the implementation with code for your data type.
- */
+ *//*
+
 public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecyclerViewAdapter.ViewHolder> {
 
-    private final EventList events;
+    private final ArrayList<Event> events;
     private final OnItemClickListener clickListener;
 
     public interface OnItemClickListener {
@@ -35,20 +31,24 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
     }
 
 
-
-    public EventRecyclerViewAdapter(EventList items, OnItemClickListener listener) {
+    public EventRecyclerViewAdapter(ArrayList<Event> items, OnItemClickListener listener) {
         events = items;
         clickListener = listener;
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         FragmentEventListItemBinding binding = FragmentEventListItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-        return new ViewHolder(binding);
+        return new RecyclerView.ViewHolder(binding);
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull EventRecyclerViewAdapter.ViewHolder holder, int position) {
+        holder.eventName.setText(events.get(position).getName());
+    }
+
+    @Override
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         //holder.eventId.setText(events.get(position).getId()); //this would display the id but we don't need that
         holder.eventName.setText(events.get(position).getName());
     }
@@ -58,10 +58,6 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
         return events.size();
     }
 
-
-
-
-
     public class ViewHolder extends RecyclerView.ViewHolder {
         //public final TextView eventId;
         public final TextView eventName;
@@ -69,7 +65,7 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
         public ViewHolder(FragmentEventListItemBinding binding) {
             super(binding.getRoot());
             //eventId = binding.textviewEventId;
-            eventName = binding.textviewEventName;
+            eventName = binding.titleTextView;
 
             itemView.setOnClickListener(view -> {
                 int position = getAdapterPosition();
@@ -79,6 +75,8 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
                 }
             });
 
+
+
         }
 
         @Override
@@ -86,4 +84,4 @@ public class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecycler
             return super.toString() + " '" + eventName.getText() + "'";
         }
     }
-}
+}*/

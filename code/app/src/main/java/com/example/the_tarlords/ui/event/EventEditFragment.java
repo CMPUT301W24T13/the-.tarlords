@@ -5,12 +5,20 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
@@ -21,6 +29,9 @@ import android.widget.TimePicker;
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.event.Event;
+import com.example.the_tarlords.databinding.FragmentAttendanceListBinding;
+import com.example.the_tarlords.databinding.FragmentEventEditBinding;
+import com.example.the_tarlords.ui.attendance_page.AttendanceFragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,7 +41,7 @@ import com.example.the_tarlords.data.event.Event;
  * linked to fragment_event_edit.xml
  * Will also take in an event as a parameter
  */
-public class EventEditFragment extends Fragment {
+public class EventEditFragment extends Fragment implements MenuProvider {
 
     // the fragment initialization parameters
     private static Event event;
@@ -40,6 +51,7 @@ public class EventEditFragment extends Fragment {
     private EditText eventLocationEditText;
     private EditText eventNameEditText;
     private TextView eventEndTimeTextView;
+    private FragmentEventEditBinding binding;
 
 
     public EventEditFragment() {
@@ -71,7 +83,79 @@ public class EventEditFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_event_edit, container, false);
+        binding = FragmentEventEditBinding.inflate(inflater, container, false);
+
+        return binding.getRoot();
+
+    }
+
+    //For both of these dialogs you can change the theme using dialog theme in layout folder
+    private void showDatePickerDialog() {
+        // logic for showing a date picker dialog
+        DatePickerDialog dialog = new DatePickerDialog(requireContext(), new DatePickerDialog.OnDateSetListener() {
+            /**
+             * Sets the startDate attribute using a built-in date picker
+             * @param view the picker associated with the dialog
+             * @param year the selected year
+             * @param month the selected month (0-11 for compatibility with
+             *              {@link Calendar#MONTH})
+             * @param dayOfMonth the selected day of the month (1-31, depending on
+             *                   month)
+             */
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                // Array of month names
+                String[] monthNames = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+
+                // Format the date components into a string "YYYY.MonthName.DD"
+                @SuppressLint("DefaultLocale")
+                String formattedDate = String.format("%s %02d, %04d", monthNames[month],year, dayOfMonth);
+
+                // Update the text view
+                eventStartDateTextView.setText(formattedDate);
+
+            }
+        }, 2024, 0, 15);
+        //show the dialog
+        dialog.show();
+    }
+    private void showTimePickerDialog(String s){
+        // logic for showing a time picker dialog
+        TimePickerDialog dialog = new TimePickerDialog(requireContext(), new TimePickerDialog.OnTimeSetListener() {
+            /**
+             * Sets the time attribute using a built-in TimePicker Dialog
+             * @param view the view associated with this listener
+             * @param hourOfDay the hour that was set
+             * @param minute the minute that was set
+             */
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                String amPm;
+                // Check if the selected hour is in the AM or PM period
+                if (hourOfDay < 12) {
+                    amPm = "AM";
+                } else {
+                    amPm = "PM";
+                    // Adjust the hour for PM
+                    hourOfDay -= 12;
+                }
+                // Use the amPm and adjusted hour to display or process the time
+                String formattedTime = String.format("%02d:%02d %s", hourOfDay, minute, amPm);
+                if(s == "start"){
+                    //update text view
+                    eventStartTimeTextView.setText(formattedTime);
+                }else{
+                    //update text view
+                    eventEndTimeTextView.setText(formattedTime);
+                }
+
+            }
+        }, 7, 30, true);
+        //show the dialog
+        dialog.show();
+    }
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState){
+        requireActivity().addMenuProvider(this);
         //Event id is a textview because user should not be able to edit it, assigned when event object created
         eventNameEditText = view.findViewById(R.id.et_event_name);
         eventLocationEditText = view.findViewById(R.id.et_event_location);
@@ -82,13 +166,20 @@ public class EventEditFragment extends Fragment {
         //add more attributes
 
         // Populate UI elements with event details
-        if (event != null) {
+        if (event.getId() != null) {
             eventNameEditText.setText(event.getName());
             eventLocationEditText.setText(event.getLocation());
             eventStartTimeTextView.setText(event.getStartTime());
             eventStartDateTextView.setText(event.getStartDate());
             eventEndTimeTextView.setText(event.getEndTime());
             // Populate more attributes
+        }
+        else {
+            eventNameEditText.setHint("Event Name");
+            eventLocationEditText.setHint("Location");
+            eventStartDateTextView.setText("Date");
+            eventStartTimeTextView.setText("Start time");
+            eventEndTimeTextView.setText("End Time");
         }
         /**
          * A Text Change Listener updates the event attributes when the edit text field is changed
@@ -141,79 +232,45 @@ public class EventEditFragment extends Fragment {
 
         // Set an OnClickListener for the eventEndDateTextView
         eventEndTimeTextView.setOnClickListener(v -> showTimePickerDialog("end"));
-
-        return view;
     }
 
-    //For both of these dialogs you can change the theme using dialog theme in layout folder
-    private void showDatePickerDialog() {
-        // logic for showing a date picker dialog
-        DatePickerDialog dialog = new DatePickerDialog(requireContext(), new DatePickerDialog.OnDateSetListener() {
-            /**
-             * Sets the startDate attribute using a built-in date picker
-             * @param view the picker associated with the dialog
-             * @param year the selected year
-             * @param month the selected month (0-11 for compatibility with
-             *              {@link Calendar#MONTH})
-             * @param dayOfMonth the selected day of the month (1-31, depending on
-             *                   month)
-             */
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                // Array of month names
-                String[] monthNames = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+    @Override
+    public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+        menu.clear();
+        menuInflater.inflate(R.menu.options_menu, menu);
+        menu.findItem(R.id.editOptionsMenu).setVisible(false);
+        menu.findItem(R.id.attendanceOptionsMenu).setVisible(false);
+        menu.findItem(R.id.saveOptionsMenu).setVisible(true);
+        menu.findItem(R.id.cancelOptionsMenu).setVisible(true);
+    }
 
-                // Format the date components into a string "YYYY.MonthName.DD"
-                @SuppressLint("DefaultLocale")
-                String formattedDate = String.format("%s %02d, %04d", monthNames[month],year, dayOfMonth);
-
-                // Update the text view
-                eventStartDateTextView.setText(formattedDate);
+    @Override
+    public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+        if (menuItem.getItemId() == R.id.saveOptionsMenu || menuItem.getItemId() == R.id.cancelOptionsMenu){
+            if (menuItem.getItemId() == R.id.saveOptionsMenu){
 
                 // Update the event attribute
-                event.setStartDate(formattedDate);
-            }
-        }, 2024, 0, 15);
-        //show the dialog
-        dialog.show();
-    }
-    private void showTimePickerDialog(String s){
-        // logic for showing a time picker dialog
-        TimePickerDialog dialog = new TimePickerDialog(requireContext(), new TimePickerDialog.OnTimeSetListener() {
-            /**
-             * Sets the time attribute using a built-in TimePicker Dialog
-             * @param view the view associated with this listener
-             * @param hourOfDay the hour that was set
-             * @param minute the minute that was set
-             */
-            @Override
-            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                String amPm;
-                // Check if the selected hour is in the AM or PM period
-                if (hourOfDay < 12) {
-                    amPm = "AM";
-                } else {
-                    amPm = "PM";
-                    // Adjust the hour for PM
-                    hourOfDay -= 12;
-                }
-                // Use the amPm and adjusted hour to display or process the time
-                String formattedTime = String.format("%02d:%02d %s", hourOfDay, minute, amPm);
-                if(s == "start"){
-                    //update text view
-                    eventStartTimeTextView.setText(formattedTime);
-                    //update event attribute
-                    event.setStartTime(formattedTime);
-                }else{
-                    //update text view
-                    eventEndTimeTextView.setText(formattedTime);
-                    //update event attribute
-                    event.setEndTime(formattedTime);
-                }
+                event.setStartDate(eventStartDateTextView.getText().toString());
+                //update event attribute
+                event.setStartTime(eventStartTimeTextView.getText().toString());
+                //update event attribute
+                event.setEndTime(eventEndTimeTextView.getText().toString());
 
+                event.setName(eventNameEditText.getText().toString());
+                event.setLocation(eventLocationEditText.getText().toString());
+
+
+                //TODO : update firebase info
+                //TODO : check valid input
             }
-        }, 7, 30, true);
-        //show the dialog
-        dialog.show();
+            Bundle args = new Bundle();
+            args.putParcelable("event",event);
+            args.putBoolean("isOrganizer", true);
+            NavHostFragment.findNavController(EventEditFragment.this)
+                    .navigate(R.id.action_eventEditFragment_to_eventDetailsFragment,args);
+            return true;
+        }
+
+        return false;
     }
 }

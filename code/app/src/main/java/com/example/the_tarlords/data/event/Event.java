@@ -4,11 +4,31 @@ import static androidx.fragment.app.FragmentManager.TAG;
 
 import static com.example.the_tarlords.MainActivity.db;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.data.QR.QRCode;
+import com.example.the_tarlords.data.attendance.Attendance;
+import com.example.the_tarlords.data.users.Attendee;
+import com.example.the_tarlords.data.users.User;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.Filter;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import org.checkerframework.common.returnsreceiver.qual.This;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -24,13 +44,14 @@ import java.util.UUID;
 
     2. Need to connect event location to the Map Class.
 */
-public class Event {
+public class Event implements Attendance, Parcelable {
     String name;
     String location;
     String startTime;
     String endTime;
     String startDate;
-    UUID id;
+    String id;
+    String organizerId;
     private QRCode qrCodeCheckIns;
     private QRCode qrCodePromo;
 
@@ -38,18 +59,54 @@ public class Event {
 
     private Integer maxSignUps;
 
+    private CollectionReference attendanceRef = MainActivity.db.collection("Events/"+ id +"/Attendees");
+    private CollectionReference usersRef = MainActivity.db.collection("Users");
+
+    private static CollectionReference eventsRef = eventsRef = MainActivity.db.collection("Events");
 
 
+
+    public Event(String name, String location, String id, String startTime, String endTime, String startDate) {
+        this.name = name;
+        this.location = location;
+        this.id = id;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.startDate = startDate;
+    }
     public Event(String name, String location) {
         this.name = name;
         this.location = location;
-        this.id = UUID.randomUUID();
+        this.id = UUID.randomUUID().toString();
+    }
+    public Event(String name, String location, String id) {
+        this.name = name;
+        this.location = location;
+        this.id = id;
+    }
+    public Event (Parcel in) {
+        name = in.readString();
+        location = in.readString();
+        id = in.readString();
+        startTime = in.readString();
+        endTime = in.readString();
+        startDate = in.readString();
+    }
+    public Event (){};
+
+    public void setOrganizerId(String organizerId) {
+        this.organizerId = organizerId;
+    }
+    public String getOrganizerId() {
+        return organizerId;
+    }
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public UUID getId() {
+    public String getId() {
         return id;
     }
-
 
     public String getLocation() {
         return location;
@@ -126,5 +183,121 @@ public class Event {
 
     public boolean reachedMaxCap() {
         return true;
+    }
+
+
+    /**
+     * Returns a list of Attendee objects attending the event.
+     *
+     * @return list of User objects
+     */
+    public ArrayList<Attendee> getAttendanceList() {
+        ArrayList<Attendee> attendees = new ArrayList<Attendee>();
+        attendanceRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot attendeeDoc : task.getResult()) {
+                        DocumentSnapshot userDoc = usersRef.document(attendeeDoc.getId()).get().getResult();
+                        String id = userDoc.getId();
+                        String firstName = userDoc.get("firstName").toString();
+                        String lastName = userDoc.get("lastName").toString();
+                        String email = userDoc.get("email").toString();
+                        String phoneNum = userDoc.get("phoneNum").toString();
+
+                        //User user = userDoc.toObject(User.class);
+                        Attendee attendee = new Attendee(id, firstName,lastName,phoneNum,email,Event.this);
+                        attendee.setCheckInStatus(attendeeDoc.getBoolean("checkedInStatus"));
+                        attendees.add(attendee);
+                    }
+                    Log.d("firestore", attendees.toString());
+                } else {
+                    Log.d("firestore", "Error getting documents: ", task.getException());
+                }
+            }
+        });
+        return attendees;
+    }
+    /**
+     * Signs up a user to attend an event by adding their name to the attendance list.
+     *
+     * @param user to add
+     */
+    public void signUp(User user) {
+        attendanceRef
+                .document(user.getId().toString())
+                .set(false)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("Firestore", "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("Firestore", e.getMessage());
+                    }
+                });
+    }
+
+    /**
+     * Removes a user from the attendance list of an event.
+     *
+     * @param user to remove
+     */
+    public void removeSignUp(User user) {
+        attendanceRef
+                .document(user.getId().toString())
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("Firestore", "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("Firestore", e.getMessage());
+                    }
+                });
+    }
+
+    /**
+     * Sets check in status of a user for an event.
+     * @param user to check in, status to set (boolean)
+     */
+    public void setCheckIn(User user, Boolean status) {
+        attendanceRef
+                .document(user.getId().toString())
+                .set(status)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("Firestore", "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("Firestore", e.getMessage());
+                    }
+                });
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeString(location);
+        dest.writeString(id);
+        dest.writeString(startTime);
+        dest.writeString(endTime);
+        dest.writeString(startDate);
     }
 }

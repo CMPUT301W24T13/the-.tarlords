@@ -52,9 +52,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
+//import com.google.firebase.firestore.CollectionReference;
+//import com.google.firebase.firestore.FirebaseFirestore;
+//import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 
@@ -62,8 +62,8 @@ import java.util.List;
 
 public class UploadPfpActivity extends AppCompatActivity {
     private static final int REQUEST_CAMERA_PERMISSION = 1;
-    private FirebaseFirestore db;
-    private CollectionReference profilesRef;
+    //private FirebaseFirestore db;
+    //private CollectionReference profilesRef;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
