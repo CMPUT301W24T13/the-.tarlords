@@ -1,5 +1,10 @@
 package com.example.the_tarlords.data.event;
 
+import static androidx.fragment.app.FragmentManager.TAG;
+
+import static com.example.the_tarlords.MainActivity.db;
+import static com.google.firebase.firestore.FirebaseFirestore.*;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
@@ -10,6 +15,7 @@ import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.data.QR.QRCode;
 import com.example.the_tarlords.data.attendance.Attendance;
 import com.example.the_tarlords.data.users.Attendee;
+import com.example.the_tarlords.data.users.Organizer;
 import com.example.the_tarlords.data.users.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -19,18 +25,27 @@ import com.google.firebase.firestore.AggregateQuery;
 import com.google.firebase.firestore.AggregateQuerySnapshot;
 import com.google.firebase.firestore.AggregateSource;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.Filter;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import org.checkerframework.common.returnsreceiver.qual.This;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * This class defines an event
  * UUID type for event attribute makes sure that everytime an event object is created it has a unique id
  * Not sure how QRcode will work , is it initialized when the event is created, or can it be set after being created
  */
+
 
 /* NOTE FOR KHUSHI AND GRACE:
 
@@ -49,18 +64,12 @@ public class Event implements Attendance, Parcelable {
 
     private EventPoster poster;
 
-    private Integer maxSignUps;
-
-    //this is accessing the same FirebaseFirestore from mainactivity's static db
-    private FirebaseFirestore db = MainActivity.db;
+    private Integer maxNumOfSignUps;
 
     private CollectionReference attendanceRef = MainActivity.db.collection("Events/"+ id +"/Attendees");
-
     private CollectionReference usersRef = MainActivity.db.collection("Users");
 
-    //this is static so that all instances of the Event class have the same eventsRef. So Im not including this ref in the constructors
-    private static CollectionReference eventsRef = MainActivity.db.collection("Events");
-
+    private static CollectionReference eventsRef = eventsRef = MainActivity.db.collection("Events");
 
     public Event(String name, String location, String id, String startTime, String endTime, String startDate) {
         this.name = name;
@@ -69,10 +78,17 @@ public class Event implements Attendance, Parcelable {
         this.startTime = startTime;
         this.endTime = endTime;
         this.startDate = startDate;
-        this.attendanceRef = db.collection("Events").document(id).collection("Attendees");
-        this.usersRef = db.collection("Users");
     }
-
+    public Event(String name, String location) {
+        this.name = name;
+        this.location = location;
+        makeNewDocID();
+    }
+    public Event(String name, String location, String id) {
+        this.name = name;
+        this.location = location;
+        this.id = id;
+    }
     public Event (Parcel in) {
         name = in.readString();
         location = in.readString();
@@ -80,22 +96,30 @@ public class Event implements Attendance, Parcelable {
         startTime = in.readString();
         endTime = in.readString();
         startDate = in.readString();
-        this.attendanceRef = db.collection("Events").document(id).collection("Attendees");
-        this.usersRef = db.collection("Users");
-
     }
+    public Event (){};
 
-    // NOTE! LEAVE THIS ONE EMPTY, DONT ADD ANYTHING OR IT CRASHES
-    public Event (){
+    public static final Creator<Event> CREATOR = new Creator<Event>() {
+        @Override
+        public Event createFromParcel(Parcel in) {
+            return new Event(in);
+        }
+
+        @Override
+        public Event[] newArray(int size) {
+            return new Event[size];
+        }
     };
 
-
+    public void setOrganizerId(String organizerId) {
+        this.organizerId = organizerId;
+    }
     public String getOrganizerId() {
         return organizerId;
     }
 
-    public void setOrganizerId(String organizerId) {
-        this.organizerId = organizerId;
+    public void setId(String id) {
+        this.id = id;
     }
 
 
@@ -103,14 +127,7 @@ public class Event implements Attendance, Parcelable {
         return id;
     }
 
-    public void setId(String id) {
-
-        this.id = id;
-    }
-
-
     public String getLocation() {
-
         return location;
     }
 
@@ -118,16 +135,13 @@ public class Event implements Attendance, Parcelable {
         this.location = location;
     }
 
-
     public String getName() {
         return name;
     }
 
-
     public void setName(String name) {
         this.name = name;
     }
-
 
     public String getStartTime() {
         return startTime;
@@ -178,22 +192,18 @@ public class Event implements Attendance, Parcelable {
         this.poster = poster;
     }
 
-    public Integer getMaxSignUps() {
-        return maxSignUps;
+    public int getMaxNumOfSignUps() {
+        return maxNumOfSignUps;
     }
 
-    public void setMaxSignUps(Integer maxSignUps) {
-        this.maxSignUps = maxSignUps;
-    }
-
-    public boolean reachedMaxCap() {
-        return true;
+    public void setMaxSignUps(int maxNumOfSignUps) {
+        this.maxNumOfSignUps = maxNumOfSignUps;
     }
 
 
     /**
-     * Returns a list of Attendee objects attending the event.
-     *
+     * Returns a list of Attendee objects attending the event. This is the default "signup" list
+     * Updates the user's checked in status if they check in or not.
      * @return list of User objects
      */
     public ArrayList<Attendee> getAttendanceList() {
@@ -230,13 +240,12 @@ public class Event implements Attendance, Parcelable {
      */
     public void signUp(User user) {
         attendanceRef
-                .document(user.getId().toString())
+                .document(user.getUserId().toString())
                 .set(false)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d("Firestore", "DocumentSnapshot successfully written!");
-
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -254,13 +263,12 @@ public class Event implements Attendance, Parcelable {
      */
     public void removeSignUp(User user) {
         attendanceRef
-                .document(user.getId().toString())
+                .document(user.getUserId().toString())
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d("Firestore", "DocumentSnapshot successfully written!");
-
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -277,13 +285,12 @@ public class Event implements Attendance, Parcelable {
      */
     public void setCheckIn(User user, Boolean status) {
         attendanceRef
-                .document(user.getId().toString())
+                .document(user.getUserId().toString())
                 .set(status)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d("Firestore", "DocumentSnapshot successfully written!");
-
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -308,14 +315,41 @@ public class Event implements Attendance, Parcelable {
         dest.writeString(endTime);
         dest.writeString(startDate);
     }
+    //NEED TO JAVADOC
+    //Generates a new doc id for the new event, IMPORTANT FOR THE QRCode stuff
+
+    private String newDocID;
+    public String makeNewDocID() {
+        DocumentReference ref = db.collection("Events").document();
+        id = ref.getId();
+        return id;
+    }
+    public void sendToFirebase() {
+        // Add the new user document to Firestore
+        //MAJOR NOTE THIS AUTOMATICALLY SETS THE DOC ID TO USER ID AND I DONT KNOW IF THAT WOULD BE A PROBLEM
+        Map<String, Object> docData = new HashMap<>();
+        docData.put("id", id);
+        docData.put("name", name);
+        docData.put("location", location);
+        docData.put("startDate", startDate);
+        docData.put("startTime", startTime);
+        docData.put("endTime", endTime);
+        docData.put("organizerId",organizerId);
+
+        eventsRef.document(id).set(docData)
+                .addOnSuccessListener(aVoid -> {
+                    // Document successfully added
+                    Log.d("debug", "User added successfully to Firestore");
+                })
+                .addOnFailureListener(e -> {
+                    // Handle the failure
+                    Log.e("debug", "Error adding user to Firestore", e);
+                });
+    }
+
 
 
 }
-
-
-
-
-
 
 
 

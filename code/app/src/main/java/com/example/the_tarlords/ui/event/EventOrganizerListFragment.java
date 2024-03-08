@@ -17,12 +17,14 @@ import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.databinding.FragmentEventListBinding;
 import com.example.the_tarlords.ui.home.EventArrayAdapter;
+import com.example.the_tarlords.ui.home.EventListFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -38,10 +40,10 @@ public class EventOrganizerListFragment extends Fragment implements MenuProvider
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
+    //private FragmentEventOrganizerListBinding binding;
     private FragmentEventListBinding binding;
     private CollectionReference eventsRef = MainActivity.db.collection("Events");
     private CollectionReference usersRef = MainActivity.db.collection("Users");
-    Event event1 = new Event("test","home","1", "startTime", "endtime", "starDate");
     ArrayList<Event> events = new ArrayList<>();
 
 
@@ -70,11 +72,11 @@ public class EventOrganizerListFragment extends Fragment implements MenuProvider
         return binding.getRoot();
     }
 
-    public void onViewCreated(@NonNull View v, Bundle savedInstanceState) {
-        super.onViewCreated(v, savedInstanceState);
-        ListView eventListView = v.findViewById(R.id.eventListView);
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ListView eventListView = view.findViewById(R.id.eventListView);
         Log.d("events list", events.toString()+"hello");
-        //events.add(event1);
+        //set adapter
         EventArrayAdapter adapter = new EventArrayAdapter(getContext(),events);
         eventListView.setAdapter(adapter);
 
@@ -90,7 +92,7 @@ public class EventOrganizerListFragment extends Fragment implements MenuProvider
                     events.clear();
                     //TODO: tried putting this in a different class but it wasn't working, maybe someone else will have better luck?
                     eventsRef
-                            .whereEqualTo("organizerId", MainActivity.user.getId())
+                            .whereEqualTo("organizerId", MainActivity.user.getUserId())
                             .get()
                             .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                 @Override
@@ -115,20 +117,11 @@ public class EventOrganizerListFragment extends Fragment implements MenuProvider
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Event event = events.get(position);
-                // Handle item click, switch to a new fragment using FragmentManager
-                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-
-                // Create a new fragment and pass the selected Event as an argument
-                EventDetailsFragment newFragment = EventDetailsFragment.newInstance(event,true);
-
-                // Replace the current fragment with the new one
-                transaction.replace(R.id.eventOrganizerListFragment, newFragment);
-
-                // Add the transaction to the back stack (optional)
-                transaction.addToBackStack(null);
-                // Commit the transaction
-                transaction.commit();
+                Bundle args = new Bundle();
+                args.putParcelable("event",event);
+                args.putBoolean("isOrganizer", true);
+                NavHostFragment.findNavController(EventOrganizerListFragment.this)
+                        .navigate(R.id.action_eventOrganizerListFragment_to_eventDetailsFragment,args);
             }
         });
     }
@@ -142,10 +135,20 @@ public class EventOrganizerListFragment extends Fragment implements MenuProvider
     @Override
     public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
         menu.clear();
+        menuInflater.inflate(R.menu.options_menu, menu);
+        menu.findItem(R.id.addOptionsMenu).setVisible(true);
     }
 
     @Override
     public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+        if (menuItem.getItemId() == R.id.addOptionsMenu){
+            Event myEvent = new Event(); //TODO: generate random id
+            Bundle args = new Bundle();
+            args.putParcelable("event",myEvent);
+            args.putBoolean("isOrganizer", true);
+            NavHostFragment.findNavController(EventOrganizerListFragment.this)
+                    .navigate(R.id.action_eventOrganizerListFragment_to_eventEditFragment,args);
+        }
         return false;
     }
 

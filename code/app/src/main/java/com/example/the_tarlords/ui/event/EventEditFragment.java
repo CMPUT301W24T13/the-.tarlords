@@ -1,5 +1,7 @@
 package com.example.the_tarlords.ui.event;
 
+import static com.example.the_tarlords.MainActivity.db;
+
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -10,10 +12,12 @@ import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,7 +32,10 @@ import android.widget.TimePicker;
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.event.Event;
+import com.example.the_tarlords.databinding.FragmentAttendanceListBinding;
+import com.example.the_tarlords.databinding.FragmentEventEditBinding;
 import com.example.the_tarlords.ui.attendance_page.AttendanceFragment;
+import com.google.firebase.firestore.DocumentReference;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -48,6 +55,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
     private EditText eventLocationEditText;
     private EditText eventNameEditText;
     private TextView eventEndTimeTextView;
+    private FragmentEventEditBinding binding;
     //add the event poster to be able to edit the poster
     //event poster doenst need to be connected to event details. Make poster connected to event so
     //when QR -> event <- event detials
@@ -82,82 +90,10 @@ public class EventEditFragment extends Fragment implements MenuProvider {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_event_edit, container, false);
-        //Event id is a textview because user should not be able to edit it, assigned when event object created
-        eventNameEditText = view.findViewById(R.id.et_event_name);
-        eventLocationEditText = view.findViewById(R.id.et_event_location);
-        eventStartTimeTextView = view.findViewById(R.id.tv_edit_event_startTime);
-        eventStartDateTextView = view.findViewById(R.id.tv_edit_event_startDate);
-        eventEndTimeTextView = view.findViewById(R.id.tv_edit_event_endTime);
+        binding = FragmentEventEditBinding.inflate(inflater, container, false);
 
-        //add more attributes
+        return binding.getRoot();
 
-        // Populate UI elements with event details
-        if (event != null) {
-            eventNameEditText.setText(event.getName());
-            eventLocationEditText.setText(event.getLocation());
-            eventStartTimeTextView.setText(event.getStartTime());
-            eventStartDateTextView.setText(event.getStartDate());
-            eventEndTimeTextView.setText(event.getEndTime());
-            // Populate more attributes
-        }
-        /**
-         * A Text Change Listener updates the event attributes when the edit text field is changed
-         */
-        eventNameEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                //not used would this be a problem ?
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // Called to notify you that somewhere within charSequence, the text has been changed.
-                // Update the eventName attribute
-                if (event != null) {
-                    event.setName(s.toString());
-                }
-            }
-            @Override
-            public void afterTextChanged(Editable s) {
-                //not used , would this be a problem ?
-            }
-
-        });
-        eventLocationEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                //not used here
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // Called to notify you that somewhere within charSequence, the text has been changed.
-                // Update the eventName attribute
-                if (event != null) {
-                    event.setLocation(s.toString());
-                }
-
-//                if (event != null) {
-//                    event.setLocation(s.toString(), aVoid -> {});
-//                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                //not used here
-            }
-        });
-        // Set an OnClickListener for the eventStartDateTextView
-        eventStartDateTextView.setOnClickListener(v -> showDatePickerDialog());
-
-        // Set an OnClickListener for the eventStartTimeTextView
-        eventStartTimeTextView.setOnClickListener(v -> showTimePickerDialog("start"));
-
-        // Set an OnClickListener for the eventEndDateTextView
-        eventEndTimeTextView.setOnClickListener(v -> showTimePickerDialog("end"));
-
-        return view;
     }
 
     //For both of these dialogs you can change the theme using dialog theme in layout folder
@@ -185,8 +121,6 @@ public class EventEditFragment extends Fragment implements MenuProvider {
                 // Update the text view
                 eventStartDateTextView.setText(formattedDate);
 
-                // Update the event attribute
-                event.setStartDate(formattedDate);
             }
         }, 2024, 0, 15);
         //show the dialog
@@ -217,13 +151,9 @@ public class EventEditFragment extends Fragment implements MenuProvider {
                 if(s == "start"){
                     //update text view
                     eventStartTimeTextView.setText(formattedTime);
-                    //update event attribute
-                    event.setStartTime(formattedTime);
                 }else{
                     //update text view
                     eventEndTimeTextView.setText(formattedTime);
-                    //update event attribute
-                    event.setEndTime(formattedTime);
                 }
 
             }
@@ -233,6 +163,82 @@ public class EventEditFragment extends Fragment implements MenuProvider {
     }
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState){
         requireActivity().addMenuProvider(this);
+        //Event id is a textview because user should not be able to edit it, assigned when event object created
+        eventNameEditText = view.findViewById(R.id.et_event_name);
+        eventLocationEditText = view.findViewById(R.id.et_event_location);
+        eventStartTimeTextView = view.findViewById(R.id.tv_edit_event_startTime);
+        eventStartDateTextView = view.findViewById(R.id.tv_edit_event_startDate);
+        eventEndTimeTextView = view.findViewById(R.id.tv_edit_event_endTime);
+
+        //add more attributes
+
+        // Populate UI elements with event details
+        if (event.getId() != null) {
+            eventNameEditText.setText(event.getName());
+            eventLocationEditText.setText(event.getLocation());
+            eventStartTimeTextView.setText(event.getStartTime());
+            eventStartDateTextView.setText(event.getStartDate());
+            eventEndTimeTextView.setText(event.getEndTime());
+            // Populate more attributes
+        }
+        else {
+            eventNameEditText.setHint("Event Name");
+            eventLocationEditText.setHint("Location");
+            eventStartDateTextView.setText("Date");
+            eventStartTimeTextView.setText("Start time");
+            eventEndTimeTextView.setText("End Time");
+        }
+        /**
+         * A Text Change Listener updates the event attributes when the edit text field is changed
+         */
+        /*eventNameEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                //not used would this be a problem ?
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Called to notify you that somewhere within charSequence, the text has been changed.
+                // Update the eventName attribute
+                if (event != null) {
+                    event.setName(s.toString());
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                //not used , would this be a problem ?
+            }
+
+        });*/
+        /*eventLocationEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                //not used here
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Called to notify you that somewhere within charSequence, the text has been changed.
+                // Update the eventName attribute
+                if (event != null) {
+                    event.setLocation(s.toString());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                //not used here
+            }
+        });*/
+        // Set an OnClickListener for the eventStartDateTextView
+        eventStartDateTextView.setOnClickListener(v -> showDatePickerDialog());
+
+        // Set an OnClickListener for the eventStartTimeTextView
+        eventStartTimeTextView.setOnClickListener(v -> showTimePickerDialog("start"));
+
+        // Set an OnClickListener for the eventEndDateTextView
+        eventEndTimeTextView.setOnClickListener(v -> showTimePickerDialog("end"));
     }
 
     @Override
@@ -248,24 +254,38 @@ public class EventEditFragment extends Fragment implements MenuProvider {
     @Override
     public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
         if (menuItem.getItemId() == R.id.saveOptionsMenu || menuItem.getItemId() == R.id.cancelOptionsMenu){
+            Object lock = new Object();
             if (menuItem.getItemId() == R.id.saveOptionsMenu){
 
+                // Update the event attribute
+                event.setStartDate(eventStartDateTextView.getText().toString());
+                //update event attribute
+                event.setStartTime(eventStartTimeTextView.getText().toString());
+                //update event attribute
+                event.setEndTime(eventEndTimeTextView.getText().toString());
+
+                event.setName(eventNameEditText.getText().toString());
+                event.setLocation(eventLocationEditText.getText().toString());
+                event.setOrganizerId(MainActivity.user.getUserId());
+                synchronized (lock) {
+                    if (event.getId() == null) {
+                        event.makeNewDocID();
+                    }
+                }
+
+
+                event.sendToFirebase();
+
+
+                //TODO : update firebase info
+                //TODO : check valid input
             }
-            // Handle item click, switch to a new fragment using FragmentManager
-            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            Bundle args = new Bundle();
+            args.putParcelable("event",event);
+            args.putBoolean("isOrganizer", true);
+            NavHostFragment.findNavController(EventEditFragment.this)
+                    .navigate(R.id.action_eventEditFragment_to_eventDetailsFragment,args);
 
-            // Create a new fragment and pass the selected Event as an argument
-            EventDetailsFragment newFragment = EventDetailsFragment.newInstance(event, true);
-
-            // Replace the current fragment with the new one
-            transaction.replace(R.id.eventEditFragment, newFragment);
-
-            // Add the transaction to the back stack (optional)
-            transaction.addToBackStack(null);
-
-            // Commit the transaction
-            transaction.commit();
             return true;
         }
 

@@ -8,6 +8,7 @@
         android:layout_height="wrap_content"
         android:icon="@drawable/attendance"
         android:title="Attendance"
+        android:visible="false"
         app:showAsAction="always|withText" />
     <item
         android:id="@+id/editOptionsMenu"
@@ -15,6 +16,7 @@
         android:layout_height="wrap_content"
         android:icon="@drawable/baseline_edit_24"
         android:title="Edit"
+        android:visible="false"
         app:showAsAction="always|withText" />
     <item
         android:id="@+id/saveOptionsMenu"
@@ -30,6 +32,14 @@
         android:layout_height="wrap_content"
         android:icon="@drawable/cancel"
         android:title="Cancel"
+        android:visible="false"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/addOptionsMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/add"
+        android:title="Add"
         android:visible="false"
         app:showAsAction="always" />
 </menu>

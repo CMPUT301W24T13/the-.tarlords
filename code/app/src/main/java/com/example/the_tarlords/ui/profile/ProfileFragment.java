@@ -57,50 +57,6 @@ public class ProfileFragment extends Fragment implements MenuProvider {
         phoneET.setText(MainActivity.user.getPhoneNum());
         emailET.setText(MainActivity.user.getEmail());
 
-        //ImageButton editButton = view.findViewById(R.id.editButton);
-        //ImageButton saveButton = view.findViewById(R.id.saveButton);
-
-        /*editButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                nameTV.setVisibility(view.GONE);
-                phoneTV.setVisibility(view.GONE);
-                emailTV.setVisibility(view.GONE);
-                editButton.setVisibility(view.GONE);
-
-                nameET.setVisibility(view.VISIBLE);
-                phoneET.setVisibility(view.VISIBLE);
-                emailET.setVisibility(view.VISIBLE);
-                saveButton.setVisibility(view.VISIBLE);
-
-                saveButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        MainActivity.user.setFirstName(nameET.getText().toString().split(" ")[0]);
-                        MainActivity.user.setLastName(nameET.getText().toString().split(" ")[1]);
-                        MainActivity.user.setPhoneNum(phoneET.getText().toString());
-                        MainActivity.user.setEmail(emailET.getText().toString());
-
-                        nameTV.setText(MainActivity.user.getFirstName()+" "+MainActivity.user.getLastName());
-                        phoneTV.setText(MainActivity.user.getPhoneNum());
-                        emailTV.setText(MainActivity.user.getEmail());
-
-                        nameTV.setVisibility(view.VISIBLE);
-                        phoneTV.setVisibility(view.VISIBLE);
-                        emailTV.setVisibility(view.VISIBLE);
-                        editButton.setVisibility(view.VISIBLE);
-
-                        nameET.setVisibility(view.GONE);
-                        phoneET.setVisibility(view.GONE);
-                        emailET.setVisibility(view.GONE);
-                        saveButton.setVisibility(view.GONE);
-
-                        //TODO: update navigation menu header, check for invalid input or name input with more than one space
-                    }
-                });
-            }
-        });*/
-
 
     }
 
@@ -108,7 +64,7 @@ public class ProfileFragment extends Fragment implements MenuProvider {
     public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
         menu.clear();
         menuInflater.inflate(R.menu.options_menu, menu);
-        menu.removeItem(R.id.attendanceOptionsMenu);
+        menu.findItem(R.id.editOptionsMenu).setVisible(true);
     }
     @Override
     public void onPrepareMenu(@NonNull Menu menu){
@@ -167,6 +123,12 @@ public class ProfileFragment extends Fragment implements MenuProvider {
                 nameTV.setText(MainActivity.user.getFirstName()+" "+MainActivity.user.getLastName());
                 phoneTV.setText(MainActivity.user.getPhoneNum());
                 emailTV.setText(MainActivity.user.getEmail());
+
+                MainActivity.user.sendToFireStore();
+
+                MainActivity.updateNavigationDrawerHeader();
+
+                //TODO: update firebase info
 
                 //TODO: update navigation menu header, check for invalid input or name input with more than one space
             }
