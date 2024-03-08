@@ -190,8 +190,8 @@ public class MainActivity extends AppCompatActivity {
     }
     private void navigateFirstTimeUserToProfileFragment() {
         // Replace 'YourFirstFragment' with the actual name of your first fragment
-        Navigation.findNavController(this, R.id.nav_host_fragment_content_main)
-                .navigate(R.id.action_eventListFragment_to_profileFragment);
+        Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+                //.navigate(R.id.action_eventListFragment_to_profileFragment);
     }
 
     @Override
