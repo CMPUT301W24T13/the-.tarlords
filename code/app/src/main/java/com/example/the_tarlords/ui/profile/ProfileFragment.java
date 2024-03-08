@@ -5,6 +5,7 @@ import androidx.core.view.MenuProvider;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -81,26 +82,27 @@ public class ProfileFragment extends Fragment implements MenuProvider {
             }
         }
 
-        //Button addPhotoButton = view.findViewById(R.id.button_add_profile_photo);
-        /*addPhotoButton.setOnClickListener(v -> {
+        Button addPhotoButton = view.findViewById(R.id.button_add_profile_photo);
+        addPhotoButton.setOnClickListener(v -> {
             new AlertDialog.Builder(this.getContext())
                     .setTitle("Where would you like to upload a profile photo from?")
                     .setPositiveButton("Camera", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            TakePhotoActivity takePhoto = new TakePhotoActivity();
+                            Intent intent = new Intent(getActivity(), TakePhotoActivity.class);
+                            startActivity(intent);
                         }
                     })
-                    .setNeutralButton("Gallery", new DialogInterface.OnClickListener() {
+                    .setNegativeButton("Gallery", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             UploadPhotoActivity uploadPhoto = new UploadPhotoActivity();
                         }
                     })
-                    .setNegativeButton("Cancel", null)
+                    .setNeutralButton("Cancel", null)
                     .create()
                     .show();
-        });*/
+        });
     }
 
     @Override
