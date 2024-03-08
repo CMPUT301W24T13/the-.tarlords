@@ -3,6 +3,8 @@ package com.example.the_tarlords;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,11 +41,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-
         setSupportActionBar(binding.appBarMain.toolbar);
 
         binding.appBarMain.scanQrButton.setOnClickListener(new View.OnClickListener() {
@@ -72,10 +71,12 @@ public class MainActivity extends AppCompatActivity {
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
         View hView = navigationView.getHeaderView(0);
+        ImageView profilePhoto = hView.findViewById(R.id.profilePic);
         TextView name = hView.findViewById(R.id.profileName);
         TextView phoneNum = hView.findViewById(R.id.phoneNumber);
         TextView email = hView.findViewById(R.id.email);
         //TODO: implement profile picture
+        profilePhoto.setImageBitmap(MainActivity.user.getProfilePhoto().getBitmap());
         name.setText(MainActivity.user.getFirstName()+" "+MainActivity.user.getLastName());
         phoneNum.setText(MainActivity.user.getPhoneNum());
         email.setText(MainActivity.user.getEmail());

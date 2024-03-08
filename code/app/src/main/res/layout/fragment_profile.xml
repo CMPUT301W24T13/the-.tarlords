@@ -7,25 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.profile.ProfileFragment">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/app_bar_margin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/profile_top_bar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:theme="@style/Theme.Thetarlords.AppBarOverlay">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/actionBar"
-            app:popupTheme="@style/Theme.Thetarlords.PopupOverlay" />
-
-    </com.google.android.material.appbar.AppBarLayout>
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/edit_profile_info"
         android:layout_width="match_parent"
@@ -143,11 +124,11 @@
         android:rotationX="0"
         android:theme="@style/Theme.Material3.Dark"
         app:circularflow_radiusInDP="20"
-        app:layout_constraintTop_toBottomOf="@+id/app_bar_margin"
-        app:layout_constraintBottom_toTopOf="@id/edit_profile_info"
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" >
+        app:layout_constraintStart_toStartOf="parent">
 
         <ImageView
             android:id="@+id/image_view_profile"
@@ -157,10 +138,11 @@
             android:layout_marginEnd="216dp"
             android:contentDescription="@string/profile_picture"
             android:src="@drawable/profile_icon"
-            app:layout_constraintTop_toTopOf="@+id/profile_top_bar"
             app:layout_constraintBottom_toBottomOf="@+id/profile_top_bar"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/profile_top_bar"
             app:srcCompat="@mipmap/ic_launcher_round" />
 
         <Button
@@ -169,15 +151,15 @@
             android:layout_height="150dp"
             android:layout_marginStart="45dp"
             android:layout_marginEnd="216dp"
+            android:background="@drawable/profile_icon"
+            android:fontFamily="@font/helvetica_rounded_bold"
             android:text="@string/add_profile_photo"
             android:textSize="20sp"
-            android:fontFamily="@font/helvetica_rounded_bold"
-            android:background="@drawable/profile_icon"
-            app:layout_constraintTop_toTopOf="@id/image_view_profile"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/image_view_profile"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:visibility="gone"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/image_view_profile" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
