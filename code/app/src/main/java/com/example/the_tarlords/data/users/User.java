@@ -48,7 +48,7 @@ public class User implements Profile {
         return false;
     }
 
-    public void (String userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
     public String getUserId() {
