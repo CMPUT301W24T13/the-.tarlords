@@ -8,14 +8,19 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
+import android.view.Menu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.users.User;
+import com.example.the_tarlords.ui.event.EventDetailsFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.example.the_tarlords.data.QR.QRScanActivity;
 
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -28,6 +33,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -51,14 +59,28 @@ public class MainActivity extends AppCompatActivity {
 
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
-
-
         setSupportActionBar(binding.appBarMain.toolbar);
+
+        if (getIntent().getStringExtra("eventId") != null) {
+            String name = getIntent().getStringExtra("eventName");
+            String location = getIntent().getStringExtra("eventLocation");
+            String id = getIntent().getStringExtra("eventId");
+            String startTime = getIntent().getStringExtra("eventStartTime");
+            String endTime = getIntent().getStringExtra("eventEndTime");
+            String startDate = getIntent().getStringExtra("eventStartDate");
+            Event event = new Event(name, location, id, startTime, endTime, startDate);
+            navigateToEventDetailsFragment(event);
+        }
 
         binding.appBarMain.scanQrButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, QRScanActivity.class);
+                intent.putExtra("userID", user.getUserId());
+                intent.putExtra("firstName", user.getFirstName());
+                intent.putExtra("lastName", user.getLastName());
+                intent.putExtra("phoneNum", user.getPhoneNum());
+                intent.putExtra("email", user.getEmail());
                 startActivity(intent);
             }
         });
@@ -137,18 +159,6 @@ public class MainActivity extends AppCompatActivity {
             setContentView(binding.getRoot());
         }
 
-        /**
-         * slide out nav bar set-up
-         * **/
-
-
-        //TextView name = hView.findViewById(R.id.profileName);
-        //TextView phoneNum = hView.findViewById(R.id.phoneNumber);
-        //TextView email = hView.findViewById(R.id.email);
-        //TODO: implement profile picture
-        //name.setText(MainActivity.user.getFirstName()+" "+MainActivity.user.getLastName());
-        //phoneNum.setText(MainActivity.user.getPhoneNum());
-        //email.setText(MainActivity.user.getEmail());
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -178,7 +188,17 @@ public class MainActivity extends AppCompatActivity {
             );
         });
     }
-    
+
+    private void navigateToEventDetailsFragment(Event event) {
+        Log.e("QrCode", "here");
+        EventDetailsFragment fragment = EventDetailsFragment.newInstance(event, false);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.nav_host_fragment_content_main, fragment); // R.id.fragment_container is the ID of your fragment container
+        fragmentTransaction.addToBackStack(null); // Optional: adds the transaction to the back stack
+        fragmentTransaction.commit();
+    }
+
     // User id generator for the sharedPreferences stuff
     @SuppressLint("HardwareIds")
     private String generateNewUserId() {
@@ -198,6 +218,11 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+
+    /**
+     * slide out nav bar set-up
+     * **/
+    //TODO: Implement profile picture
     public static void updateNavigationDrawerHeader() {
         // Set navigation drawer header information based on the user object
         if (user != null) {
