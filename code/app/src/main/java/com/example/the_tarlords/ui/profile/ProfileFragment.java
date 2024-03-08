@@ -96,7 +96,8 @@ public class ProfileFragment extends Fragment implements MenuProvider {
                     .setNegativeButton("Gallery", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            UploadPhotoActivity uploadPhoto = new UploadPhotoActivity();
+                            Intent intent = new Intent(getActivity(), UploadPhotoActivity.class);
+                            startActivity(intent);
                         }
                     })
                     .setNeutralButton("Cancel", null)
