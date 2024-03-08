@@ -8,16 +8,20 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
+
 import android.view.Menu;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.the_tarlords.data.QR.QRScanActivity;
 import com.example.the_tarlords.data.users.User;
 import com.google.android.material.navigation.NavigationView;
 import com.example.the_tarlords.data.QR.QRScanActivity;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -28,9 +32,8 @@ import com.example.the_tarlords.databinding.ActivityMainBinding;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.HashMap;
-import java.util.Map;
+import com.journeyapps.barcodescanner.ScanContract;
+import com.journeyapps.barcodescanner.ScanOptions;
 
 import java.io.IOException;
 import java.util.Calendar;
@@ -97,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
             // Update UI with default user information
             updateNavigationDrawerHeader();
             // If it's the first launch, navigate to a different fragment
-            navigateToYourFirstFragment();
+            navigateFirstTimeUserToProfileFragment();
         }else{
             //user has been here before
             String finalUserId = userId;
@@ -132,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
         }
         synchronized (lock) {
             try {
-                lock.wait(300);
+                lock.wait(400);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -142,12 +145,47 @@ public class MainActivity extends AppCompatActivity {
         /**
          * slide out nav bar set-up
          * **/
+<<<<<<< HEAD
         mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.eventListFragment, R.id.eventOrganizerListFragment, R.id.profileFragment)
+=======
+
+
+        //TextView name = hView.findViewById(R.id.profileName);
+        //TextView phoneNum = hView.findViewById(R.id.phoneNumber);
+        //TextView email = hView.findViewById(R.id.email);
+        //TODO: implement profile picture
+        //name.setText(MainActivity.user.getFirstName()+" "+MainActivity.user.getLastName());
+        //phoneNum.setText(MainActivity.user.getPhoneNum());
+        //email.setText(MainActivity.user.getEmail());
+
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
+        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.eventListFragment, R.id.eventOrganizerListFragment, R.id.eventBrowseFragment,R.id.profileFragment)
+>>>>>>> e960844bbbb688614466bb40d56bccbb68e71308
                 .setOpenableLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        binding.appBarMain.scanQrButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ScanOptions scanOptions = new ScanOptions();
+                barcodeLauncher.launch(scanOptions);
+            }
+
+            private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(
+                    new ScanContract(),
+                    result -> {
+                        if (result.getContents() != null) {
+                            Toast.makeText(getApplicationContext(), "scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(getApplicationContext(), "cancelled", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+            );
+        });
     }
     
     // User id generator for the sharedPreferences stuff
@@ -156,12 +194,13 @@ public class MainActivity extends AppCompatActivity {
         // Replace with your user logic to generate an ID
         return Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
     }
-    private void navigateToYourFirstFragment() {
+    private void navigateFirstTimeUserToProfileFragment() {
         // Replace 'YourFirstFragment' with the actual name of your first fragment
         Navigation.findNavController(this, R.id.nav_host_fragment_content_main)
                 .navigate(R.id.action_eventListFragment_to_profileFragment);
     }
 
+<<<<<<< HEAD
     @SuppressLint("HardwareIds")
     private String generateNewUserId() {
         // Replace with your user logic to generate an ID
@@ -172,6 +211,8 @@ public class MainActivity extends AppCompatActivity {
         Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
                 //.navigate(R.id.action_eventListFragment_to_profileFragment);
     }
+=======
+>>>>>>> e960844bbbb688614466bb40d56bccbb68e71308
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -199,5 +240,9 @@ public class MainActivity extends AppCompatActivity {
             user = new User(userId,"khushi","null","780-111-1111","john.doe@ualberta.ca");
         }
     }
+<<<<<<< HEAD
     //Testing Version 1 -- Rimsha1111
+=======
+
+>>>>>>> e960844bbbb688614466bb40d56bccbb68e71308
 }

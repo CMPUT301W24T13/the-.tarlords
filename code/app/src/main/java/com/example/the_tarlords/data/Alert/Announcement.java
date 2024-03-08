@@ -7,10 +7,9 @@ public class Announcement extends Alert{
      * Constructor for an announcement class
      * @param title
      * @param message
-     * @param event
      */
-    public Announcement(String title, String message, Event event) {
-        super(title, message, event);
+    public Announcement(String title, String message, String currentDateTime) {
+        super(title, message,null);
     }
 
     public void pushAnnouncements(){

@@ -7,9 +7,8 @@ public class Milestone extends Alert{
      * constructor for milestone class
      * @param title
      * @param message
-     * @param event
      */
-    public Milestone(String title, String message, Event event) {
-        super(title, message, event);
+    public Milestone(String title, String message) {
+        super(title, message,null);
     }
 }
