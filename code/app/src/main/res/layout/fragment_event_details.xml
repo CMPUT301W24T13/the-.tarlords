@@ -16,7 +16,7 @@
         android:layout_marginStart="25dp"
         android:layout_marginTop="30dp"
         android:layout_marginEnd="25dp"
-        android:text="event name"
+        android:text="BBQ"
         android:textAllCaps="true"
         android:textColor="#0B0B0B"
         android:textSize="30sp"
@@ -56,7 +56,7 @@
             android:id="@+id/tv_event_startTime"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.20"
+            android:layout_weight="0.1"
             android:text="9:35 PM"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -64,16 +64,16 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.05"
-            android:text=":"
+            android:layout_weight="0.04"
+            android:text="to"
             android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textStyle="normal" />
 
         <TextView
             android:id="@+id/tv_event_endTime"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.20"
+            android:layout_weight="0.25"
             android:text="9:35 PM"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -93,6 +93,37 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ll_time" />
+
+    <TextView
+        android:id="@+id/tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="506dp"
+        android:text="Max Attendees: "
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/tv_max_attendees"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_event_location" />
+
+    <TextView
+        android:id="@+id/tv_max_attendees"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="498dp"
+        android:ems="10"
+        android:inputType="number"
+        android:text="Unlimited"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tv"
+        app:layout_constraintTop_toBottomOf="@+id/tv_event_location" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

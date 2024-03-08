@@ -17,8 +17,7 @@
         android:layout_marginStart="25dp"
         android:layout_marginTop="30dp"
         android:layout_marginEnd="25dp"
-        android:layout_marginBottom="25sp"
-        android:text="event name"
+        android:hint="Event Name"
         android:textAllCaps="true"
         android:textColor="#0B0B0B"
         android:textSize="30sp"
@@ -35,7 +34,7 @@
         android:layout_marginTop="3dp"
         android:layout_marginEnd="25dp"
         android:layout_weight="0.5"
-        android:text="July 4, 2024"
+        android:hint="Date"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -56,26 +55,26 @@
 
         <TextView
             android:id="@+id/tv_edit_event_startTime"
-            android:layout_width="0dp"
+            android:layout_width="20dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.20"
-            android:text="9:20PM"
+            android:layout_weight="0.1"
+            android:hint="Start Time"
             android:textSize="20sp" />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.05"
-            android:text=":"
+            android:layout_weight="0.04"
+            android:text=" to"
             android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textStyle="normal" />
 
         <TextView
             android:id="@+id/tv_edit_event_endTime"
-            android:layout_width="0dp"
+            android:layout_width="20dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.20"
-            android:text="10:11PM"
+            android:layout_weight="0.2"
+            android:hint="End Time"
             android:textSize="20sp" />
 
     </LinearLayout>
@@ -87,14 +86,43 @@
         android:layout_marginStart="25dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="25dp"
+        android:hint="Location"
         android:inputType="textPostalAddress"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
-        android:text="Location"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ll_time_edit" />
+        app:layout_constraintTop_toBottomOf="@id/ll_time_edit"
+        app:layout_constraintBottom_toTopOf="@id/textView"/>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="506dp"
+        android:text="Set Max Attendees: "
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/et_max_attendees"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_event_location" />
+
+    <EditText
+        android:id="@+id/et_max_attendees"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="498dp"
+        android:ems="10"
+        android:inputType="number"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/et_event_location" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

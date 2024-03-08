@@ -66,7 +66,7 @@ public class Event implements Attendance, Parcelable {
 
     private EventPoster poster;
 
-    private Integer maxSignUps;
+    Integer maxSignUps;
 
     private CollectionReference attendanceRef = MainActivity.db.collection("Events/"+ id +"/Attendees");
     private CollectionReference usersRef = MainActivity.db.collection("Users");
@@ -384,6 +384,7 @@ public class Event implements Attendance, Parcelable {
         docData.put("startTime", startTime);
         docData.put("endTime", endTime);
         docData.put("organizerId",organizerId);
+        docData.put("maxSignUps", maxSignUps);
 
         eventsRef.document(id).set(docData)
                 .addOnSuccessListener(aVoid -> {

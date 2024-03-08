@@ -30,7 +30,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-medium"
-                android:text="My Birthday Party"
+                android:text="Event Name"
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:textSize="24sp"
                 android:textStyle="bold"
@@ -40,13 +40,13 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/dateTextView"
+                android:id="@+id/locationTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="16dp"
                 android:fontFamily="sans-serif-light"
-                android:text="January 31, 2024 @ 2pm"
+                android:text="Location"
                 android:textSize="20dp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -56,19 +56,19 @@
                 app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
 
             <TextView
-                android:id="@+id/userRoleTextView"
-                android:layout_width="70dp"
+                android:id="@+id/startDateTextView"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="15dp"
                 android:fontFamily="sans-serif-medium"
-                android:text="Attendee"
+                android:text="Start Date"
                 android:textSize="15sp"
                 android:textStyle="italic"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toEndOf="@+id/dateTextView"
+                app:layout_constraintStart_toEndOf="@+id/locationTextView"
                 app:layout_constraintTop_toBottomOf="@+id/titleTextView"
                 app:layout_constraintVertical_bias="1.0" />
         </androidx.constraintlayout.widget.ConstraintLayout>

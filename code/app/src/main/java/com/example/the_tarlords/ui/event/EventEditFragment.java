@@ -55,6 +55,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
     private EditText eventLocationEditText;
     private EditText eventNameEditText;
     private TextView eventEndTimeTextView;
+    private EditText maxAttendees;
     private FragmentEventEditBinding binding;
     //add the event poster to be able to edit the poster
     //event poster doenst need to be connected to event details. Make poster connected to event so
@@ -169,6 +170,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
         eventStartTimeTextView = view.findViewById(R.id.tv_edit_event_startTime);
         eventStartDateTextView = view.findViewById(R.id.tv_edit_event_startDate);
         eventEndTimeTextView = view.findViewById(R.id.tv_edit_event_endTime);
+        maxAttendees = view.findViewById(R.id.et_max_attendees);
 
         //add more attributes
 
@@ -179,6 +181,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
             eventStartTimeTextView.setText(event.getStartTime());
             eventStartDateTextView.setText(event.getStartDate());
             eventEndTimeTextView.setText(event.getEndTime());
+            maxAttendees.setText((event.getMaxSignUps()));
             // Populate more attributes
         }
         else {
@@ -188,49 +191,8 @@ public class EventEditFragment extends Fragment implements MenuProvider {
             eventStartTimeTextView.setText("Start time");
             eventEndTimeTextView.setText("End Time");
         }
-        /**
-         * A Text Change Listener updates the event attributes when the edit text field is changed
-         */
-        /*eventNameEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                //not used would this be a problem ?
-            }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // Called to notify you that somewhere within charSequence, the text has been changed.
-                // Update the eventName attribute
-                if (event != null) {
-                    event.setName(s.toString());
-                }
-            }
-            @Override
-            public void afterTextChanged(Editable s) {
-                //not used , would this be a problem ?
-            }
 
-        });*/
-        /*eventLocationEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                //not used here
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // Called to notify you that somewhere within charSequence, the text has been changed.
-                // Update the eventName attribute
-                if (event != null) {
-                    event.setLocation(s.toString());
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                //not used here
-            }
-        });*/
         // Set an OnClickListener for the eventStartDateTextView
         eventStartDateTextView.setOnClickListener(v -> showDatePickerDialog());
 
@@ -254,7 +216,6 @@ public class EventEditFragment extends Fragment implements MenuProvider {
     @Override
     public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
         if (menuItem.getItemId() == R.id.saveOptionsMenu || menuItem.getItemId() == R.id.cancelOptionsMenu){
-            Object lock = new Object();
             if (menuItem.getItemId() == R.id.saveOptionsMenu){
 
                 // Update the event attribute
@@ -267,17 +228,14 @@ public class EventEditFragment extends Fragment implements MenuProvider {
                 event.setName(eventNameEditText.getText().toString());
                 event.setLocation(eventLocationEditText.getText().toString());
                 event.setOrganizerId(MainActivity.user.getUserId());
-                synchronized (lock) {
-                    if (event.getId() == null) {
-                        event.makeNewDocID();
-                    }
-                }
+                event.setMaxSignUps(Integer.valueOf(maxAttendees.getText().toString()));
 
+                if (event.getId() == null) {
+                    event.makeNewDocID();
+                }
 
                 event.sendToFirebase();
 
-
-                //TODO : update firebase info
                 //TODO : check valid input
             }
             Bundle args = new Bundle();
