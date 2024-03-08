@@ -2,7 +2,9 @@ package com.example.the_tarlords.ui.profile;
 
 import androidx.core.view.MenuProvider;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -28,7 +30,7 @@ import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.users.User;
 
-public class ProfileFragment extends Fragment implements MenuProvider, AddPhotoFragment.AddPhotoDialogListener {
+public class ProfileFragment extends Fragment implements MenuProvider {
     private User user = MainActivity.user;
 
     public static ProfileFragment newInstance() {
@@ -61,7 +63,23 @@ public class ProfileFragment extends Fragment implements MenuProvider, AddPhotoF
 
         Button addPhotoButton = view.findViewById(R.id.button_add_profile_photo);
         addPhotoButton.setOnClickListener(v -> {
-            new AddPhotoFragment(null).show(getSupportFragmentManager(), "Where would you like to upload a profile photo from?");
+            new AlertDialog.Builder(this.getContext())
+                    .setTitle("Where would you like to upload a profile photo from?")
+                    .setPositiveButton("Camera", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            TakePhotoActivity takePhoto = new TakePhotoActivity();
+                        }
+                    })
+                    .setNeutralButton("Gallery", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            UploadPhotoActivity uploadPhoto = new UploadPhotoActivity();
+                        }
+                    })
+                    .setNegativeButton("Cancel", null)
+                    .create()
+                    .show();
         });
     }
 
