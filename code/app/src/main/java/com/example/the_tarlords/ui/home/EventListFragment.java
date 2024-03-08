@@ -114,7 +114,7 @@ public class EventListFragment extends Fragment implements MenuProvider {
                                     if (task.isSuccessful()) {
                                         for (QueryDocumentSnapshot document : task.getResult()) {
                                             MainActivity.db.collection("Events/"+document.getId()+"/Attendance")
-                                                    .whereEqualTo("user", MainActivity.user.getId()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                    .whereEqualTo("user", MainActivity.user.getUserId()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                                         @Override
                                                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                                             if (task.isSuccessful()) {

@@ -29,7 +29,6 @@ import com.example.the_tarlords.data.attendance.Attendance;
 import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.users.Attendee;
 import com.example.the_tarlords.databinding.FragmentAttendanceListBinding;
-import com.example.the_tarlords.placeholder.PlaceholderContent;
 import com.example.the_tarlords.ui.event.EventDetailsFragment;
 import com.example.the_tarlords.ui.home.EventArrayAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;

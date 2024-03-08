@@ -1,3 +1,4 @@
+/*
 package com.example.the_tarlords.not_in_use;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,10 +13,12 @@ import com.example.the_tarlords.placeholder.PlaceholderContent.PlaceholderItem;
 
 import java.util.ArrayList;
 
+*/
 /**
  * {@link RecyclerView.Adapter} that can display a {@link PlaceholderItem}.
  * TODO: Replace the implementation with code for your data type.
- */
+ *//*
+
 public class AttendanceRecyclerViewAdapter extends RecyclerView.Adapter<AttendanceRecyclerViewAdapter.ViewHolder> {
 
     private final ArrayList<Attendee> attendees;
@@ -69,10 +72,12 @@ public class AttendanceRecyclerViewAdapter extends RecyclerView.Adapter<Attendan
           checkInStatus = binding.itemCheckInBox;
         }
 
-   /*     @Override
+   */
+/*     @Override
         public String toString() {
             return super.toString() + " '" + mContentView.getText() + "'";
         }
-    */
+    *//*
+
     }
-}
+}*/

@@ -15,9 +15,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import android.annotation.SuppressLint;
+import android.provider.Settings;
+import com.example.the_tarlords.MainActivity;
 import java.util.Map;
 
-public class User implements Profile{
+public class User implements Profile {
     private String userId;
     private String firstName;
     private String lastName;
@@ -38,18 +42,17 @@ public class User implements Profile{
         this.email = email;
         this.profilePhoto = new ProfilePhoto(firstName+lastName, null, firstName, lastName);
         this.profilePhoto.autoGenerate();
-        //TODO: add firebase integration for new users and for all update data methods
     }
 
     boolean isAdmin() {
         return false;
     }
 
-    public String getId() {
-        return userId;
+    public void (String userId) {
+        this.userId = userId;
     }
-    public void setId(String id) {
-        this.userId = id;
+    public String getUserId() {
+        return userId;
     }
 
     public String getFirstName() {

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
@@ -11,13 +12,12 @@ import android.view.Menu;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.the_tarlords.data.QR.QRScanActivity;
 import com.example.the_tarlords.data.users.User;
 import com.google.android.material.navigation.NavigationView;
+import com.example.the_tarlords.data.QR.QRScanActivity;
 
-import androidx.activity.result.ActivityResultLauncher;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -28,8 +28,9 @@ import com.example.the_tarlords.databinding.ActivityMainBinding;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.journeyapps.barcodescanner.ScanContract;
-import com.journeyapps.barcodescanner.ScanOptions;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import java.io.IOException;
 import java.util.Calendar;
@@ -39,10 +40,9 @@ public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     public static FirebaseFirestore db = FirebaseFirestore.getInstance();
-    //create a reference to the users collection
+    // Create a reference to the users collection
     CollectionReference usersRef = db.collection("Users");
 
-    //TODO: shouldn't be hardcoded by end
     public static User user;
     private static String userId;
     private static View hView;
@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
+
         setSupportActionBar(binding.appBarMain.toolbar);
         binding.appBarMain.scanQrButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,19 +142,6 @@ public class MainActivity extends AppCompatActivity {
         /**
          * slide out nav bar set-up
          * **/
-
-        //ImageView profilePhoto = hView.findViewById(R.id.profilePic);
-        //TextView name = hView.findViewById(R.id.profileName);
-        //TextView phoneNum = hView.findViewById(R.id.phoneNumber);
-        //TextView email = hView.findViewById(R.id.email);
-
-        //profilePhoto.setImageBitmap(MainActivity.user.getProfilePhoto().getBitmap());
-        //name.setText(MainActivity.user.getFirstName()+" "+MainActivity.user.getLastName());
-        //phoneNum.setText(MainActivity.user.getPhoneNum());
-        //email.setText(MainActivity.user.getEmail());
-
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.eventListFragment, R.id.eventOrganizerListFragment, R.id.profileFragment)
                 .setOpenableLayout(drawer)
                 .build();
@@ -161,8 +149,19 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
     }
-
+    
     // User id generator for the sharedPreferences stuff
+    @SuppressLint("HardwareIds")
+    private String generateNewUserId() {
+        // Replace with your user logic to generate an ID
+        return Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+    }
+    private void navigateToYourFirstFragment() {
+        // Replace 'YourFirstFragment' with the actual name of your first fragment
+        Navigation.findNavController(this, R.id.nav_host_fragment_content_main)
+                .navigate(R.id.action_eventListFragment_to_profileFragment);
+    }
+
     @SuppressLint("HardwareIds")
     private String generateNewUserId() {
         // Replace with your user logic to generate an ID
@@ -190,6 +189,10 @@ public class MainActivity extends AppCompatActivity {
             name.setText(user.getFirstName() + " " + user.getLastName());
             phoneNum.setText(user.getPhoneNum());
             email.setText(user.getEmail());
+        } else {
+            Log.e("debug", "User object is null");
+            // Handle the case where the User object is null
+            user = new User(userId,"khushi","null","780-111-1111","john.doe@ualberta.ca");
         } else {
             Log.e("debug", "User object is null");
             // Handle the case where the User object is null

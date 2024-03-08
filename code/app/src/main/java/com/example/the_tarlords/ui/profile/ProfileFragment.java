@@ -142,6 +142,7 @@ public class ProfileFragment extends Fragment implements MenuProvider {
                 user.getProfilePhoto().setBitmap(bitmap);
 
                 MainActivity.user.sendToFireStore();
+
                 MainActivity.updateNavigationDrawerHeader();
             }
             return true;

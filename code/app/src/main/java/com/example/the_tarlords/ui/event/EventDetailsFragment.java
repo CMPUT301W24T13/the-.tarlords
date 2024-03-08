@@ -124,7 +124,6 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
         }
     }
 
-    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
         if (menuItem.getItemId() == R.id.editOptionsMenu) {

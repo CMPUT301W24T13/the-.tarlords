@@ -92,7 +92,7 @@ public class EventOrganizerListFragment extends Fragment implements MenuProvider
                     events.clear();
                     //TODO: tried putting this in a different class but it wasn't working, maybe someone else will have better luck?
                     eventsRef
-                            .whereEqualTo("organizerId", MainActivity.user.getId())
+                            .whereEqualTo("organizerId", MainActivity.user.getUserId())
                             .get()
                             .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                 @Override

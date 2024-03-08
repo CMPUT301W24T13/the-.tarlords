@@ -69,7 +69,7 @@ public class EventList {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 MainActivity.db.collection("Events/"+document.getId()+"/Attendance")
-                                        .whereEqualTo("user", user.getId()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        .whereEqualTo("user", user.getUserId()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                             @Override
                                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                                 if (task.isSuccessful()) {
