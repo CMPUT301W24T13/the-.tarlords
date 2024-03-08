@@ -1,5 +1,7 @@
 package com.example.the_tarlords.ui.event;
 
+import static com.example.the_tarlords.MainActivity.db;
+
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -15,6 +17,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -32,6 +35,7 @@ import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.databinding.FragmentAttendanceListBinding;
 import com.example.the_tarlords.databinding.FragmentEventEditBinding;
 import com.example.the_tarlords.ui.attendance_page.AttendanceFragment;
+import com.google.firebase.firestore.DocumentReference;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -187,7 +191,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
         /**
          * A Text Change Listener updates the event attributes when the edit text field is changed
          */
-        eventNameEditText.addTextChangedListener(new TextWatcher() {
+        /*eventNameEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 //not used would this be a problem ?
@@ -206,8 +210,8 @@ public class EventEditFragment extends Fragment implements MenuProvider {
                 //not used , would this be a problem ?
             }
 
-        });
-        eventLocationEditText.addTextChangedListener(new TextWatcher() {
+        });*/
+        /*eventLocationEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 //not used here
@@ -226,7 +230,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
             public void afterTextChanged(Editable s) {
                 //not used here
             }
-        });
+        });*/
         // Set an OnClickListener for the eventStartDateTextView
         eventStartDateTextView.setOnClickListener(v -> showDatePickerDialog());
 
@@ -250,6 +254,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
     @Override
     public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
         if (menuItem.getItemId() == R.id.saveOptionsMenu || menuItem.getItemId() == R.id.cancelOptionsMenu){
+            Object lock = new Object();
             if (menuItem.getItemId() == R.id.saveOptionsMenu){
 
                 // Update the event attribute
@@ -261,6 +266,15 @@ public class EventEditFragment extends Fragment implements MenuProvider {
 
                 event.setName(eventNameEditText.getText().toString());
                 event.setLocation(eventLocationEditText.getText().toString());
+                event.setOrganizerId(MainActivity.user.getUserId());
+                synchronized (lock) {
+                    if (event.getId() == null) {
+                        event.makeNewDocID();
+                    }
+                }
+
+
+                event.sendToFirebase();
 
 
                 //TODO : update firebase info
@@ -271,6 +285,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
             args.putBoolean("isOrganizer", true);
             NavHostFragment.findNavController(EventEditFragment.this)
                     .navigate(R.id.action_eventEditFragment_to_eventDetailsFragment,args);
+
             return true;
         }
 

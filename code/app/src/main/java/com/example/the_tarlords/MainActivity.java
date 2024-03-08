@@ -1,27 +1,20 @@
 package com.example.the_tarlords;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import android.provider.Settings;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.the_tarlords.data.users.User;
-import com.example.the_tarlords.ui.profile.ProfileFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.example.the_tarlords.data.QR.QRScanActivity;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -32,13 +25,9 @@ import com.example.the_tarlords.databinding.ActivityMainBinding;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.journeyapps.barcodescanner.ScanContract;
-import com.journeyapps.barcodescanner.ScanOptions;
 
-
-import java.util.ArrayList;
-import java.util.UUID;
-
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -48,10 +37,10 @@ public class MainActivity extends AppCompatActivity {
     // Create a reference to the users collection
     CollectionReference usersRef = db.collection("Users");
 
-    //TODO: shouldn't be hardcoded by end
     public static User user;
-    private String userId;
-    private View hView;
+    private static String userId;
+    private static View hView;
+    private Object lock = new Object();
 
 
     private ActivityMainBinding binding;
@@ -62,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
 
 
         setSupportActionBar(binding.appBarMain.toolbar);
@@ -88,8 +76,8 @@ public class MainActivity extends AppCompatActivity {
         // Check if the device id is already generated and stored
         SharedPreferences preferences = getSharedPreferences("MyPreferences", MODE_PRIVATE);
         //you can get the user id if the user already has used the app once before , do what you need with it
-        //userId = preferences.getString("user_id", null);
-        userId = null;
+        userId = preferences.getString("user_id", null);
+        //userId = null;
         if (userId == null) {
             // user has not used app before
             // Generate a new user ID (you can use any logic to generate a unique ID)
@@ -100,9 +88,10 @@ public class MainActivity extends AppCompatActivity {
             editor.putString("user_id", userId);
             editor.apply();
             // the profile fields are going to have to be filled with some default info the first time, but the ID is the one we generated
-            user = new User(userId,"Khushi","Test","780-999-9999","khushi.test@ualberta.ca");
+            user = new User(userId,"First Name","Last Name","Phone Number","email");
+            //user.sendToFireStore();
             //upload default user info , with our user ID to fire base
-            addUserToFireStore(user);
+
             // Update UI with default user information
             updateNavigationDrawerHeader();
             // If it's the first launch, navigate to a different fragment
@@ -114,12 +103,17 @@ public class MainActivity extends AppCompatActivity {
             usersRef.whereEqualTo("userId", userId).get()
                     .addOnSuccessListener(querySnapshot -> {
                         if (!querySnapshot.isEmpty()) {
-                            // User found, documentSnapshot contains user data
-                            DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
-                            user = documentSnapshot.toObject(User.class);
-                            // Now you can use 'user' object
-                            // Update UI with default user information
-                            updateNavigationDrawerHeader();
+                            synchronized (lock) {
+                                // User found, documentSnapshot contains user data
+                                DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
+                                Log.d("debug", querySnapshot.getDocuments().get(0).toString() + "******************");
+                                user = documentSnapshot.toObject(User.class);
+                                lock.notifyAll();
+                                // Now you can use 'user' object
+                                // Update UI with default user information
+                                updateNavigationDrawerHeader();
+                            }
+
                         } else {
                             Log.d("debug", "didn't find a user");
                             // This is a case where user has used app on device but user info is not on firebase yet (my case, developer)
@@ -134,8 +128,14 @@ public class MainActivity extends AppCompatActivity {
                     });
 
         }
-
-
+        synchronized (lock) {
+            try {
+                lock.wait(300);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            setContentView(binding.getRoot());
+        }
 
         /**
          * slide out nav bar set-up
@@ -168,17 +168,19 @@ public class MainActivity extends AppCompatActivity {
     }
     private void navigateToYourFirstFragment() {
         // Replace 'YourFirstFragment' with the actual name of your first fragment
-        ProfileFragment fragment= new ProfileFragment();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.nav_host_fragment_content_main, fragment); // R.id.fragment_container is the ID of your fragment container
-        fragmentTransaction.addToBackStack(null); // Optional: adds the transaction to the back stack
-        fragmentTransaction.commit();
+        Navigation.findNavController(this, R.id.nav_host_fragment_content_main)
+                .navigate(R.id.action_eventListFragment_to_profileFragment);
     }
-    private void addUserToFireStore(User user){
+    /*private void addUserToFireStore(User user){
         // Add the new user document to Firestore
         //MAJOR NOTE THIS AUTOMATICALLY SETS THE DOC ID TO USER ID AND I DONT KNOW IF THAT WOULD BE A PROBLEM
-        usersRef.document(userId).set(user)
+        Map<String, Object> docData = new HashMap<>();
+        docData.put("userId", user.getUserId());
+        docData.put("firstName", user.getFirstName());
+        docData.put("lastName", user.getLastName());
+        docData.put("email", user.getEmail());
+        docData.put("phoneNum", user.getPhoneNum());
+        usersRef.document(userId).set(docData)
                 .addOnSuccessListener(aVoid -> {
                     // Document successfully added
                     Log.d("debug", "User added successfully to Firestore");
@@ -187,14 +189,14 @@ public class MainActivity extends AppCompatActivity {
                     // Handle the failure
                     Log.e("debug", "Error adding user to Firestore", e);
                 });
-    }
+    }*/
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.options_menu, menu);
         return true;
-    }
+    }*/
 
     /*@Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item){
@@ -209,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
-    private void updateNavigationDrawerHeader() {
+    public static void updateNavigationDrawerHeader() {
         // Set navigation drawer header information based on the user object
         if (user != null) {
             TextView name = hView.findViewById(R.id.profileName);

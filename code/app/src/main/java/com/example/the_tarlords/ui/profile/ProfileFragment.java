@@ -124,6 +124,10 @@ public class ProfileFragment extends Fragment implements MenuProvider {
                 phoneTV.setText(MainActivity.user.getPhoneNum());
                 emailTV.setText(MainActivity.user.getEmail());
 
+                MainActivity.user.sendToFireStore();
+
+                MainActivity.updateNavigationDrawerHeader();
+
                 //TODO: update firebase info
 
                 //TODO: update navigation menu header, check for invalid input or name input with more than one space

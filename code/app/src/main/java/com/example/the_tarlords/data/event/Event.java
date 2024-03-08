@@ -25,6 +25,7 @@ import com.google.firebase.firestore.AggregateQuery;
 import com.google.firebase.firestore.AggregateQuerySnapshot;
 import com.google.firebase.firestore.AggregateSource;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Filter;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -81,7 +82,7 @@ public class Event implements Attendance, Parcelable {
     public Event(String name, String location) {
         this.name = name;
         this.location = location;
-        this.id = makeNewDocID();
+        makeNewDocID();
     }
     public Event(String name, String location, String id) {
         this.name = name;
@@ -239,7 +240,7 @@ public class Event implements Attendance, Parcelable {
      */
     public void signUp(User user) {
         attendanceRef
-                .document(user.getId().toString())
+                .document(user.getUserId().toString())
                 .set(false)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -262,7 +263,7 @@ public class Event implements Attendance, Parcelable {
      */
     public void removeSignUp(User user) {
         attendanceRef
-                .document(user.getId().toString())
+                .document(user.getUserId().toString())
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -284,7 +285,7 @@ public class Event implements Attendance, Parcelable {
      */
     public void setCheckIn(User user, Boolean status) {
         attendanceRef
-                .document(user.getId().toString())
+                .document(user.getUserId().toString())
                 .set(status)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -319,35 +320,32 @@ public class Event implements Attendance, Parcelable {
 
     private String newDocID;
     public String makeNewDocID() {
-        db = getInstance();
-        eventsRef = db.collection("Events");
-
-        eventsRef.addSnapshotListener((querySnapshots, error) -> {
-            if (error != null) {
-                Log.e("Firestore", error.toString());
-                return;
-            }
-            if (querySnapshots != null) {
-                for (QueryDocumentSnapshot doc: querySnapshots) {
-                    AggregateQuery countQuery = eventsRef.count();
-                    countQuery.get(AggregateSource.SERVER).addOnCompleteListener(new OnCompleteListener<AggregateQuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AggregateQuerySnapshot> task) {
-                            if (task.isSuccessful()) {
-                                // Count fetched successfully
-                                AggregateQuerySnapshot snapshot = task.getResult();
-                                newDocID = String.valueOf((int)snapshot.getCount() + 1);
-                            } else {
-                                throw new RuntimeException("Could not find number of documents in FireBase");
-                            }
-                        }
-                    });
-                }
-            }
-        });
-        return newDocID;
+        DocumentReference ref = db.collection("Events").document();
+        id = ref.getId();
+        return id;
     }
+    public void sendToFirebase() {
+        // Add the new user document to Firestore
+        //MAJOR NOTE THIS AUTOMATICALLY SETS THE DOC ID TO USER ID AND I DONT KNOW IF THAT WOULD BE A PROBLEM
+        Map<String, Object> docData = new HashMap<>();
+        docData.put("id", id);
+        docData.put("name", name);
+        docData.put("location", location);
+        docData.put("startDate", startDate);
+        docData.put("startTime", startTime);
+        docData.put("endTime", endTime);
+        docData.put("organizerId",organizerId);
 
+        eventsRef.document(id).set(docData)
+                .addOnSuccessListener(aVoid -> {
+                    // Document successfully added
+                    Log.d("debug", "User added successfully to Firestore");
+                })
+                .addOnFailureListener(e -> {
+                    // Handle the failure
+                    Log.e("debug", "Error adding user to Firestore", e);
+                });
+    }
 
 
 
