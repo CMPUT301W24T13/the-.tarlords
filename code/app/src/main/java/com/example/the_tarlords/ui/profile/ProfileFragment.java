@@ -2,11 +2,14 @@ package com.example.the_tarlords.ui.profile;
 
 import androidx.core.view.MenuProvider;
 
+import android.app.Dialog;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -16,14 +19,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.users.User;
 
-public class ProfileFragment extends Fragment implements MenuProvider {
+public class ProfileFragment extends Fragment implements MenuProvider, AddPhotoFragment.AddPhotoDialogListener {
     private User user = MainActivity.user;
 
     public static ProfileFragment newInstance() {
@@ -53,16 +58,77 @@ public class ProfileFragment extends Fragment implements MenuProvider {
             phoneEditText.setText(user.getPhoneNum());
             emailEditText.setText(user.getEmail());
         }
+
+        Button addPhotoButton = view.findViewById(R.id.button_add_profile_photo);
+        addPhotoButton.setOnClickListener(v -> {
+            new AddPhotoFragment(null).show(getSupportFragmentManager(), "Where would you like to upload a profile photo from?");
+        });
     }
 
     @Override
     public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
         menu.clear();
         menuInflater.inflate(R.menu.options_menu, menu);
+        menu.findItem(R.id.editOptionsMenu).setVisible(true);
+    }
+
+    @Override
+    public void onPrepareMenu(@NonNull Menu menu) {
+        if(getView().findViewById(R.id.button_edit_profile).getVisibility() == getView().GONE) {
+            menu.findItem(R.id.editOptionsMenu).setVisible(false);
+            menu.findItem(R.id.saveOptionsMenu).setVisible(true);
+            menu.findItem(R.id.cancelOptionsMenu).setVisible(true);
+        } else {
+            menu.findItem(R.id.editOptionsMenu).setVisible(true);
+            menu.findItem(R.id.saveOptionsMenu).setVisible(false);
+            menu.findItem(R.id.cancelOptionsMenu).setVisible(false);
+        }
     }
 
     @Override
     public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
-        return false;
+        View view = getView();
+        ImageView profilePhotoImageView = view.findViewById(R.id.image_view_profile);
+        Button addProfilePhotoButton = view.findViewById(R.id.button_add_profile_photo);
+        EditText firstNameEditText = view.findViewById(R.id.edit_text_first_name);
+        EditText lastNameEditText = view.findViewById(R.id.edit_text_last_name);
+        EditText phoneEditText = view.findViewById(R.id.edit_text_phone);
+        EditText emailEditText = view.findViewById(R.id.edit_text_email);
+
+        if (menuItem.getItemId() == R.id.editOptionsMenu) {
+            profilePhotoImageView.setVisibility(View.INVISIBLE);
+            addProfilePhotoButton.setVisibility(View.VISIBLE);
+            firstNameEditText.setClickable(true);
+            lastNameEditText.setClickable(true);
+            phoneEditText.setClickable(true);
+            emailEditText.setClickable(true);
+
+            requireActivity().invalidateMenu();
+            return true;
+        } else {
+            profilePhotoImageView.setVisibility(View.VISIBLE);
+            addProfilePhotoButton.setVisibility(View.GONE);
+            firstNameEditText.setClickable(false);
+            lastNameEditText.setClickable(false);
+            phoneEditText.setClickable(false);
+            emailEditText.setClickable(false);
+
+            requireActivity().invalidateMenu();
+
+            if (menuItem.getItemId() == R.id.saveOptionsMenu) {
+                user.setFirstName(firstNameEditText.getText().toString());
+                user.setLastName(lastNameEditText.getText().toString());
+                user.setPhoneNum(phoneEditText.getText().toString());
+                user.setEmail(emailEditText.getText().toString());
+
+                Bitmap bitmap = ((BitmapDrawable)profilePhotoImageView.getDrawable()).getBitmap();
+                user.getProfilePhoto().setBitmap(bitmap);
+
+                MainActivity.user.sendToFireStore();
+                MainActivity.updateNavigationDrawerHeader();
+            }
+            return true;
+        }
+        //return false;
     }
 }
