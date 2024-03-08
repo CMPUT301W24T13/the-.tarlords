@@ -10,11 +10,13 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.the_tarlords.data.users.User;
 import com.google.android.material.navigation.NavigationView;
 import com.example.the_tarlords.data.QR.QRScanActivity;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -25,6 +27,8 @@ import com.example.the_tarlords.databinding.ActivityMainBinding;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.journeyapps.barcodescanner.ScanContract;
+import com.journeyapps.barcodescanner.ScanOptions;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -158,6 +162,25 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        binding.appBarMain.scanQrButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ScanOptions scanOptions = new ScanOptions();
+                barcodeLauncher.launch(scanOptions);
+            }
+
+            private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(
+                    new ScanContract(),
+                    result -> {
+                        if (result.getContents() != null) {
+                            Toast.makeText(getApplicationContext(), "scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(getApplicationContext(), "cancelled", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+            );
+        });
     }
 
     // User id generator for the sharedPreferences stuff
@@ -229,4 +252,5 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //Testing Version 1 -- Rimsha1111
+    //what if I just wanna sing and a popstar :( - Rxmsha
 }
