@@ -1,7 +1,6 @@
 package com.example.the_tarlords.ui.profile;
 
 import androidx.core.view.MenuProvider;
-import androidx.lifecycle.ViewModelProvider;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -20,12 +19,12 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.users.User;
-import com.example.the_tarlords.not_in_use.ProfileViewModel;
 
 public class ProfileFragment extends Fragment implements MenuProvider {
-    private User user;
+    private User user = MainActivity.user;
 
     public static ProfileFragment newInstance() {
         return new ProfileFragment();
