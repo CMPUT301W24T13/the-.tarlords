@@ -121,7 +121,7 @@ public class EventOrganizerListFragment extends Fragment implements MenuProvider
                 args.putParcelable("event",event);
                 args.putBoolean("isOrganizer", true);
                 NavHostFragment.findNavController(EventOrganizerListFragment.this)
-                        .navigate(R.id.action_eventOrganizerListFragment_to_eventDetailsFragment,args);
+                        .navigate(R.id.action_eventOrganizerListFragment_to_eventEditFragment,args);
             }
         });
     }
@@ -153,4 +153,6 @@ public class EventOrganizerListFragment extends Fragment implements MenuProvider
     }
 
     //TODO: implement add event (fab or options menu)
+
+
 }
