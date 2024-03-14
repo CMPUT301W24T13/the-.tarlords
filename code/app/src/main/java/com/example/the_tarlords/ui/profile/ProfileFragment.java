@@ -31,6 +31,8 @@ import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.photo.ProfilePhoto;
 import com.example.the_tarlords.data.users.User;
+import com.example.the_tarlords.databinding.FragmentEventListBinding;
+import com.example.the_tarlords.databinding.FragmentProfileBinding;
 
 public class ProfileFragment extends Fragment implements MenuProvider {
     private User user = MainActivity.user;
@@ -40,6 +42,7 @@ public class ProfileFragment extends Fragment implements MenuProvider {
     EditText lastNameEditText;
     EditText phoneEditText;
     EditText emailEditText;
+    FragmentProfileBinding binding;
     public ProfileFragment(){
     }
 
@@ -50,7 +53,9 @@ public class ProfileFragment extends Fragment implements MenuProvider {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+        binding = FragmentProfileBinding.inflate(inflater, container, false);
+        return binding.getRoot();
+        //return inflater.inflate(R.layout.fragment_profile, container, false);
     }
 
     @Override
@@ -112,7 +117,11 @@ public class ProfileFragment extends Fragment implements MenuProvider {
                     .show();
         });
     }
-
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
     @Override
     public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
         menu.clear();
