@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavOptions;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
@@ -141,20 +142,25 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
         if (menuItem.getItemId() == R.id.editOptionsMenu) {
             Bundle args = new Bundle();
             args.putParcelable("event",event);
-            NavHostFragment.findNavController(EventDetailsFragment.this)
-                    .navigate(R.id.action_eventDetailsFragment_to_eventEditFragment,args);
+            try {
+                NavHostFragment.findNavController(EventDetailsFragment.this)
+                        .navigate(R.id.action_eventDetailsFragment_to_eventEditFragment, args);
+            } catch (Exception ignored) {}
         }
         else if (menuItem.getItemId()==R.id.attendanceOptionsMenu) {
             Bundle args = new Bundle();
             args.putParcelable("event",event);
-            NavHostFragment.findNavController(EventDetailsFragment.this)
-                    .navigate(R.id.action_eventDetailsFragment_to_attendanceFragment,args);
+            try {
+                NavHostFragment.findNavController(EventDetailsFragment.this)
+                        .navigate(R.id.action_eventDetailsFragment_to_attendanceFragment, args);
+            } catch (Exception ignored) {}
         }else if (menuItem.getItemId()==R.id.showAnouncementsMenu){
             Bundle args = new Bundle();
             args.putParcelable("event",event);
-            NavHostFragment.findNavController(EventDetailsFragment.this)
-                    .navigate(R.id.action_eventDetailsFragment_to_alertFragment,args);
-
+            try {
+                NavHostFragment.findNavController(EventDetailsFragment.this)
+                        .navigate(R.id.action_eventDetailsFragment_to_alertFragment, args);
+            } catch (Exception ignored) {}
 
         }
         return false;

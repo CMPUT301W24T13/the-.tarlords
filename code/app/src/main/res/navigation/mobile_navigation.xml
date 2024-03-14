@@ -19,9 +19,6 @@
             app:destination="@id/eventListFragment"
             app:popUpTo="@id/eventListFragment" />
         <action
-            android:id="@+id/action_profileFragment_self"
-            app:destination="@id/profileFragment" />
-        <action
             android:id="@+id/action_profileFragment_to_eventBrowseFragment2"
             app:destination="@id/eventBrowseFragment"
             app:popUpTo="@id/eventBrowseFragment" />
@@ -46,7 +43,8 @@
         <action
             android:id="@+id/action_eventListFragment_to_profileFragment"
             app:destination="@id/profileFragment"
-            app:popUpTo="@id/profileFragment" />
+            app:popUpTo="@id/profileFragment"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_eventListFragment_to_eventBrowseFragment2"
             app:destination="@id/eventBrowseFragment"
@@ -59,6 +57,7 @@
         tools:layout="@layout/fragment_attendance_list" >
         <action
             android:id="@+id/action_attendanceFragment_pop"
+            app:launchSingleTop="true"
             app:popUpTo="@id/attendanceFragment"
             app:popUpToInclusive="true" />
     </fragment>
@@ -84,6 +83,7 @@
         tools:layout="@layout/fragment_event_edit" >
         <action
             android:id="@+id/action_eventEditFragment_pop"
+            app:launchSingleTop="true"
             app:popUpTo="@id/eventEditFragment"
             app:popUpToInclusive="true" />
     </fragment>
@@ -118,6 +118,7 @@
         tools:layout="@layout/fragment_alert">
         <action
             android:id="@+id/action_alertFragment_pop"
+            app:launchSingleTop="true"
             app:popUpTo="@id/alertFragment"
             app:popUpToInclusive="true" />
     </fragment>

@@ -68,12 +68,12 @@ public class EventOrganizerListFragment extends Fragment implements MenuProvider
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentEventListBinding.inflate(inflater, container, false);
-        requireActivity().addMenuProvider(this);
         return binding.getRoot();
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        requireActivity().addMenuProvider(this);
         ListView eventListView = view.findViewById(R.id.eventListView);
         Log.d("events list", events.toString()+"hello");
         //set adapter

@@ -34,7 +34,12 @@ import com.example.the_tarlords.data.users.User;
 
 public class ProfileFragment extends Fragment implements MenuProvider {
     private User user = MainActivity.user;
-
+    ImageView profilePhotoImageView;
+    Button addProfilePhotoButton;
+    EditText firstNameEditText;
+    EditText lastNameEditText;
+    EditText phoneEditText;
+    EditText emailEditText;
     public ProfileFragment(){
     }
 
@@ -52,11 +57,12 @@ public class ProfileFragment extends Fragment implements MenuProvider {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         requireActivity().addMenuProvider(this);
-        ImageView profilePhotoImageView = view.findViewById(R.id.image_view_profile);
-        EditText firstNameEditText = view.findViewById(R.id.edit_text_first_name);
-        EditText lastNameEditText = view.findViewById(R.id.edit_text_last_name);
-        EditText phoneEditText = view.findViewById(R.id.edit_text_phone);
-        EditText emailEditText = view.findViewById(R.id.edit_text_email);
+        profilePhotoImageView = view.findViewById(R.id.image_view_profile);
+        addProfilePhotoButton = view.findViewById(R.id.button_add_profile_photo);
+        firstNameEditText = view.findViewById(R.id.edit_text_first_name);
+        lastNameEditText = view.findViewById(R.id.edit_text_last_name);
+        phoneEditText = view.findViewById(R.id.edit_text_phone);
+        emailEditText = view.findViewById(R.id.edit_text_email);
 
         if (user != null) {
             //profilePhotoImageView.setImageBitmap(user.getProfilePhoto().getBitmap());
@@ -83,8 +89,7 @@ public class ProfileFragment extends Fragment implements MenuProvider {
             }
         }
 
-        Button addPhotoButton = view.findViewById(R.id.button_add_profile_photo);
-        addPhotoButton.setOnClickListener(v -> {
+        addProfilePhotoButton.setOnClickListener(v -> {
             new AlertDialog.Builder(this.getContext())
                     .setTitle("Where would you like to upload a profile photo from?")
                     .setPositiveButton("Camera", new DialogInterface.OnClickListener() {
@@ -116,25 +121,20 @@ public class ProfileFragment extends Fragment implements MenuProvider {
     }
     @Override
     public void onPrepareMenu(@NonNull Menu menu) {
-        if(getView().findViewById(R.id.button_add_profile_photo).getVisibility() != getView().GONE) {
-            menu.findItem(R.id.editOptionsMenu).setVisible(false);
-            menu.findItem(R.id.saveOptionsMenu).setVisible(true);
-            menu.findItem(R.id.cancelOptionsMenu).setVisible(true);
-        } else {
-            menu.findItem(R.id.editOptionsMenu).setVisible(true);
-            menu.findItem(R.id.saveOptionsMenu).setVisible(false);
-            menu.findItem(R.id.cancelOptionsMenu).setVisible(false);
-        }
+        try {
+            if (getView().findViewById(R.id.button_add_profile_photo).getVisibility() != getView().GONE) {
+                menu.findItem(R.id.editOptionsMenu).setVisible(false);
+                menu.findItem(R.id.saveOptionsMenu).setVisible(true);
+                menu.findItem(R.id.cancelOptionsMenu).setVisible(true);
+            } else {
+                menu.findItem(R.id.editOptionsMenu).setVisible(true);
+                menu.findItem(R.id.saveOptionsMenu).setVisible(false);
+                menu.findItem(R.id.cancelOptionsMenu).setVisible(false);
+            }
+        } catch (Exception ignore) {}
     }
     @Override
     public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
-        View view = getView();
-        ImageView profilePhotoImageView = view.findViewById(R.id.image_view_profile);
-        Button addProfilePhotoButton = view.findViewById(R.id.button_add_profile_photo);
-        EditText firstNameEditText = view.findViewById(R.id.edit_text_first_name);
-        EditText lastNameEditText = view.findViewById(R.id.edit_text_last_name);
-        EditText phoneEditText = view.findViewById(R.id.edit_text_phone);
-        EditText emailEditText = view.findViewById(R.id.edit_text_email);
 
         if (menuItem.getItemId() == R.id.editOptionsMenu) {
             profilePhotoImageView.setVisibility(View.INVISIBLE);
@@ -145,7 +145,7 @@ public class ProfileFragment extends Fragment implements MenuProvider {
             emailEditText.setClickable(true);
 
             requireActivity().invalidateMenu();
-            return true;
+            return false;
         } else {
             profilePhotoImageView.setVisibility(View.VISIBLE);
             addProfilePhotoButton.setVisibility(View.GONE);
@@ -173,7 +173,7 @@ public class ProfileFragment extends Fragment implements MenuProvider {
 
                 //TODO: update navigation menu header, check for invalid input or name input with more than one space
             }
-            return true;
+            return false;
 
         }
         //return false;

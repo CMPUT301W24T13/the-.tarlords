@@ -1,11 +1,8 @@
 package com.example.the_tarlords.ui.event;
 
-import static java.math.MathContext.UNLIMITED;
-
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.res.Resources;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -30,7 +27,6 @@ import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.QR.QRCode;
 import com.example.the_tarlords.data.event.Event;
-import com.example.the_tarlords.data.users.Organizer;
 import com.example.the_tarlords.databinding.FragmentEventEditBinding;
 
 /**
@@ -262,10 +258,11 @@ public class EventEditFragment extends Fragment implements MenuProvider {
             Bundle args = new Bundle();
             args.putParcelable("event", event);
             args.putBoolean("isOrganizer", true);
-            NavHostFragment.findNavController(EventEditFragment.this)
-                    .navigate(R.id.action_eventEditFragment_pop, args);
-
-            return true;
+            try {
+                NavHostFragment.findNavController(EventEditFragment.this)
+                        .navigate(R.id.action_eventEditFragment_pop, args);
+            } catch (Exception ignored) {}
+            return false;
         }
 
         return false;

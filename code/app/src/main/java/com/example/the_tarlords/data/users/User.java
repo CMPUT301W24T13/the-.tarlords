@@ -142,6 +142,7 @@ public class User implements Profile {
         docData.put("lastName", lastName);
         docData.put("email", email);
         docData.put("phoneNum", phoneNum);
+        //docData.put("profilePhoto", profilePhoto.getBitmap());
         usersRef.document(userId).set(docData)
                 .addOnSuccessListener(aVoid -> {
                     // Document successfully added

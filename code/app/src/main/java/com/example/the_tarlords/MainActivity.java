@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
             //user has been here before
             String finalUserId = userId;
             Log.d("debug", userId);
-            usersRef.whereEqualTo("userId", userId).get()
+            Thread thread = new Thread(() -> {usersRef.whereEqualTo("userId", userId).get()
                     .addOnSuccessListener(querySnapshot -> {
                         if (!querySnapshot.isEmpty()) {
                             synchronized (lock) {
@@ -151,17 +151,12 @@ public class MainActivity extends AppCompatActivity {
                     .addOnFailureListener(e -> {
                         // Handle failure
                         Log.e("debug", "failed to get the document",e);
-                    });
+                    });});
+            thread.start();
 
         }
-        synchronized (lock) {
-            try {
-                lock.wait(500);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            setContentView(binding.getRoot());
-        }
+
+        setContentView(binding.getRoot());
 
 
         // Passing each menu ID as a set of Ids because each
