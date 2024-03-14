@@ -26,13 +26,11 @@ public class User implements Profile {
     private String firstName;
     private String lastName;
     private ProfilePhoto profilePhoto;
+    private String profilePhotoData;
     private String phoneNum;
     private String email;
     private CollectionReference usersRef = MainActivity.db.collection("Users");
-    //private Profile profile;
-    //private ArrayList<Event> events;
-    //private AlertList alerts;
-    //TODO : need UID generator
+
 
     public User() {
     }
@@ -62,37 +60,7 @@ public class User implements Profile {
         return userId;
     }
 
-    public void setUserId(String id) {
-        this.userId = id;
-    }
-
-    /*public Profile getProfile() {
-        return profile;
-    }
-    public void setProfile(Profile profile) {
-        this.profile = profile;
-    }*/
-    /*
-    public void editProfile() {
-        //to be implemented
-    }
-    */
-
-    /*public ArrayList<Event> getEvents() {
-        return events;
-    }
-    public void setAttendingEvents(ArrayList<Event> events) {
-        this.events = events;
-    }
-
-    public AlertList getAlerts() {
-        return alerts;
-    }
-    public void setAlerts(AlertList alerts) {
-        this.alerts = alerts;
-    }
-*/
-
+    public void setUserId(String id) {this.userId = id;}
 
     public String getFirstName() {
         return firstName;
@@ -117,6 +85,25 @@ public class User implements Profile {
         this.profilePhoto = profilePhoto;
     }
 
+    /**
+     * Sets profile photo from firestore by converting the base 64 string stored in firestore
+     * to a bitmask, then setting the profile photo to have that bitmask.
+     * @param photoB64 base64 string of photo data
+     */
+    public void setProfilePhotoFromData(String photoB64) {
+        profilePhoto = new ProfilePhoto(firstName+lastName,null,firstName,lastName);
+        profilePhoto.setBitmapFromPhotoData(photoB64);
+        profilePhotoData=photoB64;
+    }
+    /**
+     * Gets profile photo data firestore by converting the base 64 string stored in firestore
+     * to a bitmask, then setting the profile photo to have that bitmask.
+     * @return String base 64 profile photo data
+     */
+    public String getProfilePhotoData() {
+        return profilePhotoData;
+    }
+
     public String getPhoneNum() {
         return phoneNum;
     }
@@ -135,14 +122,13 @@ public class User implements Profile {
 
     public void sendToFireStore() {
         // Add the new user document to Firestore
-        //MAJOR NOTE THIS AUTOMATICALLY SETS THE DOC ID TO USER ID AND I DONT KNOW IF THAT WOULD BE A PROBLEM
         Map<String, Object> docData = new HashMap<>();
         docData.put("userId", userId);
         docData.put("firstName", firstName);
         docData.put("lastName", lastName);
         docData.put("email", email);
         docData.put("phoneNum", phoneNum);
-        //docData.put("profilePhoto", profilePhoto.getBitmap());
+        docData.put("profilePhotoData", profilePhoto.getPhotoDataFromBitmap()); //stores profile photo data as base 64 string
         usersRef.document(userId).set(docData)
                 .addOnSuccessListener(aVoid -> {
                     // Document successfully added

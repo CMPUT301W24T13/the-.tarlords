@@ -246,7 +246,13 @@ public class MainActivity extends AppCompatActivity {
                 Bitmap bitmap = user.getProfilePhoto().getBitmap();
                 profilePic.setImageBitmap(bitmap);
             }
-        } else {
+            else if (user.getProfilePhotoData() != null) {
+                user.setProfilePhotoFromData(user.getProfilePhotoData());
+                Bitmap bitmap = user.getProfilePhoto().getBitmap();
+                profilePic.setImageBitmap(bitmap);
+            }
+        }
+        else {
             Log.e("debug", "User object is null");
             // Handle the case where the User object is null
             user = new User(userId,"khushi","null","780-111-1111","john.doe@ualberta.ca");
