@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavOptions;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
@@ -36,19 +37,20 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
     private boolean isOrganizer;
     private FragmentEventDetailsBinding binding;
 
+    /**
+     * Required empty public constructor.
+     */
     public EventDetailsFragment() {
-        // Required empty public constructor
     }
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param event event to be displayed.
+     * @param isOrganizer whether or not the user has organizer permissions for this event.
      * @return A new instance of fragment EventDetailsFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static EventDetailsFragment newInstance(Event event, boolean isOrganizer) {
         EventDetailsFragment fragment = new EventDetailsFragment();
         Bundle args = new Bundle();
@@ -61,7 +63,6 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //TODO: If organizer status == true, setMenuVisibility(true)
         if (getArguments() != null) {
             event = getArguments().getParcelable("event");
             isOrganizer = getArguments().getBoolean("isOrganizer");
@@ -80,23 +81,25 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
      *
      * @return
      */
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentEventDetailsBinding.inflate(inflater, container, false);
-
         return binding.getRoot();
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        //MANDATORY: required for MenuProvider options menu
         requireActivity().addMenuProvider(this);
+
+        //set fragment views
         TextView eventNameTextView = view.findViewById(R.id.tv_event_name);
         TextView eventLocationTextView = view.findViewById(R.id.tv_event_location);
         TextView eventStartDateTextView = view.findViewById(R.id.tv_event_startDate);
         TextView eventStartTimeTextView = view.findViewById(R.id.tv_event_startTime);
         TextView eventEndTimeTextView = view.findViewById(R.id.tv_event_endTime);
         TextView eventMaxAttendees = view.findViewById(R.id.tv_max_attendees);
+        //add additional views here as desired
 
         // Check if event is not null before accessing its attributes
         if (event != null) {
@@ -105,12 +108,16 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
             eventStartTimeTextView.setText(event.getStartTime());
             eventStartDateTextView.setText(event.getStartDate());
             eventEndTimeTextView.setText(event.getEndTime());
+            // set additional fields here as desired
+
             try {
+                //TODO: this is kinda broken
                 eventMaxAttendees.setText("Max Attendees: " + event.getMaxSignUps().toString());
             } catch (Exception ignored) {
             }
-            // Set other attributes similarly
         }
+
+        //display event QR codes if user has organizer perms
         if (isOrganizer == true) {
             if (event.getQrCodeCheckIns()!=null){
                 view.findViewById(R.id.tv_checkin_details).setVisibility(view.VISIBLE);
@@ -125,38 +132,68 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
         }
     }
 
+    /**
+     * Mandatory MenuProvider interface method.
+     * Displays options menu for details fragment dependant on user status (organizer or attendee)
+     * @param menu         the menu to inflate the new menu items into
+     * @param menuInflater the inflater to be used to inflate the updated menu
+     */
     @Override
     public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
         menu.clear();
+
+        //link options menu xml
         menuInflater.inflate(R.menu.options_menu, menu);
+
+        //if user is the organizer, display edit and attendance icons
         if (isOrganizer) {
             menu.findItem(R.id.editOptionsMenu).setVisible(true);
             menu.findItem(R.id.attendanceOptionsMenu).setVisible(true);
         }
+
+        //display announcement icon for all users
         menu.findItem(R.id.showAnouncementsMenu).setVisible(true);
     }
 
+    /**
+     * Mandatory MenuProvider interface method.
+     * Handles fragment navigation depending on which menu item was pressed.
+     * @param menuItem the menu item that was selected
+     * @return
+     */
     @Override
     public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+        //try/catch around all navigation actions in order to prevent crashes
+
+        //navigate to edit fragment
         if (menuItem.getItemId() == R.id.editOptionsMenu) {
             Bundle args = new Bundle();
             args.putParcelable("event",event);
-            NavHostFragment.findNavController(EventDetailsFragment.this)
-                    .navigate(R.id.action_eventDetailsFragment_to_eventEditFragment,args);
+            try {
+                NavHostFragment.findNavController(EventDetailsFragment.this)
+                        .navigate(R.id.action_eventDetailsFragment_to_eventEditFragment, args);
+            } catch (Exception ignored) {}
         }
+        //navigate to attendance fragment
         else if (menuItem.getItemId()==R.id.attendanceOptionsMenu) {
             Bundle args = new Bundle();
             args.putParcelable("event",event);
-            NavHostFragment.findNavController(EventDetailsFragment.this)
-                    .navigate(R.id.action_eventDetailsFragment_to_attendanceFragment,args);
-        }else if (menuItem.getItemId()==R.id.showAnouncementsMenu){
+            try {
+                NavHostFragment.findNavController(EventDetailsFragment.this)
+                        .navigate(R.id.action_eventDetailsFragment_to_attendanceFragment, args);
+            } catch (Exception ignored) {}
+        }
+        //navigate to announcements fragment
+        else if (menuItem.getItemId()==R.id.showAnouncementsMenu){
             Bundle args = new Bundle();
             args.putParcelable("event",event);
-            NavHostFragment.findNavController(EventDetailsFragment.this)
-                    .navigate(R.id.action_eventDetailsFragment_to_alertFragment,args);
-
+            try {
+                NavHostFragment.findNavController(EventDetailsFragment.this)
+                        .navigate(R.id.action_eventDetailsFragment_to_alertFragment, args);
+            } catch (Exception ignored) {}
 
         }
+        //should return false to prevent crashing
         return false;
 
     }

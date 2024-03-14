@@ -1,11 +1,8 @@
 package com.example.the_tarlords.ui.event;
 
-import static java.math.MathContext.UNLIMITED;
-
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.res.Resources;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -30,7 +27,6 @@ import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.QR.QRCode;
 import com.example.the_tarlords.data.event.Event;
-import com.example.the_tarlords.data.users.Organizer;
 import com.example.the_tarlords.databinding.FragmentEventEditBinding;
 
 /**
@@ -175,31 +171,37 @@ public class EventEditFragment extends Fragment implements MenuProvider {
         checkInQR = view.findViewById(R.id.iv_checkin);
         eventInfoQR = view.findViewById(R.id.iv_info);
 
-        //add more attributes
+        //add more attributes as desired
 
-        // Populate UI elements with event details
+        //check event is not null
         if (event.getId() != null) {
+            // Populate UI elements with event details
             eventNameEditText.setText(event.getName());
             eventLocationEditText.setText(event.getLocation());
             eventStartTimeTextView.setText(event.getStartTime());
             eventStartDateTextView.setText(event.getStartDate());
             eventEndTimeTextView.setText(event.getEndTime());
             maxAttendees.setText(event.getMaxSignUps().toString());
-
-            // Populate more attributes
-        } else {
+            // Populate more attributes as desired
+        }
+        //if event is null, create new event
+        else {
+            //set placeholder data
             eventNameEditText.setHint("Event Name");
             eventLocationEditText.setHint("Location");
             eventStartDateTextView.setText("Date");
             eventStartTimeTextView.setText("Start time");
             eventEndTimeTextView.setText("End Time");
         }
+        //check if QR codes have already been generated
         if (event.getQrCodeCheckIns() == null) {
+            //hide QR code placeholder views
             view.findViewById(R.id.tv_checkin).setVisibility(view.GONE);
             view.findViewById(R.id.tv_info).setVisibility(view.GONE);
             checkInQR.setVisibility(view.GONE);
             eventInfoQR.setVisibility(view.GONE);
         } else {
+            //display QR codes
             QRCode.generateQR("CI" + event.getId(), checkInQR);
             QRCode.generateQR("EI" + event.getId(), eventInfoQR);
         }
@@ -215,38 +217,54 @@ public class EventEditFragment extends Fragment implements MenuProvider {
         eventEndTimeTextView.setOnClickListener(v -> showTimePickerDialog("end"));
     }
 
+    /**
+     * Mandatory MenuProvider interface method.
+     * Displays eventEditFragment options menu.
+     * @param menu         the menu to inflate the new menu items into
+     * @param menuInflater the inflater to be used to inflate the updated menu
+     */
     @Override
     public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
         menu.clear();
         menuInflater.inflate(R.menu.options_menu, menu);
-        menu.findItem(R.id.editOptionsMenu).setVisible(false);
-        menu.findItem(R.id.attendanceOptionsMenu).setVisible(false);
         menu.findItem(R.id.saveOptionsMenu).setVisible(true);
         menu.findItem(R.id.cancelOptionsMenu).setVisible(true);
     }
 
+    /**
+     * Mandatory MenuProvider interface method.
+     * @param menuItem the menu item that was selected
+     * @return
+     */
     @Override
     public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
         if (menuItem.getItemId() == R.id.saveOptionsMenu || menuItem.getItemId() == R.id.cancelOptionsMenu) {
+            //save changes to event details
             if (menuItem.getItemId() == R.id.saveOptionsMenu) {
 
-                // Update the event attribute
+                // Update the event startDate
                 event.setStartDate(eventStartDateTextView.getText().toString());
-                //update event attribute
+                //update event startTime
                 event.setStartTime(eventStartTimeTextView.getText().toString());
-                //update event attribute
+                //update event endTime
                 event.setEndTime(eventEndTimeTextView.getText().toString());
-
+                //update event name
                 event.setName(eventNameEditText.getText().toString());
+                //update event location
                 event.setLocation(eventLocationEditText.getText().toString());
+                //update event organizerId
                 event.setOrganizerId(MainActivity.user.getUserId());
+                //update event maxSignUps
                 try {
+                    //TODO: kinda buggy iirc
                     event.setMaxSignUps(Integer.valueOf(maxAttendees.getText().toString()));
                 } catch (IllegalStateException e) {
                     //event.setMaxSignUps(0);
                 }
 
+                //if eventId is null, treat as new event and generate a new id
                 if (event.getId() == null) {
+                    //generate new event id
                     event.makeNewDocID();
                     //generate check in QR
                     event.setQrCodeCheckIns("CI" + event.getId());
@@ -254,18 +272,21 @@ public class EventEditFragment extends Fragment implements MenuProvider {
                     event.setQrCodePromo("EI" + event.getId());
 
                 }
-
+                //upload event in firebase
                 event.sendToFirebase();
 
                 //TODO : check valid input
             }
+            //navigate back to event details fragment
+            //try/catch to prevent crashes
             Bundle args = new Bundle();
             args.putParcelable("event", event);
             args.putBoolean("isOrganizer", true);
-            NavHostFragment.findNavController(EventEditFragment.this)
-                    .navigate(R.id.action_eventEditFragment_pop, args);
-
-            return true;
+            try {
+                NavHostFragment.findNavController(EventEditFragment.this)
+                        .navigate(R.id.action_eventEditFragment_pop, args);
+            } catch (Exception ignored) {}
+            return false; //required to prevent crashes
         }
 
         return false;
