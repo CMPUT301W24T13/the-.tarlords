@@ -195,8 +195,10 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.nav_host_fragment_content_main, fragment); // R.id.fragment_container is the ID of your fragment container
         fragmentTransaction.addToBackStack(null); // Optional: adds the transaction to the back stack
         fragmentTransaction.commit();*/
+        Bundle args = new Bundle();
+        args.putParcelable("event", event);
         Navigation.findNavController(this,R.id.nav_host_fragment_content_main)
-                .navigate(R.id.action_eventFragment_to_eventDetailsFragment);
+                .navigate(R.id.action_eventFragment_to_eventDetailsFragment, args);
     }
 
 
@@ -204,7 +206,6 @@ public class MainActivity extends AppCompatActivity {
      * Redirects user to profile fragment.
      */
     private void navigateToProfileFragment() {
-        // Replace 'YourFirstFragment' with the actual name of your first fragment
         /*ProfileFragment fragment = ProfileFragment.newInstance();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
