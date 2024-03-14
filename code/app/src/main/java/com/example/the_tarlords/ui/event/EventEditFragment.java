@@ -57,6 +57,8 @@ public class EventEditFragment extends Fragment implements MenuProvider {
     //add the event poster to be able to edit the poster
     //event poster doenst need to be connected to event details. Make poster connected to event so
     //when QR -> event <- event detials
+    // Define a class member variable to hold the menu
+    private Menu menu;
 
 
     public EventEditFragment() {
@@ -84,6 +86,20 @@ public class EventEditFragment extends Fragment implements MenuProvider {
             event = getArguments().getParcelable("event");
         }
     }
+
+    /**
+     * Method to set all text and edit views to "Non editable" or "editable"
+     * TODO are the QR codes ever editable?
+     */
+    private void setTextViewsClickablity(Boolean isEditable) {
+        eventStartDateTextView.setClickable(isEditable);
+        eventStartTimeTextView.setClickable(isEditable);
+        eventEndTimeTextView.setClickable(isEditable);
+        eventLocationEditText.setEnabled(isEditable);
+        eventNameEditText.setEnabled(isEditable);
+        maxAttendees.setEnabled(isEditable);
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -244,17 +260,25 @@ public class EventEditFragment extends Fragment implements MenuProvider {
      */
     @Override
     public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+        this.menu = menu; //store the menu
         menu.clear();
         menuInflater.inflate(R.menu.options_menu, menu);
-        menu.findItem(R.id.saveOptionsMenu).setVisible(true);
-        menu.findItem(R.id.cancelOptionsMenu).setVisible(true);
+        //set visibility of menu options
+        menu.findItem(R.id.saveOptionsMenu).setVisible(false);
+        menu.findItem(R.id.cancelOptionsMenu).setVisible(false);
+        menu.findItem(R.id.editOptionsMenu).setVisible(true);
+
+        //set clickability of views and edit texts
+        setTextViewsClickablity(false);
     }
 
     /**
      * Mandatory MenuProvider interface method.
+     * This shouldn't save changes if cancelOptions menu is selected
      * @param menuItem the menu item that was selected
      * @return
      */
+    // TODO: when an event is saved duplicate events show up?
     @Override
     public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
         if (menuItem.getItemId() == R.id.saveOptionsMenu || menuItem.getItemId() == R.id.cancelOptionsMenu) {
@@ -311,6 +335,16 @@ public class EventEditFragment extends Fragment implements MenuProvider {
                         .navigate(R.id.action_eventEditFragment_pop, args);
             } catch (Exception ignored) {}
             return false; //required to prevent crashes
+        }else if (menuItem.getItemId() == R.id.editOptionsMenu) {
+            //set visibility of menu options
+            menu.findItem(R.id.saveOptionsMenu).setVisible(true);
+            menu.findItem(R.id.cancelOptionsMenu).setVisible(true);
+            menu.findItem(R.id.editOptionsMenu).setVisible(false);
+
+            //set clickability of views and edit texts
+            setTextViewsClickablity(true);
+            return true;
+
         }
 
         return false;
