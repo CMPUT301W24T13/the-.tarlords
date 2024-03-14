@@ -12,6 +12,7 @@ import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.event.EventPoster;
 import com.example.the_tarlords.data.map.Map;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 //Notes for myself(Rimsha): Finish the methods once others are done their parts
@@ -30,8 +31,8 @@ public class Organizer extends Attendee implements OrgPerms {
      * @param profile
      * @param event
      */
-    public Organizer(String id, String firstName, String lastName, String phoneNum, String email, Profile profile, Event event) {
-        super(id, firstName, lastName, phoneNum, email , event);
+    public Organizer(String userId, String firstName, String lastName, String phoneNum, String email, Event event) throws IOException {
+        super(userId, firstName, lastName, phoneNum, email, event);
     }
 
     /**
@@ -50,8 +51,9 @@ public class Organizer extends Attendee implements OrgPerms {
      * @return a new event
      */
     @Override
-    public Event createEvent(String name, String location) {
-        Event event = new Event(name, location);
+    public Event createEvent(String name, String location, String id, String startTime, String endTime, String startDate) {
+        Event event = new Event(name, location, id, startTime, endTime, startDate);
+
         return event;
     }
 
@@ -67,7 +69,7 @@ public class Organizer extends Attendee implements OrgPerms {
     public QRCode genQRCodeForCheckIns(Event event, String text, ImageView imageView) {
         QRCode qrCode = new QRCode();
         qrCode.generateQR(text, imageView);
-        event.setQrCodeCheckIns(qrCode);
+        event.setQrCodeCheckIns(qrCode.toString());
         return qrCode;
     }
 
@@ -147,7 +149,7 @@ public class Organizer extends Attendee implements OrgPerms {
     public QRCode genUniquePromotionQRCode(Event event, String text, ImageView imageView) {
         QRCode qrCode = new QRCode();
         qrCode.generateQR(text, imageView);
-        event.setQrCodePromo(qrCode);
+        event.setQrCodePromo(qrCode.toString());
         return qrCode;
     }
 
