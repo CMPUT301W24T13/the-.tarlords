@@ -1,5 +1,6 @@
 package com.example.the_tarlords.ui.profile;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.core.view.MenuProvider;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -45,7 +46,15 @@ public class ProfileFragment extends Fragment implements MenuProvider {
     FragmentProfileBinding binding;
     public ProfileFragment(){
     }
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
+        if (getArguments() != null) {
+            //parse any arguments passed into fragment here
+        }
+
+    }
     public static ProfileFragment newInstance() {
         return new ProfileFragment();
     }
@@ -55,36 +64,38 @@ public class ProfileFragment extends Fragment implements MenuProvider {
                              @Nullable Bundle savedInstanceState) {
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         return binding.getRoot();
-        //return inflater.inflate(R.layout.fragment_profile, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        //MANDATORY for MenuProvider implementation
         requireActivity().addMenuProvider(this);
+
+        //find fragment views
         profilePhotoImageView = view.findViewById(R.id.image_view_profile);
         addProfilePhotoButton = view.findViewById(R.id.button_add_profile_photo);
         firstNameEditText = view.findViewById(R.id.edit_text_first_name);
         lastNameEditText = view.findViewById(R.id.edit_text_last_name);
         phoneEditText = view.findViewById(R.id.edit_text_phone);
         emailEditText = view.findViewById(R.id.edit_text_email);
+        //add more views here as desired
 
+        //set content for views in fragment
         if (user != null) {
-            //profilePhotoImageView.setImageBitmap(user.getProfilePhoto().getBitmap());
-            //firstNameEditText.setText(user.getFirstName());
-            //lastNameEditText.setText(user.getLastName());
-            //phoneEditText.setText(user.getPhoneNum());
-            //emailEditText.setText(user.getEmail());
-            //}
+
             firstNameEditText.setText(user.getFirstName());
             lastNameEditText.setText(user.getLastName());
             phoneEditText.setText(user.getPhoneNum());
             emailEditText.setText(user.getEmail());
+            //set additional views content here as desired
 
-            if (user.getProfilePhoto() != null) {
+            if (user.getProfilePhoto() != null) { //display user's profile photo if not null
                 profilePhotoImageView.setImageBitmap(user.getProfilePhoto().getBitmap());
 
-            } else {
+            }
+            else { //if user does not have a profile photo, generate one
                 ProfilePhoto profilePhoto = new ProfilePhoto(user.getFirstName() + user.getLastName(),
                         null, user.getFirstName(), user.getLastName());
                 profilePhoto.autoGenerate();
@@ -94,6 +105,7 @@ public class ProfileFragment extends Fragment implements MenuProvider {
             }
         }
 
+        //for user to add or update profile photo
         addProfilePhotoButton.setOnClickListener(v -> {
             new AlertDialog.Builder(this.getContext())
                     .setTitle("Where would you like to upload a profile photo from?")
@@ -122,15 +134,29 @@ public class ProfileFragment extends Fragment implements MenuProvider {
         super.onDestroyView();
         binding = null;
     }
+
+    /**
+     * Required method for MenuProvider interface.
+     * Creates initial state of options menu.
+     * @param menu         the menu to inflate the new menu items into
+     * @param menuInflater the inflater to be used to inflate the updated menu
+     */
     @Override
     public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
         menu.clear();
         menuInflater.inflate(R.menu.options_menu, menu);
         menu.findItem(R.id.editOptionsMenu).setVisible(true);
     }
+
+    /**
+     * Optional method for MenuProvider interface.
+     * Recreates menu after it is invalidated (in onMenuItemSelected).
+     * Used to update menu icons after an option is selected.
+     * @param menu the menu that is to be prepared
+     */
     @Override
     public void onPrepareMenu(@NonNull Menu menu) {
-        try {
+        if (isAdded() && getContext() != null) { //bug fix for IllegalStateException: Fragment not attached to an activity
             if (getView().findViewById(R.id.button_add_profile_photo).getVisibility() != getView().GONE) {
                 menu.findItem(R.id.editOptionsMenu).setVisible(false);
                 menu.findItem(R.id.saveOptionsMenu).setVisible(true);
@@ -140,51 +166,63 @@ public class ProfileFragment extends Fragment implements MenuProvider {
                 menu.findItem(R.id.saveOptionsMenu).setVisible(false);
                 menu.findItem(R.id.cancelOptionsMenu).setVisible(false);
             }
-        } catch (Exception ignore) {}
+        }
     }
+
+    /**
+     * Required method for MenuProvider interface.
+     * On click listener for options menu.
+     * @param menuItem the menu item that was selected
+     * @return Boolean false
+     */
     @Override
     public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+        if (isAdded() && getContext() != null) { //bug fix for IllegalStateException: Fragment not attached to an activity
+            if (menuItem.getItemId() == R.id.editOptionsMenu) {
+                profilePhotoImageView.setVisibility(View.INVISIBLE);
+                addProfilePhotoButton.setVisibility(View.VISIBLE);
+                firstNameEditText.setClickable(true);
+                lastNameEditText.setClickable(true);
+                phoneEditText.setClickable(true);
+                emailEditText.setClickable(true);
 
-        if (menuItem.getItemId() == R.id.editOptionsMenu) {
-            profilePhotoImageView.setVisibility(View.INVISIBLE);
-            addProfilePhotoButton.setVisibility(View.VISIBLE);
-            firstNameEditText.setClickable(true);
-            lastNameEditText.setClickable(true);
-            phoneEditText.setClickable(true);
-            emailEditText.setClickable(true);
+                requireActivity().invalidateMenu(); //required in order to call onPrepareMenu() and repopulate menu with new options
+                return false;
+            }
+            else if (menuItem.getItemId() == R.id.saveOptionsMenu || menuItem.getItemId() == R.id.cancelOptionsMenu) {
+                profilePhotoImageView.setVisibility(View.VISIBLE);
+                addProfilePhotoButton.setVisibility(View.GONE);
+                firstNameEditText.setClickable(false);
+                lastNameEditText.setClickable(false);
+                phoneEditText.setClickable(false);
+                emailEditText.setClickable(false);
 
-            requireActivity().invalidateMenu();
-            return false;
-        } else {
-            profilePhotoImageView.setVisibility(View.VISIBLE);
-            addProfilePhotoButton.setVisibility(View.GONE);
-            firstNameEditText.setClickable(false);
-            lastNameEditText.setClickable(false);
-            phoneEditText.setClickable(false);
-            emailEditText.setClickable(false);
+                requireActivity().invalidateMenu(); //required in order to call onPrepareMenu() and repopulate menu with new options
 
-            requireActivity().invalidateMenu();
+                //if save button selected, update user info and send to firestore
+                if (menuItem.getItemId() == R.id.saveOptionsMenu) {
+                    user.setFirstName(firstNameEditText.getText().toString());
+                    user.setLastName(lastNameEditText.getText().toString());
+                    user.setPhoneNum(phoneEditText.getText().toString());
+                    user.setEmail(emailEditText.getText().toString());
 
-            if (menuItem.getItemId() == R.id.saveOptionsMenu) {
-                user.setFirstName(firstNameEditText.getText().toString());
-                user.setLastName(lastNameEditText.getText().toString());
-                user.setPhoneNum(phoneEditText.getText().toString());
-                user.setEmail(emailEditText.getText().toString());
 
-                Bitmap bitmap = ((BitmapDrawable)profilePhotoImageView.getDrawable()).getBitmap();
-                user.getProfilePhoto().setBitmap(bitmap);
+                    Bitmap bitmap = ((BitmapDrawable) profilePhotoImageView.getDrawable()).getBitmap();
+                    user.getProfilePhoto().setBitmap(bitmap);
 
-                MainActivity.user.sendToFireStore();
+                    MainActivity.user.sendToFireStore();
 
-                MainActivity.updateNavigationDrawerHeader();
+                    //update navigation header (slide out menu) with newly updated information
+                    MainActivity.updateNavigationDrawerHeader();
 
-                //TODO: update firebase info
+                    //TODO: set auto-generated photo to regenerate on name change
 
-                //TODO: update navigation menu header, check for invalid input or name input with more than one space
+                    //TODO: check for invalid input
+                }
+                return false;
             }
             return false;
-
         }
-        //return false;
+        return false;
     }
 }

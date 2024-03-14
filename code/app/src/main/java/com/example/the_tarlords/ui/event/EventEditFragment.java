@@ -195,7 +195,9 @@ public class EventEditFragment extends Fragment implements MenuProvider {
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        //MANDATORY for MenuProvider options menu
         requireActivity().addMenuProvider(this);
+
         //Event id is a textview because user should not be able to edit it, assigned when event object created
         eventNameEditText = view.findViewById(R.id.et_event_name);
         eventLocationEditText = view.findViewById(R.id.et_event_location);
