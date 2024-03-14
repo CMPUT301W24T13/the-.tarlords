@@ -127,7 +127,6 @@
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="qr_scan_fab">Scan QR Code</string>
-    <string name="edit_profile">edit profile</string>
 
     <!-- Strings related to addAlert -->
     <string name="event_name">Event Name</string>
@@ -140,8 +139,20 @@
         "ut labore et dolore magna aliqua."
     </string>
     <string name="alert_title">Alert Title</string>
+
+    <!-- strings related to profile xml -->
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="phone_number">Phone Number (XXX) XXX-XXXX</string>
+    <string name="email">Email Address</string>
+    <string name="profile_picture">profile picture</string>
+    <string name="upload_photo">upload photo</string>
+    <string name="edit_profile">Edit profile</string>
+
+    <!-- strings related to attendance -->
     <string name="total_attendee_count">Total: 10</string>
     <string name="checked_in_attendee_count">Checked In: 2</string>
-    <string name="attendee_total_count">0</string>
+    <string name="add_profile_photo">Add Profile Photo</string>
     <string name="attendee_checkin_count">0</string>
+    <string name="attendee_count">0</string>
 </resources>

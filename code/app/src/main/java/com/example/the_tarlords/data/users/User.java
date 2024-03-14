@@ -1,21 +1,31 @@
 package com.example.the_tarlords.data.users;
 
-import android.annotation.SuppressLint;
-import android.provider.Settings;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.example.the_tarlords.MainActivity;
-import com.example.the_tarlords.placeholder.Photo;
+import com.example.the_tarlords.data.Alert.AlertList;
+import com.example.the_tarlords.data.event.Event;
+import com.example.the_tarlords.data.photo.Photo;
+import com.example.the_tarlords.data.photo.ProfilePhoto;
 import com.google.firebase.firestore.CollectionReference;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+
+import android.annotation.SuppressLint;
+import android.provider.Settings;
+import com.example.the_tarlords.MainActivity;
 import java.util.Map;
 
 public class User implements Profile {
     private String userId;
     private String firstName;
     private String lastName;
-    private Photo profilePhoto;
+    private ProfilePhoto profilePhoto;
     private String phoneNum;
     private String email;
     private CollectionReference usersRef = MainActivity.db.collection("Users");
@@ -24,14 +34,21 @@ public class User implements Profile {
     //private AlertList alerts;
     //TODO : need UID generator
 
+    public User() {
+    }
+
     public User(String userId, String firstName, String lastName, String phoneNum, String email) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNum = phoneNum;
         this.email = email;
+        this.profilePhoto = new ProfilePhoto(firstName+lastName, null, firstName, lastName);
+        this.profilePhoto.autoGenerate();
+    }
 
-        //TODO: add firebase integration for new users and for all update data methods
+    boolean isAdmin() {
+        return false;
     }
 
     public User(String userId) { //prev public User(Integer userId, Profile profile, ArrayList<Event> events, AlertList alerts)
@@ -39,9 +56,6 @@ public class User implements Profile {
         //this.profile = profile;
         //this.events = events;
         //this.alerts = alerts;
-    }
-
-    public User() {
     }
 
     public String getUserId() {
@@ -78,9 +92,7 @@ public class User implements Profile {
         this.alerts = alerts;
     }
 */
-    boolean isAdmin() {
-        return false;
-    }
+
 
     public String getFirstName() {
         return firstName;
@@ -98,16 +110,10 @@ public class User implements Profile {
         this.lastName = lastName;
     }
 
-    public Photo getProfilePhoto() {
+    public ProfilePhoto getProfilePhoto() {
         return profilePhoto;
     }
-
-    public void setAutoProfilePhoto() {
-        //needs to be implemented
-        this.profilePhoto = Photo.generateAutoProfilePhoto();
-    }
-
-    public void setProfilePhoto(Photo profilePhoto) {
+    public void setProfilePhoto(ProfilePhoto profilePhoto) {
         this.profilePhoto = profilePhoto;
     }
 

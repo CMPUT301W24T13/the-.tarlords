@@ -37,6 +37,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import org.checkerframework.common.returnsreceiver.qual.This;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -268,7 +269,12 @@ public class Event implements Attendance, Parcelable {
                         String phoneNum = userDoc.get("phoneNum").toString();
 
                         //User user = userDoc.toObject(User.class);
-                        Attendee attendee = new Attendee(id, firstName,lastName,phoneNum,email,Event.this);
+                        Attendee attendee = null;
+                        try {
+                            attendee = new Attendee(id, firstName,lastName,phoneNum,email, Event.this);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                         attendee.setCheckInStatus(attendeeDoc.getBoolean("checkedInStatus"));
                         attendees.add(attendee);
                     }
@@ -286,9 +292,13 @@ public class Event implements Attendance, Parcelable {
      * @param user to add
      */
     public void signUp(User user) {
+        Map<String, Object> docData = new HashMap<>();
+        docData.put("user", user.getUserId());
+        docData.put("event", id);
+        docData.put("checkedInStatus", false);
         attendanceRef
-                .document(user.getUserId().toString())
-                .set(false)
+                .document(user.getUserId())
+                .set(docData)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -332,8 +342,8 @@ public class Event implements Attendance, Parcelable {
      */
     public void setCheckIn(User user, Boolean status) {
         attendanceRef
-                .document(user.getUserId().toString())
-                .set(status)
+                .document(user.getUserId())
+                .update("checkedInStatus",status)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {

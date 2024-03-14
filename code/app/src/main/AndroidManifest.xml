@@ -37,6 +37,8 @@
 
         </activity>
         <activity android:name=".data.QR.QRScanActivity" />
+        <activity android:name =".ui.profile.UploadPhotoActivity"/>
+        <activity android:name=".ui.profile.TakePhotoActivity"/>
 
     </application>
 
