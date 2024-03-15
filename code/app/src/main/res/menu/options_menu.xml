@@ -42,4 +42,12 @@
         android:title="Add"
         android:visible="false"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/showAnouncementsMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/notifications"
+        android:title="Announcements"
+        android:visible="false"
+        app:showAsAction="always" />
 </menu>

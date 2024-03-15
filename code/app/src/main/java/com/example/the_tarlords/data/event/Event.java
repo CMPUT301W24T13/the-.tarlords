@@ -234,7 +234,7 @@ public class Event implements Attendance, Parcelable {
             }
         });
 
-        return alertList;
+    return alertList;
 
     }
 
@@ -407,6 +407,6 @@ public class Event implements Attendance, Parcelable {
                 });
     }
 
+
+
 }
-
-

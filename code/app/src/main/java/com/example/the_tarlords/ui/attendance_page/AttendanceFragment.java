@@ -117,34 +117,34 @@ public class AttendanceFragment extends Fragment implements MenuProvider {
                     attendees.clear();
                     attendanceRef.get()
                             .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                    if (task.isSuccessful()) {
-                                        for (QueryDocumentSnapshot attendeeDoc : task.getResult()) {
-                                            usersRef.document(attendeeDoc.getId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<DocumentSnapshot> t) {
-                                                    if (t.isSuccessful()) {
-                                                        DocumentSnapshot userDoc = t.getResult();
-                                                        Log.d("fire", userDoc.getData().toString()+"111");
-                                                        Attendee attendee = userDoc.toObject(Attendee.class);
-                                                        attendee.setCheckInStatus(attendeeDoc.getBoolean("checkedInStatus"));
-                                                        attendee.setEvent(event);
-                                                        attendees.add(attendee);
-                                                        Log.d("attendance query", attendees.toString()+"0000");
-                                                        adapter.notifyDataSetChanged();
-                                                        totalCount.setText("Total: " + adapter.getItemCount());
-                                                        checkInCount.setText("Checked In: " + adapter.getCheckInCount());
-                                                    }
-                                                }
-                                            });
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot attendeeDoc : task.getResult()) {
+                                    usersRef.document(attendeeDoc.getId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> t) {
+                                            if (t.isSuccessful()) {
+                                                DocumentSnapshot userDoc = t.getResult();
+                                                Log.d("fire", userDoc.getData().toString()+"111");
+                                                Attendee attendee = userDoc.toObject(Attendee.class);
+                                                attendee.setCheckInStatus(attendeeDoc.getBoolean("checkedInStatus"));
+                                                attendee.setEvent(event);
+                                                attendees.add(attendee);
+                                                Log.d("attendance query", attendees.toString()+"0000");
+                                                adapter.notifyDataSetChanged();
+                                                totalCount.setText("Total: " + adapter.getItemCount());
+                                                checkInCount.setText("Checked In: " + adapter.getCheckInCount());
+                                            }
                                         }
-                                        Log.d("firestore", attendees.toString()+":)");
-                                    } else {
-                                        Log.d("firestore", "Error getting documents: ", task.getException());
-                                    }
+                                    });
                                 }
-                            });
+                                Log.d("firestore", attendees.toString()+":)");
+                            } else {
+                                Log.d("firestore", "Error getting documents: ", task.getException());
+                            }
+                        }
+                    });
                 }
 
             }
