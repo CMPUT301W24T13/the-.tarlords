@@ -47,6 +47,8 @@
         <activity android:name =".ui.profile.UploadPhotoActivity"/>
         <activity android:name=".ui.profile.TakePhotoActivity"/>
 
+        <activity android:name=".ui.profile.TakePhotoActivity"/>
+
     </application>
 
 </manifest>
