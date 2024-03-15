@@ -113,6 +113,9 @@
                 android:id="@+id/action_eventOrganizerListFragment_to_eventBrowseFragment2"
                 app:destination="@id/eventBrowseFragment"
                 app:popUpTo="@id/eventBrowseFragment" />
+            <action
+                android:id="@+id/action_eventOrganizerListFragment_to_eventDetailsFragment"
+                app:destination="@id/eventDetailsFragment" />
         </fragment>
     <fragment
         android:id="@+id/alertFragment"
