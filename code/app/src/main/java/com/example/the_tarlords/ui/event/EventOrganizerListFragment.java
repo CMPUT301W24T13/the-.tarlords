@@ -134,11 +134,14 @@ public class EventOrganizerListFragment extends Fragment implements MenuProvider
 
     @Override
     public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
-        menu.clear();
-        menuInflater.inflate(R.menu.options_menu, menu);
-        menu.findItem(R.id.addOptionsMenu).setVisible(true);
-        menu.findItem(R.id.editOptionsMenu).setVisible(false);
+        if (isAdded() && getContext() != null) {
+            menu.clear();
+            menuInflater.inflate(R.menu.options_menu, menu);
+            menu.findItem(R.id.addOptionsMenu).setVisible(true);
+            menu.findItem(R.id.editOptionsMenu).setVisible(false);
+        }
     }
+
 
     @Override
     public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
