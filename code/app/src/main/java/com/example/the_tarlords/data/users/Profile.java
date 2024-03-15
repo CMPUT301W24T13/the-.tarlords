@@ -13,7 +13,7 @@ public interface Profile {
     public void setLastName(String lastName);
 
 
-    public Photo getProfilePhoto();
+    public ProfilePhoto getProfilePhoto();
     public void setProfilePhoto(ProfilePhoto profilePhoto);
 
     public String getPhoneNum();

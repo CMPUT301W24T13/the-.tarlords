@@ -57,10 +57,6 @@ public class EventListFragment extends Fragment implements MenuProvider {
     private CollectionReference eventsRef = MainActivity.db.collection("Events");
     ArrayList<Event> events = new ArrayList<>();
 
-    /**
-     * EventListFragment has a list of events called eventsList
-     */
-    //private EventRecyclerViewAdapter adapter;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -73,6 +69,7 @@ public class EventListFragment extends Fragment implements MenuProvider {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //currently not relevant
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
@@ -88,13 +85,15 @@ public class EventListFragment extends Fragment implements MenuProvider {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        //MANDATORY: this enables the options menu
         requireActivity().addMenuProvider(this);
+
         ListView eventListView = view.findViewById(R.id.eventListView);
-        Log.d("events list", events.toString()+"hello");
-        //events.add(event1);
         EventArrayAdapter adapter = new EventArrayAdapter(getContext(),events);
         eventListView.setAdapter(adapter);
 
+        //this updates the displayed list on an event
         eventsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot querySnapshots,
@@ -105,7 +104,11 @@ public class EventListFragment extends Fragment implements MenuProvider {
                 }
                 if (querySnapshots != null) {
                     events.clear();
+                    //This queries firestore for a list of events the user is attending
                     //TODO: tried putting this in a different class but it wasn't working, maybe someone else will have better luck?
+                    //should ideally be moved into separate class if possible, async query currently a problem
+                    //possible solutions: Thread or ContentResolver/ContentProvider classes
+                    //if successful, eventListFragment, eventOrganizerListFragment and eventBrowseFragment could be consolidated
                     eventsRef
                             .get()
                             .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -139,6 +142,7 @@ public class EventListFragment extends Fragment implements MenuProvider {
             }
         });
 
+        //listens for user to click on an event, could maybe be its own method outside onCreate?
         eventListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -152,17 +156,31 @@ public class EventListFragment extends Fragment implements MenuProvider {
         });
     }
 
+    //possibly unnecessary
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
     }
 
+
+    /**
+     * Mandatory MenuProvider interface method.
+     * Clear icons from options menu.
+     * @param menu         the menu to inflate the new menu items into
+     * @param menuInflater the inflater to be used to inflate the updated menu
+     */
     @Override
     public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
         menu.clear();
     }
 
+
+    /**
+     * Mandatory MenuProvider interface method.
+     * @param menuItem the menu item that was selected
+     * @return
+     */
     @Override
     public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
         return false;

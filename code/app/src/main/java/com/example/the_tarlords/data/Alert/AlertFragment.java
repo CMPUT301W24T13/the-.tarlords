@@ -83,10 +83,11 @@ public class AlertFragment extends Fragment implements AddAlertDialogListener,Me
         });
 
         // unfinished fab
+
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.button_add_alert);
+
         fab.setOnClickListener(v -> {
 
-            // calls the add book fragment constructer with filler values
             AddAlertFragment addAlertFragment = new AddAlertFragment(null);
             addAlertFragment.setAddAlertDialogListener(this);
             addAlertFragment.show(getChildFragmentManager(), "Add alert");
@@ -135,27 +136,17 @@ public class AlertFragment extends Fragment implements AddAlertDialogListener,Me
         refreshList();
     }
     public void refreshList(){
-        Object lock = new Object();
-        synchronized (lock) {
-            alertList = event.getAlertList(new AlertCallback() {
-                @Override
-                public void onAlertsLoaded(ArrayList<Alert> alertList) {
-                    ListView listView = getView().findViewById(R.id.alert_list);
-                    alertListAdapter = new AlertListAdapter(requireContext(), alertList, 1);
-                    listView.setAdapter(alertListAdapter);
-                    lock.notify();
-                }
-            });
-        }
-        synchronized (lock) {
-            try {
-                lock.wait(300);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+        alertList = event.getAlertList(new AlertCallback() {
+            @Override
+            public void onAlertsLoaded(ArrayList<Alert> alertList) {
+                ListView listView = getView().findViewById(R.id.alert_list);
+                alertListAdapter = new AlertListAdapter(requireContext(), alertList, 1);
+                listView.setAdapter(alertListAdapter);
             }
+        });
             Collections.sort(alertList);
             alertListAdapter.notifyDataSetChanged();
-        }
+
 
 
     }

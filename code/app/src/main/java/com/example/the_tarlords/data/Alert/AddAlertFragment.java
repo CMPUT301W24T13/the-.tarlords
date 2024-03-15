@@ -111,7 +111,7 @@ public class AddAlertFragment extends DialogFragment {
                     public void onClick(DialogInterface dialog, int which) {
                         String title = editTitle.getText().toString();
                         String message = editMessage.getText().toString();
-                        AlertFragment.event.setAlert(new Alert(title, message, LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))));
+                        listener.addAlert(new Alert(title,message,null));
                     }
                 })
                 .create();

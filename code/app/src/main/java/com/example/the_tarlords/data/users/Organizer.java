@@ -50,8 +50,9 @@ public class Organizer extends Attendee implements OrgPerms {
      * @return a new event
      */
     @Override
-    public Event createEvent(String name, String location) {
-        Event event = new Event(name, location);
+    public Event createEvent(String name, String location, String id, String startTime, String endTime, String startDate) {
+        Event event = new Event(name, location, id, startTime, endTime, startDate);
+
         return event;
     }
 
@@ -67,7 +68,7 @@ public class Organizer extends Attendee implements OrgPerms {
     public QRCode genQRCodeForCheckIns(Event event, String text, ImageView imageView) {
         QRCode qrCode = new QRCode();
         qrCode.generateQR(text, imageView);
-        event.setQrCodeCheckIns(qrCode);
+        event.setQrCodeCheckIns(qrCode.toString());
         return qrCode;
     }
 
@@ -89,7 +90,8 @@ public class Organizer extends Attendee implements OrgPerms {
      */
     @Override
     public ArrayList<Attendee> viewAttendeeCheckIns(Event event) {
-        ArrayList<Attendee> attendeeCheckInList = event.getAttendanceList();
+        ArrayList<Attendee> attendeeCheckInList = new ArrayList<>();
+        event.populateAttendanceList(attendeeCheckInList);
         return attendeeCheckInList;
     }
 
@@ -147,7 +149,7 @@ public class Organizer extends Attendee implements OrgPerms {
     public QRCode genUniquePromotionQRCode(Event event, String text, ImageView imageView) {
         QRCode qrCode = new QRCode();
         qrCode.generateQR(text, imageView);
-        event.setQrCodePromo(qrCode);
+        event.setQrCodePromo(qrCode.toString());
         return qrCode;
     }
 
