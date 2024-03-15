@@ -145,7 +145,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
 
                 // Format the date components into a string "YYYY.MonthName.DD"
                 @SuppressLint("DefaultLocale")
-                
+
                 String formattedDate = String.format("%s %02d, %04d", monthNames[month], dayOfMonth,year);
 
 
@@ -337,4 +337,4 @@ public class EventEditFragment extends Fragment implements MenuProvider {
 
         return false;
     }
-}
+}  
