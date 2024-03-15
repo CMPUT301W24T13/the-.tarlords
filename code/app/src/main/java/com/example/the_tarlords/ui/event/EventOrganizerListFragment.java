@@ -121,7 +121,7 @@ public class EventOrganizerListFragment extends Fragment implements MenuProvider
                 args.putParcelable("event",event);
                 args.putBoolean("isOrganizer", true);
                 NavHostFragment.findNavController(EventOrganizerListFragment.this)
-                        .navigate(R.id.action_eventOrganizerListFragment_to_eventDetailsFragment,args);
+                        .navigate(R.id.action_eventOrganizerListFragment_to_eventEditFragment,args);
             }
         });
     }
@@ -134,10 +134,14 @@ public class EventOrganizerListFragment extends Fragment implements MenuProvider
 
     @Override
     public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
-        menu.clear();
-        menuInflater.inflate(R.menu.options_menu, menu);
-        menu.findItem(R.id.addOptionsMenu).setVisible(true);
+        if (isAdded() && getContext() != null) {
+            menu.clear();
+            menuInflater.inflate(R.menu.options_menu, menu);
+            menu.findItem(R.id.addOptionsMenu).setVisible(true);
+            menu.findItem(R.id.editOptionsMenu).setVisible(false);
+        }
     }
+
 
     @Override
     public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
@@ -153,4 +157,6 @@ public class EventOrganizerListFragment extends Fragment implements MenuProvider
     }
 
     //TODO: implement add event (fab or options menu)
+
+
 }

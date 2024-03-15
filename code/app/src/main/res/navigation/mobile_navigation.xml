@@ -96,12 +96,11 @@
             android:name="com.example.the_tarlords.ui.event.EventOrganizerListFragment"
             android:label="fragment_event_organizer_list"
             tools:layout="@layout/fragment_event_list">
-            <action
-                android:id="@+id/action_eventOrganizerListFragment_to_eventDetailsFragment"
-                app:destination="@id/eventDetailsFragment" />
+
             <action
                 android:id="@+id/action_eventOrganizerListFragment_to_eventEditFragment"
-                app:destination="@id/eventEditFragment" />
+                app:destination="@id/eventEditFragment"
+                app:popUpTo="@id/eventEditFragment"/>
             <action
                 android:id="@+id/action_eventOrganizerListFragment_to_eventListFragment"
                 app:destination="@id/eventListFragment"
