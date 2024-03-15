@@ -45,6 +45,7 @@ public class QRScanActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //setContentView(R.layout.activity_qr);
         setContentView(R.layout.content_main);
 
         userId = getIntent().getStringExtra("userID");
@@ -59,7 +60,6 @@ public class QRScanActivity extends AppCompatActivity {
         } else {
             scanQr();
         }
-        //QrtoEvent("EI1");
     }
 
     /**
@@ -91,7 +91,6 @@ public class QRScanActivity extends AppCompatActivity {
                 for (QueryDocumentSnapshot doc: querySnapshots) {
                     String eventID = doc.getId();
                     try {
-
                         if (eventID.equals(QrID.substring(2))) {
 
                             String eventName = doc.getString("name");

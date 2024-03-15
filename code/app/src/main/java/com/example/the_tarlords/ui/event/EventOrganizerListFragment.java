@@ -68,12 +68,12 @@ public class EventOrganizerListFragment extends Fragment implements MenuProvider
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentEventListBinding.inflate(inflater, container, false);
-        requireActivity().addMenuProvider(this);
         return binding.getRoot();
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        requireActivity().addMenuProvider(this);
         ListView eventListView = view.findViewById(R.id.eventListView);
         Log.d("events list", events.toString()+"hello");
         //set adapter
@@ -121,7 +121,7 @@ public class EventOrganizerListFragment extends Fragment implements MenuProvider
                 args.putParcelable("event",event);
                 args.putBoolean("isOrganizer", true);
                 NavHostFragment.findNavController(EventOrganizerListFragment.this)
-                        .navigate(R.id.action_eventOrganizerListFragment_to_eventDetailsFragment,args);
+                        .navigate(R.id.action_eventOrganizerListFragment_to_eventEditFragment,args);
             }
         });
     }
@@ -134,10 +134,14 @@ public class EventOrganizerListFragment extends Fragment implements MenuProvider
 
     @Override
     public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
-        menu.clear();
-        menuInflater.inflate(R.menu.options_menu, menu);
-        menu.findItem(R.id.addOptionsMenu).setVisible(true);
+        if (isAdded() && getContext() != null) {
+            menu.clear();
+            menuInflater.inflate(R.menu.options_menu, menu);
+            menu.findItem(R.id.addOptionsMenu).setVisible(true);
+            menu.findItem(R.id.editOptionsMenu).setVisible(false);
+        }
     }
+
 
     @Override
     public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
@@ -146,11 +150,15 @@ public class EventOrganizerListFragment extends Fragment implements MenuProvider
             Bundle args = new Bundle();
             args.putParcelable("event",myEvent);
             args.putBoolean("isOrganizer", true);
-            NavHostFragment.findNavController(EventOrganizerListFragment.this)
-                    .navigate(R.id.action_eventOrganizerListFragment_to_eventEditFragment,args);
+            try {
+                NavHostFragment.findNavController(EventOrganizerListFragment.this)
+                        .navigate(R.id.action_eventOrganizerListFragment_to_eventEditFragment, args);
+            } catch (Exception ignored) {}
         }
         return false;
     }
 
     //TODO: implement add event (fab or options menu)
+
+
 }

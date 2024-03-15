@@ -70,7 +70,7 @@ public class QRCode {
      * @param text      The text to be encoded into the QR code.
      * @param imageView The ImageView where the generated QR code will be displayed.
      */
-    public void generateQR(String text, ImageView imageView) {
+    public static void generateQR(String text, ImageView imageView) {
         // Initialize a MultiFormatWriter to encode the QR code
         MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
 

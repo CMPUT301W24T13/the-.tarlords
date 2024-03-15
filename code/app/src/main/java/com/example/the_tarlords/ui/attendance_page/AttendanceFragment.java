@@ -49,7 +49,7 @@ public class AttendanceFragment extends Fragment implements MenuProvider {
 
     FragmentAttendanceListBinding binding;
     private Event event;
-    private ArrayList<Attendee> attendees = new ArrayList<>();//event.getAttendanceList() ;
+    private ArrayList<Attendee> attendees = new ArrayList<>();
     private AttendanceArrayAdapter adapter;
     private CollectionReference attendanceRef;
     private CollectionReference usersRef = MainActivity.db.collection("Users");
@@ -104,8 +104,7 @@ public class AttendanceFragment extends Fragment implements MenuProvider {
 
         TextView totalCount = view.findViewById(R.id.attendee_count);
         TextView checkInCount = view.findViewById(R.id.attendee_checkin_count);
-        totalCount.setText("Total: " + adapter.getItemCount());
-        checkInCount.setText("Checked In: " + adapter.getCheckInCount());
+
 
         attendanceRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -134,6 +133,8 @@ public class AttendanceFragment extends Fragment implements MenuProvider {
                                                         attendees.add(attendee);
                                                         Log.d("attendance query", attendees.toString()+"0000");
                                                         adapter.notifyDataSetChanged();
+                                                        totalCount.setText("Total: " + adapter.getItemCount());
+                                                        checkInCount.setText("Checked In: " + adapter.getCheckInCount());
                                                     }
                                                 }
                                             });

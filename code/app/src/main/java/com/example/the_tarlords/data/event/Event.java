@@ -12,6 +12,8 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.example.the_tarlords.MainActivity;
+import com.example.the_tarlords.data.Alert.Alert;
+import com.example.the_tarlords.data.Alert.AlertCallback;
 import com.example.the_tarlords.data.QR.QRCode;
 import com.example.the_tarlords.data.attendance.Attendance;
 import com.example.the_tarlords.data.users.Attendee;
@@ -35,6 +37,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import org.checkerframework.common.returnsreceiver.qual.This;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -59,17 +62,21 @@ public class Event implements Attendance, Parcelable {
     String startDate;
     String id;
     String organizerId;
-    private QRCode qrCodeCheckIns;
-    private QRCode qrCodePromo;
+    private String qrCodeCheckIns;
+    private String qrCodePromo;
 
     private EventPoster poster;
 
-    private Integer maxNumOfSignUps;
+    Integer maxSignUps;
 
     private CollectionReference attendanceRef = MainActivity.db.collection("Events/"+ id +"/Attendees");
     private CollectionReference usersRef = MainActivity.db.collection("Users");
 
     private static CollectionReference eventsRef = eventsRef = MainActivity.db.collection("Events");
+
+
+
+
 
     public Event(String name, String location, String id, String startTime, String endTime, String startDate) {
         this.name = name;
@@ -168,19 +175,19 @@ public class Event implements Attendance, Parcelable {
         this.endTime = endTime;
     }
 
-    public void setQrCodeCheckIns(QRCode qrCode) {
+    public void setQrCodeCheckIns(String qrCode) {
         this.qrCodeCheckIns = qrCode;
     }
 
-    public void setQrCodePromo(QRCode qrCode) {
+    public void setQrCodePromo(String qrCode) {
         this.qrCodePromo = qrCode;
     }
 
-    public QRCode getQrCodeCheckIns() {
+    public String getQrCodeCheckIns() {
         return qrCodeCheckIns;
     }
 
-    public QRCode getQrCodePromo() {
+    public String getQrCodePromo() {
         return qrCodePromo;
     }
 
@@ -192,15 +199,56 @@ public class Event implements Attendance, Parcelable {
         this.poster = poster;
     }
 
-    public int getMaxNumOfSignUps() {
-        return maxNumOfSignUps;
+    public Integer getMaxSignUps() {
+        return maxSignUps;
     }
 
-    public void setMaxSignUps(int maxNumOfSignUps) {
-        this.maxNumOfSignUps = maxNumOfSignUps;
+    public void setMaxSignUps(Integer maxSignUps) {
+        this.maxSignUps = maxSignUps;
     }
 
+    public boolean reachedMaxCap() {
+        return true;
+    }
 
+    public ArrayList<Alert> getAlertList(AlertCallback callback){
+        CollectionReference alertRef = MainActivity.db.collection("Events/"+ id +"/alerts");
+        ArrayList<Alert> alertList = new ArrayList<>();
+        alertRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot alertDoc : task.getResult()) {
+                        Alert alert = new Alert(alertDoc.getString("title"), alertDoc.getString("message"), alertDoc.getString("currentDateTime"));
+                        //alert.setCurrentDateTime(alertDoc.getString("currentDateTime"));
+                        Log.d("km", alertDoc.getString("title"));
+                        alertList.add(alert);
+                        Log.d("returned not yet", String.valueOf(alertList.size()));
+
+                    }
+                    Log.d("firestore", alertList.toString());
+                    callback.onAlertsLoaded(alertList);
+                } else {
+                    Log.d("firestore", "Error getting documents: ", task.getException());
+                }
+            }
+        });
+
+        return alertList;
+
+    }
+
+    //test, used to write alerts to firebase
+    public void setAlert(Alert alert) {
+        CollectionReference alertRef = MainActivity.db.collection("Events/"+ id +"/alerts");
+        Map<String, Object> alertMap = new HashMap<>();
+        alertMap.put("title", alert.getTitle());
+        alertMap.put("message", alert.getMessage());
+        alertMap.put("currentDateTime", alert.getCurrentDateTime());
+        alertRef.add(alertMap);
+
+        Log.d("alert adding","working");
+    }
     /**
      * Returns a list of Attendee objects attending the event. This is the default "signup" list
      * Updates the user's checked in status if they check in or not.
@@ -221,7 +269,12 @@ public class Event implements Attendance, Parcelable {
                         String phoneNum = userDoc.get("phoneNum").toString();
 
                         //User user = userDoc.toObject(User.class);
-                        Attendee attendee = new Attendee(id, firstName,lastName,phoneNum,email,Event.this);
+                        Attendee attendee = null;
+                        try {
+                            attendee = new Attendee(id, firstName,lastName,phoneNum,email, Event.this);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                         attendee.setCheckInStatus(attendeeDoc.getBoolean("checkedInStatus"));
                         attendees.add(attendee);
                     }
@@ -239,9 +292,13 @@ public class Event implements Attendance, Parcelable {
      * @param user to add
      */
     public void signUp(User user) {
+        Map<String, Object> docData = new HashMap<>();
+        docData.put("user", user.getUserId());
+        docData.put("event", id);
+        docData.put("checkedInStatus", false);
         attendanceRef
-                .document(user.getUserId().toString())
-                .set(false)
+                .document(user.getUserId())
+                .set(docData)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -285,8 +342,8 @@ public class Event implements Attendance, Parcelable {
      */
     public void setCheckIn(User user, Boolean status) {
         attendanceRef
-                .document(user.getUserId().toString())
-                .set(status)
+                .document(user.getUserId())
+                .update("checkedInStatus",status)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -335,6 +392,9 @@ public class Event implements Attendance, Parcelable {
         docData.put("startTime", startTime);
         docData.put("endTime", endTime);
         docData.put("organizerId",organizerId);
+        docData.put("maxSignUps", maxSignUps);
+        docData.put("qrCodeCheckIns",qrCodeCheckIns);
+        docData.put("qrCodePromo", qrCodePromo);
 
         eventsRef.document(id).set(docData)
                 .addOnSuccessListener(aVoid -> {
@@ -347,15 +407,6 @@ public class Event implements Attendance, Parcelable {
                 });
     }
 
-
-
 }
-
-
-
-
-
-
-
 
 

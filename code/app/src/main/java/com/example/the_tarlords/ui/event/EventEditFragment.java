@@ -1,6 +1,6 @@
 package com.example.the_tarlords.ui.event;
 
-import static com.example.the_tarlords.MainActivity.db;
+import static com.google.firebase.firestore.model.Values.isInteger;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
@@ -10,14 +10,10 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.os.Parcelable;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,16 +22,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
+import com.example.the_tarlords.data.QR.QRCode;
 import com.example.the_tarlords.data.event.Event;
-import com.example.the_tarlords.databinding.FragmentAttendanceListBinding;
 import com.example.the_tarlords.databinding.FragmentEventEditBinding;
-import com.example.the_tarlords.ui.attendance_page.AttendanceFragment;
-import com.google.firebase.firestore.DocumentReference;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -55,10 +50,15 @@ public class EventEditFragment extends Fragment implements MenuProvider {
     private EditText eventLocationEditText;
     private EditText eventNameEditText;
     private TextView eventEndTimeTextView;
+    private EditText maxAttendees;
+    private ImageView checkInQR;
+    private ImageView eventInfoQR;
     private FragmentEventEditBinding binding;
     //add the event poster to be able to edit the poster
     //event poster doenst need to be connected to event details. Make poster connected to event so
     //when QR -> event <- event detials
+    // Define a class member variable to hold the menu
+    private Menu menu;
 
 
     public EventEditFragment() {
@@ -67,6 +67,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
 
     /**
      * This is used to create a new instance of EditEventFragment
+     *
      * @param event , an object of event class
      * @return the fragment to parent
      */
@@ -86,6 +87,20 @@ public class EventEditFragment extends Fragment implements MenuProvider {
         }
     }
 
+    /**
+     * Method to set all text and edit views to "Non editable" or "editable"
+     * TODO are the QR codes ever editable?
+     */
+    private void setTextViewsClickablity(Boolean isEditable) {
+        eventStartDateTextView.setClickable(isEditable);
+        eventStartTimeTextView.setClickable(isEditable);
+        eventEndTimeTextView.setClickable(isEditable);
+        eventLocationEditText.setEnabled(isEditable);
+        eventNameEditText.setEnabled(isEditable);
+        maxAttendees.setEnabled(isEditable);
+    }
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -94,6 +109,20 @@ public class EventEditFragment extends Fragment implements MenuProvider {
 
         return binding.getRoot();
 
+    }
+
+    /**
+     * Method to check if a string represents a valid integer
+     * @param str
+     * @return Boolean
+     */
+    private boolean isInteger(String str) {
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 
     //For both of these dialogs you can change the theme using dialog theme in layout folder
@@ -116,7 +145,9 @@ public class EventEditFragment extends Fragment implements MenuProvider {
 
                 // Format the date components into a string "YYYY.MonthName.DD"
                 @SuppressLint("DefaultLocale")
-                String formattedDate = String.format("%s %02d, %04d", monthNames[month],year, dayOfMonth);
+
+                String formattedDate = String.format("%s %02d, %04d", monthNames[month], dayOfMonth,year);
+
 
                 // Update the text view
                 eventStartDateTextView.setText(formattedDate);
@@ -126,7 +157,8 @@ public class EventEditFragment extends Fragment implements MenuProvider {
         //show the dialog
         dialog.show();
     }
-    private void showTimePickerDialog(String s){
+
+    private void showTimePickerDialog(String s) {
         // logic for showing a time picker dialog
         TimePickerDialog dialog = new TimePickerDialog(requireContext(), new TimePickerDialog.OnTimeSetListener() {
             /**
@@ -148,10 +180,10 @@ public class EventEditFragment extends Fragment implements MenuProvider {
                 }
                 // Use the amPm and adjusted hour to display or process the time
                 String formattedTime = String.format("%02d:%02d %s", hourOfDay, minute, amPm);
-                if(s == "start"){
+                if (s == "start") {
                     //update text view
                     eventStartTimeTextView.setText(formattedTime);
-                }else{
+                } else {
                     //update text view
                     eventEndTimeTextView.setText(formattedTime);
                 }
@@ -161,76 +193,57 @@ public class EventEditFragment extends Fragment implements MenuProvider {
         //show the dialog
         dialog.show();
     }
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState){
+
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        //MANDATORY for MenuProvider options menu
         requireActivity().addMenuProvider(this);
+
         //Event id is a textview because user should not be able to edit it, assigned when event object created
         eventNameEditText = view.findViewById(R.id.et_event_name);
         eventLocationEditText = view.findViewById(R.id.et_event_location);
         eventStartTimeTextView = view.findViewById(R.id.tv_edit_event_startTime);
         eventStartDateTextView = view.findViewById(R.id.tv_edit_event_startDate);
         eventEndTimeTextView = view.findViewById(R.id.tv_edit_event_endTime);
+        maxAttendees = view.findViewById(R.id.et_max_attendees);
+        checkInQR = view.findViewById(R.id.iv_checkin);
+        eventInfoQR = view.findViewById(R.id.iv_info);
 
-        //add more attributes
+        //add more attributes as desired
 
-        // Populate UI elements with event details
+        //check event is not null
         if (event.getId() != null) {
+            // Populate UI elements with event details
             eventNameEditText.setText(event.getName());
             eventLocationEditText.setText(event.getLocation());
             eventStartTimeTextView.setText(event.getStartTime());
             eventStartDateTextView.setText(event.getStartDate());
             eventEndTimeTextView.setText(event.getEndTime());
-            // Populate more attributes
+            maxAttendees.setText(event.getMaxSignUps().toString());
+            // Populate more attributes as desired
         }
+        //if event is null, create new event
         else {
+            //set placeholder data
             eventNameEditText.setHint("Event Name");
             eventLocationEditText.setHint("Location");
-            eventStartDateTextView.setText("Date");
-            eventStartTimeTextView.setText("Start time");
-            eventEndTimeTextView.setText("End Time");
+            eventStartDateTextView.setHint("January 1, 2000");
+            eventStartTimeTextView.setHint("5:30am");
+            eventEndTimeTextView.setHint("4:30pm");
         }
-        /**
-         * A Text Change Listener updates the event attributes when the edit text field is changed
-         */
-        /*eventNameEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                //not used would this be a problem ?
-            }
+        //check if QR codes have already been generated
+        if (event.getQrCodeCheckIns() == null) {
+            //hide QR code placeholder views
+            view.findViewById(R.id.tv_checkin).setVisibility(view.GONE);
+            view.findViewById(R.id.tv_info).setVisibility(view.GONE);
+            checkInQR.setVisibility(view.GONE);
+            eventInfoQR.setVisibility(view.GONE);
+        } else {
+            //display QR codes
+            QRCode.generateQR("CI" + event.getId(), checkInQR);
+            QRCode.generateQR("EI" + event.getId(), eventInfoQR);
+        }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // Called to notify you that somewhere within charSequence, the text has been changed.
-                // Update the eventName attribute
-                if (event != null) {
-                    event.setName(s.toString());
-                }
-            }
-            @Override
-            public void afterTextChanged(Editable s) {
-                //not used , would this be a problem ?
-            }
 
-        });*/
-        /*eventLocationEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                //not used here
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // Called to notify you that somewhere within charSequence, the text has been changed.
-                // Update the eventName attribute
-                if (event != null) {
-                    event.setLocation(s.toString());
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                //not used here
-            }
-        });*/
         // Set an OnClickListener for the eventStartDateTextView
         eventStartDateTextView.setOnClickListener(v -> showDatePickerDialog());
 
@@ -241,52 +254,99 @@ public class EventEditFragment extends Fragment implements MenuProvider {
         eventEndTimeTextView.setOnClickListener(v -> showTimePickerDialog("end"));
     }
 
+    /**
+     * Mandatory MenuProvider interface method.
+     * Displays eventEditFragment options menu.
+     * @param menu         the menu to inflate the new menu items into
+     * @param menuInflater the inflater to be used to inflate the updated menu
+     */
     @Override
     public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+        this.menu = menu; //store the menu
         menu.clear();
         menuInflater.inflate(R.menu.options_menu, menu);
-        menu.findItem(R.id.editOptionsMenu).setVisible(false);
-        menu.findItem(R.id.attendanceOptionsMenu).setVisible(false);
-        menu.findItem(R.id.saveOptionsMenu).setVisible(true);
-        menu.findItem(R.id.cancelOptionsMenu).setVisible(true);
+        //set visibility of menu options
+        menu.findItem(R.id.saveOptionsMenu).setVisible(false);
+        menu.findItem(R.id.cancelOptionsMenu).setVisible(false);
+        menu.findItem(R.id.editOptionsMenu).setVisible(true);
+
+        //set clickability of views and edit texts
+        setTextViewsClickablity(false);
     }
 
+    /**
+     * Mandatory MenuProvider interface method.
+     * This shouldn't save changes if cancelOptions menu is selected
+     * @param menuItem the menu item that was selected
+     * @return
+     */
+    // TODO: when an event is saved duplicate events show up?
     @Override
     public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
-        if (menuItem.getItemId() == R.id.saveOptionsMenu || menuItem.getItemId() == R.id.cancelOptionsMenu){
-            Object lock = new Object();
-            if (menuItem.getItemId() == R.id.saveOptionsMenu){
+        if (menuItem.getItemId() == R.id.saveOptionsMenu || menuItem.getItemId() == R.id.cancelOptionsMenu) {
+            //save changes to event details
+            if (menuItem.getItemId() == R.id.saveOptionsMenu) {
 
-                // Update the event attribute
+                // Update the event startDate
                 event.setStartDate(eventStartDateTextView.getText().toString());
-                //update event attribute
+                //update event startTime
                 event.setStartTime(eventStartTimeTextView.getText().toString());
-                //update event attribute
+                //update event endTime
                 event.setEndTime(eventEndTimeTextView.getText().toString());
-
+                //update event name
                 event.setName(eventNameEditText.getText().toString());
+                //update event location
                 event.setLocation(eventLocationEditText.getText().toString());
+                //update event organizerId
                 event.setOrganizerId(MainActivity.user.getUserId());
-                synchronized (lock) {
-                    if (event.getId() == null) {
-                        event.makeNewDocID();
-                    }
+                //update event maxSignUps
+                String max = maxAttendees.getText().toString();
+
+                // Check if the input string is empty or contains non-integer values
+                if (TextUtils.isEmpty(max) || !isInteger(max)) {
+                    // Set it to "infinity" if empty or non-integer
+                    event.setMaxSignUps(Integer.MAX_VALUE);
+                    maxAttendees.setText("unlimited");
+                } else {
+                    // If the string represents a valid integer, parse int
+                    event.setMaxSignUps(Integer.parseInt(max));
                 }
 
+                //if eventId is null, treat as new event and generate a new id
+                if (event.getId() == null) {
+                    //generate new event id
+                    event.makeNewDocID();
+                    //generate check in QR
+                    event.setQrCodeCheckIns("CI" + event.getId());
+                    //generate event info QR
+                    event.setQrCodePromo("EI" + event.getId());
 
+                }
+                //upload event in firebase
                 event.sendToFirebase();
 
-
-                //TODO : update firebase info
                 //TODO : check valid input
             }
+            //navigate back to event details fragment
+            //try/catch to prevent crashes
             Bundle args = new Bundle();
-            args.putParcelable("event",event);
+            args.putParcelable("event", event);
             args.putBoolean("isOrganizer", true);
-            NavHostFragment.findNavController(EventEditFragment.this)
-                    .navigate(R.id.action_eventEditFragment_to_eventDetailsFragment,args);
+            try {
+                NavHostFragment.findNavController(EventEditFragment.this)
+                        .navigate(R.id.action_eventEditFragment_pop, args);
+            } catch (Exception ignored) {}
+            return false; //required to prevent crashes
+        }else if (menuItem.getItemId() == R.id.editOptionsMenu) {
+            //set visibility of menu options
+            menu.findItem(R.id.saveOptionsMenu).setVisible(true);
+            menu.findItem(R.id.cancelOptionsMenu).setVisible(true);
+            menu.findItem(R.id.editOptionsMenu).setVisible(false);
 
-            return true;
+            //set clickability of views and edit texts
+            setTextViewsClickablity(true);
+            return false;
+
         }
 
         return false;

@@ -19,17 +19,22 @@ public class Alert implements Comparable{
      * Constructor for the Alert object
      * @param title --> string of title
      * @param message --> string of message
-     * @param event  --> associated event
      */
-    public Alert(String title, String message, Event event) {
+    public Alert(String title, String message,String currentDateTime) {
         this.title = title;
         this.message = message;
-        this.event = event;
+        //this.event = event;
         // gets the local date time and formats it into a string
-        ldt = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        this.currentDateTime = ldt.format(formatter);
+        if(currentDateTime == null) {
+            ldt = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            this.currentDateTime = ldt.format(formatter);
+        }else{
+            this.currentDateTime = currentDateTime;
+        }
     }
+
+    public Alert(){}
 
     /**
      * get ldt

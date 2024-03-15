@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -33,12 +32,10 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
         Event event = (Event) getItem(position);
         TextView name = view.findViewById(R.id.titleTextView);
         name.setText(event.getName());
-
-        TextView location = view.findViewById(R.id.dateTextView);
+        TextView location = view.findViewById(R.id.locationTextView);
         location.setText(event.getLocation());
-
-        TextView status = view.findViewById(R.id.userRoleTextView);
-        status.setText("Attendee");
+        TextView startDate = view.findViewById(R.id.startDateTextView);
+        startDate.setText(event.getStartDate());
         return view;
     }
 }
