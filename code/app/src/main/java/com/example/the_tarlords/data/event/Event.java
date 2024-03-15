@@ -408,5 +408,4 @@ public class Event implements Attendance, Parcelable {
     }
 
 
-
 }
