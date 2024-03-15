@@ -117,7 +117,7 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
             }
         }
 
-        //display event QR codes if user has organizer perms
+        //display event QR codes if user has organizer perms, this is extra code now , organizer will never touch this fragment
         if (isOrganizer == true) {
             if (event.getQrCodeCheckIns()!=null){
                 view.findViewById(R.id.tv_checkin_details).setVisibility(view.VISIBLE);

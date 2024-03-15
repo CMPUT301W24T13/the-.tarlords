@@ -345,7 +345,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
 
             //set clickability of views and edit texts
             setTextViewsClickablity(true);
-            return true;
+            return false;
 
         }
 
