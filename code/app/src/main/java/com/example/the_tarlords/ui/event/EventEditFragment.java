@@ -145,7 +145,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
 
                 // Format the date components into a string "YYYY.MonthName.DD"
                 @SuppressLint("DefaultLocale")
-                
+
                 String formattedDate = String.format("%s %02d, %04d", monthNames[month], dayOfMonth,year);
 
 
@@ -266,12 +266,11 @@ public class EventEditFragment extends Fragment implements MenuProvider {
         menu.clear();
         menuInflater.inflate(R.menu.options_menu, menu);
         //set visibility of menu options
-        menu.findItem(R.id.saveOptionsMenu).setVisible(false);
-        menu.findItem(R.id.cancelOptionsMenu).setVisible(false);
-        menu.findItem(R.id.editOptionsMenu).setVisible(true);
+        menu.findItem(R.id.saveOptionsMenu).setVisible(true);
+        menu.findItem(R.id.cancelOptionsMenu).setVisible(true);
 
         //set clickability of views and edit texts
-        setTextViewsClickablity(false);
+        setTextViewsClickablity(true);
     }
 
     /**
@@ -284,22 +283,20 @@ public class EventEditFragment extends Fragment implements MenuProvider {
     @Override
     public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
         if (menuItem.getItemId() == R.id.saveOptionsMenu || menuItem.getItemId() == R.id.cancelOptionsMenu) {
+
+            //set clickability of views and edit texts
+            setTextViewsClickablity(false);
+
             //save changes to event details
             if (menuItem.getItemId() == R.id.saveOptionsMenu) {
 
-                // Update the event startDate
+                // Update the event details
                 event.setStartDate(eventStartDateTextView.getText().toString());
-                //update event startTime
                 event.setStartTime(eventStartTimeTextView.getText().toString());
-                //update event endTime
                 event.setEndTime(eventEndTimeTextView.getText().toString());
-                //update event name
                 event.setName(eventNameEditText.getText().toString());
-                //update event location
                 event.setLocation(eventLocationEditText.getText().toString());
-                //update event organizerId
                 event.setOrganizerId(MainActivity.user.getUserId());
-                //update event maxSignUps
                 String max = maxAttendees.getText().toString();
 
                 // Check if the input string is empty or contains non-integer values
@@ -314,12 +311,9 @@ public class EventEditFragment extends Fragment implements MenuProvider {
 
                 //if eventId is null, treat as new event and generate a new id
                 if (event.getId() == null) {
-                    //generate new event id
-                    event.makeNewDocID();
-                    //generate check in QR
-                    event.setQrCodeCheckIns("CI" + event.getId());
-                    //generate event info QR
-                    event.setQrCodePromo("EI" + event.getId());
+                    event.makeNewDocID(); //generate new event id
+                    event.setQrCodeCheckIns("CI" + event.getId()); //generate check in QR
+                    event.setQrCodePromo("EI" + event.getId()); //generate promo QR
 
                 }
                 //upload event in firebase
@@ -327,28 +321,20 @@ public class EventEditFragment extends Fragment implements MenuProvider {
 
                 //TODO : check valid input
             }
-            //navigate back to event details fragment
-            //try/catch to prevent crashes
+            //create event bundle to pass to details fragment
             Bundle args = new Bundle();
             args.putParcelable("event", event);
             args.putBoolean("isOrganizer", true);
+
+            //navigate to event details fragment
+            //try catch to prevent crashes
             try {
                 NavHostFragment.findNavController(EventEditFragment.this)
                         .navigate(R.id.action_eventEditFragment_pop, args);
             } catch (Exception ignored) {}
             return false; //required to prevent crashes
-        }else if (menuItem.getItemId() == R.id.editOptionsMenu) {
-            //set visibility of menu options
-            menu.findItem(R.id.saveOptionsMenu).setVisible(true);
-            menu.findItem(R.id.cancelOptionsMenu).setVisible(true);
-            menu.findItem(R.id.editOptionsMenu).setVisible(false);
-
-            //set clickability of views and edit texts
-            setTextViewsClickablity(true);
-            return false;
-
         }
 
         return false;
     }
-}
+}  

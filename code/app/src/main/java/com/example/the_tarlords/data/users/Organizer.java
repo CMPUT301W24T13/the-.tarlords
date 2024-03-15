@@ -91,7 +91,8 @@ public class Organizer extends Attendee implements OrgPerms {
      */
     @Override
     public ArrayList<Attendee> viewAttendeeCheckIns(Event event) {
-        ArrayList<Attendee> attendeeCheckInList = event.getAttendanceList();
+        ArrayList<Attendee> attendeeCheckInList = new ArrayList<>();
+        event.populateAttendanceList(attendeeCheckInList);
         return attendeeCheckInList;
     }
 

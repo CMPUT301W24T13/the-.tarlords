@@ -16,7 +16,11 @@ import java.util.ArrayList;
 public interface OrgPerms {
     Event createEvent(String name, String location, String id, String startTime, String endTime, String startDate);
 
-    QRCode genQRCodeForCheckIns(Event event, String text, ImageView imageView);
+    boolean setLimit();
+
+    public int maxLimitFunction();
+
+    public QRCode generateQRCode(Event event, String text, ImageView imageView);
 
     QRCode reuseQRCode(QRCode qrCode);
 
@@ -35,14 +39,11 @@ public interface OrgPerms {
 
     void shareQRCodeImage(QRCode qrcode, App shareToThisApp);
 
-    QRCode genUniquePromotionQRCode(Event event, String text, ImageView imageView);
-
     Map viewUserCheckInPlace(Attendee attendee, Event event);
-
 
     int specificAttendeeCount(Attendee attendee, Event event);
 
-    AttendeeSignUpList viewAttendeeSignUps(Event event);
+    public ArrayList<Attendee> viewAttendeeSignUps(Event event);
 
     void setLimitOnSignUps(int signUpLimit, Event event);
 
@@ -68,4 +69,7 @@ public interface OrgPerms {
     Org wants to see where users are checking in from on the MAP. I am assuming the location means the event location
     and also I am gonna create MAP class and return a pin location that would show on the MAP
     */
+
+
+
 

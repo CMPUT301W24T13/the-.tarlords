@@ -9,6 +9,8 @@ import com.example.the_tarlords.data.Alert.AlertList;
 import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.photo.Photo;
 import com.example.the_tarlords.data.photo.ProfilePhoto;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 
 import java.io.IOException;
@@ -18,6 +20,9 @@ import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.provider.Settings;
+
+import androidx.annotation.NonNull;
+
 import com.example.the_tarlords.MainActivity;
 import java.util.Map;
 
@@ -32,6 +37,9 @@ public class User implements Profile {
     private CollectionReference usersRef = MainActivity.db.collection("Users");
 
 
+    /**
+     * Mandatory empty constructor for firestore functionality
+     */
     public User() {
     }
 
@@ -47,13 +55,6 @@ public class User implements Profile {
 
     boolean isAdmin() {
         return false;
-    }
-
-    public User(String userId) { //prev public User(Integer userId, Profile profile, ArrayList<Event> events, AlertList alerts)
-        this.userId = userId;
-        //this.profile = profile;
-        //this.events = events;
-        //this.alerts = alerts;
     }
 
     public String getUserId() {
@@ -120,6 +121,10 @@ public class User implements Profile {
         this.email = email;
     }
 
+    /**
+     * Uploads user data to fire store via a hash table.
+     * Includes: userId, firstName, lastName, email, phoneNum and profilePhotoData (base64 string)
+     */
     public void sendToFireStore() {
         // Add the new user document to Firestore
         Map<String, Object> docData = new HashMap<>();
@@ -140,4 +145,29 @@ public class User implements Profile {
                 });
     }
 
+
+    /**
+     * Deletes a user from firestore Users collection, along with any documents associated with the user in
+     * the Attendance collection, and any event where the deleted user is specified as the organizer.
+     */
+    public void removeFromFirestore() {
+        usersRef.document(userId)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("Firestore", "Document successfully removed!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("Firestore", e.getMessage());
+                    }
+                });
+        //TODO: delete user instances in attendance
+        //TODO: delete events organized by user
+    }
+
 }
+
