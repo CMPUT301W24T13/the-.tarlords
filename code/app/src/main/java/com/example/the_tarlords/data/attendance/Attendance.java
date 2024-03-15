@@ -8,11 +8,11 @@ import java.util.ArrayList;
 public interface Attendance {       //could be made into interface
 
     /**
-     * Returns a list of Attendee objects attending the event.
+     * Populates a list of Attendee objects attending the event.
      *
-     * @return list of User objects
+     * @param attendees array list of Attendee objects to populate
      */
-    public ArrayList<Attendee> getAttendanceList();
+    public void populateAttendanceList(ArrayList<Attendee> attendees);
 
     /**
      * Signs up a user to attend an event by adding their name to the attendance list.
