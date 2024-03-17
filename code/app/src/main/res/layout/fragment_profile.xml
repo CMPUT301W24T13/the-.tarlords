@@ -24,18 +24,19 @@
             android:layout_marginStart="25dp"
             android:layout_marginTop="27dp"
             android:layout_marginEnd="25dp"
+            android:clickable="false"
             android:ems="10"
+            android:enabled="false"
             android:fontFamily="@font/helvetica"
+
             android:hint="@string/first_name"
             android:inputType="text"
             android:textSize="20sp"
             android:textStyle="bold"
-
-            android:clickable="false"
+            app:layout_constraintBottom_toTopOf="@+id/edit_text_last_name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/edit_text_last_name"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
             android:id="@+id/edit_text_last_name"
@@ -44,18 +45,19 @@
             android:layout_marginStart="25dp"
             android:layout_marginTop="3dp"
             android:layout_marginEnd="25dp"
+            android:clickable="false"
             android:ems="10"
+            android:enabled="false"
             android:fontFamily="@font/helvetica"
+
             android:hint="@string/last_name"
             android:inputType="text"
             android:textSize="20sp"
             android:textStyle="bold"
-
-            android:clickable="false"
+            app:layout_constraintBottom_toTopOf="@+id/edit_text_phone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/edit_text_first_name"
-            app:layout_constraintBottom_toTopOf="@+id/edit_text_phone"/>
+            app:layout_constraintTop_toBottomOf="@id/edit_text_first_name" />
 
         <EditText
             android:id="@+id/edit_text_phone"
@@ -64,18 +66,19 @@
             android:layout_marginStart="25dp"
             android:layout_marginTop="3dp"
             android:layout_marginEnd="25dp"
+            android:clickable="false"
             android:ems="10"
+            android:enabled="false"
             android:fontFamily="@font/helvetica"
+
             android:hint="@string/phone_number"
             android:inputType="phone"
             android:textSize="20sp"
             android:textStyle="bold"
-
-            android:clickable="false"
+            app:layout_constraintBottom_toTopOf="@+id/edit_text_email"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_text_last_name"
-            app:layout_constraintBottom_toTopOf="@+id/edit_text_email"/>
+            app:layout_constraintTop_toBottomOf="@+id/edit_text_last_name" />
 
         <EditText
             android:id="@+id/edit_text_email"
@@ -84,15 +87,15 @@
             android:layout_marginStart="25dp"
             android:layout_marginTop="3dp"
             android:layout_marginEnd="25dp"
-            android:layout_marginBottom="310dp"
+            android:clickable="false"
             android:ems="10"
+            android:enabled="false"
             android:fontFamily="@font/helvetica"
+
             android:hint="@string/email"
             android:inputType="textEmailAddress"
             android:textSize="20sp"
             android:textStyle="bold"
-
-            android:clickable="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/edit_text_phone" />
