@@ -36,6 +36,8 @@ public class QRScanActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private CollectionReference eventsRef;
 
+    //TODO: exit scan button (ie go back to main activity without scanning anything)
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +88,7 @@ public class QRScanActivity extends AppCompatActivity {
                             Event event = doc.toObject(Event.class);
 
                             if (QrID.equals("CI" + eventID)) {
+                                //TODO: check if max attendees reached
                                 //This is a CheckIn QR
                                 User user = new User();
                                 user.setUserId(userId);

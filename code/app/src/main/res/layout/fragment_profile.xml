@@ -27,8 +27,8 @@
             android:clickable="false"
             android:ems="10"
             android:enabled="false"
-            android:fontFamily="@font/helvetica"
 
+            android:fontFamily="@font/helvetica"
             android:hint="@string/first_name"
             android:inputType="text"
             android:textSize="20sp"
