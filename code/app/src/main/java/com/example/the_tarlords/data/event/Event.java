@@ -65,18 +65,11 @@ public class Event implements Attendance, Parcelable {
     String organizerId;
     private String qrCodeCheckIns;
     private String qrCodePromo;
-
     private EventPoster poster;
-
     Integer maxSignUps;
-
-    private CollectionReference attendanceRef = MainActivity.db.collection("Events/"+ id +"/Attendees");
     private CollectionReference usersRef = MainActivity.db.collection("Users");
 
     private static CollectionReference eventsRef = MainActivity.db.collection("Events");
-
-
-
 
 
     public Event(String name, String location, String id, String startTime, String endTime, String startDate) {
@@ -257,6 +250,7 @@ public class Event implements Attendance, Parcelable {
      * @param attendees array list of Attendee objects
      */
     public void populateAttendanceList(ArrayList<Attendee> attendees) {
+        CollectionReference attendanceRef = MainActivity.db.collection("Events/"+ id +"/Attendance");
         attendees.clear();
         attendanceRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
@@ -283,6 +277,7 @@ public class Event implements Attendance, Parcelable {
      * @param user to add
      */
     public void signUp(User user) {
+        CollectionReference attendanceRef = MainActivity.db.collection("Events/"+ id +"/Attendance");
         Map<String, Object> docData = new HashMap<>();
         docData.put("user", user.getUserId());
         docData.put("event", id);
@@ -310,6 +305,7 @@ public class Event implements Attendance, Parcelable {
      * @param user to remove
      */
     public void removeSignUp(User user) {
+        CollectionReference attendanceRef = MainActivity.db.collection("Events/"+ id +"/Attendance");
         attendanceRef
                 .document(user.getUserId())
                 .delete()
@@ -333,9 +329,14 @@ public class Event implements Attendance, Parcelable {
      * @param status boolean check-in status to set
      */
     public void setCheckIn(User user, Boolean status) {
+        CollectionReference attendanceRef = MainActivity.db.collection("Events/"+ id +"/Attendance");
+        Map<String, Object> docData = new HashMap<>();
+        docData.put("user", user.getUserId());
+        docData.put("event", id);
+        docData.put("checkedInStatus", status);
         attendanceRef
                 .document(user.getUserId())
-                .update("checkedInStatus",status) //updates checkedInStatus field in firebase
+                .set(docData) //updates checkedInStatus field in firebase
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -426,6 +427,9 @@ public class Event implements Attendance, Parcelable {
      * sub-collection.
      */
     public void removeFromFirestore() {
+        CollectionReference attendanceRef = MainActivity.db.collection("Events/"+ id +"/Attendance");
+        CollectionReference alertsRef = MainActivity.db.collection("Events/"+id+"/alerts");
+        //remove event doc
         eventsRef.document(id)
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -440,8 +444,40 @@ public class Event implements Attendance, Parcelable {
                         Log.d("Firestore", e.getMessage());
                     }
                 });
+        //remove attendance sub-collection
+        attendanceRef.get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot attendeeDoc : queryDocumentSnapshots) {
+                            attendeeDoc.getReference().delete();
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("Firestore", e.getMessage());
+                    }
+                });
+        //remove alerts sub-collection
+        alertsRef.get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot alertDoc : queryDocumentSnapshots) {
+                            alertDoc.getReference().delete();
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("Firestore", e.getMessage());
+                    }
+                });
 
     }
 
-
 }
+

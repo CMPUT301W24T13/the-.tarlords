@@ -43,11 +43,19 @@
         android:visible="false"
         app:showAsAction="always" />
     <item
-        android:id="@+id/showAnouncementsMenu"
+        android:id="@+id/anouncementsOptionsMenu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:icon="@drawable/notifications"
         android:title="Announcements"
+        android:visible="false"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/deleteOptionsMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/delete"
+        android:title="Delete"
         android:visible="false"
         app:showAsAction="always" />
 </menu>
