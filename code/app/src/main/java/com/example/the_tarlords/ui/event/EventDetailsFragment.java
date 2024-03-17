@@ -1,6 +1,9 @@
 package com.example.the_tarlords.ui.event;
 
 
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -148,6 +151,7 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
         if (isOrganizer) {
             menu.findItem(R.id.editOptionsMenu).setVisible(true);
             menu.findItem(R.id.attendanceOptionsMenu).setVisible(true);
+            menu.findItem(R.id.deleteOptionsMenu).setVisible(true);
         }
 
         //display announcement icon for all users
@@ -183,7 +187,7 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
             } catch (Exception ignored) {}
         }
         //navigate to announcements fragment
-        else if (menuItem.getItemId()==R.id.anouncementsOptionsMenu){
+        else if (menuItem.getItemId()==R.id.anouncementsOptionsMenu) {
             Bundle args = new Bundle();
             args.putParcelable("event",event);
             try {
@@ -191,6 +195,26 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
                         .navigate(R.id.action_eventDetailsFragment_to_alertFragment, args);
             } catch (Exception ignored) {}
 
+        }
+        else if (menuItem.getItemId()==R.id.deleteOptionsMenu) {
+            AlertDialog dialog = new AlertDialog.Builder(getContext())
+                    .setMessage("Are you sure you would like to delete the event "+event.getName()+"?")
+                    .setNegativeButton("Delete", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            event.removeFromFirestore();
+                            try {
+                                //return to event organizer list fragment
+                                NavHostFragment.findNavController(EventDetailsFragment.this)
+                                        .navigate(R.id.action_eventDetailsFragment_pop);
+                            } catch (Exception ignored) {}
+                        }
+                    })
+                    .setCancelable(true)
+                    .setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {}
+                    }).show();
         }
         //should return false to prevent crashing
         return false;

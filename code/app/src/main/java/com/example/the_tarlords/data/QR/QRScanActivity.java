@@ -12,17 +12,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
-import com.example.the_tarlords.data.attendance.Attendance;
 import com.example.the_tarlords.data.users.User;
 import com.example.the_tarlords.data.event.Event;
-import com.example.the_tarlords.data.users.Attendee;
-import com.example.the_tarlords.ui.event.EventDetailsFragment;
-import com.example.the_tarlords.ui.profile.ProfileFragment;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
