@@ -30,39 +30,6 @@ import com.journeyapps.barcodescanner.BarcodeEncoder;
 public class QRCode {
     private FirebaseFirestore db;
     private CollectionReference eventsRef;
-    //private String newDocID;
-
-    //NEED TO JAVADOC
-    //Generates a new doc id for the new event  //   Put into Event
-    /*public String makeNewDocID() {
-        db = FirebaseFirestore.getInstance();
-        eventsRef = db.collection("Events");
-
-        eventsRef.addSnapshotListener((querySnapshots, error) -> {
-            if (error != null) {
-                Log.e("Firestore", error.toString());
-                return;
-            }
-            if (querySnapshots != null) {
-                for (QueryDocumentSnapshot doc: querySnapshots) {
-                    AggregateQuery countQuery = eventsRef.count();
-                    countQuery.get(AggregateSource.SERVER).addOnCompleteListener(new OnCompleteListener<AggregateQuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AggregateQuerySnapshot> task) {
-                            if (task.isSuccessful()) {
-                                // Count fetched successfully
-                                AggregateQuerySnapshot snapshot = task.getResult();
-                                newDocID = String.valueOf((int)snapshot.getCount() + 1);
-                            } else {
-                                throw new RuntimeException("Could not find number of documents in FireBase");
-                            }
-                        }
-                    });
-                }
-            }
-        });
-        return newDocID;
-    } */
 
     /**
      * Generates a QR code from the provided text and sets it to the specified ImageView.
@@ -89,5 +56,18 @@ public class QRCode {
             // Handle exception if encoding fails
             e.printStackTrace();
         }
+    }
+
+    public void shareQR(ImageView imageView) {
+        BitmapDrawable bitmapDrawable = (BitmapDrawable) imageView.getDrawable();
+        Bitmap bitmap = bitmapDrawable.getBitmap();
+
+        String bitmapPath = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, "QRCode", "Share QR");
+        Uri uri = Uri.parse(bitmapPath);
+
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("image/png");
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
+        startActivity(Intent.createChooser(intent, "Share"));
     }
 }
