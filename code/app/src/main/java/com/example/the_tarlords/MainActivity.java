@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
          * and set user value to your choice of ID. PLEASE COMMENT IT OUT AFTER TESTING
          */
         //userId = "whatever you want";
+        setBinding();
 
         if (userId == null) {
             // user has not used app before
@@ -98,7 +99,8 @@ public class MainActivity extends AppCompatActivity {
             user = new User(userId,"First Name","Last Name","Phone Number","email");
 
             //sets content binding now that userId is no longer null (must stay above updateNavigationDrawerHeader()
-            setBinding();
+            //setBinding();
+
 
             // Update UI with default user information
             updateNavigationDrawerHeader();
@@ -107,7 +109,6 @@ public class MainActivity extends AppCompatActivity {
             navigateToProfileFragment();
         }
         else {
-            //user has been here before
             String finalUserId = userId;
             Log.d("debug", userId);
 
@@ -121,24 +122,26 @@ public class MainActivity extends AppCompatActivity {
                             //creates 'user' object from firestore data, now you can use 'user' object
                             user = documentSnapshot.toObject(User.class);
 
-                            // sets content binding now that 'user' object is not null
-                            setBinding();
-
                             //updates navigation UI header
                             updateNavigationDrawerHeader();
                         }
                         else {
                             Log.d("debug", "didn't find a user");
-                            // This is a case where user has used app on device but user info is not on firebase yet (my case, developer)
-                            user = new User(finalUserId,"khushi","lad","780-111-1111","john.doe@ualberta.ca");
+                            // This is a case where user has used app on device but user info is not on firebase yet
+                            user = new User(finalUserId,"First Name","Last Name","Phone Number","email");
                             // Update UI with default user information
                             updateNavigationDrawerHeader();
+
+                            // Navigate to profile fragment
+                            navigateToProfileFragment();
                         }
                     })
                     .addOnFailureListener(e -> {
                         // Handle failure
                         Log.e("debug", "failed to get the document",e);
                     });
+
+
 
         }
     }
@@ -233,30 +236,33 @@ public class MainActivity extends AppCompatActivity {
     //TODO: Implement profile picture
     public static void updateNavigationDrawerHeader() {
         // Set navigation drawer header information based on the user object
-        if (user != null) {
-            TextView name = hView.findViewById(R.id.profileName);
-            TextView phoneNum = hView.findViewById(R.id.phoneNumber);
-            TextView email = hView.findViewById(R.id.email);
-            ImageView profilePic = hView.findViewById(R.id.profilePic);
+        if (hView != null) {
+            if (user != null) {
+                TextView name = hView.findViewById(R.id.profileName);
+                TextView phoneNum = hView.findViewById(R.id.phoneNumber);
+                TextView email = hView.findViewById(R.id.email);
+                ImageView profilePic = hView.findViewById(R.id.profilePic);
 
-            name.setText(user.getFirstName() + " " + user.getLastName());
-            phoneNum.setText(user.getPhoneNum());
-            email.setText(user.getEmail());
-            if (user != null && user.getProfilePhoto() != null && user.getProfilePhoto().getBitmap()!=null) {
-                Bitmap bitmap = user.getProfilePhoto().getBitmap();
-                profilePic.setImageBitmap(bitmap);
+                name.setText(user.getFirstName() + " " + user.getLastName());
+                phoneNum.setText(user.getPhoneNum());
+                email.setText(user.getEmail());
+                if (user != null && user.getProfilePhoto() != null && user.getProfilePhoto().getBitmap()!=null) {
+                    Bitmap bitmap = user.getProfilePhoto().getBitmap();
+                    profilePic.setImageBitmap(bitmap);
+                }
+                else if (user.getProfilePhotoData() != null) {
+                    user.setProfilePhotoFromData(user.getProfilePhotoData());
+                    Bitmap bitmap = user.getProfilePhoto().getBitmap();
+                    profilePic.setImageBitmap(bitmap);
+                }
             }
-            else if (user.getProfilePhotoData() != null) {
-                user.setProfilePhotoFromData(user.getProfilePhotoData());
-                Bitmap bitmap = user.getProfilePhoto().getBitmap();
-                profilePic.setImageBitmap(bitmap);
+            else {
+                Log.e("debug", "User object is null");
+                // Handle the case where the User object is null
+                user = new User(userId,"khushi","null","780-111-1111","john.doe@ualberta.ca");
             }
         }
-        else {
-            Log.e("debug", "User object is null");
-            // Handle the case where the User object is null
-            user = new User(userId,"khushi","null","780-111-1111","john.doe@ualberta.ca");
-        }
+
     }
 
     /**

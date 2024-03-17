@@ -93,55 +93,58 @@ public class EventListFragment extends Fragment implements MenuProvider {
         EventArrayAdapter adapter = new EventArrayAdapter(getContext(),events);
         eventListView.setAdapter(adapter);
 
-        //this updates the displayed list on an event
-        eventsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot querySnapshots,
-                                @Nullable FirebaseFirestoreException error) {
-                if (error != null) {
-                    Log.e("Firestore", error.toString());
-                    return;
-                }
-                if (querySnapshots != null) {
-                    events.clear();
-                    //This queries firestore for a list of events the user is attending
-                    //TODO: tried putting this in a different class but it wasn't working, maybe someone else will have better luck?
-                    //should ideally be moved into separate class if possible, async query currently a problem
-                    //possible solutions: Thread or ContentResolver/ContentProvider classes
-                    //if successful, eventListFragment, eventOrganizerListFragment and eventBrowseFragment could be consolidated
-                    eventsRef
-                            .get()
-                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                    if (task.isSuccessful()) {
-                                        for (QueryDocumentSnapshot document : task.getResult()) {
-                                            MainActivity.db.collection("Events/"+document.getId()+"/Attendance")
-                                                    .whereEqualTo("user", MainActivity.user.getUserId()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                                        @Override
-                                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                            if (task.isSuccessful()) {
-                                                                for (QueryDocumentSnapshot doc : task.getResult()) {
-                                                                    events.add(document.toObject(Event.class));
-                                                                    adapter.notifyDataSetChanged();
-                                                                }
-                                                                Log.d("query events", document.getId() + " => " + document.getData());
-                                                            }
-                                                            else {
-                                                                Log.d("query events", "Error getting documents: ", task.getException());
-                                                            }
-                                                        }
-                                                    });
-                                        }
-                                    } else {
-                                        Log.d("query events", "Error getting documents: ", task.getException());
-                                    }
-                                }
-                            });
-                }
-            }
-        });
+        if (MainActivity.user != null) {
+            String userId = MainActivity.user.getUserId();
+            // Use userId...
 
+            // This updates the displayed list on an event
+            eventsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+                @Override
+                public void onEvent(@Nullable QuerySnapshot querySnapshots,
+                                    @Nullable FirebaseFirestoreException error) {
+                    if (error != null) {
+                        Log.e("Firestore", error.toString());
+                        return;
+                    }
+                    if (querySnapshots != null) {
+                        events.clear();
+                        //This queries firestore for a list of events the user is attending
+                        eventsRef
+                                .get()
+                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                                MainActivity.db.collection("Events/"+document.getId()+"/Attendance")
+                                                        .whereEqualTo("user", userId).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                            @Override
+                                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                                if (task.isSuccessful()) {
+                                                                    for (QueryDocumentSnapshot doc : task.getResult()) {
+                                                                        events.add(document.toObject(Event.class));
+                                                                        adapter.notifyDataSetChanged();
+                                                                    }
+                                                                    Log.d("query events", document.getId() + " => " + document.getData());
+                                                                }
+                                                                else {
+                                                                    Log.d("query events", "Error getting documents: ", task.getException());
+                                                                }
+                                                            }
+                                                        });
+                                            }
+                                        } else {
+                                            Log.d("query events", "Error getting documents: ", task.getException());
+                                        }
+                                    }
+                                });
+                    }
+                }
+            });
+        } else {
+            Log.e("debug", "User object is null in EventListFragment");
+            // Handle the case where the User object is null
+        }
         //listens for user to click on an event, could maybe be its own method outside onCreate?
         eventListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
