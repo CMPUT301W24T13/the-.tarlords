@@ -70,7 +70,7 @@ public class Event implements Attendance, Parcelable {
 
     Integer maxSignUps;
 
-    private CollectionReference attendanceRef = MainActivity.db.collection("Events/"+ id +"/Attendees");
+    private CollectionReference attendanceRef;
     private CollectionReference usersRef = MainActivity.db.collection("Users");
 
     private static CollectionReference eventsRef = MainActivity.db.collection("Events");
@@ -257,6 +257,7 @@ public class Event implements Attendance, Parcelable {
      * @param attendees array list of Attendee objects
      */
     public void populateAttendanceList(ArrayList<Attendee> attendees) {
+        attendanceRef = MainActivity.db.collection("Events/"+ id +"/Attendees");
         attendees.clear();
         attendanceRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
@@ -283,6 +284,7 @@ public class Event implements Attendance, Parcelable {
      * @param user to add
      */
     public void signUp(User user) {
+        attendanceRef = MainActivity.db.collection("Events/"+ id +"/Attendees");
         Map<String, Object> docData = new HashMap<>();
         docData.put("user", user.getUserId());
         docData.put("event", id);
@@ -310,6 +312,7 @@ public class Event implements Attendance, Parcelable {
      * @param user to remove
      */
     public void removeSignUp(User user) {
+        attendanceRef = MainActivity.db.collection("Events/"+ id +"/Attendees");
         attendanceRef
                 .document(user.getUserId())
                 .delete()
@@ -333,9 +336,14 @@ public class Event implements Attendance, Parcelable {
      * @param status boolean check-in status to set
      */
     public void setCheckIn(User user, Boolean status) {
+        attendanceRef = MainActivity.db.collection("Events/"+ id +"/Attendance");
+        Map<String, Object> docData = new HashMap<>();
+        docData.put("user", user.getUserId());
+        docData.put("event", id);
+        docData.put("checkedInStatus", status);
         attendanceRef
                 .document(user.getUserId())
-                .update("checkedInStatus",status) //updates checkedInStatus field in firebase
+                .set(docData) //updates checkedInStatus field in firebase
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {

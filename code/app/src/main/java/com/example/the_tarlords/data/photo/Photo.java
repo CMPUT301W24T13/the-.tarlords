@@ -46,7 +46,7 @@ public abstract class Photo {
 
         //bitmap from user image file
         //too much increase in quality may result in firebase errors (ie string too long)
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 0, baos);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 30, baos);
         byte[] byteArray = baos.toByteArray();
         String photoB64 = Base64.encodeToString(byteArray,0,byteArray.length,Base64.URL_SAFE);
         return photoB64;

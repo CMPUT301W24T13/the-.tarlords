@@ -6,7 +6,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavOptions;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
@@ -112,7 +111,7 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
 
             try {
                 //TODO: this is kinda broken
-                eventMaxAttendees.setText("Max Attendees: " + event.getMaxSignUps().toString());
+                eventMaxAttendees.setText(event.getMaxSignUps().toString());
             } catch (Exception ignored) {
             }
         }
@@ -152,7 +151,7 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
         }
 
         //display announcement icon for all users
-        menu.findItem(R.id.showAnouncementsMenu).setVisible(true);
+        menu.findItem(R.id.anouncementsOptionsMenu).setVisible(true);
     }
 
     /**
@@ -184,7 +183,7 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
             } catch (Exception ignored) {}
         }
         //navigate to announcements fragment
-        else if (menuItem.getItemId()==R.id.showAnouncementsMenu){
+        else if (menuItem.getItemId()==R.id.anouncementsOptionsMenu){
             Bundle args = new Bundle();
             args.putParcelable("event",event);
             try {

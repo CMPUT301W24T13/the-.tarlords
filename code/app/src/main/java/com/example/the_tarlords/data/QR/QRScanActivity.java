@@ -48,11 +48,7 @@ public class QRScanActivity extends AppCompatActivity {
         //setContentView(R.layout.activity_qr);
         setContentView(R.layout.content_main);
 
-        userId = getIntent().getStringExtra("userID");
-        firstName = getIntent().getStringExtra("firstName");
-        lastName = getIntent().getStringExtra("lastName");
-        phoneNum = getIntent().getStringExtra("phoneNum");
-        email = getIntent().getStringExtra("email");
+        userId = getIntent().getStringExtra("userId");
 
         // Check camera permission and initiate QR code scanning if permission is granted
         if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -93,20 +89,15 @@ public class QRScanActivity extends AppCompatActivity {
                     try {
                         if (eventID.equals(QrID.substring(2))) {
 
-                            String eventName = doc.getString("name");
-                            String eventLocation = doc.getString("location");
-                            String eventId = doc.getString("id");
-                            String eventStartTime = doc.getString("startTime");
-                            String eventEndTime = doc.getString("endTime");
-                            String eventStartDate = doc.getString("startDate");
-                            Event event = new Event(eventName, eventLocation, eventId, eventStartTime, eventEndTime, eventStartDate);
+                            Event event = doc.toObject(Event.class);
 
                             if (QrID.equals("CI" + eventID)) {
                                 //This is a CheckIn QR
-                                Attendee attendee = new Attendee(userId, firstName, lastName, phoneNum, email, event);
-                                attendee.setCheckInStatus(TRUE);
+                                User user = new User();
+                                user.setUserId(userId);
+                                event.setCheckIn(user,TRUE);
                                 Log.e("QrCode", "In CI" + eventID);
-                                Log.e("QrCode", "EventName is " + eventName);
+                                Log.e("QrCode", "EventName is " + event.getName());
                                 finish();
 
                             } else {
@@ -115,12 +106,8 @@ public class QRScanActivity extends AppCompatActivity {
 
                                 //Go to EventDetails Fragment through main
                                 Intent intent = new Intent(QRScanActivity.this, MainActivity.class);
-                                intent.putExtra("eventName", eventName);
-                                intent.putExtra("eventLocation", eventLocation);
-                                intent.putExtra("eventId", eventId);
-                                intent.putExtra("eventStartTime", eventStartTime);
-                                intent.putExtra("eventEndTime", eventEndTime);
-                                intent.putExtra("eventStartDate", eventStartDate);
+                                intent.putExtra("event", event);
+
                                 startActivity(intent);
                             }
 

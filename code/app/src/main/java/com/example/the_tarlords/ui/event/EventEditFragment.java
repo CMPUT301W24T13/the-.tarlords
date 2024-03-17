@@ -277,7 +277,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
      * Mandatory MenuProvider interface method.
      * This shouldn't save changes if cancelOptions menu is selected
      * @param menuItem the menu item that was selected
-     * @return
+     * @return boolean
      */
     // TODO: when an event is saved duplicate events show up?
     @Override
