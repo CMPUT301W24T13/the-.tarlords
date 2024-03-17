@@ -2,12 +2,9 @@ package com.example.the_tarlords.data.users;
 
 import android.widget.ImageView;
 
-import androidx.fragment.app.FragmentActivity;
-
 import com.example.the_tarlords.data.Alert.Alert;
 import com.example.the_tarlords.data.QR.QRCode;
 import com.example.the_tarlords.data.app.App;
-import com.example.the_tarlords.data.attendance.Attendance;
 import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.event.EventPoster;
 import com.example.the_tarlords.data.map.Map;
@@ -57,6 +54,21 @@ public class Organizer extends Attendee implements OrgPerms {
         return event;
     }
 
+    @Override
+    public boolean setLimit() {
+        return false;
+    }
+
+    @Override
+    public int maxLimitFunction() {
+        return 0;
+    }
+
+    @Override
+    public QRCode generateQRCode(Event event, String text, ImageView imageView) {
+        return null;
+    }
+
     /**
      * This allows organizer to generate a QR code linked to attendee check in list for that event.
      * It also connects the generated QRcode to a specific event.
@@ -65,7 +77,7 @@ public class Organizer extends Attendee implements OrgPerms {
      * @param imageView
      * @return
      */
-    @Override
+
     public QRCode genQRCodeForCheckIns(Event event, String text, ImageView imageView) {
         QRCode qrCode = new QRCode();
         qrCode.generateQR(text, imageView);
@@ -146,7 +158,7 @@ public class Organizer extends Attendee implements OrgPerms {
      * @param imageView
      * @return
      */
-    @Override
+
     public QRCode genUniquePromotionQRCode(Event event, String text, ImageView imageView) {
         QRCode qrCode = new QRCode();
         qrCode.generateQR(text, imageView);
@@ -168,7 +180,7 @@ public class Organizer extends Attendee implements OrgPerms {
 
     //need iz's attendance list; This code is incorrect, I will change it
     @Override
-    public AttendeeSignUpList viewAttendeeSignUps(Event event) {
+    public ArrayList<Attendee> viewAttendeeSignUps(Event event) {
         return null;
     }
 
