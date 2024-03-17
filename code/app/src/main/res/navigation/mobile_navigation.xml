@@ -22,10 +22,6 @@
             android:id="@+id/action_profileFragment_to_eventBrowseFragment2"
             app:destination="@id/eventBrowseFragment"
             app:popUpTo="@id/eventBrowseFragment" />
-        <action
-            android:id="@+id/action_profileFragment_self"
-            app:destination="@id/profileFragment"
-            app:launchSingleTop="true" />
     </fragment>
     <activity
         android:id="@+id/mainActivity"
@@ -47,8 +43,7 @@
         <action
             android:id="@+id/action_eventListFragment_to_profileFragment"
             app:destination="@id/profileFragment"
-            app:popUpTo="@id/profileFragment"
-            app:popUpToInclusive="true" />
+            app:popUpTo="@id/profileFragment" />
         <action
             android:id="@+id/action_eventListFragment_to_eventBrowseFragment2"
             app:destination="@id/eventBrowseFragment"
@@ -79,6 +74,10 @@
         <action
             android:id="@+id/action_eventDetailsFragment_to_alertFragment"
             app:destination="@id/alertFragment" />
+        <action
+            android:id="@+id/action_eventDetailsFragment_pop"
+            app:popUpTo="@id/eventDetailsFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/eventEditFragment"
