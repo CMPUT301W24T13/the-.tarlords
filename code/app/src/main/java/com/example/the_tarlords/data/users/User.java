@@ -148,6 +148,7 @@ public class User implements Profile {
                 });
     }
 
+
     /**
      * Deletes a user from firestore Users collection, along with any documents associated with the user in
      * the Attendance collection, and any event where the deleted user is specified as the organizer.
@@ -208,3 +209,4 @@ public class User implements Profile {
     }
 
 }
+
