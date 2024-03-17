@@ -34,10 +34,11 @@ import com.example.the_tarlords.data.photo.ProfilePhoto;
 import com.example.the_tarlords.data.users.User;
 import com.example.the_tarlords.databinding.FragmentEventListBinding;
 import com.example.the_tarlords.databinding.FragmentProfileBinding;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileFragment extends Fragment implements MenuProvider {
     private User user = MainActivity.user;
-    ImageView profilePhotoImageView;
+    CircleImageView profilePhotoImageView;
     Button addProfilePhotoButton;
     EditText firstNameEditText;
     EditText lastNameEditText;
@@ -93,7 +94,6 @@ public class ProfileFragment extends Fragment implements MenuProvider {
 
             if (user.getProfilePhoto() != null) { //display user's profile photo if not null
                 profilePhotoImageView.setImageBitmap(user.getProfilePhoto().getBitmap());
-
             }
             else { //if user does not have a profile photo, generate one
                 ProfilePhoto profilePhoto = new ProfilePhoto(user.getFirstName() + user.getLastName(),
@@ -101,7 +101,6 @@ public class ProfileFragment extends Fragment implements MenuProvider {
                 profilePhoto.autoGenerate();
                 user.setProfilePhoto(profilePhoto);
                 profilePhotoImageView.setImageBitmap(profilePhoto.getBitmap());
-
             }
         }
 
