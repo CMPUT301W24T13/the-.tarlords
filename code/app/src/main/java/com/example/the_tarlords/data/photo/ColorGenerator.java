@@ -13,7 +13,7 @@ import java.util.Random;
 public class ColorGenerator {
     //private static Stack<Integer> colors;
     //private static Stack<Integer> recycler;
-    private static Integer[] colors = {0xFFFFC0CB, 0xFFDB7093, 0xFFADD8E6, 0xFF90EE90, 0xFFFFDAB9, 0xFFE6E6FA, 0xFF87CEEB, 0xFF98FB98, 0xFFFFFFE0, 0xFFD8BFD8};
+    private static Integer[] colors = {0xFFFFC0CB, 0xFFDB7093, 0xFFADD8E6, 0xFF90EE90, 0xFFFFDAB9, 0xFFE6E6FA, 0xFF87CEEB, 0xFF98FB98, 0xFFD8BFD8};
     /*
     public void RandomColor() {
         colors = new Stack<>();

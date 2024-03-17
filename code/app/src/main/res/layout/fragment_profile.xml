@@ -49,9 +49,7 @@
         android:id="@+id/button_add_profile_photo"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:layout_marginStart="45dp"
-        android:layout_marginEnd="216dp"
-        android:background="@drawable/profile_icon"
+        android:background="@drawable/button_border"
         android:fontFamily="@font/helvetica_rounded_bold"
         android:text="@string/add_profile_photo"
         android:textSize="20sp"
@@ -59,7 +57,8 @@
         app:layout_constraintBottom_toBottomOf="@id/image_view_profile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/image_view_profile" />
+        app:layout_constraintTop_toTopOf="@id/image_view_profile"
+        tools:visibility="visible" />
 
     <EditText
         android:id="@+id/edit_text_first_name"
