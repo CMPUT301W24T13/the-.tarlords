@@ -71,7 +71,7 @@ public class EventListFragment extends Fragment implements MenuProvider {
 
         //currently not relevant
         if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
+            //parse any args here
         }
 
     }
