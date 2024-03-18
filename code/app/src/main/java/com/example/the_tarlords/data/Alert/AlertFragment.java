@@ -8,6 +8,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
@@ -81,9 +82,12 @@ public class AlertFragment extends Fragment implements AddAlertDialogListener,Me
                 ListView listView = view.findViewById(R.id.alert_list);
                 alertListAdapter = new AlertListAdapter(requireContext(), alertList,1);
                 listView.setAdapter(alertListAdapter);
+                refreshList();
+
+
+
             }
         });
-
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.button_add_alert);
         if (!isOrganizer){
             fab.setVisibility(View.GONE);
@@ -97,6 +101,16 @@ public class AlertFragment extends Fragment implements AddAlertDialogListener,Me
             addAlertFragment.show(getChildFragmentManager(), "Add alert");
 
         });
+
+        ListView alertListView = (ListView) view.findViewById(R.id.alert_list);
+        if(isOrganizer){
+            alertListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    new AddAlertFragment(alertList.get(position)).show(getChildFragmentManager(),"Edit / delete alert" );
+                }
+            });
+        }
 
         return view;
     }
@@ -148,6 +162,7 @@ public class AlertFragment extends Fragment implements AddAlertDialogListener,Me
                 listView.setAdapter(alertListAdapter);
             }
         });
+            // todo: sorting not working correctly, newest alerts should be at the top
             Collections.sort(alertList);
             alertListAdapter.notifyDataSetChanged();
 
