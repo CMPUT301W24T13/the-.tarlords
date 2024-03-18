@@ -51,9 +51,6 @@ public class QRScanActivity extends AppCompatActivity {
             scanQr();
         }*/
         ActivityCompat.requestPermissions(QRScanActivity.this, new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
-        if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-            scanQr();
-        }
     }
 
     /**
