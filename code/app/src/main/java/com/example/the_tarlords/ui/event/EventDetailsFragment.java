@@ -187,6 +187,7 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
         else if (menuItem.getItemId()==R.id.showAnouncementsMenu){
             Bundle args = new Bundle();
             args.putParcelable("event",event);
+            args.putBoolean("isOrganizer",isOrganizer);
             try {
                 NavHostFragment.findNavController(EventDetailsFragment.this)
                         .navigate(R.id.action_eventDetailsFragment_to_alertFragment, args);

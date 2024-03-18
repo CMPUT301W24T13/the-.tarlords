@@ -34,7 +34,8 @@ public class AlertFragment extends Fragment implements AddAlertDialogListener,Me
 
     //private ArrayList<Alert> alertDataList;
     private AlertListAdapter alertListAdapter;
-    public static Event event;
+    private static Event event;
+    private boolean isOrganizer;
     private ArrayList<Alert> alertList = new ArrayList<>();
 
     public AlertFragment(ArrayList<Alert> alertDataList){
@@ -50,6 +51,7 @@ public class AlertFragment extends Fragment implements AddAlertDialogListener,Me
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             event = getArguments().getParcelable("event");
+            isOrganizer =  getArguments().getBoolean("isOrganizer");
         }
 
     }
@@ -82,10 +84,12 @@ public class AlertFragment extends Fragment implements AddAlertDialogListener,Me
             }
         });
 
-        // unfinished fab
-
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.button_add_alert);
-
+        if (!isOrganizer){
+            fab.setVisibility(View.GONE);
+        }else{
+            fab.setVisibility(View.VISIBLE);
+        }
         fab.setOnClickListener(v -> {
 
             AddAlertFragment addAlertFragment = new AddAlertFragment(null);
