@@ -1,11 +1,14 @@
 package com.example.the_tarlords.ui;
 
+import static com.example.the_tarlords.MainActivity.db;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,19 +18,40 @@ import android.view.ViewGroup;
 
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
+import com.example.the_tarlords.data.event.Event;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class MapsFragment extends Fragment implements MenuProvider {
 
-    //TODO dont hardcode the event id
 
-    CollectionReference checkInsRef = MainActivity.db.collection("Events/"+ "1" +"/checkIns");
+    public static Event event;
+    private String eventId;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            event = getArguments().getParcelable("event");
+            if(event != null){
+                Log.d("maps", event.getId());
+                eventId = event.getId();
+            }else{
+                Log.d("maps", "null event");
+            }
+        }
+
+    }
+
 
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
@@ -96,11 +120,48 @@ public class MapsFragment extends Fragment implements MenuProvider {
      * at that event
      * @param googleMap
      */
+
     public void addMarkers(GoogleMap googleMap) {
         LatLng sydney = new LatLng(-34, 151);
         googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
         // get one from firebase
+        
+         // Query Firestore to get documents from events collection where eventId matches
+         Query eventQuery = db.collection("Events").whereEqualTo("id", eventId);
+         eventQuery.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        @Override
+        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+        for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+        // For each document, get the checkIns subcollection
+        String eventId = documentSnapshot.getString("id");
+        if (eventId != null) {
+        db.collection("Events").document(eventId).collection("checkIns")
+        .get()
+        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        @Override
+        public void onSuccess(QuerySnapshot checkInsSnapshots) {
+        for (DocumentSnapshot checkInSnapshot : checkInsSnapshots) {
+        // Get name , longitude and latitude fields
+        Double longitude = checkInSnapshot.getDouble("longitude");
+        Double latitude = checkInSnapshot.getDouble("latitude");
+        String name = checkInSnapshot.getString("name");
+
+        // Use longitude and latitude to create a marker
+        if (longitude != null && latitude != null) {
+        // Do something with longitude and latitude
+        LatLng position = new LatLng(latitude, longitude);
+        googleMap.addMarker(new MarkerOptions().position(position).title( name + "'s location"));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(position));
+        Log.d("CheckIn", "Longitude: " + longitude + ", Latitude: " + latitude);
+        }
+        }
+        }
+        });
+        }
+        }
+        }
+        });
 
     }
 
