@@ -25,7 +25,7 @@ import java.util.Scanner;
 /**
  * This is the Organizer Class, which is subclass of Attendee but with more permissions
  */
-public class Organizer extends Attendee implements OrgPerms {
+public class Organizer  {
 
     /**
      * Constructor for organizer
