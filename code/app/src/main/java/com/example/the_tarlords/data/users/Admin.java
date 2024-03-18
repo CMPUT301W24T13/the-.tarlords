@@ -13,6 +13,9 @@ public class Admin extends User implements AdminPerms {
     public Admin(String userId, String firstName, String lastName, String phoneNum, String email) throws IOException {
         super(userId, firstName, lastName, phoneNum, email);
     }
+    /*public Admin(String userId, Profile profile, List<Event> events, AlertList alerts) {
+        super(userId, profile, events, alerts);
+    }*/
 
     @Override
     boolean isAdmin() {

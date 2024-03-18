@@ -4,20 +4,13 @@
 
     <uses-feature
         android:name="android.hardware.camera"
-        android:required="false"/>
-        <uses-feature
-            android:name="android.hardware.camera.autofocus"
-            android:required="false"/>
-        <uses-feature
-            android:name="android.hardware.camera.flash"
-            android:required="false"/>
+        android:required="false" />
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <application
         android:allowBackup="true"
@@ -47,7 +40,9 @@
         <activity android:name =".ui.profile.UploadPhotoActivity"/>
         <activity android:name=".ui.profile.TakePhotoActivity"/>
 
-        <activity android:name=".ui.profile.TakePhotoActivity"/>
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
 
     </application>
 

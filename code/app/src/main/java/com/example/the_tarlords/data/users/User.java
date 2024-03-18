@@ -24,6 +24,9 @@ import android.provider.Settings;
 import androidx.annotation.NonNull;
 
 import com.example.the_tarlords.MainActivity;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import java.util.Map;
 
 public class User implements Profile {
@@ -151,6 +154,10 @@ public class User implements Profile {
      * the Attendance collection, and any event where the deleted user is specified as the organizer.
      */
     public void removeFromFirestore() {
+        CollectionReference attendanceRef = MainActivity.db.collection("Attendance");
+        CollectionReference eventsRef = MainActivity.db.collection("Events");
+
+        //delete user doc
         usersRef.document(userId)
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -165,8 +172,40 @@ public class User implements Profile {
                         Log.d("Firestore", e.getMessage());
                     }
                 });
-        //TODO: delete user instances in attendance
-        //TODO: delete events organized by user
+
+        //delete user's attendance docs
+        attendanceRef.whereEqualTo("user",userId).get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot attendeeDoc : queryDocumentSnapshots) {
+                            attendeeDoc.getReference().delete();
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("Firestore", e.getMessage());
+                    }
+                });
+
+        //delete events created by user
+        eventsRef.whereEqualTo("organizerId", userId).get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot eventDoc : queryDocumentSnapshots) {
+                            eventDoc.toObject(Event.class).removeFromFirestore();
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("Firestore", e.getMessage());
+                    }
+                });
     }
 
 }

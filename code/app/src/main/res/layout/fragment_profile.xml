@@ -1,151 +1,153 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#ececec"
     tools:context=".ui.profile.ProfileFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/edit_profile_info"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/profile_top_bar"
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="394dp"
+        android:layout_height="712dp"
+        android:src="@drawable/dashboard_background"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.058"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0" >
-
-        <EditText
-            android:id="@+id/edit_text_first_name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="27dp"
-            android:layout_marginEnd="25dp"
-            android:ems="10"
-            android:fontFamily="@font/helvetica"
-            android:hint="@string/first_name"
-            android:inputType="text"
-            android:textSize="20sp"
-            android:textStyle="bold"
-
-            android:clickable="false"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/edit_text_last_name"/>
-
-        <EditText
-            android:id="@+id/edit_text_last_name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="3dp"
-            android:layout_marginEnd="25dp"
-            android:ems="10"
-            android:fontFamily="@font/helvetica"
-            android:hint="@string/last_name"
-            android:inputType="text"
-            android:textSize="20sp"
-            android:textStyle="bold"
-
-            android:clickable="false"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/edit_text_first_name"
-            app:layout_constraintBottom_toTopOf="@+id/edit_text_phone"/>
-
-        <EditText
-            android:id="@+id/edit_text_phone"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="3dp"
-            android:layout_marginEnd="25dp"
-            android:ems="10"
-            android:fontFamily="@font/helvetica"
-            android:hint="@string/phone_number"
-            android:inputType="phone"
-            android:textSize="20sp"
-            android:textStyle="bold"
-
-            android:clickable="false"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_text_last_name"
-            app:layout_constraintBottom_toTopOf="@+id/edit_text_email"/>
-
-        <EditText
-            android:id="@+id/edit_text_email"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="3dp"
-            android:layout_marginEnd="25dp"
-            android:layout_marginBottom="310dp"
-            android:ems="10"
-            android:fontFamily="@font/helvetica"
-            android:hint="@string/email"
-            android:inputType="textEmailAddress"
-            android:textSize="20sp"
-            android:textStyle="bold"
-
-            android:clickable="false"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_text_phone" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/profile_top_bar"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:background="@drawable/side_nav_bar"
-        android:backgroundTintMode="src_atop"
-        android:foregroundGravity="bottom"
-        android:rotationX="0"
-        android:theme="@style/Theme.Material3.Dark"
-        app:circularflow_radiusInDP="20"
-
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="376dp"
+        android:layout_height="694dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/dashboard_background2"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/imageView1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/image_view_profile"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:contentDescription="@string/profile_picture"
+        android:src="@drawable/profile"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageView1"
+        app:layout_constraintVertical_bias="0.253" />
+
+    <Button
+        android:id="@+id/button_add_profile_photo"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:background="@drawable/button_border"
+        android:fontFamily="@font/helvetica_rounded_bold"
+        android:text="@string/add_profile_photo"
+        android:textSize="20sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/image_view_profile"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/image_view_profile"
+        tools:visibility="visible" />
+
+    <EditText
+        android:id="@+id/edit_text_first_name"
+        android:layout_width="131dp"
+        android:layout_height="44dp"
+        android:background="@drawable/rounded_corner"
+        android:clickable="false"
+        android:fontFamily="@font/helvetica"
+        android:gravity="center"
+        android:hint="@string/first_name"
+        android:inputType="text"
+        android:textColor="#000000"
+        android:textColorHint="#887D7D"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.26"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/image_view_profile"
+        app:layout_constraintVertical_bias="0.123" />
+
+
+    <EditText
+        android:id="@+id/edit_text_last_name"
+        android:layout_width="131dp"
+        android:layout_height="44dp"
+        android:background="@drawable/rounded_corner"
+        android:clickable="false"
+        android:fontFamily="@font/helvetica"
+        android:gravity="center"
+        android:hint="@string/last_name"
+        android:inputType="text"
+        android:textColor="#000000"
+        android:textColorHint="#887D7D"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/edit_text_first_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.21"
+        app:layout_constraintStart_toEndOf="@+id/edit_text_first_name"
+        app:layout_constraintTop_toTopOf="@+id/edit_text_first_name"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <EditText
+        android:id="@+id/edit_text_phone"
+        android:layout_width="290dp"
+        android:layout_height="44dp"
+        android:layout_marginBottom="268dp"
+        android:background="@drawable/rounded_corner"
+        android:clickable="false"
+        android:fontFamily="@font/helvetica"
+        android:gravity="center"
+        android:hint="@string/phone_number"
+        android:inputType="phone"
+        android:textColor="#000000"
+        android:textColorHint="#887D7D"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/edit_text_last_name"
+        app:layout_constraintHorizontal_bias="0.583"
+        app:layout_constraintStart_toStartOf="@+id/edit_text_first_name"
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_first_name"
+        app:layout_constraintVertical_bias="0.361" />
+
+    <EditText
+        android:id="@+id/edit_text_email"
+        android:layout_width="290dp"
+        android:layout_height="44dp"
+        android:layout_marginBottom="216dp"
+        android:background="@drawable/rounded_corner"
+        android:clickable="false"
+        android:fontFamily="@font/helvetica"
+        android:gravity="center"
+        android:hint="@string/email"
+        android:inputType="textEmailAddress"
+        android:textColor="#000000"
+        android:textColorHint="#887D7D"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/edit_text_phone"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="@+id/edit_text_phone"
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_phone"
+        app:layout_constraintVertical_bias="0.368" />
 
-        <ImageView
-            android:id="@+id/image_view_profile"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_marginStart="45dp"
-            android:layout_marginEnd="216dp"
-            android:contentDescription="@string/profile_picture"
-            android:src="@drawable/profile_icon"
-            app:layout_constraintBottom_toBottomOf="@+id/profile_top_bar"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/profile_top_bar"
-            app:srcCompat="@mipmap/ic_launcher_round" />
 
-        <Button
-            android:id="@+id/button_add_profile_photo"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_marginStart="45dp"
-            android:layout_marginEnd="216dp"
-            android:background="@drawable/profile_icon"
-            android:fontFamily="@font/helvetica_rounded_bold"
-            android:text="@string/add_profile_photo"
-            android:textSize="20sp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@id/image_view_profile"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/image_view_profile" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
