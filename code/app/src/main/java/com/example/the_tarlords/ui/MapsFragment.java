@@ -129,38 +129,38 @@ public class MapsFragment extends Fragment implements MenuProvider {
         
          // Query Firestore to get documents from events collection where eventId matches
          Query eventQuery = db.collection("Events").whereEqualTo("id", eventId);
-         eventQuery.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-        @Override
-        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-        for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-        // For each document, get the checkIns subcollection
-        String eventId = documentSnapshot.getString("id");
-        if (eventId != null) {
-        db.collection("Events").document(eventId).collection("checkIns")
-        .get()
-        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-        @Override
-        public void onSuccess(QuerySnapshot checkInsSnapshots) {
-        for (DocumentSnapshot checkInSnapshot : checkInsSnapshots) {
-        // Get name , longitude and latitude fields
-        Double longitude = checkInSnapshot.getDouble("longitude");
-        Double latitude = checkInSnapshot.getDouble("latitude");
-        String name = checkInSnapshot.getString("name");
+        eventQuery.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                    // For each document, get the checkIns subcollection
+                    String eventId = documentSnapshot.getString("id");
+                    if (eventId != null) {
+                        db.collection("Events").document(eventId).collection("checkIns")
+                                .get()
+                                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onSuccess(QuerySnapshot checkInsSnapshots) {
+                                        for (DocumentSnapshot checkInSnapshot : checkInsSnapshots) {
+                                            // Get name , longitude and latitude fields
+                                            Double longitude = checkInSnapshot.getDouble("longitude");
+                                            Double latitude = checkInSnapshot.getDouble("latitude");
+                                            String name = checkInSnapshot.getString("name");
 
-        // Use longitude and latitude to create a marker
-        if (longitude != null && latitude != null) {
-        // Do something with longitude and latitude
-        LatLng position = new LatLng(latitude, longitude);
-        googleMap.addMarker(new MarkerOptions().position(position).title( name + "'s location"));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(position));
-        Log.d("CheckIn", "Longitude: " + longitude + ", Latitude: " + latitude);
-        }
-        }
-        }
-        });
-        }
-        }
-        }
+                                            // Use longitude and latitude to create a marker
+                                            if (longitude != null && latitude != null) {
+                                                // Do something with longitude and latitude
+                                                LatLng position = new LatLng(latitude, longitude);
+                                                googleMap.addMarker(new MarkerOptions().position(position).title(name + "'s location"));
+                                                googleMap.moveCamera(CameraUpdateFactory.newLatLng(position));
+                                                Log.d("CheckIn", "Longitude: " + longitude + ", Latitude: " + latitude);
+                                            }
+                                        }
+                                    }
+                                });
+                    }
+                }
+            }
         });
 
     }
