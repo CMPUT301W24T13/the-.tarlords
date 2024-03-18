@@ -1,5 +1,7 @@
 package com.example.the_tarlords.ui.event;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -120,8 +122,10 @@ public class EventOrganizerListFragment extends Fragment implements MenuProvider
                 Bundle args = new Bundle();
                 args.putParcelable("event",event);
                 args.putBoolean("isOrganizer", true);
-                NavHostFragment.findNavController(EventOrganizerListFragment.this)
-                        .navigate(R.id.action_eventOrganizerListFragment_to_eventDetailsFragment,args);
+                try {
+                    NavHostFragment.findNavController(EventOrganizerListFragment.this)
+                            .navigate(R.id.action_eventOrganizerListFragment_to_eventDetailsFragment,args);
+                } catch (Exception ignore) {}
             }
         });
     }
@@ -134,10 +138,14 @@ public class EventOrganizerListFragment extends Fragment implements MenuProvider
 
     @Override
     public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
-        menu.clear();
-        menuInflater.inflate(R.menu.options_menu, menu);
-        menu.findItem(R.id.addOptionsMenu).setVisible(true);
+        if (isAdded() && getContext() != null) {
+            menu.clear();
+            menuInflater.inflate(R.menu.options_menu, menu);
+            menu.findItem(R.id.addOptionsMenu).setVisible(true);
+            menu.findItem(R.id.editOptionsMenu).setVisible(false);
+        }
     }
+
 
     @Override
     public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
@@ -146,11 +154,15 @@ public class EventOrganizerListFragment extends Fragment implements MenuProvider
             Bundle args = new Bundle();
             args.putParcelable("event",myEvent);
             args.putBoolean("isOrganizer", true);
-            NavHostFragment.findNavController(EventOrganizerListFragment.this)
-                    .navigate(R.id.action_eventOrganizerListFragment_to_eventEditFragment,args);
+            try {
+                NavHostFragment.findNavController(EventOrganizerListFragment.this)
+                        .navigate(R.id.action_eventOrganizerListFragment_to_eventEditFragment, args);
+            } catch (Exception ignored) {}
         }
         return false;
     }
 
     //TODO: implement add event (fab or options menu)
+
+
 }

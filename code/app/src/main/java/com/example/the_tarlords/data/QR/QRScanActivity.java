@@ -12,17 +12,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
-import com.example.the_tarlords.data.attendance.Attendance;
 import com.example.the_tarlords.data.users.User;
 import com.example.the_tarlords.data.event.Event;
-import com.example.the_tarlords.data.users.Attendee;
-import com.example.the_tarlords.ui.event.EventDetailsFragment;
-import com.example.the_tarlords.ui.profile.ProfileFragment;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -42,17 +36,15 @@ public class QRScanActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private CollectionReference eventsRef;
 
+    //TODO: exit scan button (ie go back to main activity without scanning anything)
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_qr);
         setContentView(R.layout.content_main);
 
-        userId = getIntent().getStringExtra("userID");
-        firstName = getIntent().getStringExtra("firstName");
-        lastName = getIntent().getStringExtra("lastName");
-        phoneNum = getIntent().getStringExtra("phoneNum");
-        email = getIntent().getStringExtra("email");
+        userId = getIntent().getStringExtra("userId");
 
         // Check camera permission and initiate QR code scanning if permission is granted
         if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -93,20 +85,16 @@ public class QRScanActivity extends AppCompatActivity {
                     try {
                         if (eventID.equals(QrID.substring(2))) {
 
-                            String eventName = doc.getString("name");
-                            String eventLocation = doc.getString("location");
-                            String eventId = doc.getString("id");
-                            String eventStartTime = doc.getString("startTime");
-                            String eventEndTime = doc.getString("endTime");
-                            String eventStartDate = doc.getString("startDate");
-                            Event event = new Event(eventName, eventLocation, eventId, eventStartTime, eventEndTime, eventStartDate);
+                            Event event = doc.toObject(Event.class);
 
                             if (QrID.equals("CI" + eventID)) {
+                                //TODO: check if max attendees reached
                                 //This is a CheckIn QR
-                                Attendee attendee = new Attendee(userId, firstName, lastName, phoneNum, email, event);
-                                attendee.setCheckInStatus(TRUE);
+                                User user = new User();
+                                user.setUserId(userId);
+                                event.setCheckIn(user,TRUE);
                                 Log.e("QrCode", "In CI" + eventID);
-                                Log.e("QrCode", "EventName is " + eventName);
+                                Log.e("QrCode", "EventName is " + event.getName());
                                 finish();
 
                             } else {
@@ -115,12 +103,8 @@ public class QRScanActivity extends AppCompatActivity {
 
                                 //Go to EventDetails Fragment through main
                                 Intent intent = new Intent(QRScanActivity.this, MainActivity.class);
-                                intent.putExtra("eventName", eventName);
-                                intent.putExtra("eventLocation", eventLocation);
-                                intent.putExtra("eventId", eventId);
-                                intent.putExtra("eventStartTime", eventStartTime);
-                                intent.putExtra("eventEndTime", eventEndTime);
-                                intent.putExtra("eventStartDate", eventStartDate);
+                                intent.putExtra("event", event);
+
                                 startActivity(intent);
                             }
 

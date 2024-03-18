@@ -49,23 +49,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
 
-        /**
-         * Checks if returning from QR activity, and redirects user to event
-         * detail fragment if so.
-         */
 
-        if (getIntent().getStringExtra("eventId") != null) {
-            String name = getIntent().getStringExtra("eventName");
-            String location = getIntent().getStringExtra("eventLocation");
-            String id = getIntent().getStringExtra("eventId");
-            String startTime = getIntent().getStringExtra("eventStartTime");
-            String endTime = getIntent().getStringExtra("eventEndTime");
-            String startDate = getIntent().getStringExtra("eventStartDate");
-            Event event = new Event(name, location, id, startTime, endTime, startDate);
-
-            //opens event detail fragment of scanned event
-            navigateToEventDetailsFragment(event);
-        }
         //TODO: check if returning from profile pic activity, if so redirect to profile fragment
 
 
@@ -100,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
             //sets content binding now that userId is no longer null (must stay above updateNavigationDrawerHeader()
             setBinding();
 
+
             // Update UI with default user information
             updateNavigationDrawerHeader();
 
@@ -107,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
             navigateToProfileFragment();
         }
         else {
-            //user has been here before
             String finalUserId = userId;
             Log.d("debug", userId);
 
@@ -121,24 +105,36 @@ public class MainActivity extends AppCompatActivity {
                             //creates 'user' object from firestore data, now you can use 'user' object
                             user = documentSnapshot.toObject(User.class);
 
-                            // sets content binding now that 'user' object is not null
+                            //sets content binding now that userId is no longer null (must stay above updateNavigationDrawerHeader()
                             setBinding();
 
                             //updates navigation UI header
                             updateNavigationDrawerHeader();
+
+                            //checks if user is returning from QR activity
+                            if (getIntent().getParcelableExtra("event") != null) {
+                                Event event = getIntent().getParcelableExtra("event");
+                                //opens event detail fragment of scanned event
+                                navigateToEventDetailsFragment(event);
+                            }
                         }
                         else {
                             Log.d("debug", "didn't find a user");
-                            // This is a case where user has used app on device but user info is not on firebase yet (my case, developer)
-                            user = new User(finalUserId,"khushi","lad","780-111-1111","john.doe@ualberta.ca");
+                            // This is a case where user has used app on device but user info is not on firebase yet
+                            user = new User(finalUserId,"First Name","Last Name","Phone Number","email");
                             // Update UI with default user information
                             updateNavigationDrawerHeader();
+
+                            // Navigate to profile fragment
+                            navigateToProfileFragment();
                         }
                     })
                     .addOnFailureListener(e -> {
                         // Handle failure
                         Log.e("debug", "failed to get the document",e);
                     });
+
+
 
         }
     }
@@ -166,11 +162,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 //passes in user info in case of check-in QR scan
                 Intent intent = new Intent(MainActivity.this, QRScanActivity.class);
-                intent.putExtra("userID", user.getUserId());
-                intent.putExtra("firstName", user.getFirstName());
-                intent.putExtra("lastName", user.getLastName());
-                intent.putExtra("phoneNum", user.getPhoneNum());
-                intent.putExtra("email", user.getEmail());
+                intent.putExtra("userId", user.getUserId());
+
                 startActivity(intent);
             }
         });
@@ -197,10 +190,12 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.commit();*/
         Bundle args = new Bundle();
         args.putParcelable("event", event);
-        Navigation.findNavController(this,R.id.nav_host_fragment_content_main)
-                .navigate(R.id.action_eventFragment_to_eventDetailsFragment, args);
+        args.putBoolean("isOrganizer", false);
+        try {
+            Navigation.findNavController(this, R.id.nav_host_fragment_content_main)
+                    .navigate(R.id.action_eventFragment_to_eventDetailsFragment, args);
+        } catch (Exception ignore) {}
     }
-
 
     /**
      * Redirects user to profile fragment.
@@ -242,11 +237,10 @@ public class MainActivity extends AppCompatActivity {
             name.setText(user.getFirstName() + " " + user.getLastName());
             phoneNum.setText(user.getPhoneNum());
             email.setText(user.getEmail());
-            if (user != null && user.getProfilePhoto() != null && user.getProfilePhoto().getBitmap()!=null) {
+            if (user != null && user.getProfilePhoto() != null && user.getProfilePhoto().getBitmap() != null) {
                 Bitmap bitmap = user.getProfilePhoto().getBitmap();
                 profilePic.setImageBitmap(bitmap);
-            }
-            else if (user.getProfilePhotoData() != null) {
+            } else if (user.getProfilePhotoData() != null) {
                 user.setProfilePhotoFromData(user.getProfilePhotoData());
                 Bitmap bitmap = user.getProfilePhoto().getBitmap();
                 profilePic.setImageBitmap(bitmap);
@@ -255,8 +249,9 @@ public class MainActivity extends AppCompatActivity {
         else {
             Log.e("debug", "User object is null");
             // Handle the case where the User object is null
-            user = new User(userId,"khushi","null","780-111-1111","john.doe@ualberta.ca");
+            user = new User(userId, "khushi", "null", "780-111-1111", "john.doe@ualberta.ca");
         }
+
     }
 
     /**

@@ -40,6 +40,10 @@
         <activity android:name =".ui.profile.UploadPhotoActivity"/>
         <activity android:name=".ui.profile.TakePhotoActivity"/>
 
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+
     </application>
 
 </manifest>

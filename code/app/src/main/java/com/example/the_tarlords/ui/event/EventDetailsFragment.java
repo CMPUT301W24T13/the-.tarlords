@@ -1,12 +1,14 @@
 package com.example.the_tarlords.ui.event;
 
 
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavOptions;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
@@ -112,12 +114,12 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
 
             try {
                 //TODO: this is kinda broken
-                eventMaxAttendees.setText("Max Attendees: " + event.getMaxSignUps().toString());
+                eventMaxAttendees.setText(event.getMaxSignUps().toString());
             } catch (Exception ignored) {
             }
         }
 
-        //display event QR codes if user has organizer perms
+        //display event QR codes if user has organizer perms, this is extra code now , organizer will never touch this fragment
         if (isOrganizer == true) {
             if (event.getQrCodeCheckIns()!=null){
                 view.findViewById(R.id.tv_checkin_details).setVisibility(view.VISIBLE);
@@ -149,10 +151,11 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
         if (isOrganizer) {
             menu.findItem(R.id.editOptionsMenu).setVisible(true);
             menu.findItem(R.id.attendanceOptionsMenu).setVisible(true);
+            menu.findItem(R.id.deleteOptionsMenu).setVisible(true);
         }
 
         //display announcement icon for all users
-        menu.findItem(R.id.showAnouncementsMenu).setVisible(true);
+        menu.findItem(R.id.anouncementsOptionsMenu).setVisible(true);
     }
 
     /**
@@ -184,7 +187,7 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
             } catch (Exception ignored) {}
         }
         //navigate to announcements fragment
-        else if (menuItem.getItemId()==R.id.showAnouncementsMenu){
+        else if (menuItem.getItemId()==R.id.anouncementsOptionsMenu) {
             Bundle args = new Bundle();
             args.putParcelable("event",event);
             args.putBoolean("isOrganizer",isOrganizer);
@@ -193,6 +196,26 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
                         .navigate(R.id.action_eventDetailsFragment_to_alertFragment, args);
             } catch (Exception ignored) {}
 
+        }
+        else if (menuItem.getItemId()==R.id.deleteOptionsMenu) {
+            AlertDialog dialog = new AlertDialog.Builder(getContext())
+                    .setMessage("Are you sure you would like to delete the event "+event.getName()+"?")
+                    .setNegativeButton("Delete", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            event.removeFromFirestore();
+                            try {
+                                //return to event organizer list fragment
+                                NavHostFragment.findNavController(EventDetailsFragment.this)
+                                        .navigate(R.id.action_eventDetailsFragment_pop);
+                            } catch (Exception ignored) {}
+                        }
+                    })
+                    .setCancelable(true)
+                    .setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {}
+                    }).show();
         }
         //should return false to prevent crashing
         return false;
