@@ -48,8 +48,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-
         //TODO: check if returning from profile pic activity, if so redirect to profile fragment
 
 
@@ -67,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
          * and set user value to your choice of ID. PLEASE COMMENT IT OUT AFTER TESTING
          */
         //userId = "whatever you want";
-        setBinding();
+        //setBinding();
 
         if (userId == null) {
             // user has not used app before
@@ -83,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
             user = new User(userId,"First Name","Last Name","Phone Number","email");
 
             //sets content binding now that userId is no longer null (must stay above updateNavigationDrawerHeader()
-            //setBinding();
+            setBinding();
 
 
             // Update UI with default user information
@@ -109,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
                             //updates navigation UI header
                             updateNavigationDrawerHeader();
 
+                            setBinding();
                             //checks if user is returning from QR activity
                             if (getIntent().getParcelableExtra("event") != null) {
                                 Event event = getIntent().getParcelableExtra("event");

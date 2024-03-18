@@ -1,6 +1,10 @@
 package com.example.the_tarlords.data.QR;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -58,16 +62,16 @@ public class QRCode {
         }
     }
 
-    public void shareQR(ImageView imageView) {
-        BitmapDrawable bitmapDrawable = (BitmapDrawable) imageView.getDrawable();
-        Bitmap bitmap = bitmapDrawable.getBitmap();
-
-        String bitmapPath = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, "QRCode", "Share QR");
-        Uri uri = Uri.parse(bitmapPath);
-
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("image/png");
-        intent.putExtra(Intent.EXTRA_STREAM, uri);
-        startActivity(Intent.createChooser(intent, "Share"));
-    }
+//    public void shareQR(ImageView imageView) {
+//        BitmapDrawable bitmapDrawable = (BitmapDrawable) imageView.getDrawable();
+//        Bitmap bitmap = bitmapDrawable.getBitmap();
+//
+//        String bitmapPath = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, "QRCode", "Share QR");
+//        Uri uri = Uri.parse(bitmapPath);
+//
+//        Intent intent = new Intent(Intent.ACTION_SEND);
+//        intent.setType("image/png");
+//        intent.putExtra(Intent.EXTRA_STREAM, uri);
+//        startActivity(Intent.createChooser(intent, "Share"));
+//    }
 }

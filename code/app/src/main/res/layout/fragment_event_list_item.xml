@@ -13,9 +13,10 @@
         android:layout_marginTop="1dp"
         android:layout_marginBottom="1dp"
         app:cardBackgroundColor="@color/list_item_background"
-        app:cardCornerRadius="10dp"
-        app:cardElevation="10dp"
+        app:cardCornerRadius="30dp"
+        app:cardElevation="6dp"
         app:contentPadding="8dp"
+        app:layout_goneMarginBottom="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -27,50 +28,111 @@
 
             <TextView
                 android:id="@+id/titleTextView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-medium"
+                android:layout_width="271dp"
+                android:layout_height="36dp"
+                android:fontFamily="@font/amaranth_bold"
+                android:gravity="left"
                 android:text="Event Name"
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:textSize="24sp"
                 android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintHorizontal_bias="0.944"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.285" />
+
 
             <TextView
                 android:id="@+id/locationTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="16dp"
-                android:fontFamily="sans-serif-light"
+                android:layout_width="181dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="96dp"
+                android:layout_marginBottom="8dp"
+                android:fontFamily="@font/almendra"
+                android:gravity="left"
                 android:text="Location"
+                android:textColor="#403636"
                 android:textSize="20dp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.961" />
+
+            <ImageView
+                android:id="@+id/imageView6"
+                android:layout_width="142dp"
+                android:layout_height="91dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.428"
+                app:srcCompat="@drawable/plant" />
 
             <TextView
                 android:id="@+id/startDateTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:layout_marginBottom="15dp"
-                android:fontFamily="sans-serif-medium"
+                android:fontFamily="@font/averia_sans_libre_bold"
                 android:text="Start Date"
-                android:textSize="15sp"
+                android:textColor="#403636"
+                android:textSize="14sp"
+                android:textStyle="italic"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/dash"
+                app:layout_constraintHorizontal_bias="0.951"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.014" />
+
+            <TextView
+                android:id="@+id/dash"
+                android:layout_width="27dp"
+                android:layout_height="15dp"
+                android:gravity="center"
+                android:text="---"
+                android:textColor="#403636"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/titleTextView"
+                app:layout_constraintHorizontal_bias="0.598"
+                app:layout_constraintStart_toStartOf="@+id/titleTextView"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.028" />
+
+            <TextView
+                android:id="@+id/endDateTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/averia_sans_libre_bold"
+                android:text="End Date"
+                android:textColor="#403636"
+                android:textSize="14sp"
                 android:textStyle="italic"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toEndOf="@+id/locationTextView"
+                app:layout_constraintHorizontal_bias="0.296"
+                app:layout_constraintStart_toEndOf="@+id/dash"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.014" />
+
+            <TextView
+                android:id="@+id/organizerNameTextView"
+                android:layout_width="99dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="4dp"
+                android:fontFamily="@font/averia_sans_libre_bold"
+                android:text="Org Name"
+                android:textColor="#204220"
+                android:textSize="15sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/titleTextView"
-                app:layout_constraintVertical_bias="1.0" />
+                app:layout_constraintVertical_bias="0.0" />
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>

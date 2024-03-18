@@ -10,13 +10,18 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
+        android:background="#f5f1ed"
         android:theme="@style/Theme.Thetarlords.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/actionBar"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/rounded_corner_app_bar"
             app:popupTheme="@style/Theme.Thetarlords.PopupOverlay" />
 
   </com.google.android.material.appbar.AppBarLayout>
@@ -31,7 +36,7 @@
         android:layout_marginEnd="@dimen/fab_dimension"
         android:layout_marginBottom="@dimen/fab_dimension"
         android:contentDescription="@string/qr_scan_fab"
-        app:backgroundTint="@color/fab_colour"
+        app:backgroundTint="#b4d3c4"
         app:fabCustomSize="70dp"
         app:fabSize="normal"
         app:maxImageSize="35dp"

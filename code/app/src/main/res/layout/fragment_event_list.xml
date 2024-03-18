@@ -5,9 +5,10 @@
     android:id="@+id/eventList"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="4dp"
-    android:layout_marginTop="2dp"
-    android:layout_marginRight="4dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginBottom="10dp"
     android:background="@color/white"
     tools:context=".ui.home.EventListFragment">
     <!--TODO : Move FAB (QR button) into fragment_event_list instead of app_bar_main-->
@@ -15,5 +16,12 @@
         android:id="@+id/eventListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/fragment_event_list_item" />
 </androidx.constraintlayout.widget.ConstraintLayout>
