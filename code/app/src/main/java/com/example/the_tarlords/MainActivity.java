@@ -14,9 +14,12 @@ import android.widget.TextView;
 
 import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.users.User;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.material.navigation.NavigationView;
 import com.example.the_tarlords.data.QR.QRScanActivity;
 
+import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -29,7 +32,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private AppBarConfiguration mAppBarConfiguration;
     public static FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -261,4 +264,13 @@ public class MainActivity extends AppCompatActivity {
         return Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
     }
 
+    /**
+     * Mandatory empty method here because MainActivity implements OnMapReadyCallBack
+     * the function is implemented and used in MapsFragment.java
+     * @param googleMap
+     */
+    @Override
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+
+    }
 }
