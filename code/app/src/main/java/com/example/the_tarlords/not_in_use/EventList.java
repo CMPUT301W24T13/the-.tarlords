@@ -77,7 +77,7 @@ public class EventList {
                                                         String id = document.getId();
                                                         String name = document.get("name").toString();
                                                         String location = document.get("location").toString();
-                                                        events.add(new Event(name, location, id));
+                                                        events.add(new Event());
                                                         Log.d("query events", doc.getId() + " => " + doc.getData());
                                                         Log.d("events list", events.toString()+"hi");
                                                         Log.d("query events", document.getId() + " =>=> " + document.getData());

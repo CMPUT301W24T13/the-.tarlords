@@ -3,6 +3,7 @@ package com.example.the_tarlords.data.event;
 import static androidx.fragment.app.FragmentManager.TAG;
 
 import static com.example.the_tarlords.MainActivity.db;
+import static com.example.the_tarlords.MainActivity.user;
 import static com.google.firebase.firestore.FirebaseFirestore.*;
 
 import android.os.Parcel;
@@ -64,19 +65,11 @@ public class Event implements Attendance, Parcelable {
     String organizerId;
     private String qrCodeCheckIns;
     private String qrCodePromo;
-
     private EventPoster poster;
-
     Integer maxSignUps;
-
-    private CollectionReference attendanceRef = MainActivity.db.collection("Events/"+ id +"/Attendees");
     private CollectionReference usersRef = MainActivity.db.collection("Users");
 
-    private static CollectionReference eventsRef = eventsRef = MainActivity.db.collection("Events");
-
-
-
-
+    private static CollectionReference eventsRef = MainActivity.db.collection("Events");
 
     public Event(String name, String location, String id, String startTime, String endTime, String startDate) {
         this.name = name;
@@ -249,49 +242,41 @@ public class Event implements Attendance, Parcelable {
 
         Log.d("alert adding","working");
     }
-    /**
-     * Returns a list of Attendee objects attending the event. This is the default "signup" list
-     * Updates the user's checked in status if they check in or not.
-     * @return list of User objects
-     */
-    public ArrayList<Attendee> getAttendanceList() {
-        ArrayList<Attendee> attendees = new ArrayList<Attendee>();
-        attendanceRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot attendeeDoc : task.getResult()) {
-                        DocumentSnapshot userDoc = usersRef.document(attendeeDoc.getId()).get().getResult();
-                        String id = userDoc.getId();
-                        String firstName = userDoc.get("firstName").toString();
-                        String lastName = userDoc.get("lastName").toString();
-                        String email = userDoc.get("email").toString();
-                        String phoneNum = userDoc.get("phoneNum").toString();
 
-                        //User user = userDoc.toObject(User.class);
-                        Attendee attendee = null;
-                        try {
-                            attendee = new Attendee(id, firstName,lastName,phoneNum,email, Event.this);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                        attendee.setCheckInStatus(attendeeDoc.getBoolean("checkedInStatus"));
-                        attendees.add(attendee);
-                    }
-                    Log.d("firestore", attendees.toString());
-                } else {
-                    Log.d("firestore", "Error getting documents: ", task.getException());
+    /**
+     * Populates an array list with Attendee objects attending the event using firestore data.
+     * This is the default "signup" list.
+     * @param attendees array list of Attendee objects
+     */
+    public void populateAttendanceList(ArrayList<Attendee> attendees) {
+        CollectionReference attendanceRef = MainActivity.db.collection("Events/"+ id +"/Attendance");
+        attendees.clear();
+        attendanceRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for (QueryDocumentSnapshot attendeeDoc : queryDocumentSnapshots) {
+                    DocumentSnapshot userDoc = usersRef.document(attendeeDoc.getId()).get().getResult();
+                    Attendee attendee = userDoc.toObject(Attendee.class);
+                    attendee.setProfilePhotoFromData(attendee.getProfilePhotoData());
+                    attendees.add(attendee);
                 }
             }
+        })
+       .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("Firestore", e.getMessage());
+            }
         });
-        return attendees;
     }
+
     /**
      * Signs up a user to attend an event by adding their name to the attendance list.
      *
      * @param user to add
      */
     public void signUp(User user) {
+        CollectionReference attendanceRef = MainActivity.db.collection("Events/"+ id +"/Attendance");
         Map<String, Object> docData = new HashMap<>();
         docData.put("user", user.getUserId());
         docData.put("event", id);
@@ -319,8 +304,9 @@ public class Event implements Attendance, Parcelable {
      * @param user to remove
      */
     public void removeSignUp(User user) {
+        CollectionReference attendanceRef = MainActivity.db.collection("Events/"+ id +"/Attendance");
         attendanceRef
-                .document(user.getUserId().toString())
+                .document(user.getUserId())
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -339,11 +325,17 @@ public class Event implements Attendance, Parcelable {
     /**
      * Sets check in status of a user for an event.
      * @param user to check in, status to set (boolean)
+     * @param status boolean check-in status to set
      */
     public void setCheckIn(User user, Boolean status) {
+        CollectionReference attendanceRef = MainActivity.db.collection("Events/"+ id +"/Attendance");
+        Map<String, Object> docData = new HashMap<>();
+        docData.put("user", user.getUserId());
+        docData.put("event", id);
+        docData.put("checkedInStatus", status);
         attendanceRef
                 .document(user.getUserId())
-                .update("checkedInStatus",status)
+                .set(docData) //updates checkedInStatus field in firebase
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -358,13 +350,28 @@ public class Event implements Attendance, Parcelable {
                 });
     }
 
+    /**
+     * Mandatory method for Parcelable interface.
+     * @return int
+     */
     @Override
     public int describeContents() {
         return 0;
     }
 
+    /**
+     * Mandatory method for Parcelable interface.
+     * Allows event objects to be bundled and passed as arguments between fragments.
+     * ***** Must include all fields to be passed through *****
+     * @param dest  The Parcel in which the object should be written.
+     * @param flags Additional flags about how the object should be written.
+     *              May be 0 or {@link #PARCELABLE_WRITE_RETURN_VALUE}.
+     */
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
+        //add additional fields as necessary
+        //additional fields must be added to the Event(Parcelable) constructor
+        //all fields must be in the same order as the Event(Parcelable) constructor
         dest.writeString(name);
         dest.writeString(location);
         dest.writeString(id);
@@ -372,18 +379,24 @@ public class Event implements Attendance, Parcelable {
         dest.writeString(endTime);
         dest.writeString(startDate);
     }
-    //NEED TO JAVADOC
-    //Generates a new doc id for the new event, IMPORTANT FOR THE QRCode stuff
 
-    private String newDocID;
+    /**
+     * Generates an event id for a new event based off an auto-generated firestore doc id.
+     * @return String of the event id
+     */
     public String makeNewDocID() {
-        DocumentReference ref = db.collection("Events").document();
-        id = ref.getId();
+        DocumentReference ref = eventsRef.document(); //get new document from firestore
+        id = ref.getId(); //assign event id to doc id
         return id;
     }
+
+    /**
+     * Uploads event data to fire store via a hash table.
+     * Includes: id, name, location, startDate, startTime, endTime, organizerId, maxSignUps,
+     * qrCodeCheckIns (as string) and qrCodePromo (as string)
+     */
     public void sendToFirebase() {
         // Add the new user document to Firestore
-        //MAJOR NOTE THIS AUTOMATICALLY SETS THE DOC ID TO USER ID AND I DONT KNOW IF THAT WOULD BE A PROBLEM
         Map<String, Object> docData = new HashMap<>();
         docData.put("id", id);
         docData.put("name", name);
@@ -395,6 +408,7 @@ public class Event implements Attendance, Parcelable {
         docData.put("maxSignUps", maxSignUps);
         docData.put("qrCodeCheckIns",qrCodeCheckIns);
         docData.put("qrCodePromo", qrCodePromo);
+        //TODO: add event poster
 
         eventsRef.document(id).set(docData)
                 .addOnSuccessListener(aVoid -> {
@@ -407,6 +421,90 @@ public class Event implements Attendance, Parcelable {
                 });
     }
 
+    /**
+     * Deletes an event from the Events collection in firestore, as well as its Attendance
+     * sub-collection.
+     */
+    public void removeFromFirestore() {
+        CollectionReference attendanceRef = MainActivity.db.collection("Events/"+ id +"/Attendance");
+        CollectionReference alertsRef = MainActivity.db.collection("Events/"+id+"/alerts");
+        //remove event doc
+        eventsRef.document(id)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("Firestore", "Document successfully removed!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("Firestore", e.getMessage());
+                    }
+                });
+        //remove attendance sub-collection
+        attendanceRef.get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot attendeeDoc : queryDocumentSnapshots) {
+                            attendeeDoc.getReference().delete();
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("Firestore", e.getMessage());
+                    }
+                });
+        //remove alerts sub-collection
+        alertsRef.get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot alertDoc : queryDocumentSnapshots) {
+                            alertDoc.getReference().delete();
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("Firestore", e.getMessage());
+                    }
+                });
 
+    }
+
+    /**
+     * Returns a list of Attendee objects attending the event. This is the default "signup" list
+     * Updates the user's checked in status if they check in or not.
+     * @return list of User objects
+     */
+    public ArrayList<Attendee> getAttendanceList() {
+        ArrayList<Attendee> attendees = new ArrayList<>();
+        CollectionReference attendanceRef = MainActivity.db.collection("Events/"+ id +"/Attendance");
+        attendanceRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot attendeeDoc : queryDocumentSnapshots) {
+                            DocumentSnapshot userDoc = usersRef.document(attendeeDoc.getId()).get().getResult();
+                            Attendee attendee = userDoc.toObject(Attendee.class);
+                            attendee.setProfilePhotoFromData(attendee.getProfilePhotoData());
+                            attendees.add(attendee);
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("Firestore", e.getMessage());
+                    }
+                });
+        return attendees;
+    }
 
 }
+

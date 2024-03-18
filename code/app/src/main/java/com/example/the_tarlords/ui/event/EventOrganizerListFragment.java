@@ -120,8 +120,10 @@ public class EventOrganizerListFragment extends Fragment implements MenuProvider
                 Bundle args = new Bundle();
                 args.putParcelable("event",event);
                 args.putBoolean("isOrganizer", true);
-                NavHostFragment.findNavController(EventOrganizerListFragment.this)
-                        .navigate(R.id.action_eventOrganizerListFragment_to_eventEditFragment,args);
+                try {
+                    NavHostFragment.findNavController(EventOrganizerListFragment.this)
+                            .navigate(R.id.action_eventOrganizerListFragment_to_eventDetailsFragment,args);
+                } catch (Exception ignore) {}
             }
         });
     }
@@ -150,8 +152,10 @@ public class EventOrganizerListFragment extends Fragment implements MenuProvider
             Bundle args = new Bundle();
             args.putParcelable("event",myEvent);
             args.putBoolean("isOrganizer", true);
-            NavHostFragment.findNavController(EventOrganizerListFragment.this)
-                    .navigate(R.id.action_eventOrganizerListFragment_to_eventEditFragment,args);
+            try {
+                NavHostFragment.findNavController(EventOrganizerListFragment.this)
+                        .navigate(R.id.action_eventOrganizerListFragment_to_eventEditFragment, args);
+            } catch (Exception ignored) {}
         }
         return false;
     }

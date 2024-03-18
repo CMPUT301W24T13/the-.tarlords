@@ -21,9 +21,18 @@ public abstract class Photo {
         return fileName;
     }
 
+    /**
+     * Gets photo's bitmap.
+     * @return Bitmap bitmap
+     */
     public Bitmap getBitmap() {
         return bitmap;
     }
+
+    /**
+     * sets photo's bitmap
+     * @param bitmap Bitmap object to assign to Photo
+     */
     public void setBitmap(Bitmap bitmap) {
         this.bitmap = bitmap;
     }
@@ -34,9 +43,10 @@ public abstract class Photo {
      */
     public String getPhotoDataFromBitmap() {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            bitmap.compress(Bitmap.CompressFormat.WEBP_LOSSY, 0, baos); //bitmap from user image file
-        }
+
+        //bitmap from user image file
+        //too much increase in quality may result in firebase errors (ie string too long)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 30, baos);
         byte[] byteArray = baos.toByteArray();
         String photoB64 = Base64.encodeToString(byteArray,0,byteArray.length,Base64.URL_SAFE);
         return photoB64;
