@@ -10,4 +10,5 @@
     <dimen name="fragment_vertical_margin">16dp</dimen>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="fab_dimension">20dp</dimen>
+    <dimen name="menu_bar_vertical_offset">50dp</dimen>
 </resources>

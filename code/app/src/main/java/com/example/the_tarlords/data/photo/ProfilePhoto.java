@@ -31,7 +31,7 @@ public class ProfilePhoto extends Photo {
         String lastInitial = lastName.substring(0,1);
         String initials = firstInitial + lastInitial;
 
-        Bitmap bitmap = Bitmap.createBitmap(200, 200, Bitmap.Config.ARGB_8888);
+        Bitmap bitmap = Bitmap.createBitmap(400, 400, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         Paint paint = new Paint();
         //get semi-random color
@@ -39,7 +39,7 @@ public class ProfilePhoto extends Photo {
         canvas.drawColor(color);
         paint.setTextAlign(Paint.Align.CENTER);
         paint.setTypeface(Typeface.create(String.valueOf(R.font.helvetica_bold), Typeface.BOLD ));
-        paint.setTextSize(90);
+        paint.setTextSize(180);
         paint.setColor(Color.WHITE);
 
         int x = canvas.getWidth()/2;

@@ -39,9 +39,6 @@ public class UploadPhotoActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Initiate device's camera to capture a photo.
-     */
     public void uploadPicture() {
         //from android studio official references site:
         //using PickVisualMedia opens photo picker in half-screen mode.
@@ -74,7 +71,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_GALLERY_PERMISSION) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Retry takePicture() after receiving camera permission
+                // Retry uploadPicture() after receiving camera permission
                 uploadPicture();
             } else {
                 // Inform the user to enable camera permissions and finish the activity
