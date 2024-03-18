@@ -67,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
          * and set user value to your choice of ID. PLEASE COMMENT IT OUT AFTER TESTING
          */
         //userId = "whatever you want";
-        setBinding();
 
         if (userId == null) {
             // user has not used app before
@@ -83,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
             user = new User(userId,"First Name","Last Name","Phone Number","email");
 
             //sets content binding now that userId is no longer null (must stay above updateNavigationDrawerHeader()
-            //setBinding();
+            setBinding();
 
 
             // Update UI with default user information
@@ -105,6 +104,9 @@ public class MainActivity extends AppCompatActivity {
 
                             //creates 'user' object from firestore data, now you can use 'user' object
                             user = documentSnapshot.toObject(User.class);
+
+                            //sets content binding now that userId is no longer null (must stay above updateNavigationDrawerHeader()
+                            setBinding();
 
                             //updates navigation UI header
                             updateNavigationDrawerHeader();
@@ -226,31 +228,28 @@ public class MainActivity extends AppCompatActivity {
     //TODO: Implement profile picture
     public static void updateNavigationDrawerHeader() {
         // Set navigation drawer header information based on the user object
-        if (hView != null) {
-            if (user != null) {
-                TextView name = hView.findViewById(R.id.profileName);
-                TextView phoneNum = hView.findViewById(R.id.phoneNumber);
-                TextView email = hView.findViewById(R.id.email);
-                ImageView profilePic = hView.findViewById(R.id.profilePic);
+        if (user != null) {
+            TextView name = hView.findViewById(R.id.profileName);
+            TextView phoneNum = hView.findViewById(R.id.phoneNumber);
+            TextView email = hView.findViewById(R.id.email);
+            ImageView profilePic = hView.findViewById(R.id.profilePic);
 
-                name.setText(user.getFirstName() + " " + user.getLastName());
-                phoneNum.setText(user.getPhoneNum());
-                email.setText(user.getEmail());
-                if (user != null && user.getProfilePhoto() != null && user.getProfilePhoto().getBitmap()!=null) {
-                    Bitmap bitmap = user.getProfilePhoto().getBitmap();
-                    profilePic.setImageBitmap(bitmap);
-                }
-                else if (user.getProfilePhotoData() != null) {
-                    user.setProfilePhotoFromData(user.getProfilePhotoData());
-                    Bitmap bitmap = user.getProfilePhoto().getBitmap();
-                    profilePic.setImageBitmap(bitmap);
-                }
+            name.setText(user.getFirstName() + " " + user.getLastName());
+            phoneNum.setText(user.getPhoneNum());
+            email.setText(user.getEmail());
+            if (user != null && user.getProfilePhoto() != null && user.getProfilePhoto().getBitmap() != null) {
+                Bitmap bitmap = user.getProfilePhoto().getBitmap();
+                profilePic.setImageBitmap(bitmap);
+            } else if (user.getProfilePhotoData() != null) {
+                user.setProfilePhotoFromData(user.getProfilePhotoData());
+                Bitmap bitmap = user.getProfilePhoto().getBitmap();
+                profilePic.setImageBitmap(bitmap);
             }
-            else {
-                Log.e("debug", "User object is null");
-                // Handle the case where the User object is null
-                user = new User(userId,"khushi","null","780-111-1111","john.doe@ualberta.ca");
-            }
+        }
+        else {
+            Log.e("debug", "User object is null");
+            // Handle the case where the User object is null
+            user = new User(userId, "khushi", "null", "780-111-1111", "john.doe@ualberta.ca");
         }
 
     }
