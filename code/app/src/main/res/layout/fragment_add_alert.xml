@@ -5,41 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/event_info_topbar"
-        android:orientation="horizontal"
-        android:paddingLeft="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/alert_event_name"
-            android:padding="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/event_name" />
-        <TextView
-            android:id="@+id/alert_event_date"
-            android:padding="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="YYYY/MM/DD" />
-        <TextView
-            android:id="@+id/alert_event_time"
-            android:padding="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="00:00 AM/PM" />
-
-    </LinearLayout>
-
 
     <TextView
-        android:id="@+id/edit_text_message"
-        android:padding="10dp"
+        android:id="@+id/add_alert_title_display"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/alert_message" />
+        android:text="Alert Title: " />
+
     <EditText
         android:id="@+id/edit_text_alert_title"
         android:padding="10dp"
@@ -47,12 +19,19 @@
         android:layout_height="wrap_content"
         android:hint="@string/alert_title"
         android:inputType="text" />
+
+    <TextView
+        android:id="@+id/add_alert_message_display"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Message: " />
+
     <EditText
         android:id="@+id/edit_text_alert_message"
         android:padding="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/alert_message_hint"
+        android:hint="Alert message"
         android:inputType="textMultiLine" />
 
 </LinearLayout>
