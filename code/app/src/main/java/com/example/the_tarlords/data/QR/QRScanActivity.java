@@ -45,9 +45,13 @@ public class QRScanActivity extends AppCompatActivity {
         userId = getIntent().getStringExtra("userId");
 
         // Check camera permission and initiate QR code scanning if permission is granted
-        if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+        /*if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(QRScanActivity.this, new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
         } else {
+            scanQr();
+        }*/
+        ActivityCompat.requestPermissions(QRScanActivity.this, new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
+        if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             scanQr();
         }
     }
@@ -141,7 +145,7 @@ public class QRScanActivity extends AppCompatActivity {
                 scanQr();
             } else {
                 // Inform user to enable camera permissions and finish the activity
-                Toast.makeText(this, "Enable Camera", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Enable Camera to Scan QR", Toast.LENGTH_SHORT).show();
                 finish();
             }
         }
