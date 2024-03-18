@@ -89,6 +89,7 @@
         android:background="@drawable/rounded_corner"
         android:clickable="false"
         android:fontFamily="@font/helvetica"
+
         android:gravity="center"
         android:hint="@string/last_name"
         android:inputType="text"
@@ -111,6 +112,7 @@
         android:background="@drawable/rounded_corner"
         android:clickable="false"
         android:fontFamily="@font/helvetica"
+
         android:gravity="center"
         android:hint="@string/phone_number"
         android:inputType="phone"
@@ -133,6 +135,7 @@
         android:background="@drawable/rounded_corner"
         android:clickable="false"
         android:fontFamily="@font/helvetica"
+
         android:gravity="center"
         android:hint="@string/email"
         android:inputType="textEmailAddress"
