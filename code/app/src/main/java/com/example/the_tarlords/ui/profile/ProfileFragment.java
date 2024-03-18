@@ -9,6 +9,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 
@@ -36,10 +37,11 @@ import com.example.the_tarlords.data.photo.ProfilePhoto;
 import com.example.the_tarlords.data.users.User;
 import com.example.the_tarlords.databinding.FragmentEventListBinding;
 import com.example.the_tarlords.databinding.FragmentProfileBinding;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileFragment extends Fragment implements MenuProvider {
     private User user = MainActivity.user;
-    ImageView profilePhotoImageView;
+    CircleImageView profilePhotoImageView;
     Button addProfilePhotoButton;
     EditText firstNameEditText;
     EditText lastNameEditText;
@@ -76,6 +78,8 @@ public class ProfileFragment extends Fragment implements MenuProvider {
 
         //find fragment views
         profilePhotoImageView = view.findViewById(R.id.image_view_profile);
+        profilePhotoImageView.setBorderWidth(5); // Set the border width in pixels
+        profilePhotoImageView.setBorderColor(Color.WHITE);
         addProfilePhotoButton = view.findViewById(R.id.button_add_profile_photo);
         firstNameEditText = view.findViewById(R.id.edit_text_first_name);
         lastNameEditText = view.findViewById(R.id.edit_text_last_name);
@@ -94,7 +98,6 @@ public class ProfileFragment extends Fragment implements MenuProvider {
 
             if (user.getProfilePhoto() != null) { //display user's profile photo if not null
                 profilePhotoImageView.setImageBitmap(user.getProfilePhoto().getBitmap());
-
             }
             else { //if user does not have a profile photo, generate one
                 ProfilePhoto profilePhoto = new ProfilePhoto(user.getFirstName() + user.getLastName(),
@@ -102,7 +105,6 @@ public class ProfileFragment extends Fragment implements MenuProvider {
                 profilePhoto.autoGenerate();
                 user.setProfilePhoto(profilePhoto);
                 profilePhotoImageView.setImageBitmap(profilePhoto.getBitmap());
-
             }
         }
 

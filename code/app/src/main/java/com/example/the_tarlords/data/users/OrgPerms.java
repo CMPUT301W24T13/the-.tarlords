@@ -14,7 +14,7 @@ import com.example.the_tarlords.data.map.Map;
 import java.util.ArrayList;
 
 public interface OrgPerms {
-    Event createEvent(String name, String location, String id, String startTime, String endTime, String startDate);
+    public Event createEvent(String name, String location, String id, String startTime, String endTime, String startDate);
 
     boolean setLimit();
 
@@ -31,9 +31,7 @@ public interface OrgPerms {
 
     void uploadEventPoster(Event event);
 
-    int count = AttendeeCheckInList.count();
-
-    int trackAttendance(int count);
+    int trackAttendance(Event event);
 
     Alert receiveAlerts(Alert alert);
 
