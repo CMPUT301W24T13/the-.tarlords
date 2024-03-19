@@ -1,9 +1,13 @@
 package com.example.the_tarlords;
 
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.location.Location;
 import android.os.Bundle;
 
 import android.provider.Settings;
@@ -14,22 +18,34 @@ import android.widget.TextView;
 
 import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.users.User;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.example.the_tarlords.data.QR.QRScanActivity;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.the_tarlords.databinding.ActivityMainBinding;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.type.LatLng;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -43,6 +59,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private static String userId;
     private static View hView;
     private Object lock = new Object();
+    private FusedLocationProviderClient client;
+    private static final int REQUEST_LOCATION_PERMISSION = 99;
+    // Need this for location
+    private String eventId;
 
 
     private ActivityMainBinding binding;
@@ -50,7 +70,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
 
         //TODO: check if returning from profile pic activity, if so redirect to profile fragment
@@ -82,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             editor.apply();
 
             // the profile fields are going to have to be filled with some default info the first time, but the ID is the one we generated
-            user = new User(userId,"First Name","Last Name","Phone Number","email");
+            user = new User(userId, "First Name", "Last Name", "Phone Number", "email");
 
             //sets content binding now that userId is no longer null (must stay above updateNavigationDrawerHeader()
             setBinding();
@@ -92,8 +111,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             // If it's the first launch, navigate to profile fragment to get user info
             navigateToProfileFragment();
-        }
-        else {
+        } else {
             //user has been here before
             String finalUserId = userId;
             Log.d("debug", userId);
@@ -120,21 +138,27 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 //opens event detail fragment of scanned event
                                 navigateToEventDetailsFragment(event);
                             }
-                        }
-                        else {
+                        } else {
                             Log.d("debug", "didn't find a user");
                             // This is a case where user has used app on device but user info is not on firebase yet (my case, developer)
-                            user = new User(finalUserId,"khushi","lad","780-111-1111","john.doe@ualberta.ca");
+                            user = new User(finalUserId, "khushi", "lad", "780-111-1111", "john.doe@ualberta.ca");
                             // Update UI with default user information
                             updateNavigationDrawerHeader();
                         }
                     })
                     .addOnFailureListener(e -> {
                         // Handle failure
-                        Log.e("debug", "failed to get the document",e);
+                        Log.e("debug", "failed to get the document", e);
                     });
 
         }
+
+        // Initialize the FusedLocationProviderClient
+        client = LocationServices.getFusedLocationProviderClient(this);
+        //TODO take out this test case
+        getMyLocation("dzAK3vDdNTdk76xcyo3U");
+
+
     }
 
     /**
@@ -151,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         setSupportActionBar(binding.appBarMain.toolbar);
         DrawerLayout drawer = binding.drawerLayout;
         // Passing each menu ID as a set of Ids because each menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.eventListFragment, R.id.eventOrganizerListFragment, R.id.eventBrowseFragment,R.id.profileFragment)
+        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.eventListFragment, R.id.eventOrganizerListFragment, R.id.eventBrowseFragment, R.id.profileFragment)
                 .setOpenableLayout(drawer)
                 .build();
         //QR code scanner button set up
@@ -192,7 +216,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         try {
             Navigation.findNavController(this, R.id.nav_host_fragment_content_main)
                     .navigate(R.id.action_eventFragment_to_eventDetailsFragment, args);
-        } catch (Exception ignore) {}
+        } catch (Exception ignore) {
+        }
     }
 
     /**
@@ -235,20 +260,18 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             name.setText(user.getFirstName() + " " + user.getLastName());
             phoneNum.setText(user.getPhoneNum());
             email.setText(user.getEmail());
-            if (user != null && user.getProfilePhoto() != null && user.getProfilePhoto().getBitmap()!=null) {
+            if (user != null && user.getProfilePhoto() != null && user.getProfilePhoto().getBitmap() != null) {
                 Bitmap bitmap = user.getProfilePhoto().getBitmap();
                 profilePic.setImageBitmap(bitmap);
-            }
-            else if (user.getProfilePhotoData() != null) {
+            } else if (user.getProfilePhotoData() != null) {
                 user.setProfilePhotoFromData(user.getProfilePhotoData());
                 Bitmap bitmap = user.getProfilePhoto().getBitmap();
                 profilePic.setImageBitmap(bitmap);
             }
-        }
-        else {
+        } else {
             Log.e("debug", "User object is null");
             // Handle the case where the User object is null
-            user = new User(userId,"khushi","null","780-111-1111","john.doe@ualberta.ca");
+            user = new User(userId, "khushi", "null", "780-111-1111", "john.doe@ualberta.ca");
         }
     }
 
@@ -273,4 +296,86 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(@NonNull GoogleMap googleMap) {
 
     }
+
+    /**
+     * Method to get users location and if needed the permissions
+     */
+    public void getMyLocation(String eventId) {
+        this.eventId = eventId;
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // Permission not granted, request it
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_LOCATION_PERMISSION);
+
+        }else{
+            // Permission already granted, proceed to get location
+            Task<Location> task = client.getLastLocation();
+            task.addOnSuccessListener(new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    if (location != null){
+                        // get latitude and longitude, and user name , put it on firebase
+                        Double latitude = location.getLatitude();
+                        Double longitude = location.getLongitude();
+                        checkInLocation(latitude, longitude, eventId);
+                    }else{
+                        Log.d("maps", "users location during check-in was null");
+                    }
+
+                }
+            });
+        }
+
+    }
+    /**
+     * If location permissions are requested
+     * handle the case where they grant permission
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_LOCATION_PERMISSION) {
+            // Check if the requested permissions were granted
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, call getMyLocation() again to proceed
+                getMyLocation(eventId);
+            } else {
+                // Permission denied, we don't do anything
+                Log.d("maps", "location permissions denied");
+            }
+        }
+    }
+    /**
+     * Method to help getMyLocation put the users location onto Firebase
+     */
+    public void checkInLocation(Double lat, Double lon, String eventId){
+        // Create a new check-in document
+        Map<String, Object> checkInData = new HashMap<>();
+        if(user != null){
+            checkInData.put("name", user.getFirstName());
+        }else{
+            checkInData.put("name", "attendee");
+        }
+
+        checkInData.put("latitude", lat);
+        checkInData.put("longitude", lon);
+
+        // Add the new check-in document to the "checkIns" subcollection
+        db.collection("Events").document(eventId).collection("checkIns")
+                .add(checkInData)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d("maps", "Check-in added with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("maps", "Error adding check-in", e);
+                        // Handle failure to add check-in, if needed
+                    }
+                });
+
+    }
+
 }
