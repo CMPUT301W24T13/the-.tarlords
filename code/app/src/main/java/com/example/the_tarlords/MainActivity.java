@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.the_tarlords.data.event.Event;
+import com.example.the_tarlords.data.map.LocationHelper;
 import com.example.the_tarlords.data.users.User;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -59,10 +60,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private static String userId;
     private static View hView;
     private Object lock = new Object();
-    private FusedLocationProviderClient client;
-    private static final int REQUEST_LOCATION_PERMISSION = 99;
-    // Need this for location
-    private String eventId;
+
+
 
 
     private ActivityMainBinding binding;
@@ -153,10 +152,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         }
 
-        // Initialize the FusedLocationProviderClient
-        client = LocationServices.getFusedLocationProviderClient(this);
-        //TODO take out this test case
-        getMyLocation("dzAK3vDdNTdk76xcyo3U");
+
+        //TODO take out this test case, to show you guys how to call it
+        LocationHelper location = new LocationHelper(MainActivity.this); // Pass MainActivity instance to Location class constructor
+
+        location.getMyLocation("LBm1Cpj48GOnEulAK613"); // Call the getMyLocation method
 
 
     }
@@ -290,91 +290,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     /**
      * Mandatory empty method here because MainActivity implements OnMapReadyCallBack
      * the function is implemented and used in MapsFragment.java
+     * This needs to stay in main activity
      * @param googleMap
      */
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
-
-    }
-
-    /**
-     * Method to get users location and if needed the permissions
-     */
-    public void getMyLocation(String eventId) {
-        this.eventId = eventId;
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // Permission not granted, request it
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_LOCATION_PERMISSION);
-
-        }else{
-            // Permission already granted, proceed to get location
-            Task<Location> task = client.getLastLocation();
-            task.addOnSuccessListener(new OnSuccessListener<Location>() {
-                @Override
-                public void onSuccess(Location location) {
-                    if (location != null){
-                        // get latitude and longitude, and user name , put it on firebase
-                        Double latitude = location.getLatitude();
-                        Double longitude = location.getLongitude();
-                        checkInLocation(latitude, longitude, eventId);
-                    }else{
-                        Log.d("maps", "users location during check-in was null");
-                    }
-
-                }
-            });
-        }
-
-    }
-    /**
-     * If location permissions are requested
-     * handle the case where they grant permission
-     */
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_LOCATION_PERMISSION) {
-            // Check if the requested permissions were granted
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission granted, call getMyLocation() again to proceed
-                getMyLocation(eventId);
-            } else {
-                // Permission denied, we don't do anything
-                Log.d("maps", "location permissions denied");
-            }
-        }
-    }
-    /**
-     * Method to help getMyLocation put the users location onto Firebase
-     */
-    public void checkInLocation(Double lat, Double lon, String eventId){
-        // Create a new check-in document
-        Map<String, Object> checkInData = new HashMap<>();
-        if(user != null){
-            checkInData.put("name", user.getFirstName());
-        }else{
-            checkInData.put("name", "attendee");
-        }
-
-        checkInData.put("latitude", lat);
-        checkInData.put("longitude", lon);
-
-        // Add the new check-in document to the "checkIns" subcollection
-        db.collection("Events").document(eventId).collection("checkIns")
-                .add(checkInData)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d("maps", "Check-in added with ID: " + documentReference.getId());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("maps", "Error adding check-in", e);
-                        // Handle failure to add check-in, if needed
-                    }
-                });
 
     }
 

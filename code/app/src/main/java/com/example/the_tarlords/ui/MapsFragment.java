@@ -96,12 +96,6 @@ public class MapsFragment extends Fragment implements MenuProvider {
         //link options menu xml
         menuInflater.inflate(R.menu.options_menu, menu);
 
-        //disable all menu options
-        menu.findItem(R.id.editOptionsMenu).setVisible(false);
-        menu.findItem(R.id.attendanceOptionsMenu).setVisible(false);
-        menu.findItem(R.id.deleteOptionsMenu).setVisible(false);
-        menu.findItem(R.id.mapOptionsMenu).setVisible(false);
-        menu.findItem(R.id.anouncementsOptionsMenu).setVisible(false);
     }
 
     /**
