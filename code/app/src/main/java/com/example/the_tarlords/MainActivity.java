@@ -27,6 +27,7 @@ import com.example.the_tarlords.databinding.ActivityMainBinding;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -47,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
 
         //TODO: check if returning from profile pic activity, if so redirect to profile fragment
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
             // the profile fields are going to have to be filled with some default info the first time, but the ID is the one we generated
             user = new User(userId,"First Name","Last Name","Phone Number","email");
-
+            setDeviceFCMToken();
             //sets content binding now that userId is no longer null (must stay above updateNavigationDrawerHeader()
             setBinding();
 
@@ -229,6 +229,7 @@ public class MainActivity extends AppCompatActivity {
     public static void updateNavigationDrawerHeader() {
         // Set navigation drawer header information based on the user object
         if (user != null) {
+
             TextView name = hView.findViewById(R.id.profileName);
             TextView phoneNum = hView.findViewById(R.id.phoneNumber);
             TextView email = hView.findViewById(R.id.email);
@@ -265,5 +266,17 @@ public class MainActivity extends AppCompatActivity {
         // Replace with your user logic to generate an ID
         return Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
     }
+
+
+    private void setDeviceFCMToken(){
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task ->{
+           if(task.isSuccessful()){
+               String token = task.getResult();
+               Log.d("FCM token",token);
+               user.setfCMToken(token);
+           }
+        });
+    }
+
 
 }
