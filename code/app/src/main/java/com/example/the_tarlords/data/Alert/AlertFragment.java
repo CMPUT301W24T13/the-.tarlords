@@ -8,6 +8,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
@@ -34,7 +35,8 @@ public class AlertFragment extends Fragment implements AddAlertDialogListener,Me
 
     //private ArrayList<Alert> alertDataList;
     private AlertListAdapter alertListAdapter;
-    public static Event event;
+    private static Event event;
+    private boolean isOrganizer;
     private ArrayList<Alert> alertList = new ArrayList<>();
 
     public AlertFragment(ArrayList<Alert> alertDataList){
@@ -50,6 +52,7 @@ public class AlertFragment extends Fragment implements AddAlertDialogListener,Me
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             event = getArguments().getParcelable("event");
+            isOrganizer =  getArguments().getBoolean("isOrganizer");
         }
 
     }
@@ -79,13 +82,18 @@ public class AlertFragment extends Fragment implements AddAlertDialogListener,Me
                 ListView listView = view.findViewById(R.id.alert_list);
                 alertListAdapter = new AlertListAdapter(requireContext(), alertList,1);
                 listView.setAdapter(alertListAdapter);
+                refreshList();
+
+
+
             }
         });
-
-        // unfinished fab
-
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.button_add_alert);
-
+        if (!isOrganizer){
+            fab.setVisibility(View.GONE);
+        }else{
+            fab.setVisibility(View.VISIBLE);
+        }
         fab.setOnClickListener(v -> {
 
             AddAlertFragment addAlertFragment = new AddAlertFragment(null);
@@ -93,6 +101,16 @@ public class AlertFragment extends Fragment implements AddAlertDialogListener,Me
             addAlertFragment.show(getChildFragmentManager(), "Add alert");
 
         });
+
+        ListView alertListView = (ListView) view.findViewById(R.id.alert_list);
+        if(isOrganizer){
+            alertListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    new AddAlertFragment(alertList.get(position)).show(getChildFragmentManager(),"Edit / delete alert" );
+                }
+            });
+        }
 
         return view;
     }
@@ -144,6 +162,7 @@ public class AlertFragment extends Fragment implements AddAlertDialogListener,Me
                 listView.setAdapter(alertListAdapter);
             }
         });
+            // todo: sorting not working correctly, newest alerts should be at the top
             Collections.sort(alertList);
             alertListAdapter.notifyDataSetChanged();
 

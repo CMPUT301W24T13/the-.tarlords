@@ -105,13 +105,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             //sets content binding now that userId is no longer null (must stay above updateNavigationDrawerHeader()
             setBinding();
 
+
             // Update UI with default user information
             updateNavigationDrawerHeader();
 
             // If it's the first launch, navigate to profile fragment to get user info
             navigateToProfileFragment();
+
         } else {
             //user has been here before
+
             String finalUserId = userId;
             Log.d("debug", userId);
 
@@ -125,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             //creates 'user' object from firestore data, now you can use 'user' object
                             user = documentSnapshot.toObject(User.class);
 
-                            // sets content binding now that 'user' object is not null
+                            //sets content binding now that userId is no longer null (must stay above updateNavigationDrawerHeader()
                             setBinding();
 
                             //updates navigation UI header
@@ -139,16 +142,23 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             }
                         } else {
                             Log.d("debug", "didn't find a user");
+
                             // This is a case where user has used app on device but user info is not on firebase yet (my case, developer)
                             user = new User(finalUserId, "khushi", "lad", "780-111-1111", "john.doe@ualberta.ca");
+
                             // Update UI with default user information
                             updateNavigationDrawerHeader();
+
+                            // Navigate to profile fragment
+                            navigateToProfileFragment();
                         }
                     })
                     .addOnFailureListener(e -> {
                         // Handle failure
                         Log.e("debug", "failed to get the document", e);
                     });
+
+
 
         }
 
@@ -273,6 +283,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             // Handle the case where the User object is null
             user = new User(userId, "khushi", "null", "780-111-1111", "john.doe@ualberta.ca");
         }
+
     }
 
     /**

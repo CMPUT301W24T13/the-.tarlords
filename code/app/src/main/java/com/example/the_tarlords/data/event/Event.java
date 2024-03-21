@@ -71,7 +71,6 @@ public class Event implements Attendance, Parcelable {
 
     private static CollectionReference eventsRef = MainActivity.db.collection("Events");
 
-
     public Event(String name, String location, String id, String startTime, String endTime, String startDate) {
         this.name = name;
         this.location = location;
@@ -477,6 +476,34 @@ public class Event implements Attendance, Parcelable {
                     }
                 });
 
+    }
+
+    /**
+     * Returns a list of Attendee objects attending the event. This is the default "signup" list
+     * Updates the user's checked in status if they check in or not.
+     * @return list of User objects
+     */
+    public ArrayList<Attendee> getAttendanceList() {
+        ArrayList<Attendee> attendees = new ArrayList<>();
+        CollectionReference attendanceRef = MainActivity.db.collection("Events/"+ id +"/Attendance");
+        attendanceRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot attendeeDoc : queryDocumentSnapshots) {
+                            DocumentSnapshot userDoc = usersRef.document(attendeeDoc.getId()).get().getResult();
+                            Attendee attendee = userDoc.toObject(Attendee.class);
+                            attendee.setProfilePhotoFromData(attendee.getProfilePhotoData());
+                            attendees.add(attendee);
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("Firestore", e.getMessage());
+                    }
+                });
+        return attendees;
     }
 
 }

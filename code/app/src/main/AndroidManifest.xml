@@ -48,8 +48,13 @@
         <activity android:name=".ui.profile.TakePhotoActivity" />
 
         <meta-data
+
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+
     </application>
 
 </manifest>
