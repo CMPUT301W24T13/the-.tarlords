@@ -11,6 +11,7 @@ import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -152,6 +153,7 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
             menu.findItem(R.id.editOptionsMenu).setVisible(true);
             menu.findItem(R.id.attendanceOptionsMenu).setVisible(true);
             menu.findItem(R.id.deleteOptionsMenu).setVisible(true);
+            menu.findItem(R.id.mapOptionsMenu).setVisible(true);
         }
 
         //display announcement icon for all users
@@ -216,6 +218,18 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {}
                     }).show();
+        }
+        //Navigate to Maps Fragment
+        else if(menuItem.getItemId()==R.id.mapOptionsMenu) {
+            Bundle args = new Bundle();
+            args.putParcelable("event",event);
+            try {
+                NavHostFragment.findNavController(EventDetailsFragment.this)
+                        .navigate(R.id.action_eventDetailsFragment_to_MapsFragment, args);
+            }catch(Exception e)
+                {
+                    Log.e("maps", Log.getStackTraceString(e));
+                }
         }
         //should return false to prevent crashing
         return false;
