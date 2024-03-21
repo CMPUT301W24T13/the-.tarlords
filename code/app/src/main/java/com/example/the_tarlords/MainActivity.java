@@ -1,9 +1,13 @@
 package com.example.the_tarlords;
 
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.location.Location;
 import android.os.Bundle;
 
 import android.provider.Settings;
@@ -13,23 +17,43 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.the_tarlords.data.event.Event;
+import com.example.the_tarlords.data.map.LocationHelper;
 import com.example.the_tarlords.data.users.User;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.example.the_tarlords.data.QR.QRScanActivity;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.the_tarlords.databinding.ActivityMainBinding;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import com.google.firebase.messaging.FirebaseMessaging;
 
-public class MainActivity extends AppCompatActivity {
+import com.google.type.LatLng;
+
+
+import java.util.HashMap;
+import java.util.Map;
+
+
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private AppBarConfiguration mAppBarConfiguration;
     public static FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -42,12 +66,13 @@ public class MainActivity extends AppCompatActivity {
     private Object lock = new Object();
 
 
+
+
     private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
 
         //TODO: check if returning from profile pic activity, if so redirect to profile fragment
@@ -79,7 +104,9 @@ public class MainActivity extends AppCompatActivity {
             editor.apply();
 
             // the profile fields are going to have to be filled with some default info the first time, but the ID is the one we generated
+
             user = new User(userId,"First Name","Last Name","Phone Number","email");
+            setDeviceFCMToken();
 
             //sets content binding now that userId is no longer null (must stay above updateNavigationDrawerHeader()
             setBinding();
@@ -90,8 +117,10 @@ public class MainActivity extends AppCompatActivity {
 
             // If it's the first launch, navigate to profile fragment to get user info
             navigateToProfileFragment();
-        }
-        else {
+
+        } else {
+            //user has been here before
+
             String finalUserId = userId;
             Log.d("debug", userId);
 
@@ -117,11 +146,12 @@ public class MainActivity extends AppCompatActivity {
                                 //opens event detail fragment of scanned event
                                 navigateToEventDetailsFragment(event);
                             }
-                        }
-                        else {
+                        } else {
                             Log.d("debug", "didn't find a user");
-                            // This is a case where user has used app on device but user info is not on firebase yet
-                            user = new User(finalUserId,"First Name","Last Name","Phone Number","email");
+
+                            // This is a case where user has used app on device but user info is not on firebase yet (my case, developer)
+                            user = new User(finalUserId, "khushi", "lad", "780-111-1111", "john.doe@ualberta.ca");
+
                             // Update UI with default user information
                             updateNavigationDrawerHeader();
 
@@ -131,12 +161,20 @@ public class MainActivity extends AppCompatActivity {
                     })
                     .addOnFailureListener(e -> {
                         // Handle failure
-                        Log.e("debug", "failed to get the document",e);
+                        Log.e("debug", "failed to get the document", e);
                     });
 
 
 
         }
+
+
+        //TODO take out this test case, to show you guys how to call it
+        LocationHelper location = new LocationHelper(MainActivity.this); // Pass MainActivity instance to Location class constructor
+
+        location.getMyLocation("LBm1Cpj48GOnEulAK613"); // Call the getMyLocation method
+
+
     }
 
     /**
@@ -153,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(binding.appBarMain.toolbar);
         DrawerLayout drawer = binding.drawerLayout;
         // Passing each menu ID as a set of Ids because each menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.eventListFragment, R.id.eventOrganizerListFragment, R.id.eventBrowseFragment,R.id.profileFragment)
+        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.eventListFragment, R.id.eventOrganizerListFragment, R.id.eventBrowseFragment, R.id.profileFragment)
                 .setOpenableLayout(drawer)
                 .build();
         //QR code scanner button set up
@@ -194,7 +232,8 @@ public class MainActivity extends AppCompatActivity {
         try {
             Navigation.findNavController(this, R.id.nav_host_fragment_content_main)
                     .navigate(R.id.action_eventFragment_to_eventDetailsFragment, args);
-        } catch (Exception ignore) {}
+        } catch (Exception ignore) {
+        }
     }
 
     /**
@@ -229,6 +268,7 @@ public class MainActivity extends AppCompatActivity {
     public static void updateNavigationDrawerHeader() {
         // Set navigation drawer header information based on the user object
         if (user != null) {
+
             TextView name = hView.findViewById(R.id.profileName);
             TextView phoneNum = hView.findViewById(R.id.phoneNumber);
             TextView email = hView.findViewById(R.id.email);
@@ -245,8 +285,7 @@ public class MainActivity extends AppCompatActivity {
                 Bitmap bitmap = user.getProfilePhoto().getBitmap();
                 profilePic.setImageBitmap(bitmap);
             }
-        }
-        else {
+        } else {
             Log.e("debug", "User object is null");
             // Handle the case where the User object is null
             user = new User(userId, "khushi", "null", "780-111-1111", "john.doe@ualberta.ca");
@@ -264,6 +303,31 @@ public class MainActivity extends AppCompatActivity {
     private String generateNewUserId() {
         // Replace with your user logic to generate an ID
         return Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+    }
+
+
+
+    private void setDeviceFCMToken(){
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task ->{
+           if(task.isSuccessful()){
+               String token = task.getResult();
+               Log.d("FCM token",token);
+               user.setfCMToken(token);
+           }
+        });
+    }
+
+
+
+    /**
+     * Mandatory empty method here because MainActivity implements OnMapReadyCallBack
+     * the function is implemented and used in MapsFragment.java
+     * This needs to stay in main activity
+     * @param googleMap
+     */
+    @Override
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+
     }
 
 }

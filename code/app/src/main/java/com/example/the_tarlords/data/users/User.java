@@ -1,29 +1,18 @@
 package com.example.the_tarlords.data.users;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import com.example.the_tarlords.MainActivity;
-import com.example.the_tarlords.data.Alert.AlertList;
 import com.example.the_tarlords.data.event.Event;
-import com.example.the_tarlords.data.photo.Photo;
 import com.example.the_tarlords.data.photo.ProfilePhoto;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-
-import android.annotation.SuppressLint;
-import android.provider.Settings;
 
 import androidx.annotation.NonNull;
 
-import com.example.the_tarlords.MainActivity;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -39,6 +28,7 @@ public class User implements Profile {
     private String email;
     private CollectionReference usersRef = MainActivity.db.collection("Users");
 
+    private String fCMToken;
 
     /**
      * Mandatory empty constructor for firestore functionality
@@ -54,6 +44,7 @@ public class User implements Profile {
         this.email = email;
         this.profilePhoto = new ProfilePhoto(firstName+lastName, null, firstName, lastName);
         this.profilePhoto.autoGenerate();
+
     }
 
     boolean isAdmin() {
@@ -124,6 +115,14 @@ public class User implements Profile {
         this.email = email;
     }
 
+    public String getfCMToken() {
+        return fCMToken;
+    }
+
+    public void setfCMToken(String fCMToken) {
+        this.fCMToken = fCMToken;
+    }
+
     /**
      * Uploads user data to fire store via a hash table.
      * Includes: userId, firstName, lastName, email, phoneNum and profilePhotoData (base64 string)
@@ -136,6 +135,7 @@ public class User implements Profile {
         docData.put("lastName", lastName);
         docData.put("email", email);
         docData.put("phoneNum", phoneNum);
+        docData.put("FCM",fCMToken);
         docData.put("profilePhotoData", profilePhoto.getPhotoDataFromBitmap()); //stores profile photo data as base 64 string
         usersRef.document(userId).set(docData)
                 .addOnSuccessListener(aVoid -> {
