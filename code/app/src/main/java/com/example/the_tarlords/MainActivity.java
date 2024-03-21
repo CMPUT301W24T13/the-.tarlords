@@ -43,7 +43,11 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import com.google.firebase.messaging.FirebaseMessaging;
+
 import com.google.type.LatLng;
+
 
 import java.util.HashMap;
 import java.util.Map;
@@ -100,7 +104,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             editor.apply();
 
             // the profile fields are going to have to be filled with some default info the first time, but the ID is the one we generated
-            user = new User(userId, "First Name", "Last Name", "Phone Number", "email");
+
+            user = new User(userId,"First Name","Last Name","Phone Number","email");
+            setDeviceFCMToken();
 
             //sets content binding now that userId is no longer null (must stay above updateNavigationDrawerHeader()
             setBinding();
@@ -262,6 +268,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public static void updateNavigationDrawerHeader() {
         // Set navigation drawer header information based on the user object
         if (user != null) {
+
             TextView name = hView.findViewById(R.id.profileName);
             TextView phoneNum = hView.findViewById(R.id.phoneNumber);
             TextView email = hView.findViewById(R.id.email);
@@ -297,6 +304,20 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         // Replace with your user logic to generate an ID
         return Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
     }
+
+
+
+    private void setDeviceFCMToken(){
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task ->{
+           if(task.isSuccessful()){
+               String token = task.getResult();
+               Log.d("FCM token",token);
+               user.setfCMToken(token);
+           }
+        });
+    }
+
+
 
     /**
      * Mandatory empty method here because MainActivity implements OnMapReadyCallBack
