@@ -78,6 +78,9 @@
             android:id="@+id/action_eventDetailsFragment_pop"
             app:popUpTo="@id/eventDetailsFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_eventDetailsFragment_to_MapsFragment"
+            app:destination="@id/mapsFragment"/>
     </fragment>
     <fragment
         android:id="@+id/eventEditFragment"
@@ -147,4 +150,14 @@
             android:id="@+id/action_eventBrowseFragment_to_eventDetailsFragment"
             app:destination="@id/eventDetailsFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="com.example.the_tarlords.ui.MapsFragment"
+        android:label="MapsFragment">
+        <action
+            android:id="@+id/action_mapsFragment_to_eventDetailsFragment"
+            app:destination="@+id/eventDetailsFragment"
+            app:popUpTo="@id/eventDetailsFragment"/>
+    </fragment>
+
 </navigation>
