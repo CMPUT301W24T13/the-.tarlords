@@ -1,12 +1,19 @@
 package com.example.the_tarlords.ui.event;
 
 
+import static androidx.core.content.PermissionChecker.checkSelfPermission;
+
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.PermissionChecker;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
@@ -21,6 +28,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.QR.QRCode;
 import com.example.the_tarlords.data.event.Event;
@@ -39,6 +47,8 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
     private static Event event;
     private boolean isOrganizer;
     private FragmentEventDetailsBinding binding;
+    private static final int REQUEST_NOTIFICATION_PERMISSION = 101;
+
 
     /**
      * Required empty public constructor.
@@ -70,6 +80,7 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
             event = getArguments().getParcelable("event");
             isOrganizer = getArguments().getBoolean("isOrganizer");
         }
+        requestNotificationPermissions();
     }
 
     /**
@@ -233,6 +244,17 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
         }
         //should return false to prevent crashing
         return false;
+
+    }
+
+    /**
+     * Requests notification permissions
+     */
+    private void requestNotificationPermissions(){
+
+        if(ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.POST_NOTIFICATIONS) != PermissionChecker.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.POST_NOTIFICATIONS},REQUEST_NOTIFICATION_PERMISSION);
+        }
 
     }
 
