@@ -214,12 +214,9 @@ public class Event implements Attendance, Parcelable {
                     for (QueryDocumentSnapshot alertDoc : task.getResult()) {
                         Alert alert = new Alert(alertDoc.getString("title"), alertDoc.getString("message"), alertDoc.getString("currentDateTime"));
                         //alert.setCurrentDateTime(alertDoc.getString("currentDateTime"));
-                        Log.d("km", alertDoc.getString("title"));
                         alertList.add(alert);
-                        Log.d("returned not yet", String.valueOf(alertList.size()));
 
                     }
-                    Log.d("firestore", alertList.toString());
                     callback.onAlertsLoaded(alertList);
                 } else {
                     Log.d("firestore", "Error getting documents: ", task.getException());

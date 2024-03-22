@@ -5,20 +5,13 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/event_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:textSize="35sp"
-        android:text="Event" />
-
-    <TextView
         android:id="@+id/title_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="8dp"
+        android:text="Header"
         android:textSize="20sp"
-        android:text="Header" />
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/message_text"
@@ -33,7 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="8dp"
-        android:textSize="20sp"
-        android:text=" " />
+        android:text="ldt"
+        android:textSize="14sp" />
 
 </LinearLayout>

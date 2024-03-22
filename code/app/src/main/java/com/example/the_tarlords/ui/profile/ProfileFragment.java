@@ -17,7 +17,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.ui.ActionBarOnDestinationChangedListener;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -51,7 +53,6 @@ public class ProfileFragment extends Fragment implements MenuProvider {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (getArguments() != null) {
             //parse any arguments passed into fragment here
         }
@@ -198,33 +199,52 @@ public class ProfileFragment extends Fragment implements MenuProvider {
                 lastNameEditText.setEnabled(false);
                 phoneEditText.setEnabled(false);
                 emailEditText.setEnabled(false);
-
-                requireActivity().invalidateMenu(); //required in order to call onPrepareMenu() and repopulate menu with new options
+                if (menuItem.getItemId() == R.id.cancelOptionsMenu) {
+                    requireActivity().invalidateMenu(); //required in order to call onPrepareMenu() and repopulate menu with new options
+                }
 
                 //if save button selected, update user info and send to firestore
                 if (menuItem.getItemId() == R.id.saveOptionsMenu) {
-                    user.setFirstName(firstNameEditText.getText().toString());
-                    user.setLastName(lastNameEditText.getText().toString());
-                    user.setPhoneNum(phoneEditText.getText().toString());
-                    user.setEmail(emailEditText.getText().toString());
+                    if (checkValidInput()) {
+                        user.setFirstName(firstNameEditText.getText().toString());
+                        user.setLastName(lastNameEditText.getText().toString());
+                        user.setPhoneNum(phoneEditText.getText().toString());
+                        user.setEmail(emailEditText.getText().toString());
 
 
-                    Bitmap bitmap = ((BitmapDrawable) profilePhotoImageView.getDrawable()).getBitmap();
-                    user.getProfilePhoto().setBitmap(bitmap);
+                        Bitmap bitmap = ((BitmapDrawable) profilePhotoImageView.getDrawable()).getBitmap();
+                        user.getProfilePhoto().setBitmap(bitmap);
 
-                    MainActivity.user.sendToFireStore();
+                        MainActivity.user.sendToFireStore();
 
-                    //update navigation header (slide out menu) with newly updated information
-                    MainActivity.updateNavigationDrawerHeader();
+                        //update navigation header (slide out menu) with newly updated information
+                        MainActivity.updateNavigationDrawerHeader();
+                        requireActivity().invalidateMenu(); //required in order to call onPrepareMenu() and repopulate menu with new options
 
-                    //TODO: set auto-generated photo to regenerate on name change
+                        //TODO: set auto-generated photo to regenerate on name change
 
-                    //TODO: check for invalid input
+                        //TODO: check for invalid input
+                    }
                 }
                 return false;
             }
             return false;
         }
         return false;
+    }
+
+    /**
+     * Doesn't work
+     * @return  true if input valid, false otherwise
+     */
+    public boolean checkValidInput() {
+        for (View v : this.getView().getFocusables(View.FOCUS_FORWARD)){
+            Log.d("validate input", "View: " + v.getId());
+            if (v instanceof EditText && ((EditText)v).getText().toString().trim().length() == 0) {
+                Log.d("validate input", "EditText: " + v.getId());
+                return false;
+            }
+        }
+        return true;
     }
 }
