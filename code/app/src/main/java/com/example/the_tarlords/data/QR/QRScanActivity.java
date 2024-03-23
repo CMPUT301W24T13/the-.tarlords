@@ -41,18 +41,16 @@ public class QRScanActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_qr);
         setContentView(R.layout.content_main);
 
         userId = getIntent().getStringExtra("userId");
 
         // Check camera permission and initiate QR code scanning if permission is granted
-        /*if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+        if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(QRScanActivity.this, new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
         } else {
             scanQr();
-        }*/
-        ActivityCompat.requestPermissions(QRScanActivity.this, new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
+        }
     }
 
     /**
@@ -95,12 +93,12 @@ public class QRScanActivity extends AppCompatActivity {
                                 user.setUserId(userId);
                                 event.setCheckIn(user,TRUE);
                                 Log.e("QrCode", "In CI" + eventID);
-                                Log.e("QrCode", "EventName is " + event.getName());
                                 finish();
 
                             } else {
                                 //This is a EventInfo QR
                                 Log.e("QrCode", "In EI" + eventID);
+                                Log.e("QrCode", "EventName is " + event.getName());
 
                                 //Go to EventDetails Fragment through main
                                 Intent intent = new Intent(QRScanActivity.this, MainActivity.class);
@@ -117,6 +115,7 @@ public class QRScanActivity extends AppCompatActivity {
                     }
                 }
             }
+            finish();
         });
     }
 
@@ -127,7 +126,6 @@ public class QRScanActivity extends AppCompatActivity {
             if (result.getContents() != null) {
                 String qrValue = result.getContents();
                 QrtoEvent(qrValue);
-                //LINK TO SOME SORT OF EVENT PAGE
             } else {
                 Toast.makeText(this, "Unable to scan", Toast.LENGTH_SHORT).show();
             }
