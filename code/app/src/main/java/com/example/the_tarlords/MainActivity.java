@@ -12,6 +12,8 @@ import android.os.Bundle;
 
 import android.provider.Settings;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -61,6 +63,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     CollectionReference usersRef = db.collection("Users");
 
     public static User user;
+    // TODO : do not hardcode
+    public static Boolean isAdmin = false;
     private static String userId;
     private static View hView;
     private Object lock = new Object();
@@ -106,6 +110,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             // the profile fields are going to have to be filled with some default info the first time, but the ID is the one we generated
 
             user = new User(userId,"First Name","Last Name","Phone Number","email");
+            isAdmin = false;
             setDeviceFCMToken();
 
             //sets content binding now that userId is no longer null (must stay above updateNavigationDrawerHeader()
@@ -151,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                             // This is a case where user has used app on device but user info is not on firebase yet (my case, developer)
                             user = new User(finalUserId, "khushi", "lad", "780-111-1111", "john.doe@ualberta.ca");
-
+                            isAdmin = false;
                             // Update UI with default user information
                             updateNavigationDrawerHeader();
 
@@ -170,11 +175,18 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
         //TODO take out this test case, to show you guys how to call it
-        LocationHelper location = new LocationHelper(MainActivity.this); // Pass MainActivity instance to Location class constructor
+        //LocationHelper location = new LocationHelper(MainActivity.this); // Pass MainActivity instance to Location class constructor
 
-        location.getMyLocation("LBm1Cpj48GOnEulAK613"); // Call the getMyLocation method
-
-
+        //location.getMyLocation("LBm1Cpj48GOnEulAK613"); // Call the getMyLocation method
+        // TODO : putting this here for now, Khushi
+        /**
+        if (user!= null){
+            isAdmin = user.getIsAdmin();
+            Log.d("admin", String.valueOf(isAdmin));
+        }else{
+            Log.d("admin", "wtf");
+        }
+        */
     }
 
     /**
@@ -191,9 +203,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         setSupportActionBar(binding.appBarMain.toolbar);
         DrawerLayout drawer = binding.drawerLayout;
         // Passing each menu ID as a set of Ids because each menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.eventListFragment, R.id.eventOrganizerListFragment, R.id.eventBrowseFragment, R.id.profileFragment)
+        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.eventListFragment, R.id.eventOrganizerListFragment, R.id.eventBrowseFragment, R.id.profileFragment, R.id.profileBrowseFragment)
                 .setOpenableLayout(drawer)
                 .build();
+
         //QR code scanner button set up
         binding.appBarMain.scanQrButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -212,6 +225,18 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        // Hide or show ProfileBrowseFragment menu item based on isAdmin
+        Menu navMenu = navigationView.getMenu();
+        MenuItem profileBrowseItem = navMenu.findItem(R.id.profileBrowseFragment);
+        MenuItem ImageBrowseItem = navMenu.findItem(R.id.imageBrowseFragment);
+
+        if (profileBrowseItem != null && ImageBrowseItem != null) {
+            profileBrowseItem.setVisible(isAdmin);
+            profileBrowseItem.setEnabled(isAdmin);
+            ImageBrowseItem.setVisible(isAdmin);
+            ImageBrowseItem.setEnabled(isAdmin);
+        }
     }
 
     /**
@@ -268,7 +293,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public static void updateNavigationDrawerHeader() {
         // Set navigation drawer header information based on the user object
         if (user != null) {
-
             TextView name = hView.findViewById(R.id.profileName);
             TextView phoneNum = hView.findViewById(R.id.phoneNumber);
             TextView email = hView.findViewById(R.id.email);
@@ -329,5 +353,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(@NonNull GoogleMap googleMap) {
 
     }
+
 
 }

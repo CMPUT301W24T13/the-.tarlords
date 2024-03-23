@@ -29,13 +29,16 @@ public class User implements Profile {
     private CollectionReference usersRef = MainActivity.db.collection("Users");
 
     private String fCMToken;
+    private Boolean isAdmin;
+
+
 
     /**
      * Mandatory empty constructor for firestore functionality
      */
     public User() {
     }
-
+    //TODO : automatically sets isAdmin to false in constructor, should we have a constructor that allows us to choose, or we changing in firebase directly?
     public User(String userId, String firstName, String lastName, String phoneNum, String email) {
         this.userId = userId;
         this.firstName = firstName;
@@ -44,13 +47,20 @@ public class User implements Profile {
         this.email = email;
         this.profilePhoto = new ProfilePhoto(firstName+lastName, null, firstName, lastName);
         this.profilePhoto.autoGenerate();
-
+        this.isAdmin = false;
     }
+
 
     boolean isAdmin() {
         return false;
     }
+    public Boolean getIsAdmin() {
+        return isAdmin;
+    }
 
+    public void setIsAdmin(Boolean isAdmin) {
+        this.isAdmin = isAdmin;
+    }
     public String getUserId() {
         return userId;
     }
@@ -137,6 +147,7 @@ public class User implements Profile {
         docData.put("phoneNum", phoneNum);
         docData.put("FCM",fCMToken);
         docData.put("profilePhotoData", profilePhoto.getPhotoDataFromBitmap()); //stores profile photo data as base 64 string
+        docData.put("isAdmin", isAdmin);
         usersRef.document(userId).set(docData)
                 .addOnSuccessListener(aVoid -> {
                     // Document successfully added
