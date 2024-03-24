@@ -8,10 +8,13 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.the_tarlords.MainActivity;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
@@ -27,6 +30,7 @@ import java.util.Map;
  */
 public class QRCode {
     private String qrID;
+    private FirebaseFirestore db;
     private static CollectionReference QRRef = MainActivity.db.collection("QRCodes");
 
     /**
@@ -62,11 +66,11 @@ public class QRCode {
         QRRef.document(qrID).set(docData)
             .addOnSuccessListener(aVoid -> {
                 //Document successfully added
-                Log.d("debug", "User added successfully to Firestore");
+                Log.d("debug", "QR added successfully to Firestore");
             })
             .addOnFailureListener(e -> {
                 //Handle the failure
-                Log.e("debug", "Error adding user to Firestore", e);
+                Log.e("debug", "Error adding QR to Firestore", e);
             });
     }
 
@@ -115,6 +119,34 @@ public class QRCode {
         intent.setType("image/png");
         intent.putExtra(Intent.EXTRA_STREAM, uri);
         activity.startActivity(Intent.createChooser(intent, "Share"));
+    }
+
+    /**
+     * Replaces the EventID field in the Firebase, thus linking the QR Code to a different event
+     * @param qrID The id of the QR Code (should not have CI and EI)
+     * @param eventID  The id of the linked event
+     */
+    public void reuseQR(String qrID, String eventID) {
+        db = FirebaseFirestore.getInstance();
+        QRRef = db.collection("QRCodes");
+
+        QRRef.addSnapshotListener((querySnapshots, error) -> {
+            if (error != null) {
+                Log.e("Firestore", error.toString());
+                return;
+            }
+            if (querySnapshots != null) {
+                for (QueryDocumentSnapshot doc: querySnapshots) {
+                    String DocCodeID = doc.getId();
+                    try {
+                        if (DocCodeID.equals(qrID)) {
+                            //Replace and put in new EventID
+                            QRRef.document(DocCodeID).update("EventId", eventID);
+                        }
+                    } catch (Exception e) { }
+                }
+            }
+        });
     }
 
     /**
