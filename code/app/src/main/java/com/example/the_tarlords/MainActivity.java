@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public static User user;
     // TODO : do not hardcode
-    public static Boolean isAdmin = false;
+    public static Boolean isAdmin = true;
     private static String userId;
     private static View hView;
     private Object lock = new Object();

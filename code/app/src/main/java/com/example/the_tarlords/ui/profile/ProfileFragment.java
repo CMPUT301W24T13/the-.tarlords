@@ -1,7 +1,11 @@
 package com.example.the_tarlords.ui.profile;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.MenuProvider;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.AlertDialog;
@@ -17,7 +21,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.ui.ActionBarOnDestinationChangedListener;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -39,8 +45,10 @@ import com.example.the_tarlords.databinding.FragmentEventListBinding;
 import com.example.the_tarlords.databinding.FragmentProfileBinding;
 import de.hdodenhof.circleimageview.CircleImageView;
 
+
 public class ProfileFragment extends Fragment implements MenuProvider {
-    private User user = MainActivity.user;
+    private User user;
+    private Boolean fromAdmin = false;
     CircleImageView profilePhotoImageView;
     Button addProfilePhotoButton;
     EditText firstNameEditText;
@@ -54,7 +62,11 @@ public class ProfileFragment extends Fragment implements MenuProvider {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            //parse any arguments passed into fragment here
+            user = (User) getArguments().getParcelable("user");
+            fromAdmin = getArguments().getBoolean("fromAdmin");
+            Log.d("profiles", "it is this user");
+        } else {
+            user = MainActivity.user; // Fall back to the user from MainActivity
         }
 
     }
@@ -75,6 +87,12 @@ public class ProfileFragment extends Fragment implements MenuProvider {
 
         //MANDATORY for MenuProvider implementation
         requireActivity().addMenuProvider(this);
+        // needed for browseProfiles
+
+        if (!fromAdmin) {
+            // Navigation is not from browse profile, pop the back stack
+            Navigation.findNavController(view).popBackStack();
+        }
 
         //find fragment views
         profilePhotoImageView = view.findViewById(R.id.image_view_profile);
@@ -131,12 +149,15 @@ public class ProfileFragment extends Fragment implements MenuProvider {
                     .create()
                     .show();
         });
+
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
     }
+
 
     /**
      * Required method for MenuProvider interface.
@@ -165,9 +186,15 @@ public class ProfileFragment extends Fragment implements MenuProvider {
                 menu.findItem(R.id.saveOptionsMenu).setVisible(true);
                 menu.findItem(R.id.cancelOptionsMenu).setVisible(true);
             } else {
-                menu.findItem(R.id.editOptionsMenu).setVisible(true);
-                menu.findItem(R.id.saveOptionsMenu).setVisible(false);
-                menu.findItem(R.id.cancelOptionsMenu).setVisible(false);
+                if(fromAdmin){
+                    menu.findItem(R.id.deleteOptionsMenu).setVisible(true);
+                    menu.findItem(R.id.editOptionsMenu).setVisible(false);
+                }else{
+                    menu.findItem(R.id.editOptionsMenu).setVisible(true);
+                    menu.findItem(R.id.saveOptionsMenu).setVisible(false);
+                    menu.findItem(R.id.cancelOptionsMenu).setVisible(false);
+                }
+
             }
         }
     }

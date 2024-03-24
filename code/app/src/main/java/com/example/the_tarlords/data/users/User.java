@@ -1,5 +1,7 @@
 package com.example.the_tarlords.data.users;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 import com.example.the_tarlords.MainActivity;
@@ -18,7 +20,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Map;
 
-public class User implements Profile {
+public class User implements Profile , Parcelable {
     private String userId;
     private String firstName;
     private String lastName;
@@ -218,6 +220,37 @@ public class User implements Profile {
                     }
                 });
     }
+    protected User(Parcel in) {
+        firstName = in.readString();
+        lastName = in.readString();
+        phoneNum = in.readString();
+        email = in.readString();
+    }
 
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeString(firstName);
+        dest.writeString(lastName);
+        dest.writeString(phoneNum);
+        dest.writeString(email);
+
+    }
 }
 
