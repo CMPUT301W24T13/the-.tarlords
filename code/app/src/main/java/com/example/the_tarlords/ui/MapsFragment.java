@@ -2,11 +2,6 @@ package com.example.the_tarlords.ui;
 
 import static com.example.the_tarlords.MainActivity.db;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.view.MenuProvider;
-import androidx.fragment.app.Fragment;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,7 +11,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.the_tarlords.MainActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.view.MenuProvider;
+import androidx.fragment.app.Fragment;
+
 import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.event.Event;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -26,7 +25,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -130,7 +128,7 @@ public class MapsFragment extends Fragment implements MenuProvider {
                     // For each document, get the checkIns subcollection
                     String eventId = documentSnapshot.getString("id");
                     if (eventId != null) {
-                        db.collection("Events").document(eventId).collection("checkIns")
+                        db.collection("Events").document(eventId).collection("Attendance")
                                 .get()
                                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                     @Override

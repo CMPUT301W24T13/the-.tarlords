@@ -1,17 +1,9 @@
 package com.example.the_tarlords.ui.event;
 
-import static com.google.firebase.firestore.model.Values.isInteger;
-
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.core.view.MenuProvider;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
-
 import android.os.Parcelable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -25,6 +17,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
+
+import androidx.annotation.NonNull;
+import androidx.core.view.MenuProvider;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
@@ -314,6 +311,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
                     event.makeNewDocID(); //generate new event id
                     event.setQrCodeCheckIns("CI" + event.getId()); //generate check in QR
                     event.setQrCodePromo("EI" + event.getId()); //generate promo QR
+                    event.setSignUps(0);
 
                 }
                 //upload event in firebase

@@ -1,8 +1,7 @@
 package com.example.the_tarlords.data.QR;
 
-import static java.lang.Boolean.TRUE;
-
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -15,8 +14,8 @@ import androidx.core.app.ActivityCompat;
 
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
-import com.example.the_tarlords.data.users.User;
 import com.example.the_tarlords.data.event.Event;
+import com.example.the_tarlords.data.users.User;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -35,12 +34,12 @@ public class QRScanActivity extends AppCompatActivity {
     private static final int REQUEST_CAMERA_PERMISSION = 1;
     private FirebaseFirestore db;
     private CollectionReference eventsRef;
-
-    //TODO: exit scan button (ie go back to main activity without scanning anything)
+    private static Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = this;
         //setContentView(R.layout.activity_qr);
         setContentView(R.layout.content_main);
 
@@ -88,16 +87,15 @@ public class QRScanActivity extends AppCompatActivity {
                             Event event = doc.toObject(Event.class);
 
                             if (QrID.equals("CI" + eventID)) {
-                                //TODO: check if max attendees reached
                                 //This is a CheckIn QR
                                 User user = new User();
                                 user.setUserId(userId);
-                                event.setCheckIn(user,TRUE);
+                                event.setCheckIn(user, true);
                                 Log.e("QrCode", "In CI" + eventID);
                                 Log.e("QrCode", "EventName is " + event.getName());
                                 finish();
 
-                            } else {
+                            }else {
                                 //This is a EventInfo QR
                                 Log.e("QrCode", "In EI" + eventID);
 
@@ -108,8 +106,8 @@ public class QRScanActivity extends AppCompatActivity {
                                 startActivity(intent);
                             }
 
-                        }
-                    } catch (Exception e) {
+
+                    }} catch (Exception e) {
                         Toast.makeText(this, "Invalid QR", Toast.LENGTH_SHORT).show();
                         finish();
                         //throw new RuntimeException("This is not a valid QR code for this app");
@@ -147,6 +145,15 @@ public class QRScanActivity extends AppCompatActivity {
                 Toast.makeText(this, "Enable Camera", Toast.LENGTH_SHORT).show();
                 finish();
             }
+        }
+    }
+
+    public static void showCheckInMessage(Boolean success) {
+        if (success) {
+            Toast.makeText(context, "Check In Successful!", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            Toast.makeText(context, "Unable to check-in. Max capacity reached.", Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -30,6 +30,7 @@ public interface Attendance {       //could be made into interface
 
     /**
      * Sets check in status of a user to bool status for an event.
+     *
      * @param user to check in
      */
     public void setCheckIn(User user, Boolean status);
