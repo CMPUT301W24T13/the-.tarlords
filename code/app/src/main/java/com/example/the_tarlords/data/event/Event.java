@@ -194,10 +194,9 @@ public class Event implements Attendance, Parcelable {
     }
 
     public boolean reachedMaxCap() {
-        if (signUps == null){
+        if (signUps == null || maxSignUps ==-1){
             return false;
-        }
-        else {
+        } else {
             return maxSignUps <= signUps;
         }
     }
@@ -408,6 +407,7 @@ public class Event implements Attendance, Parcelable {
      */
     public void sendToFirebase() {
         // Add the new user document to Firestore
+        if (signUps==null){signUps=0;}
         Map<String, Object> docData = new HashMap<>();
         docData.put("id", id);
         docData.put("name", name);

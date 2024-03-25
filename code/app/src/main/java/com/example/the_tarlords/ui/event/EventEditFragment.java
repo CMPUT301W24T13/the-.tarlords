@@ -299,7 +299,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
                 // Check if the input string is empty or contains non-integer values
                 if (TextUtils.isEmpty(max) || !isInteger(max)) {
                     // Set it to "infinity" if empty or non-integer
-                    event.setMaxSignUps(Integer.MAX_VALUE);
+                    event.setMaxSignUps(-1);
                     maxAttendees.setText("unlimited");
                 } else {
                     // If the string represents a valid integer, parse int
