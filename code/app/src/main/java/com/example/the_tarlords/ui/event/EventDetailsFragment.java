@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.QR.QRCode;
 import com.example.the_tarlords.data.event.Event;
@@ -38,6 +39,7 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
 
     private static Event event;
     private boolean isOrganizer;
+    private boolean isAdmin;
     private FragmentEventDetailsBinding binding;
 
     /**
@@ -92,6 +94,9 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        //intialize isAdmin, this part is working
+        isAdmin = MainActivity.isAdmin;
+        Log.d("admin", String.valueOf(isAdmin));
         //MANDATORY: required for MenuProvider options menu
         requireActivity().addMenuProvider(this);
 
@@ -120,7 +125,7 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
             }
         }
 
-        //display event QR codes if user has organizer perms, this is extra code now , organizer will never touch this fragment
+        //display event QR codes if user has organizer perms
         if (isOrganizer == true) {
             if (event.getQrCodeCheckIns()!=null){
                 view.findViewById(R.id.tv_checkin_details).setVisibility(view.VISIBLE);
@@ -158,6 +163,12 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
 
         //display announcement icon for all users
         menu.findItem(R.id.anouncementsOptionsMenu).setVisible(true);
+        //if user is also an admin, display delete options icon
+
+        if (isAdmin) {
+            menu.findItem(R.id.deleteOptionsMenu).setVisible(true);
+        }
+
     }
 
     /**
@@ -200,24 +211,33 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
 
         }
         else if (menuItem.getItemId()==R.id.deleteOptionsMenu) {
-            AlertDialog dialog = new AlertDialog.Builder(getContext())
-                    .setMessage("Are you sure you would like to delete the event "+event.getName()+"?")
-                    .setNegativeButton("Delete", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            event.removeFromFirestore();
-                            try {
-                                //return to event organizer list fragment
-                                NavHostFragment.findNavController(EventDetailsFragment.this)
-                                        .navigate(R.id.action_eventDetailsFragment_pop);
-                            } catch (Exception ignored) {}
-                        }
-                    })
-                    .setCancelable(true)
-                    .setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {}
-                    }).show();
+            //TODO : I think this works?, needs a check
+            if (isAdded()) { // Check if the fragment is attached to an activity
+                AlertDialog dialog = new AlertDialog.Builder(requireContext())
+                        .setMessage("Are you sure you would like to delete the event " + event.getName() + "?")
+                        .setNegativeButton("Delete", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                event.removeFromFirestore();
+                                try {
+                                    // Return to event organizer list fragment
+                                    NavHostFragment.findNavController(EventDetailsFragment.this)
+                                            .navigate(R.id.action_eventDetailsFragment_pop);
+                                } catch (Exception ignored) {
+                                }
+                            }
+                        })
+                        .setCancelable(true)
+                        .setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Handle cancel action if needed
+                            }
+                        }).show();
+            } else {
+                // Fragment is not attached to an activity, handle the situation accordingly
+                Log.d("admin", "fragment not attached to activity");
+            }
         }
         //Navigate to Maps Fragment
         else if(menuItem.getItemId()==R.id.mapOptionsMenu) {
