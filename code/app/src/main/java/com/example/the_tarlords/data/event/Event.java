@@ -81,6 +81,8 @@ public class Event implements Attendance, Parcelable {
         startTime = in.readString();
         endTime = in.readString();
         startDate = in.readString();
+        maxSignUps = in.readInt();
+        signUps = in.readInt();
     }
     public Event (){};
 
@@ -385,6 +387,8 @@ public class Event implements Attendance, Parcelable {
         dest.writeString(startTime);
         dest.writeString(endTime);
         dest.writeString(startDate);
+        dest.writeInt(maxSignUps);
+        dest.writeInt(signUps);
     }
 
     /**

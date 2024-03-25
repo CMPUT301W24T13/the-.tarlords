@@ -2,15 +2,8 @@ package com.example.the_tarlords.ui.event;
 
 
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.core.view.MenuProvider;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,7 +13,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.core.view.MenuProvider;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
+
+import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.QR.QRCode;
 import com.example.the_tarlords.data.event.Event;
@@ -38,6 +38,7 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
 
     private static Event event;
     private boolean isOrganizer;
+    private boolean browse;
     private FragmentEventDetailsBinding binding;
 
     /**
@@ -69,6 +70,7 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
         if (getArguments() != null) {
             event = getArguments().getParcelable("event");
             isOrganizer = getArguments().getBoolean("isOrganizer");
+            browse = getArguments().getBoolean("browse");
         }
     }
 
@@ -155,7 +157,10 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
             menu.findItem(R.id.deleteOptionsMenu).setVisible(true);
             menu.findItem(R.id.mapOptionsMenu).setVisible(true);
         }
-
+        //if user came from browse fragment display sign up button
+        if (browse) {
+            menu.findItem(R.id.signUpOptionsMenu).setVisible(true);
+        }
         //display announcement icon for all users
         menu.findItem(R.id.anouncementsOptionsMenu).setVisible(true);
     }
@@ -230,6 +235,15 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
                 {
                     Log.e("maps", Log.getStackTraceString(e));
                 }
+        } else if (menuItem.getItemId()==R.id.signUpOptionsMenu) {
+            if (!event.reachedMaxCap()){
+                event.signUp(MainActivity.user);
+                Toast.makeText(getContext(),"Sign Up Successful", Toast.LENGTH_SHORT).show();
+            }
+            else {
+                Toast.makeText(getContext(), "Max capacity reached. Unable to sign up.", Toast.LENGTH_SHORT).show();
+            }
+            return true;
         }
         //should return false to prevent crashing
         return false;
