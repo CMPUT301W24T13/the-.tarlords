@@ -30,6 +30,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -41,6 +42,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 
 import okhttp3.Call;
@@ -183,10 +185,8 @@ public class AlertFragment extends Fragment implements AddAlertDialogListener,Me
      */
     @Override
     public void addAlert(Alert alert) {
-        //alertListAdapter.add(alert);
         event.setAlert(alert);
-        // TODO send anouncements
-        sendAnnouncementNotification(event);
+        sendAnnouncementNotification(event,"New Announcement");
         refreshList();
     }
 
@@ -238,51 +238,60 @@ public class AlertFragment extends Fragment implements AddAlertDialogListener,Me
      * sends a notification for the corresponding event
      * @param event
      */
-    void sendAnnouncementNotification(Event event){
-        // currently sending notification to ALL users
-        // TODO: send only to users that are signed up to the event, just need to change the path
-        String text = "New Announcement";
-        Log.d("FCM","Call fcm query");
-        ArrayList<String> recievers = new ArrayList<>();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("Users")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                String fcmToken = document.getString("FCM");
-                                if(fcmToken != null){
-                                    Log.d("FCM",fcmToken);
+    void sendAnnouncementNotification(Event event,String text){
 
-                                    try {
-                                        JSONObject jsonObject = new JSONObject();
-                                        JSONObject notificationObject = new JSONObject();
-                                        JSONObject dataObject = new JSONObject();
-                                        notificationObject.put("title", event.getName());
-                                        notificationObject.put("body",text);
-                                        dataObject.put("event",event.getId());
-                                        jsonObject.put("notification",notificationObject);
-                                        jsonObject.put("data",dataObject);
-                                        jsonObject.put("to", fcmToken);
+        CollectionReference attendanceRef = MainActivity.db.collection("Events/"+event.getId()+"/Attendance");
+        attendanceRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()){
+                    for(QueryDocumentSnapshot attendeeDoc : task.getResult()){
+                        MainActivity.db.collection("Users").document(attendeeDoc.getId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> t) {
+                                if(t.isSuccessful()){
+                                    try{
+                                        DocumentSnapshot userDoc = t.getResult();
+                                        String fcmToken = userDoc.getString("FCM");
+                                        if(fcmToken != null){
+                                            Log.d("fcm Token? ",fcmToken);
+                                            JSONObject jsonObject = getJsonObject(fcmToken,text);
+                                            callApi(jsonObject);
+                                        }
 
-                                        callApi(jsonObject);
-
-
-
-                                    } catch (JSONException e) {
+                                    }catch (JSONException e){
                                         throw new RuntimeException(e);
+
                                     }
-
-                                    recievers.add(fcmToken);
-
                                 }
                             }
-                        } else {
-                        }
+                        });
                     }
-                });
+                }
+            }
+        });
+
+    }
+
+    /**
+     * creates a JSONObject representation of a notification
+     * @param fcmToken
+     * @param text
+     * @return JSONObject representation
+     * @throws JSONException
+     */
+    @NonNull
+    private static JSONObject getJsonObject(String fcmToken,String text) throws JSONException {
+        JSONObject jsonObject = new JSONObject();
+        JSONObject notificationObject = new JSONObject();
+        JSONObject dataObject = new JSONObject();
+        notificationObject.put("title", event.getName());
+        notificationObject.put("body",text);
+        dataObject.put("event",event.getId());
+        jsonObject.put("notification",notificationObject);
+        jsonObject.put("data",dataObject);
+        jsonObject.put("to", fcmToken);
+        return jsonObject;
     }
 
     /**
