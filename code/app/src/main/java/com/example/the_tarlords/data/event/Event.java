@@ -237,6 +237,7 @@ public class Event implements Attendance, Parcelable {
     }
 
     /**
+     * NOT WORKING
      * Populates an array list with Attendee objects attending the event using firestore data.
      * This is the default "signup" list.
      * @param attendees array list of Attendee objects
@@ -292,7 +293,7 @@ public class Event implements Attendance, Parcelable {
                         public void onFailure(@NonNull Exception e) {
                             Log.d("Firestore", e.getMessage());
                         }
-                    }).isSuccessful();
+                    });
         }
 
     }
@@ -320,7 +321,7 @@ public class Event implements Attendance, Parcelable {
                     public void onFailure(@NonNull Exception e) {
                         Log.d("Firestore", e.getMessage());
                     }
-                }).isSuccessful();
+                });
     }
 
     /**
