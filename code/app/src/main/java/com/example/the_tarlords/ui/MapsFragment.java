@@ -80,6 +80,9 @@ public class MapsFragment extends Fragment implements MenuProvider {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        //MANDATORY: required for MenuProvider options menu
+        requireActivity().addMenuProvider(this);
+
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         if (mapFragment != null) {
@@ -92,7 +95,7 @@ public class MapsFragment extends Fragment implements MenuProvider {
         menu.clear();
 
         //link options menu xml
-        menuInflater.inflate(R.menu.options_menu, menu);
+        //menuInflater.inflate(R.menu.options_menu, menu);
 
     }
 
