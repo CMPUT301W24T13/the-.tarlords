@@ -1,15 +1,11 @@
 package com.example.the_tarlords;
 
-import static android.Manifest.permission.ACCESS_FINE_LOCATION;
-
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.location.Location;
 import android.os.Bundle;
-
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
@@ -18,41 +14,25 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.the_tarlords.data.event.Event;
-import com.example.the_tarlords.data.map.LocationHelper;
-import com.example.the_tarlords.data.users.User;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.material.navigation.NavigationView;
-import com.example.the_tarlords.data.QR.QRScanActivity;
-
 import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.the_tarlords.data.QR.QRScanActivity;
+import com.example.the_tarlords.data.event.Event;
+import com.example.the_tarlords.data.users.User;
 import com.example.the_tarlords.databinding.ActivityMainBinding;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-
 import com.google.firebase.messaging.FirebaseMessaging;
-
-import com.google.type.LatLng;
-
-
-import java.util.HashMap;
-import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -67,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     //public static Boolean isAdmin = true;
     private static String userId;
     private static View hView;
+    public static Context context;
     private Object lock = new Object();
 
 
@@ -77,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        context = this;
 
         //TODO: check if returning from profile pic activity, if so redirect to profile fragment
 
@@ -245,12 +226,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
      */
     private void navigateToEventDetailsFragment(Event event) {
         Log.e("QrCode", "here");
-        /*EventDetailsFragment fragment = EventDetailsFragment.newInstance(event, false);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.nav_host_fragment_content_main, fragment); // R.id.fragment_container is the ID of your fragment container
-        fragmentTransaction.addToBackStack(null); // Optional: adds the transaction to the back stack
-        fragmentTransaction.commit();*/
         Bundle args = new Bundle();
         args.putParcelable("event", event);
         args.putBoolean("isOrganizer", false);
@@ -265,12 +240,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
      * Redirects user to profile fragment.
      */
     private void navigateToProfileFragment() {
-        /*ProfileFragment fragment = ProfileFragment.newInstance();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.nav_host_fragment_content_main, fragment); // R.id.fragment_container is the ID of your fragment container
-        fragmentTransaction.addToBackStack(null); // Optional: adds the transaction to the back stack
-        fragmentTransaction.commit();*/
         Navigation.findNavController(this, R.id.nav_host_fragment_content_main)
                 .navigate(R.id.action_eventListFragment_to_profileFragment);
     }
