@@ -1,5 +1,7 @@
 package com.example.the_tarlords.data.users;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 import com.example.the_tarlords.MainActivity;
@@ -18,7 +20,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Map;
 
-public class User implements Profile {
+public class User implements Profile , Parcelable {
     private String userId;
     private String firstName;
     private String lastName;
@@ -29,13 +31,16 @@ public class User implements Profile {
     private CollectionReference usersRef = MainActivity.db.collection("Users");
 
     private String fCMToken;
+    private Boolean isAdmin;
+
+
 
     /**
      * Mandatory empty constructor for firestore functionality
      */
     public User() {
     }
-
+    //TODO : automatically sets isAdmin to false in constructor, should we have a constructor that allows us to choose, or we changing in firebase directly?
     public User(String userId, String firstName, String lastName, String phoneNum, String email) {
         this.userId = userId;
         this.firstName = firstName;
@@ -44,13 +49,20 @@ public class User implements Profile {
         this.email = email;
         this.profilePhoto = new ProfilePhoto(firstName+lastName, null, firstName, lastName);
         this.profilePhoto.autoGenerate();
-
+        this.isAdmin = false;
     }
+
 
     boolean isAdmin() {
         return false;
     }
+    public Boolean getIsAdmin() {
+        return isAdmin;
+    }
 
+    public void setIsAdmin(Boolean isAdmin) {
+        this.isAdmin = isAdmin;
+    }
     public String getUserId() {
         return userId;
     }
@@ -137,6 +149,7 @@ public class User implements Profile {
         docData.put("phoneNum", phoneNum);
         docData.put("FCM",fCMToken);
         docData.put("profilePhotoData", profilePhoto.getPhotoDataFromBitmap()); //stores profile photo data as base 64 string
+        docData.put("isAdmin", isAdmin);
         usersRef.document(userId).set(docData)
                 .addOnSuccessListener(aVoid -> {
                     // Document successfully added
@@ -207,6 +220,37 @@ public class User implements Profile {
                     }
                 });
     }
+    protected User(Parcel in) {
+        firstName = in.readString();
+        lastName = in.readString();
+        phoneNum = in.readString();
+        email = in.readString();
+    }
 
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeString(firstName);
+        dest.writeString(lastName);
+        dest.writeString(phoneNum);
+        dest.writeString(email);
+
+    }
 }
 

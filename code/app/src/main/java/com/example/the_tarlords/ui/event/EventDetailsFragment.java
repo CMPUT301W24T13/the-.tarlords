@@ -1,9 +1,22 @@
 package com.example.the_tarlords.ui.event;
 
 
+import static androidx.core.content.PermissionChecker.checkSelfPermission;
+
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+
+
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.PermissionChecker;
+import androidx.core.view.MenuProvider;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,10 +28,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import androidx.annotation.NonNull;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
+
 
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
@@ -38,8 +53,14 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
 
     private static Event event;
     private boolean isOrganizer;
+
     private boolean browse;
+
+    private boolean isAdmin;
+
     private FragmentEventDetailsBinding binding;
+    private static final int REQUEST_NOTIFICATION_PERMISSION = 101;
+
 
     /**
      * Required empty public constructor.
@@ -72,6 +93,7 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
             isOrganizer = getArguments().getBoolean("isOrganizer");
             browse = getArguments().getBoolean("browse");
         }
+        requestNotificationPermissions();
     }
 
     /**
@@ -94,6 +116,9 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        //intialize isAdmin, this part is working
+        isAdmin = MainActivity.isAdmin;
+        Log.d("admin", String.valueOf(isAdmin));
         //MANDATORY: required for MenuProvider options menu
         requireActivity().addMenuProvider(this);
 
@@ -122,7 +147,7 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
             }
         }
 
-        //display event QR codes if user has organizer perms, this is extra code now , organizer will never touch this fragment
+        //display event QR codes if user has organizer perms
         if (isOrganizer == true) {
             if (event.getQrCodeCheckIns()!=null){
                 view.findViewById(R.id.tv_checkin_details).setVisibility(view.VISIBLE);
@@ -163,6 +188,12 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
         }
         //display announcement icon for all users
         menu.findItem(R.id.anouncementsOptionsMenu).setVisible(true);
+        //if user is also an admin, display delete options icon
+
+        if (isAdmin) {
+            menu.findItem(R.id.deleteOptionsMenu).setVisible(true);
+        }
+
     }
 
     /**
@@ -205,24 +236,33 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
 
         }
         else if (menuItem.getItemId()==R.id.deleteOptionsMenu) {
-            AlertDialog dialog = new AlertDialog.Builder(getContext())
-                    .setMessage("Are you sure you would like to delete the event "+event.getName()+"?")
-                    .setNegativeButton("Delete", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            event.removeFromFirestore();
-                            try {
-                                //return to event organizer list fragment
-                                NavHostFragment.findNavController(EventDetailsFragment.this)
-                                        .navigate(R.id.action_eventDetailsFragment_pop);
-                            } catch (Exception ignored) {}
-                        }
-                    })
-                    .setCancelable(true)
-                    .setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {}
-                    }).show();
+            //TODO : I think this works?, needs a check
+            if (isAdded()) { // Check if the fragment is attached to an activity
+                AlertDialog dialog = new AlertDialog.Builder(requireContext())
+                        .setMessage("Are you sure you would like to delete the event " + event.getName() + "?")
+                        .setNegativeButton("Delete", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                event.removeFromFirestore();
+                                try {
+                                    // Return to event organizer list fragment
+                                    NavHostFragment.findNavController(EventDetailsFragment.this)
+                                            .navigate(R.id.action_eventDetailsFragment_pop);
+                                } catch (Exception ignored) {
+                                }
+                            }
+                        })
+                        .setCancelable(true)
+                        .setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Handle cancel action if needed
+                            }
+                        }).show();
+            } else {
+                // Fragment is not attached to an activity, handle the situation accordingly
+                Log.d("admin", "fragment not attached to activity");
+            }
         }
         //Navigate to Maps Fragment
         else if(menuItem.getItemId()==R.id.mapOptionsMenu) {
@@ -247,6 +287,17 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
         }
         //should return false to prevent crashing
         return false;
+
+    }
+
+    /**
+     * Requests notification permissions
+     */
+    private void requestNotificationPermissions(){
+
+        if(ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.POST_NOTIFICATIONS) != PermissionChecker.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.POST_NOTIFICATIONS},REQUEST_NOTIFICATION_PERMISSION);
+        }
 
     }
 
