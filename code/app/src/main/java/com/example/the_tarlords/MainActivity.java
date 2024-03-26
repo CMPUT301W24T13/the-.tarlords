@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.map.LocationHelper;
+import com.example.the_tarlords.data.map.ShareLocation;
 import com.example.the_tarlords.data.users.User;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -175,9 +176,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
         //TODO take out this test case, to show you guys how to call it
-        //LocationHelper location = new LocationHelper(MainActivity.this); // Pass MainActivity instance to Location class constructor
-
-        //location.getMyLocation("LBm1Cpj48GOnEulAK613"); // Call the getMyLocation method
+        ShareLocation shareLocationDialog = new ShareLocation("IOsuEel731gKuEwVFIqo","My Party");
+        shareLocationDialog.show(getSupportFragmentManager(), "ShareLocationDialog");
+        
         // TODO : putting this here for now, Khushi
         /**
         if (user!= null){
