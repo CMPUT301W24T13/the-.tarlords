@@ -27,7 +27,7 @@ public class ShareLocation extends DialogFragment {
                 .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // calling location helper
-                        LocationHelper locationHelper = new LocationHelper(getActivity()); // Assuming getActivity() provides the context of your activity
+                        LocationHelper locationHelper = new LocationHelper(getActivity());
                         locationHelper.getMyLocation(eventId);
                     }
                 })

@@ -15,6 +15,7 @@ import androidx.core.app.ActivityCompat;
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.event.Event;
+import com.example.the_tarlords.data.map.ShareLocation;
 import com.example.the_tarlords.data.users.User;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -91,6 +92,10 @@ public class QRScanActivity extends AppCompatActivity {
                                 User user = new User();
                                 user.setUserId(userId);
                                 event.setCheckIn(user, true);
+                                // Seperate from check-In so its fine here
+                                ShareLocation shareLocationDialog = new ShareLocation(event.getId(),event.getName());
+                                shareLocationDialog.show(getSupportFragmentManager(), "ShareLocationDialog");
+
                                 Log.e("QrCode", "In CI" + eventID);
                                 Log.e("QrCode", "EventName is " + event.getName());
                                 finish();
