@@ -1,18 +1,6 @@
 package com.example.the_tarlords.ui.attendance_page;
 
-import static com.example.the_tarlords.databinding.FragmentAttendanceListBinding.inflate;
-
-import android.content.Context;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.view.MenuProvider;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,14 +11,16 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.view.MenuProvider;
+import androidx.fragment.app.Fragment;
+
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
-import com.example.the_tarlords.data.attendance.Attendance;
 import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.users.Attendee;
 import com.example.the_tarlords.databinding.FragmentAttendanceListBinding;
-import com.example.the_tarlords.ui.event.EventDetailsFragment;
-import com.example.the_tarlords.ui.home.EventArrayAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -50,14 +40,12 @@ public class AttendanceFragment extends Fragment implements MenuProvider {
     FragmentAttendanceListBinding binding;
     private Event event;
     private ArrayList<Attendee> attendees = new ArrayList<>();
-    private AttendanceArrayAdapter adapter;
+    private static AttendanceArrayAdapter adapter;
     private CollectionReference attendanceRef;
     private CollectionReference usersRef = MainActivity.db.collection("Users");
 
-    // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
 
-    // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
     public static AttendanceFragment newInstance(Event event) {
         AttendanceFragment fragment = new AttendanceFragment();
@@ -161,5 +149,8 @@ public class AttendanceFragment extends Fragment implements MenuProvider {
     @Override
     public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
         return false;
+    }
+    public static void notifyComplete(){
+        adapter.notifyDataSetChanged();
     }
 }
