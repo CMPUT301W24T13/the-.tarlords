@@ -1,35 +1,41 @@
 package com.example.the_tarlords;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-
 import android.provider.Settings;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.the_tarlords.data.event.Event;
-import com.example.the_tarlords.data.users.User;
-import com.google.android.material.navigation.NavigationView;
-import com.example.the_tarlords.data.QR.QRScanActivity;
-
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.the_tarlords.data.QR.QRScanActivity;
+import com.example.the_tarlords.data.event.Event;
+import com.example.the_tarlords.data.users.User;
 import com.example.the_tarlords.databinding.ActivityMainBinding;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private AppBarConfiguration mAppBarConfiguration;
     public static FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -37,9 +43,14 @@ public class MainActivity extends AppCompatActivity {
     CollectionReference usersRef = db.collection("Users");
 
     public static User user;
+    // TODO : do not hardcode
+    //public static Boolean isAdmin = true;
     private static String userId;
     private static View hView;
+    public static Context context;
     private Object lock = new Object();
+
+
 
 
     private ActivityMainBinding binding;
@@ -47,8 +58,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
+        context = this;
 
         //TODO: check if returning from profile pic activity, if so redirect to profile fragment
 
@@ -67,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
          * and set user value to your choice of ID. PLEASE COMMENT IT OUT AFTER TESTING
          */
         //userId = "whatever you want";
-        setBinding();
 
         if (userId == null) {
             // user has not used app before
@@ -80,10 +89,13 @@ public class MainActivity extends AppCompatActivity {
             editor.apply();
 
             // the profile fields are going to have to be filled with some default info the first time, but the ID is the one we generated
+
             user = new User(userId,"First Name","Last Name","Phone Number","email");
+            isAdmin = false;
+            setDeviceFCMToken();
 
             //sets content binding now that userId is no longer null (must stay above updateNavigationDrawerHeader()
-            //setBinding();
+            setBinding();
 
 
             // Update UI with default user information
@@ -91,8 +103,10 @@ public class MainActivity extends AppCompatActivity {
 
             // If it's the first launch, navigate to profile fragment to get user info
             navigateToProfileFragment();
-        }
-        else {
+
+        } else {
+            //user has been here before
+
             String finalUserId = userId;
             Log.d("debug", userId);
 
@@ -106,6 +120,9 @@ public class MainActivity extends AppCompatActivity {
                             //creates 'user' object from firestore data, now you can use 'user' object
                             user = documentSnapshot.toObject(User.class);
 
+                            //sets content binding now that userId is no longer null (must stay above updateNavigationDrawerHeader()
+                            setBinding();
+
                             //updates navigation UI header
                             updateNavigationDrawerHeader();
 
@@ -115,11 +132,12 @@ public class MainActivity extends AppCompatActivity {
                                 //opens event detail fragment of scanned event
                                 navigateToEventDetailsFragment(event);
                             }
-                        }
-                        else {
+                        } else {
                             Log.d("debug", "didn't find a user");
-                            // This is a case where user has used app on device but user info is not on firebase yet
-                            user = new User(finalUserId,"First Name","Last Name","Phone Number","email");
+
+                            // This is a case where user has used app on device but user info is not on firebase yet (my case, developer)
+                            user = new User(finalUserId, "khushi", "lad", "780-111-1111", "john.doe@ualberta.ca");
+                            isAdmin = false;
                             // Update UI with default user information
                             updateNavigationDrawerHeader();
 
@@ -129,12 +147,27 @@ public class MainActivity extends AppCompatActivity {
                     })
                     .addOnFailureListener(e -> {
                         // Handle failure
-                        Log.e("debug", "failed to get the document",e);
+                        Log.e("debug", "failed to get the document", e);
                     });
 
 
 
         }
+
+
+        //TODO take out this test case, to show you guys how to call it
+        //LocationHelper location = new LocationHelper(MainActivity.this); // Pass MainActivity instance to Location class constructor
+
+        //location.getMyLocation("LBm1Cpj48GOnEulAK613"); // Call the getMyLocation method
+        // TODO : putting this here for now, Khushi
+        /**
+        if (user!= null){
+            isAdmin = user.getIsAdmin();
+            Log.d("admin", String.valueOf(isAdmin));
+        }else{
+            Log.d("admin", "wtf");
+        }
+        */
     }
 
     /**
@@ -151,9 +184,10 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(binding.appBarMain.toolbar);
         DrawerLayout drawer = binding.drawerLayout;
         // Passing each menu ID as a set of Ids because each menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.eventListFragment, R.id.eventOrganizerListFragment, R.id.eventBrowseFragment,R.id.profileFragment)
+        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.eventListFragment, R.id.eventOrganizerListFragment, R.id.eventBrowseFragment, R.id.profileFragment, R.id.profileBrowseFragment)
                 .setOpenableLayout(drawer)
                 .build();
+
         //QR code scanner button set up
         binding.appBarMain.scanQrButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -172,6 +206,18 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        // Hide or show ProfileBrowseFragment menu item based on isAdmin
+        Menu navMenu = navigationView.getMenu();
+        MenuItem profileBrowseItem = navMenu.findItem(R.id.profileBrowseFragment);
+        MenuItem ImageBrowseItem = navMenu.findItem(R.id.imageBrowseFragment);
+
+        if (profileBrowseItem != null && ImageBrowseItem != null) {
+            profileBrowseItem.setVisible(isAdmin);
+            profileBrowseItem.setEnabled(isAdmin);
+            ImageBrowseItem.setVisible(isAdmin);
+            ImageBrowseItem.setEnabled(isAdmin);
+        }
     }
 
     /**
@@ -180,31 +226,20 @@ public class MainActivity extends AppCompatActivity {
      */
     private void navigateToEventDetailsFragment(Event event) {
         Log.e("QrCode", "here");
-        /*EventDetailsFragment fragment = EventDetailsFragment.newInstance(event, false);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.nav_host_fragment_content_main, fragment); // R.id.fragment_container is the ID of your fragment container
-        fragmentTransaction.addToBackStack(null); // Optional: adds the transaction to the back stack
-        fragmentTransaction.commit();*/
         Bundle args = new Bundle();
         args.putParcelable("event", event);
         args.putBoolean("isOrganizer", false);
         try {
             Navigation.findNavController(this, R.id.nav_host_fragment_content_main)
                     .navigate(R.id.action_eventFragment_to_eventDetailsFragment, args);
-        } catch (Exception ignore) {}
+        } catch (Exception ignore) {
+        }
     }
 
     /**
      * Redirects user to profile fragment.
      */
     private void navigateToProfileFragment() {
-        /*ProfileFragment fragment = ProfileFragment.newInstance();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.nav_host_fragment_content_main, fragment); // R.id.fragment_container is the ID of your fragment container
-        fragmentTransaction.addToBackStack(null); // Optional: adds the transaction to the back stack
-        fragmentTransaction.commit();*/
         Navigation.findNavController(this, R.id.nav_host_fragment_content_main)
                 .navigate(R.id.action_eventListFragment_to_profileFragment);
     }
@@ -226,31 +261,27 @@ public class MainActivity extends AppCompatActivity {
     //TODO: Implement profile picture
     public static void updateNavigationDrawerHeader() {
         // Set navigation drawer header information based on the user object
-        if (hView != null) {
-            if (user != null) {
-                TextView name = hView.findViewById(R.id.profileName);
-                TextView phoneNum = hView.findViewById(R.id.phoneNumber);
-                TextView email = hView.findViewById(R.id.email);
-                ImageView profilePic = hView.findViewById(R.id.profilePic);
+        if (user != null) {
+            TextView name = hView.findViewById(R.id.profileName);
+            TextView phoneNum = hView.findViewById(R.id.phoneNumber);
+            TextView email = hView.findViewById(R.id.email);
+            ImageView profilePic = hView.findViewById(R.id.profilePic);
 
-                name.setText(user.getFirstName() + " " + user.getLastName());
-                phoneNum.setText(user.getPhoneNum());
-                email.setText(user.getEmail());
-                if (user != null && user.getProfilePhoto() != null && user.getProfilePhoto().getBitmap()!=null) {
-                    Bitmap bitmap = user.getProfilePhoto().getBitmap();
-                    profilePic.setImageBitmap(bitmap);
-                }
-                else if (user.getProfilePhotoData() != null) {
-                    user.setProfilePhotoFromData(user.getProfilePhotoData());
-                    Bitmap bitmap = user.getProfilePhoto().getBitmap();
-                    profilePic.setImageBitmap(bitmap);
-                }
+            name.setText(user.getFirstName() + " " + user.getLastName());
+            phoneNum.setText(user.getPhoneNum());
+            email.setText(user.getEmail());
+            if (user != null && user.getProfilePhoto() != null && user.getProfilePhoto().getBitmap() != null) {
+                Bitmap bitmap = user.getProfilePhoto().getBitmap();
+                profilePic.setImageBitmap(bitmap);
+            } else if (user.getProfilePhotoData() != null) {
+                user.setProfilePhotoFromData(user.getProfilePhotoData());
+                Bitmap bitmap = user.getProfilePhoto().getBitmap();
+                profilePic.setImageBitmap(bitmap);
             }
-            else {
-                Log.e("debug", "User object is null");
-                // Handle the case where the User object is null
-                user = new User(userId,"khushi","null","780-111-1111","john.doe@ualberta.ca");
-            }
+        } else {
+            Log.e("debug", "User object is null");
+            // Handle the case where the User object is null
+            user = new User(userId, "khushi", "null", "780-111-1111", "john.doe@ualberta.ca");
         }
 
     }
@@ -266,5 +297,31 @@ public class MainActivity extends AppCompatActivity {
         // Replace with your user logic to generate an ID
         return Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
     }
+
+
+
+    private void setDeviceFCMToken(){
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task ->{
+           if(task.isSuccessful()){
+               String token = task.getResult();
+               Log.d("FCM token",token);
+               user.setfCMToken(token);
+           }
+        });
+    }
+
+
+
+    /**
+     * Mandatory empty method here because MainActivity implements OnMapReadyCallBack
+     * the function is implemented and used in MapsFragment.java
+     * This needs to stay in main activity
+     * @param googleMap
+     */
+    @Override
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+
+    }
+
 
 }
