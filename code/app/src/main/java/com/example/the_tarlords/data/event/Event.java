@@ -1,11 +1,5 @@
 package com.example.the_tarlords.data.event;
 
-import static androidx.fragment.app.FragmentManager.TAG;
-
-import static com.example.the_tarlords.MainActivity.db;
-import static com.example.the_tarlords.MainActivity.user;
-import static com.google.firebase.firestore.FirebaseFirestore.*;
-
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
@@ -15,34 +9,24 @@ import androidx.annotation.NonNull;
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.data.Alert.Alert;
 import com.example.the_tarlords.data.Alert.AlertCallback;
-import com.example.the_tarlords.data.QR.QRCode;
+import com.example.the_tarlords.data.QR.QRScanActivity;
 import com.example.the_tarlords.data.attendance.Attendance;
+import com.example.the_tarlords.data.map.LocationHelper;
 import com.example.the_tarlords.data.users.Attendee;
-import com.example.the_tarlords.data.users.Organizer;
 import com.example.the_tarlords.data.users.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.AggregateQuery;
-import com.google.firebase.firestore.AggregateQuerySnapshot;
-import com.google.firebase.firestore.AggregateSource;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.Filter;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import org.checkerframework.common.returnsreceiver.qual.This;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * This class defines an event
@@ -67,6 +51,7 @@ public class Event implements Attendance, Parcelable {
     private String qrCodePromo;
     private EventPoster poster;
     Integer maxSignUps;
+    Integer signUps;
     private CollectionReference usersRef = MainActivity.db.collection("Users");
 
     private static CollectionReference eventsRef = MainActivity.db.collection("Events");
@@ -96,6 +81,8 @@ public class Event implements Attendance, Parcelable {
         startTime = in.readString();
         endTime = in.readString();
         startDate = in.readString();
+        maxSignUps = in.readInt();
+        signUps = in.readInt();
     }
     public Event (){};
 
@@ -200,8 +187,18 @@ public class Event implements Attendance, Parcelable {
         this.maxSignUps = maxSignUps;
     }
 
+    public Integer getSignUps() {return signUps;}
+
+    public void setSignUps(Integer signUps) {
+        this.signUps = signUps;
+    }
+
     public boolean reachedMaxCap() {
-        return true;
+        if (signUps == null || maxSignUps ==-1){
+            return false;
+        } else {
+            return maxSignUps <= signUps;
+        }
     }
 
     public ArrayList<Alert> getAlertList(AlertCallback callback){
@@ -214,12 +211,9 @@ public class Event implements Attendance, Parcelable {
                     for (QueryDocumentSnapshot alertDoc : task.getResult()) {
                         Alert alert = new Alert(alertDoc.getString("title"), alertDoc.getString("message"), alertDoc.getString("currentDateTime"));
                         //alert.setCurrentDateTime(alertDoc.getString("currentDateTime"));
-                        Log.d("km", alertDoc.getString("title"));
                         alertList.add(alert);
-                        Log.d("returned not yet", String.valueOf(alertList.size()));
 
                     }
-                    Log.d("firestore", alertList.toString());
                     callback.onAlertsLoaded(alertList);
                 } else {
                     Log.d("firestore", "Error getting documents: ", task.getException());
@@ -244,6 +238,7 @@ public class Event implements Attendance, Parcelable {
     }
 
     /**
+     * NOT WORKING
      * Populates an array list with Attendee objects attending the event using firestore data.
      * This is the default "signup" list.
      * @param attendees array list of Attendee objects
@@ -275,31 +270,37 @@ public class Event implements Attendance, Parcelable {
      *
      * @param user to add
      */
-    public void signUp(User user) {
-        CollectionReference attendanceRef = MainActivity.db.collection("Events/"+ id +"/Attendance");
+    public synchronized void signUp(User user) {
+
+        CollectionReference attendanceRef = MainActivity.db.collection("Events/" + id + "/Attendance");
         Map<String, Object> docData = new HashMap<>();
         docData.put("user", user.getUserId());
         docData.put("event", id);
         docData.put("checkedInStatus", false);
-        attendanceRef
-                .document(user.getUserId())
-                .set(docData)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("Firestore", "DocumentSnapshot successfully written!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d("Firestore", e.getMessage());
-                    }
-                });
+        if (!reachedMaxCap()) {
+             attendanceRef
+                    .document(user.getUserId())
+                    .set(docData)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d("Firestore", "DocumentSnapshot successfully written!");
+                            signUps += 1;
+                            eventsRef.document(id).update("signUps", signUps);
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d("Firestore", e.getMessage());
+                        }
+                    });
+        }
+
     }
 
     /**
-     * Removes a user from the attendance list of an event.
+     * Removes a user from the attendance list of an event and updates sign ups.
      *
      * @param user to remove
      */
@@ -311,6 +312,8 @@ public class Event implements Attendance, Parcelable {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        signUps-=1;
+                        eventsRef.document(id).update("signUps",signUps);
                         Log.d("Firestore", "DocumentSnapshot successfully written!");
                     }
                 })
@@ -323,29 +326,34 @@ public class Event implements Attendance, Parcelable {
     }
 
     /**
-     * Sets check in status of a user for an event.
-     * @param user to check in, status to set (boolean)
+     * Sets check in status of a user for an event, the user is not already signed up for that event,
+     * the method will attempt to first sign them up, then check them in.
+     *
+     * @param user   to check in, status to set (boolean)
      * @param status boolean check-in status to set
      */
     public void setCheckIn(User user, Boolean status) {
         CollectionReference attendanceRef = MainActivity.db.collection("Events/"+ id +"/Attendance");
-        Map<String, Object> docData = new HashMap<>();
-        docData.put("user", user.getUserId());
-        docData.put("event", id);
-        docData.put("checkedInStatus", status);
         attendanceRef
                 .document(user.getUserId())
-                .set(docData) //updates checkedInStatus field in firebase
+                .update("checkedInStatus", status)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("Firestore", "DocumentSnapshot successfully written!");
+                    public void onSuccess(Void unused) {
+
+                        LocationHelper location = new LocationHelper(MainActivity.context); // Pass MainActivity instance to Location class constructor
+                        location.getMyLocation(id); // Call the getMyLocation method
+                        QRScanActivity.showCheckInMessage(true);
                     }
-                })
-                .addOnFailureListener(new OnFailureListener() {
+                }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.d("Firestore", e.getMessage());
+                        if (!reachedMaxCap()){
+                            signUp(user);
+                            setCheckIn(user, true);
+                        } else {
+                            QRScanActivity.showCheckInMessage(false);
+                        }
                     }
                 });
     }
@@ -378,6 +386,8 @@ public class Event implements Attendance, Parcelable {
         dest.writeString(startTime);
         dest.writeString(endTime);
         dest.writeString(startDate);
+        dest.writeInt(maxSignUps);
+        dest.writeInt(signUps);
     }
 
     /**
@@ -397,6 +407,7 @@ public class Event implements Attendance, Parcelable {
      */
     public void sendToFirebase() {
         // Add the new user document to Firestore
+        if (signUps==null){signUps=0;}
         Map<String, Object> docData = new HashMap<>();
         docData.put("id", id);
         docData.put("name", name);
@@ -406,6 +417,7 @@ public class Event implements Attendance, Parcelable {
         docData.put("endTime", endTime);
         docData.put("organizerId",organizerId);
         docData.put("maxSignUps", maxSignUps);
+        docData.put("signUps", signUps);
         docData.put("qrCodeCheckIns",qrCodeCheckIns);
         docData.put("qrCodePromo", qrCodePromo);
         //TODO: add event poster

@@ -161,13 +161,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         //location.getMyLocation("LBm1Cpj48GOnEulAK613"); // Call the getMyLocation method
         // TODO : putting this here for now, Khushi
         /**
-         if (user!= null){
-         isAdmin = user.getIsAdmin();
-         Log.d("admin", String.valueOf(isAdmin));
-         }else{
-         Log.d("admin", "wtf");
-         }
-         */
+        if (user!= null){
+            isAdmin = user.getIsAdmin();
+            Log.d("admin", String.valueOf(isAdmin));
+        }else{
+            Log.d("admin", "wtf");
+        }
+        */
     }
 
     /**
@@ -302,11 +302,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private void setDeviceFCMToken(){
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task ->{
-            if(task.isSuccessful()){
-                String token = task.getResult();
-                Log.d("FCM token",token);
-                user.setfCMToken(token);
-            }
+           if(task.isSuccessful()){
+               String token = task.getResult();
+               Log.d("FCM token",token);
+               user.setfCMToken(token);
+           }
         });
     }
 

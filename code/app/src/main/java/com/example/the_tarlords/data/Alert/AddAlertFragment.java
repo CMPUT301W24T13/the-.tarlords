@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,20 +29,21 @@ public class AddAlertFragment extends DialogFragment {
     private String ldtTemp;
     private Alert oldAlert;
     private AddAlertDialogListener listener;
+    private Alert alert;
 
     /**
      * Constructor for the AddAlertFragment. used for receiving data from the array list
      * @param alert --> Alert object, put null if adding a new object
      */
     public AddAlertFragment(Alert alert) {
+        this.alert = alert;
         if (alert != null) {
             this.titleTemp = alert.getTitle();
             this.messageTemp = alert.getMessage();
             this.ldtTemp = alert.getCurrentDateTime();
-            this.oldAlert = alert;
         } else {
-            this.titleTemp = "title";
-            this.messageTemp = "message";
+            //this.titleTemp = "title";
+            //this.messageTemp = "message";
             this.ldtTemp = "ldt";
 
         }
@@ -85,35 +87,46 @@ public class AddAlertFragment extends DialogFragment {
 
         editTitle.setText(titleTemp);
         editMessage.setText(messageTemp);
-        Bundle args = getArguments();
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        String positive_button_text = "Add";
-        if (args != null) {
-            Alert alert = (Alert) args.getSerializable("alert");
-            boolean isEditing = args.getBoolean("isEditing", false);
-            if (isEditing) {
-                builder.setTitle("Edit Alert");
-                positive_button_text = "Confirm";
-            } else {
-                builder.setTitle("Add Alert");
-                positive_button_text = "Add";
-            }
-            if (alert != null) {
-                // Populate EditText fields with existing message information for editing
-                editMessage.setText(alert.getMessage());
-            }
+        if (alert == null) {
+            return builder
+                    .setView(view)
+                    .setTitle("Send Alert")
+                    .setNegativeButton("Cancel", null)
+                    .setPositiveButton("add", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            String title = editTitle.getText().toString();
+                            String message = editMessage.getText().toString();
+                            if(title.length()>0 && message.length()>0){
+                                listener.addAlert(new Alert(title, message, null));
+
+                            }else{
+                                Toast.makeText(getContext(), "Must fill all fields",Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    })
+                    .create();
+        } else {
+            return builder
+                    .setView(view)
+                    .setTitle("Edit / Delete Alert")
+                    .setNegativeButton("Cancel", null)
+
+                    .setPositiveButton("Delete",(dialog, which) -> {
+                        // TODO: fix delete alert and update firebase
+                        //listener.deleteAlert(alert);
+                    })
+
+
+
+                    .setNeutralButton("Edit",(dialog, which) -> {
+                        // TODO: fix edit alert and update firebase
+                        //listener.deleteAlert(alert);
+                    })
+                    .create();
         }
-        return builder
-                .setView(view)
-                .setNegativeButton("Cancel", null)
-                .setPositiveButton("add", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String title = editTitle.getText().toString();
-                        String message = editMessage.getText().toString();
-                        listener.addAlert(new Alert(title,message,null));
-                    }
-                })
-                .create();
     }
+
+
 }

@@ -1,7 +1,11 @@
 package com.example.the_tarlords.ui.profile;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.MenuProvider;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.AlertDialog;
@@ -17,7 +21,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -37,8 +45,10 @@ import com.example.the_tarlords.databinding.FragmentEventListBinding;
 import com.example.the_tarlords.databinding.FragmentProfileBinding;
 import de.hdodenhof.circleimageview.CircleImageView;
 
+
 public class ProfileFragment extends Fragment implements MenuProvider {
-    private User user = MainActivity.user;
+    private User user;
+    private Boolean fromAdmin = false;
     CircleImageView profilePhotoImageView;
     Button addProfilePhotoButton;
     EditText firstNameEditText;
@@ -51,9 +61,12 @@ public class ProfileFragment extends Fragment implements MenuProvider {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (getArguments() != null) {
-            //parse any arguments passed into fragment here
+            user = (User) getArguments().getParcelable("user");
+            fromAdmin = getArguments().getBoolean("fromAdmin");
+            Log.d("profiles", "it is this user");
+        } else {
+            user = MainActivity.user; // Fall back to the user from MainActivity
         }
 
     }
@@ -74,6 +87,12 @@ public class ProfileFragment extends Fragment implements MenuProvider {
 
         //MANDATORY for MenuProvider implementation
         requireActivity().addMenuProvider(this);
+        // needed for browseProfiles
+
+        if (!fromAdmin) {
+            // Navigation is not from browse profile, pop the back stack
+            Navigation.findNavController(view).popBackStack();
+        }
 
         //find fragment views
         profilePhotoImageView = view.findViewById(R.id.image_view_profile);
@@ -130,12 +149,15 @@ public class ProfileFragment extends Fragment implements MenuProvider {
                     .create()
                     .show();
         });
+
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
     }
+
 
     /**
      * Required method for MenuProvider interface.
@@ -164,9 +186,15 @@ public class ProfileFragment extends Fragment implements MenuProvider {
                 menu.findItem(R.id.saveOptionsMenu).setVisible(true);
                 menu.findItem(R.id.cancelOptionsMenu).setVisible(true);
             } else {
-                menu.findItem(R.id.editOptionsMenu).setVisible(true);
-                menu.findItem(R.id.saveOptionsMenu).setVisible(false);
-                menu.findItem(R.id.cancelOptionsMenu).setVisible(false);
+                if(fromAdmin){
+                    menu.findItem(R.id.deleteOptionsMenu).setVisible(true);
+                    menu.findItem(R.id.editOptionsMenu).setVisible(false);
+                }else{
+                    menu.findItem(R.id.editOptionsMenu).setVisible(true);
+                    menu.findItem(R.id.saveOptionsMenu).setVisible(false);
+                    menu.findItem(R.id.cancelOptionsMenu).setVisible(false);
+                }
+
             }
         }
     }
@@ -198,33 +226,52 @@ public class ProfileFragment extends Fragment implements MenuProvider {
                 lastNameEditText.setEnabled(false);
                 phoneEditText.setEnabled(false);
                 emailEditText.setEnabled(false);
-
-                requireActivity().invalidateMenu(); //required in order to call onPrepareMenu() and repopulate menu with new options
+                if (menuItem.getItemId() == R.id.cancelOptionsMenu) {
+                    requireActivity().invalidateMenu(); //required in order to call onPrepareMenu() and repopulate menu with new options
+                }
 
                 //if save button selected, update user info and send to firestore
                 if (menuItem.getItemId() == R.id.saveOptionsMenu) {
-                    user.setFirstName(firstNameEditText.getText().toString());
-                    user.setLastName(lastNameEditText.getText().toString());
-                    user.setPhoneNum(phoneEditText.getText().toString());
-                    user.setEmail(emailEditText.getText().toString());
+                    if (checkValidInput()) {
+                        user.setFirstName(firstNameEditText.getText().toString());
+                        user.setLastName(lastNameEditText.getText().toString());
+                        user.setPhoneNum(phoneEditText.getText().toString());
+                        user.setEmail(emailEditText.getText().toString());
 
 
-                    Bitmap bitmap = ((BitmapDrawable) profilePhotoImageView.getDrawable()).getBitmap();
-                    user.getProfilePhoto().setBitmap(bitmap);
+                        Bitmap bitmap = ((BitmapDrawable) profilePhotoImageView.getDrawable()).getBitmap();
+                        user.getProfilePhoto().setBitmap(bitmap);
 
-                    MainActivity.user.sendToFireStore();
+                        MainActivity.user.sendToFireStore();
 
-                    //update navigation header (slide out menu) with newly updated information
-                    MainActivity.updateNavigationDrawerHeader();
+                        //update navigation header (slide out menu) with newly updated information
+                        MainActivity.updateNavigationDrawerHeader();
+                        requireActivity().invalidateMenu(); //required in order to call onPrepareMenu() and repopulate menu with new options
 
-                    //TODO: set auto-generated photo to regenerate on name change
+                        //TODO: set auto-generated photo to regenerate on name change
 
-                    //TODO: check for invalid input
+                        //TODO: check for invalid input
+                    }
                 }
                 return false;
             }
             return false;
         }
         return false;
+    }
+
+    /**
+     * Doesn't work
+     * @return  true if input valid, false otherwise
+     */
+    public boolean checkValidInput() {
+        for (View v : this.getView().getFocusables(View.FOCUS_FORWARD)){
+            Log.d("validate input", "View: " + v.getId());
+            if (v instanceof EditText && ((EditText)v).getText().toString().trim().length() == 0) {
+                Log.d("validate input", "EditText: " + v.getId());
+                return false;
+            }
+        }
+        return true;
     }
 }

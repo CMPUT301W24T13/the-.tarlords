@@ -1,22 +1,6 @@
 package com.example.the_tarlords.ui.home;
 
-import android.content.Context;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.view.MenuProvider;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,13 +11,16 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.view.MenuProvider;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
+
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
-import com.example.the_tarlords.databinding.FragmentEventListBinding;
-import com.example.the_tarlords.placeholder.PlaceholderEventContent;
 import com.example.the_tarlords.data.event.Event;
-import com.example.the_tarlords.placeholder.PlaceholderContent;
-import com.example.the_tarlords.ui.event.EventDetailsFragment;
+import com.example.the_tarlords.databinding.FragmentEventListBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -43,7 +30,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 /**
