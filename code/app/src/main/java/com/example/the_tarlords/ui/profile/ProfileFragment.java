@@ -48,7 +48,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileFragment extends Fragment implements MenuProvider {
     private User user;
-    private Boolean fromAdmin = false;
     CircleImageView profilePhotoImageView;
     Button addProfilePhotoButton;
     EditText firstNameEditText;
@@ -61,7 +60,7 @@ public class ProfileFragment extends Fragment implements MenuProvider {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
+        if (MainActivity.user != null) {
             user = MainActivity.user;
             Log.d("profile", user.getFirstName());
         }

@@ -39,7 +39,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class ProfileViewFragment extends Fragment implements MenuProvider{
 
     private User user;
-    private Boolean fromAdmin = false;
     CircleImageView profilePhotoImageView;
     Button addProfilePhotoButton;
     EditText firstNameEditText;
@@ -73,7 +72,7 @@ public class ProfileViewFragment extends Fragment implements MenuProvider{
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             user = (User) getArguments().getParcelable("user");
-            fromAdmin = getArguments().getBoolean("fromAdmin");
+
         }
     }
     @Override
