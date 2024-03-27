@@ -1,24 +1,12 @@
 package com.example.the_tarlords.ui.profile;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.core.view.MenuProvider;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.ui.ActionBarOnDestinationChangedListener;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,19 +16,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.view.MenuProvider;
+import androidx.fragment.app.Fragment;
 
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.photo.ProfilePhoto;
 import com.example.the_tarlords.data.users.User;
-import com.example.the_tarlords.databinding.FragmentEventListBinding;
 import com.example.the_tarlords.databinding.FragmentProfileBinding;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
+
 public class ProfileFragment extends Fragment implements MenuProvider {
-    private User user = MainActivity.user;
+    private User user;
+    private Boolean fromAdmin = false;
     CircleImageView profilePhotoImageView;
     Button addProfilePhotoButton;
     EditText firstNameEditText;
@@ -54,7 +47,11 @@ public class ProfileFragment extends Fragment implements MenuProvider {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            //parse any arguments passed into fragment here
+            user = (User) getArguments().getParcelable("user");
+            fromAdmin = getArguments().getBoolean("fromAdmin");
+            Log.d("profiles", "it is this user");
+        } else {
+            user = MainActivity.user; // Fall back to the user from MainActivity
         }
 
     }
@@ -75,6 +72,12 @@ public class ProfileFragment extends Fragment implements MenuProvider {
 
         //MANDATORY for MenuProvider implementation
         requireActivity().addMenuProvider(this);
+        // needed for browseProfiles
+
+      /*  if (!fromAdmin) {
+            // Navigation is not from browse profile, pop the back stack
+            Navigation.findNavController(view).popBackStack();
+        }*/
 
         //find fragment views
         profilePhotoImageView = view.findViewById(R.id.image_view_profile);
@@ -131,12 +134,15 @@ public class ProfileFragment extends Fragment implements MenuProvider {
                     .create()
                     .show();
         });
+
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
     }
+
 
     /**
      * Required method for MenuProvider interface.
@@ -165,9 +171,15 @@ public class ProfileFragment extends Fragment implements MenuProvider {
                 menu.findItem(R.id.saveOptionsMenu).setVisible(true);
                 menu.findItem(R.id.cancelOptionsMenu).setVisible(true);
             } else {
-                menu.findItem(R.id.editOptionsMenu).setVisible(true);
-                menu.findItem(R.id.saveOptionsMenu).setVisible(false);
-                menu.findItem(R.id.cancelOptionsMenu).setVisible(false);
+                if(fromAdmin){
+                    menu.findItem(R.id.deleteOptionsMenu).setVisible(true);
+                    menu.findItem(R.id.editOptionsMenu).setVisible(false);
+                }else{
+                    menu.findItem(R.id.editOptionsMenu).setVisible(true);
+                    menu.findItem(R.id.saveOptionsMenu).setVisible(false);
+                    menu.findItem(R.id.cancelOptionsMenu).setVisible(false);
+                }
+
             }
         }
     }

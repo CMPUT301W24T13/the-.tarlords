@@ -1,17 +1,9 @@
 package com.example.the_tarlords.ui.event;
 
-import static com.google.firebase.firestore.model.Values.isInteger;
-
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.core.view.MenuProvider;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
-
 import android.os.Parcelable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -26,10 +18,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import androidx.annotation.NonNull;
+import androidx.core.view.MenuProvider;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
+
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.QR.QRCode;
 import com.example.the_tarlords.data.event.Event;
+import com.example.the_tarlords.data.photo.EventPoster;
 import com.example.the_tarlords.databinding.FragmentEventEditBinding;
 
 /**
@@ -302,7 +300,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
                 // Check if the input string is empty or contains non-integer values
                 if (TextUtils.isEmpty(max) || !isInteger(max)) {
                     // Set it to "infinity" if empty or non-integer
-                    event.setMaxSignUps(Integer.MAX_VALUE);
+                    event.setMaxSignUps(-1);
                     maxAttendees.setText("unlimited");
                 } else {
                     // If the string represents a valid integer, parse int
@@ -314,7 +312,13 @@ public class EventEditFragment extends Fragment implements MenuProvider {
                     event.makeNewDocID(); //generate new event id
                     event.setQrCodeCheckIns("CI" + event.getId()); //generate check in QR
                     event.setQrCodePromo("EI" + event.getId()); //generate promo QR
+                    event.setSignUps(0);
 
+                }
+                if (event.getPoster()==null){
+                    EventPoster poster = new EventPoster(event.getId(), null,event);
+                    poster.autoGenerate();
+                    event.setPoster(poster);
                 }
                 //upload event in firebase
                 event.sendToFirebase();

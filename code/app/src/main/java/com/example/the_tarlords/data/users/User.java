@@ -1,35 +1,24 @@
 package com.example.the_tarlords.data.users;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
-
-import com.example.the_tarlords.MainActivity;
-import com.example.the_tarlords.data.Alert.AlertList;
-import com.example.the_tarlords.data.event.Event;
-import com.example.the_tarlords.data.photo.Photo;
-import com.example.the_tarlords.data.photo.ProfilePhoto;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.CollectionReference;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import android.annotation.SuppressLint;
-import android.provider.Settings;
 
 import androidx.annotation.NonNull;
 
 import com.example.the_tarlords.MainActivity;
+import com.example.the_tarlords.data.event.Event;
+import com.example.the_tarlords.data.photo.ProfilePhoto;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.HashMap;
 import java.util.Map;
 
-public class User implements Profile {
+public class User implements Profile , Parcelable {
     private String userId;
     private String firstName;
     private String lastName;
@@ -39,13 +28,17 @@ public class User implements Profile {
     private String email;
     private CollectionReference usersRef = MainActivity.db.collection("Users");
 
+    private String fCMToken;
+    private Boolean isAdmin;
+
+
 
     /**
      * Mandatory empty constructor for firestore functionality
      */
     public User() {
     }
-
+    //TODO : automatically sets isAdmin to false in constructor, should we have a constructor that allows us to choose, or we changing in firebase directly?
     public User(String userId, String firstName, String lastName, String phoneNum, String email) {
         this.userId = userId;
         this.firstName = firstName;
@@ -54,12 +47,20 @@ public class User implements Profile {
         this.email = email;
         this.profilePhoto = new ProfilePhoto(firstName+lastName, null, firstName, lastName);
         this.profilePhoto.autoGenerate();
+        this.isAdmin = false;
     }
+
 
     boolean isAdmin() {
         return false;
     }
+    public Boolean getIsAdmin() {
+        return isAdmin;
+    }
 
+    public void setIsAdmin(Boolean isAdmin) {
+        this.isAdmin = isAdmin;
+    }
     public String getUserId() {
         return userId;
     }
@@ -83,6 +84,11 @@ public class User implements Profile {
     }
 
     public ProfilePhoto getProfilePhoto() {
+        if (profilePhoto != null){
+            return profilePhoto;
+        } else if (profilePhotoData!=null) {
+            setProfilePhotoFromData(profilePhotoData);
+        }
         return profilePhoto;
     }
     public void setProfilePhoto(ProfilePhoto profilePhoto) {
@@ -124,6 +130,14 @@ public class User implements Profile {
         this.email = email;
     }
 
+    public String getfCMToken() {
+        return fCMToken;
+    }
+
+    public void setfCMToken(String fCMToken) {
+        this.fCMToken = fCMToken;
+    }
+
     /**
      * Uploads user data to fire store via a hash table.
      * Includes: userId, firstName, lastName, email, phoneNum and profilePhotoData (base64 string)
@@ -136,7 +150,9 @@ public class User implements Profile {
         docData.put("lastName", lastName);
         docData.put("email", email);
         docData.put("phoneNum", phoneNum);
+        docData.put("FCM",fCMToken);
         docData.put("profilePhotoData", profilePhoto.getPhotoDataFromBitmap()); //stores profile photo data as base 64 string
+        docData.put("isAdmin", isAdmin);
         usersRef.document(userId).set(docData)
                 .addOnSuccessListener(aVoid -> {
                     // Document successfully added
@@ -207,6 +223,37 @@ public class User implements Profile {
                     }
                 });
     }
+    protected User(Parcel in) {
+        firstName = in.readString();
+        lastName = in.readString();
+        phoneNum = in.readString();
+        email = in.readString();
+    }
 
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeString(firstName);
+        dest.writeString(lastName);
+        dest.writeString(phoneNum);
+        dest.writeString(email);
+
+    }
 }
 
