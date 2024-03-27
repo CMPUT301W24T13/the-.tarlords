@@ -62,11 +62,7 @@ public class ProfileFragment extends Fragment implements MenuProvider {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            user = (User) getArguments().getParcelable("user");
-            fromAdmin = getArguments().getBoolean("fromAdmin");
-            Log.d("profiles", "it is this user");
-        } else {
-            user = MainActivity.user; // Fall back to the user from MainActivity
+            user = MainActivity.user;
         }
 
     }
@@ -87,12 +83,7 @@ public class ProfileFragment extends Fragment implements MenuProvider {
 
         //MANDATORY for MenuProvider implementation
         requireActivity().addMenuProvider(this);
-        // needed for browseProfiles
 
-        if (!fromAdmin) {
-            // Navigation is not from browse profile, pop the back stack
-            Navigation.findNavController(view).popBackStack();
-        }
 
         //find fragment views
         profilePhotoImageView = view.findViewById(R.id.image_view_profile);
@@ -186,16 +177,12 @@ public class ProfileFragment extends Fragment implements MenuProvider {
                 menu.findItem(R.id.saveOptionsMenu).setVisible(true);
                 menu.findItem(R.id.cancelOptionsMenu).setVisible(true);
             } else {
-                if(fromAdmin){
-                    menu.findItem(R.id.deleteOptionsMenu).setVisible(true);
-                    menu.findItem(R.id.editOptionsMenu).setVisible(false);
-                }else{
-                    menu.findItem(R.id.editOptionsMenu).setVisible(true);
-                    menu.findItem(R.id.saveOptionsMenu).setVisible(false);
-                    menu.findItem(R.id.cancelOptionsMenu).setVisible(false);
-                }
-
+                menu.findItem(R.id.editOptionsMenu).setVisible(true);
+                menu.findItem(R.id.saveOptionsMenu).setVisible(false);
+                menu.findItem(R.id.cancelOptionsMenu).setVisible(false);
             }
+
+
         }
     }
 

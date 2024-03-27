@@ -177,13 +177,24 @@
             app:popUpTo="@id/mainActivity" />
         <action
             android:id="@+id/action_profileBrowseFragment_to_profileFragment"
-            app:destination="@id/profileFragment"
-             />
+            app:destination="@id/profileFragment"/>
         <action
             android:id="@+id/action_profileBrowseFragment_to_eventDetailsFragment"
             app:destination="@id/eventDetailsFragment" />
         <action
             android:id="@+id/action_profileBrowseFragment_to_eventBrowseFragment"
             app:destination="@id/eventBrowseFragment" />
+        <action
+            android:id="@+id/action_profileBrowseFragment_to_profileViewFragment"
+            app:destination="@id/profileViewFragment"/>
+    </fragment>
+    <fragment
+        android:id="@+id/profileViewFragment"
+        android:name="com.example.the_tarlords.ui.profile.ProfileViewFragment"
+        android:label="ProfileViewFragment">
+        <action
+            android:id="@+id/action_profileViewFragment_to_profileBrowseFragment"
+            app:destination="@+id/profileBrowseFragment"
+            app:popUpTo="@+id/profileBrowseFragment"/>
     </fragment>
 </navigation>

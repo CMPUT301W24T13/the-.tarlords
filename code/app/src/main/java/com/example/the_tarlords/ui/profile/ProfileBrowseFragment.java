@@ -88,7 +88,7 @@ public class ProfileBrowseFragment extends Fragment implements MenuProvider {
         Bundle args = new Bundle();
         args.putParcelable("user", user);
         args.putBoolean("fromAdmin", true);
-        NavHostFragment.findNavController(ProfileBrowseFragment.this).navigate(R.id.action_profileBrowseFragment_to_profileFragment, args);
+        NavHostFragment.findNavController(ProfileBrowseFragment.this).navigate(R.id.action_profileBrowseFragment_to_profileViewFragment, args);
 
     }
     private void fetchUsersFromFirebase() {
