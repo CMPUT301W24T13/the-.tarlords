@@ -248,4 +248,3 @@ public class Organizer extends Attendee implements OrgPerms {
     }
 }
 
-//testing
