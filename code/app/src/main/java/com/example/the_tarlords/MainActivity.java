@@ -220,12 +220,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
      */
     private void navigateToEventDetailsFragment(Event event) {
         Log.e("QrCode", "here");
-        /*EventDetailsFragment fragment = EventDetailsFragment.newInstance(event, false);
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.nav_host_fragment_content_main, fragment); // R.id.fragment_container is the ID of your fragment container
-        fragmentTransaction.addToBackStack(null); // Optional: adds the transaction to the back stack
-        fragmentTransaction.commit();*/
         Bundle args = new Bundle();
         args.putParcelable("event", event);
         args.putBoolean("isOrganizer", false);
@@ -240,12 +234,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
      * Redirects user to profile fragment.
      */
     private void navigateToProfileFragment() {
-        /*ProfileFragment fragment = ProfileFragment.newInstance();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.nav_host_fragment_content_main, fragment); // R.id.fragment_container is the ID of your fragment container
-        fragmentTransaction.addToBackStack(null); // Optional: adds the transaction to the back stack
-        fragmentTransaction.commit();*/
         Navigation.findNavController(this, R.id.nav_host_fragment_content_main)
                 .navigate(R.id.action_eventListFragment_to_profileFragment);
     }

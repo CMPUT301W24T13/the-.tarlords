@@ -17,7 +17,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.ui.ActionBarOnDestinationChangedListener;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -134,12 +133,15 @@ public class ProfileFragment extends Fragment implements MenuProvider {
                     .create()
                     .show();
         });
+
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
     }
+
 
     /**
      * Required method for MenuProvider interface.
