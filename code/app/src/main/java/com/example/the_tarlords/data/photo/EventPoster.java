@@ -29,14 +29,14 @@ public class EventPoster extends Photo{
         canvas.drawColor(color);
         paint.setTextAlign(Paint.Align.CENTER);
         paint.setTypeface(Typeface.create(String.valueOf(R.font.helvetica_bold), Typeface.BOLD ));
-        paint.setTextSize(150);
+        paint.setTextSize(75);
         paint.setColor(Color.BLACK);
 
         int x = canvas.getWidth()/2;
         int y = (int) ((canvas.getHeight()/8) - ((paint.descent() + paint.ascent())/2));
         canvas.drawText(event.getName(),x,y,paint);
-        x = 0;
-        y = (int) (canvas.getHeight()- ((paint.descent() + paint.ascent())/2));
+        y = (int) (canvas.getHeight()+ ((paint.descent() + paint.ascent())/2));
+        paint.setTextSize(50);
         canvas.drawText(event.getStartDate(),x,y,paint);
         this.setBitmap(bitmap);
 

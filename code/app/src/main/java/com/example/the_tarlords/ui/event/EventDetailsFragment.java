@@ -1,22 +1,10 @@
 package com.example.the_tarlords.ui.event;
 
 
-import static androidx.core.content.PermissionChecker.checkSelfPermission;
-
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-
-
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.PermissionChecker;
-import androidx.core.view.MenuProvider;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,17 +16,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.PermissionChecker;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
-
 
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.QR.QRCode;
 import com.example.the_tarlords.data.event.Event;
+import com.example.the_tarlords.data.photo.EventPoster;
 import com.example.the_tarlords.databinding.FragmentEventDetailsBinding;
 
 /**
@@ -129,6 +119,7 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
         TextView eventStartTimeTextView = view.findViewById(R.id.tv_event_startTime);
         TextView eventEndTimeTextView = view.findViewById(R.id.tv_event_endTime);
         TextView eventMaxAttendees = view.findViewById(R.id.tv_max_attendees);
+        ImageView eventPosterImageView = view.findViewById(R.id.iv_poster);
         //add additional views here as desired
 
         // Check if event is not null before accessing its attributes
@@ -139,6 +130,17 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
             eventStartDateTextView.setText(event.getStartDate());
             eventEndTimeTextView.setText(event.getEndTime());
             // set additional fields here as desired
+
+            if (event.getPosterData()!=null){ //if poster data exists, display uploaded poster
+                event.setPosterFromData(event.getPosterData());
+                eventPosterImageView.setImageBitmap(event.getPoster().getBitmap());
+            }
+            else { //otherwise generate poster
+                EventPoster eventPoster = new EventPoster(event.getId(),null, event);
+                eventPoster.autoGenerate();
+                event.setPoster(eventPoster);
+                eventPosterImageView.setImageBitmap(eventPoster.getBitmap());
+            }
 
             try {
                 //TODO: this is kinda broken

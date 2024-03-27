@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public static User user;
     // TODO : do not hardcode
-    //public static Boolean isAdmin = true;
+    public static Boolean isAdmin = false;
     private static String userId;
     private static View hView;
     public static Context context;
@@ -119,6 +119,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                             //creates 'user' object from firestore data, now you can use 'user' object
                             user = documentSnapshot.toObject(User.class);
+                            //isAdmin = user.getIsAdmin(); should also check null and set null = false, also for user.sendToFirestore()
 
                             //sets content binding now that userId is no longer null (must stay above updateNavigationDrawerHeader()
                             setBinding();
