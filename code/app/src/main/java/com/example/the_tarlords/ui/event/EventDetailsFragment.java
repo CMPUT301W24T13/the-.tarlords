@@ -131,7 +131,7 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
             eventEndTimeTextView.setText(event.getEndTime());
             // set additional fields here as desired
 
-            if (event.getPosterData()!=null){ //if poster data exists, display uploaded poster
+            if (event.getPoster()!=null){ //if poster data exists, display uploaded poster
                 event.setPosterFromData(event.getPosterData());
                 eventPosterImageView.setImageBitmap(event.getPoster().getBitmap());
             }
@@ -279,8 +279,12 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
                 }
         } else if (menuItem.getItemId()==R.id.signUpOptionsMenu) {
             if (!event.reachedMaxCap()){
-                event.signUp(MainActivity.user);
-                Toast.makeText(getContext(),"Sign Up Successful", Toast.LENGTH_SHORT).show();
+                try {
+                    event.signUp(MainActivity.user);
+                    Toast.makeText(getContext(), "Sign Up Successful", Toast.LENGTH_SHORT).show();
+                } catch (Exception ignored) {
+                    Toast.makeText(getContext(), "Error. Is this event out of date? If not let Isabelle know. ", Toast.LENGTH_SHORT).show();
+                }
             }
             else {
                 Toast.makeText(getContext(), "Max capacity reached. Unable to sign up.", Toast.LENGTH_SHORT).show();

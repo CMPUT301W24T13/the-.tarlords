@@ -11,6 +11,7 @@ import com.example.the_tarlords.data.Alert.Alert;
 import com.example.the_tarlords.data.Alert.AlertCallback;
 import com.example.the_tarlords.data.QR.QRScanActivity;
 import com.example.the_tarlords.data.attendance.Attendance;
+import com.example.the_tarlords.data.attendance.AttendanceCallback;
 import com.example.the_tarlords.data.map.LocationHelper;
 import com.example.the_tarlords.data.photo.EventPoster;
 import com.example.the_tarlords.data.users.Attendee;
@@ -174,6 +175,9 @@ public class Event implements Attendance, Parcelable {
     }
 
     public EventPoster getPoster() {
+      if (poster == null && posterData!=null) {
+            setPosterFromData(posterData);
+        }
         return poster;
     }
 
@@ -255,10 +259,13 @@ public class Event implements Attendance, Parcelable {
      * NOT WORKING
      * Populates an array list with Attendee objects attending the event using firestore data.
      * This is the default "signup" list.
-     * @param attendees array list of Attendee objects
+     *
+     * @param callback attendance callback
+     * @return ArrayList<Attendee> attendees
      */
-    public void populateAttendanceList(ArrayList<Attendee> attendees) {
+    public ArrayList<Attendee> getAttendanceList(AttendanceCallback callback){
         CollectionReference attendanceRef = MainActivity.db.collection("Events/"+ id +"/Attendance");
+        ArrayList<Attendee> attendees = new ArrayList<>();
         attendees.clear();
         attendanceRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
@@ -266,9 +273,9 @@ public class Event implements Attendance, Parcelable {
                 for (QueryDocumentSnapshot attendeeDoc : queryDocumentSnapshots) {
                     DocumentSnapshot userDoc = usersRef.document(attendeeDoc.getId()).get().getResult();
                     Attendee attendee = userDoc.toObject(Attendee.class);
-                    attendee.setProfilePhotoFromData(attendee.getProfilePhotoData());
                     attendees.add(attendee);
                 }
+                callback.onAttendanceLoaded(attendees);
             }
         })
        .addOnFailureListener(new OnFailureListener() {
@@ -277,6 +284,7 @@ public class Event implements Attendance, Parcelable {
                 Log.d("Firestore", e.getMessage());
             }
         });
+        return attendees;
     }
 
     /**
