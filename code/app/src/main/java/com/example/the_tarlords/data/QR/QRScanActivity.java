@@ -1,8 +1,7 @@
 package com.example.the_tarlords.data.QR;
 
-import static java.lang.Boolean.TRUE;
-
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -15,8 +14,8 @@ import androidx.core.app.ActivityCompat;
 
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
-import com.example.the_tarlords.data.users.User;
 import com.example.the_tarlords.data.event.Event;
+import com.example.the_tarlords.data.users.User;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -36,12 +35,12 @@ public class QRScanActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private CollectionReference eventsRef;
     private CollectionReference QRRef;
-
-    //TODO: exit scan button (ie go back to main activity without scanning anything)
+    private static Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = this;
         setContentView(R.layout.content_main);
 
         userId = getIntent().getStringExtra("userId");
@@ -120,14 +119,13 @@ public class QRScanActivity extends AppCompatActivity {
                             Event event = doc.toObject(Event.class);
 
                             if (QRtype.equals("CI")) {
-                                //TODO: check if max attendees reached
                                 //This is a CheckIn QR
                                 Log.e("QrCode", "In CI" + docEventID);
                                 Log.e("QrCode", "EventName is " + doc.getString("name"));
 
                                 User user = new User();
                                 user.setUserId(userId);
-                                event.setCheckIn(user,TRUE);
+                                event.setCheckIn(user, true);
                                 finish();
 
                             } else {
@@ -178,6 +176,15 @@ public class QRScanActivity extends AppCompatActivity {
                 Toast.makeText(this, "Enable Camera to Scan QR", Toast.LENGTH_SHORT).show();
                 finish();
             }
+        }
+    }
+
+    public static void showCheckInMessage(Boolean success) {
+        if (success) {
+            Toast.makeText(context, "Check In Successful!", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            Toast.makeText(context, "Unable to check-in. Max capacity reached.", Toast.LENGTH_SHORT).show();
         }
     }
 }

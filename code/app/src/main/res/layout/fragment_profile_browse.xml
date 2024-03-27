@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/eventList"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginLeft="4dp"
     android:layout_marginTop="2dp"
     android:layout_marginRight="4dp"
     android:background="@color/white"
-    tools:context=".ui.home.EventListFragment">
-    <!--TODO : Move FAB (QR button) into fragment_event_list instead of app_bar_main-->
+    android:id="@+id/profileList"
+    tools:context=".ui.profile.ProfileBrowseFragment">
+
     <ListView
-        android:id="@+id/eventListView"
+        android:id="@+id/profileListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="-193dp"
-        tools:listitem="@layout/fragment_event_list_item" />
+        tools:listitem="@layout/fragment_profile_list_item" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
