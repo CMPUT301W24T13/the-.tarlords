@@ -318,10 +318,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
      * This needs to stay in main activity
      * @param googleMap
      */
-    @Override
-    public void onMapReady(@NonNull GoogleMap googleMap) {
-
-    }
+    
 
 
 }
