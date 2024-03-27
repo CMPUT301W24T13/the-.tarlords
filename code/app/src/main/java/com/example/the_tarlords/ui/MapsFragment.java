@@ -2,6 +2,11 @@ package com.example.the_tarlords.ui;
 
 import static com.example.the_tarlords.MainActivity.db;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.view.MenuProvider;
+import androidx.fragment.app.Fragment;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,11 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.view.MenuProvider;
-import androidx.fragment.app.Fragment;
-
+import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.event.Event;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -25,6 +26,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -80,9 +82,6 @@ public class MapsFragment extends Fragment implements MenuProvider {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //MANDATORY: required for MenuProvider options menu
-        requireActivity().addMenuProvider(this);
-
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         if (mapFragment != null) {
@@ -95,7 +94,7 @@ public class MapsFragment extends Fragment implements MenuProvider {
         menu.clear();
 
         //link options menu xml
-        //menuInflater.inflate(R.menu.options_menu, menu);
+        menuInflater.inflate(R.menu.options_menu, menu);
 
     }
 
@@ -131,7 +130,7 @@ public class MapsFragment extends Fragment implements MenuProvider {
                     // For each document, get the checkIns subcollection
                     String eventId = documentSnapshot.getString("id");
                     if (eventId != null) {
-                        db.collection("Events").document(eventId).collection("Attendance")
+                        db.collection("Events").document(eventId).collection("checkIns")
                                 .get()
                                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                     @Override

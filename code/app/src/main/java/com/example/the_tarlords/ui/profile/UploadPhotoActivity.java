@@ -26,7 +26,8 @@ import java.util.Objects;
 
 public class UploadPhotoActivity extends AppCompatActivity {
     private static final int REQUEST_GALLERY_PERMISSION = 1;
-    private Uri imageUri;
+    private static final int RESULT_GALLERY_UPLOAD = 1000;
+    private ImageView imageView;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,31 +40,27 @@ public class UploadPhotoActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Initiate device's gallery to upload a photo.
+     */
     public void uploadPicture() {
-        //from android studio official references site:
-        //using PickVisualMedia opens photo picker in half-screen mode.
-        // Registers a photo picker activity launcher in single-select mode.
-        ActivityResultLauncher<PickVisualMediaRequest> pickMedia = registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
-            // Callback is invoked after the user selects a media item or closes the photo picker
-            if (uri != null) {
-                Log.d("PhotoPicker", "Selected URI: " + uri);
-                imageUri = (Uri) uri;
-            } else {
-                Log.d("PhotoPicker", "No image selected");
-                imageUri = null;
-            }
-        });
+        Intent open_gallery = new Intent(Intent.ACTION_PICK);
+        open_gallery.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(open_gallery, RESULT_GALLERY_UPLOAD);
+    }
 
-        // Launch the photo picker and let the user choose only images (no video).
-        pickMedia.launch(new PickVisualMediaRequest.Builder()
-                .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
-                .build());
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+        if (resultCode == RESULT_OK && requestCode == RESULT_GALLERY_UPLOAD && data != null) {
+            Uri newUpload = data.getData();
+            imageView.setImageURI(newUpload);
+        }
         // Retrieve the captured photo from the camera intent
-        Log.e("image name", imageUri.getPath());
-        Bitmap capturedPhoto = BitmapFactory.decodeFile(imageUri.getPath());;
-        ImageView imageView = findViewById(R.id.profilePic);
-        imageView.setImageBitmap(capturedPhoto);
+        //Bitmap capturedPhoto = BitmapFactory.decodeFile(data.getData().toString());
+        //ImageView imageView = findViewById(R.id.profilePic);
+        //imageView.setImageBitmap(capturedPhoto);
     }
 
     @Override

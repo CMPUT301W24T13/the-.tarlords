@@ -15,7 +15,5 @@
         android:id="@+id/eventListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="-193dp"
         tools:listitem="@layout/fragment_event_list_item" />
 </androidx.constraintlayout.widget.ConstraintLayout>

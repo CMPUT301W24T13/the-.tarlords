@@ -5,30 +5,24 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.view.View;
 
 import com.example.the_tarlords.R;
-import com.example.the_tarlords.data.users.User;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 
 public class ProfilePhoto extends Photo {
-    private String firstName;
-    private String lastName;
+    private String photoFirstName;
+    private String photoLastName;
+    private boolean isDefault;
 
     public ProfilePhoto(String fileName, Bitmap bitmap, String firstName, String lastName) {
         super(fileName, bitmap);
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.photoFirstName = firstName;
+        this.photoLastName = lastName;
     }
 
     public void autoGenerate() {
         //get profile info - using initials for photo
-        String firstInitial = firstName.substring(0,1);
-        String lastInitial = lastName.substring(0,1);
+        String firstInitial = photoFirstName.substring(0,1);
+        String lastInitial = photoLastName.substring(0,1);
         String initials = firstInitial + lastInitial;
 
         Bitmap bitmap = Bitmap.createBitmap(400, 400, Bitmap.Config.ARGB_8888);
@@ -55,5 +49,27 @@ public class ProfilePhoto extends Photo {
         //bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
         //fOut.flush();
         //fOut.close();
+    }
+
+    public boolean isDefault() {
+        return isDefault;
+    }
+    public void setDefault(boolean newIsDefault) {
+        isDefault = newIsDefault;
+    }
+
+    public String getPhotoFirstName() {
+        return photoFirstName;
+    }
+
+    public void setPhotoFirstName(String firstName) {
+        this.photoFirstName = firstName;
+    }
+
+    public String getPhotoLastName() {
+        return photoLastName;
+    }
+    public void setPhotoLastName(String lastName) {
+        this.photoLastName = lastName;
     }
 }

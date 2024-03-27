@@ -119,7 +119,6 @@ public class EventBrowseFragment extends Fragment implements MenuProvider {
                 Bundle args = new Bundle();
                 args.putParcelable("event",event);
                 args.putBoolean("isOrganizer", false);
-                args.putBoolean("browse", true);
                 NavHostFragment.findNavController(EventBrowseFragment.this)
                         .navigate(R.id.action_eventBrowseFragment_to_eventDetailsFragment,args);
             }

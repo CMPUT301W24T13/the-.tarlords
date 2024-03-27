@@ -28,23 +28,4 @@
         android:enabled="true"
         android:icon="@drawable/profile_icon"
         android:title="Profile" />
-    <item
-        android:id="@+id/profileBrowseFragment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:enabled="false"
-        android:icon="@drawable/browse_events"
-        android:visible="false"
-        android:title="Browse Profiles"
-        />
-    <item
-        android:id="@+id/imageBrowseFragment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:enabled="false"
-        android:icon="@drawable/browse_events"
-        android:visible="false"
-        android:title="Browse Images"
-        />
-
 </menu>

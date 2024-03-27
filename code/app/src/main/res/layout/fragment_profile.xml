@@ -25,7 +25,7 @@
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:background="@drawable/button_border"
-        android:fontFamily="@font/helvetica_bold"
+        android:fontFamily="@font/helvetica_rounded_bold"
         android:text="@string/add_profile_photo"
         android:textSize="20sp"
         android:visibility="gone"
@@ -42,7 +42,9 @@
         android:layout_height="45dp"
         android:background="@drawable/rounded_corner"
         android:clickable="false"
+        android:enabled="false"
         android:fontFamily="@font/helvetica_light"
+
         android:gravity="center"
         android:hint="@string/first_name"
         android:inputType="text"
@@ -63,6 +65,7 @@
         android:layout_height="45dp"
         android:background="@drawable/rounded_corner"
         android:clickable="false"
+        android:enabled="false"
         android:fontFamily="@font/helvetica_light"
 
         android:gravity="center"
@@ -85,6 +88,7 @@
         android:layout_marginBottom="285dp"
         android:background="@drawable/rounded_corner"
         android:clickable="false"
+        android:enabled="false"
         android:fontFamily="@font/helvetica_light"
 
         android:gravity="center"
@@ -107,6 +111,7 @@
         android:layout_marginBottom="216dp"
         android:background="@drawable/rounded_corner"
         android:clickable="false"
+        android:enabled="false"
         android:fontFamily="@font/helvetica_light"
 
         android:gravity="center"

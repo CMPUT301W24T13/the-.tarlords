@@ -2,9 +2,11 @@ package com.example.the_tarlords.data.photo;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.util.Base64;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 public abstract class Photo {
     private String fileName;

@@ -1,7 +1,6 @@
 package com.example.the_tarlords.data.map;
 
 import static com.example.the_tarlords.MainActivity.db;
-import static com.example.the_tarlords.MainActivity.user;
 
 import android.Manifest;
 import android.app.Activity;
@@ -20,6 +19,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
 
 import java.util.HashMap;
 
@@ -56,7 +56,7 @@ public class LocationHelper {
     }
 
     private boolean checkLocationPermission() {
-        if ( ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // Permission not granted, request it
             ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_LOCATION_PERMISSION);
@@ -64,7 +64,6 @@ public class LocationHelper {
         }
         return true;
     }
-
 
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == REQUEST_LOCATION_PERMISSION) {
@@ -87,12 +86,12 @@ public class LocationHelper {
         checkInData.put("latitude", lat);
         checkInData.put("longitude", lon);
 
-        db.collection("Events").document(eventId).collection("Attendance")
-                .document(MainActivity.user.getUserId()).update(checkInData)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
+        db.collection("Events").document(eventId).collection("checkIns")
+                .add(checkInData)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
-                    public void onSuccess(Void unused) {
-                        Log.d("maps", "Check-in added with ID: " + user.getUserId());
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d("maps", "Check-in added with ID: " + documentReference.getId());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
