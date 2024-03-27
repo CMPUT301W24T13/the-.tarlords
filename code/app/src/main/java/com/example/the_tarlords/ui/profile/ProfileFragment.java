@@ -1,5 +1,7 @@
 package com.example.the_tarlords.ui.profile;
 
+import static java.lang.Character.isAlphabetic;
+
 import androidx.appcompat.app.ActionBar;
 import androidx.core.view.MenuProvider;
 import androidx.lifecycle.ViewModelProvider;
@@ -37,6 +39,10 @@ import com.example.the_tarlords.data.photo.ProfilePhoto;
 import com.example.the_tarlords.data.users.User;
 import com.example.the_tarlords.databinding.FragmentEventListBinding;
 import com.example.the_tarlords.databinding.FragmentProfileBinding;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileFragment extends Fragment implements MenuProvider {
@@ -204,40 +210,35 @@ public class ProfileFragment extends Fragment implements MenuProvider {
                 return false;
             }
             else if (menuItem.getItemId() == R.id.saveOptionsMenu || menuItem.getItemId() == R.id.cancelOptionsMenu) {
-                profilePhotoImageView.setVisibility(View.VISIBLE);
-                addProfilePhotoButton.setVisibility(View.GONE);
-                firstNameEditText.setEnabled(false);
-                lastNameEditText.setEnabled(false);
-                phoneEditText.setEnabled(false);
-                emailEditText.setEnabled(false);
+                if (checkValidInput(this.getView())) {
+                    profilePhotoImageView.setVisibility(View.VISIBLE);
+                    addProfilePhotoButton.setVisibility(View.GONE);
+                    firstNameEditText.setEnabled(false);
+                    lastNameEditText.setEnabled(false);
+                    phoneEditText.setEnabled(false);
+                    emailEditText.setEnabled(false);
 
+                }
                 if (menuItem.getItemId() == R.id.cancelOptionsMenu) {
-                    requireActivity().invalidateMenu(); //required in order to call onPrepareMenu() and repopulate menu with new options
+                requireActivity().invalidateMenu(); //required in order to call onPrepareMenu() and repopulate menu with new options
                 }
 
                 //if save button selected, update user info and send to firestore
                 if (menuItem.getItemId() == R.id.saveOptionsMenu) {
-                    if (checkValidInput()) {
-                        user.setFirstName(firstNameEditText.getText().toString());
-                        user.setLastName(lastNameEditText.getText().toString());
-                        user.setPhoneNum(phoneEditText.getText().toString());
-                        user.setEmail(emailEditText.getText().toString());
+                    user.setFirstName(firstNameEditText.getText().toString());
+                    user.setLastName(lastNameEditText.getText().toString());
+                    user.setPhoneNum(phoneEditText.getText().toString());
+                    user.setEmail(emailEditText.getText().toString());
 
+                    Bitmap bitmap = ((BitmapDrawable) profilePhotoImageView.getDrawable()).getBitmap();
+                    user.getProfilePhoto().setBitmap(bitmap);
 
-                        Bitmap bitmap = ((BitmapDrawable) profilePhotoImageView.getDrawable()).getBitmap();
-                        user.getProfilePhoto().setBitmap(bitmap);
+                    MainActivity.user.sendToFireStore();
 
-                        MainActivity.user.sendToFireStore();
-
-                        //update navigation header (slide out menu) with newly updated information
-                        MainActivity.updateNavigationDrawerHeader();
-                        requireActivity().invalidateMenu(); //required in order to call onPrepareMenu() and repopulate menu with new options
-
-                        //TODO: set auto-generated photo to regenerate on name change
-                        checkNameChanged();
-
-                        //TODO: check for invalid input
-                    }
+                    //update navigation header (slide out menu) with newly updated information
+                    MainActivity.updateNavigationDrawerHeader();
+                    requireActivity().invalidateMenu(); //required in order to call onPrepareMenu() and repopulate menu with new options
+                    checkNameChanged();
                 }
                 return false;
             }
@@ -268,14 +269,57 @@ public class ProfileFragment extends Fragment implements MenuProvider {
      * Doesn't work
      * @return  true if input valid, false otherwise
      */
-    public boolean checkValidInput() {
-        for (View v : this.getView().getFocusables(View.FOCUS_FORWARD)){
-            Log.d("validate input", "View: " + v.getId());
-            if (v instanceof EditText && ((EditText)v).getText().toString().trim().length() == 0) {
-                Log.d("validate input", "EditText: " + v.getId());
-                return false;
+    public boolean checkValidInput(View v) {
+        boolean validInput = true;
+        firstNameEditText = v.findViewById(R.id.edit_text_first_name);
+        if (firstNameEditText.getText().toString().length() == 0) {
+            firstNameEditText.setError("Required Field.");
+            validInput = false;
+        } else if (!isAlphabetic(firstNameEditText.getText().toString().charAt(0))) {
+            firstNameEditText.setError("Invalid entry. Name must start with a letter.");
+            validInput = false;
+        }
+        lastNameEditText = v.findViewById(R.id.edit_text_last_name);
+        if (lastNameEditText.getText().toString().length() == 0) {
+            lastNameEditText.setError("Required Field.");
+            validInput = false;
+        } else if (!isAlphabetic(lastNameEditText.getText().toString().charAt(0))) {
+            lastNameEditText.setError("Invalid entry. Name must start with a letter.");
+            validInput = false;
+        }
+        phoneEditText = v.findViewById(R.id.edit_text_phone);
+        if (phoneEditText.getText().toString().length() == 0) {
+            phoneEditText.setError("Required Field.");
+            validInput = false;
+        } else if (phoneEditText.getText().toString().length() < 9 || phoneEditText.getText().toString().length() > 20) {
+            // 9 digits for local code, up to 20 poss digits by ITU standards
+            phoneEditText.setError("Invalid phone number.");
+            validInput = false;
+        }
+        emailEditText = v.findViewById(R.id.edit_text_email);
+        if (emailEditText.getText().toString().length() == 0) {
+            emailEditText.setError("Required Field.");
+            validInput = false;
+        } else {
+            String email_string = emailEditText.getText().toString();
+            boolean validEmailFormat = true;
+            int emailMiddle = email_string.indexOf('@');
+
+            if (email_string.charAt(0) == '.') {
+                validEmailFormat = false;
+            } else if (emailMiddle == -1) {
+                validEmailFormat = false;
+            } else if ((email_string.length() - emailMiddle) < 3) {
+                // minimum 3 chars after @ symbol name@i.u, site, ., domain
+                validEmailFormat = false;
+            } else if (email_string.charAt(email_string.length()-1) == '.'){
+                validEmailFormat = false;
+            }
+            if (!validEmailFormat) {
+                emailEditText.setError("Invalid email format.");
+                validInput = false;
             }
         }
-        return true;
+        return validInput;
     }
 }

@@ -3,35 +3,36 @@ package com.example.the_tarlords.ui.profile;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.PickVisualMediaRequest;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.Objects;
 
 public class UploadPhotoActivity extends AppCompatActivity {
     private static final int REQUEST_GALLERY_PERMISSION = 1;
-    private static final int RESULT_GALLERY_UPLOAD = 1000;
-    private ImageView imageView;
+    private static final int REQUEST_IMAGE_PICK = 1000;
+    private Uri uploadPath;
+    private ImageView photo;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_profile);
+
+        photo = findViewById(R.id.image_view_profile);
 
         if (checkSelfPermission(android.Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(UploadPhotoActivity.this, new String[]{android.Manifest.permission.READ_MEDIA_IMAGES}, REQUEST_GALLERY_PERMISSION);
@@ -46,21 +47,28 @@ public class UploadPhotoActivity extends AppCompatActivity {
     public void uploadPicture() {
         Intent open_gallery = new Intent(Intent.ACTION_PICK);
         open_gallery.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(open_gallery, RESULT_GALLERY_UPLOAD);
+        startActivityForResult(open_gallery, REQUEST_IMAGE_PICK);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_OK && requestCode == RESULT_GALLERY_UPLOAD && data != null) {
-            Uri newUpload = data.getData();
-            imageView.setImageURI(newUpload);
+        if (resultCode == RESULT_OK && requestCode == REQUEST_IMAGE_PICK && data != null) {
+            uploadPath = data.getData();
+            Bitmap bitmap = null;
+
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),uploadPath);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            photo.setImageBitmap(bitmap);
         }
-        // Retrieve the captured photo from the camera intent
-        //Bitmap capturedPhoto = BitmapFactory.decodeFile(data.getData().toString());
-        //ImageView imageView = findViewById(R.id.profilePic);
-        //imageView.setImageBitmap(capturedPhoto);
+
+        //WHICH SCREEN DO WE START?? SHOULD JUST BE ABLE TO LINK BACK
+        Intent intent = new Intent(UploadPhotoActivity.this, MainActivity.class);
+        startActivity(intent);
     }
 
     @Override

@@ -73,6 +73,8 @@
     <string name="profile_picture">profile picture</string>
     <string name="upload_photo">upload photo</string>
     <string name="edit_profile">Edit profile</string>
+    <string name="accepted_name_chars">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-.\' </string>
+    <string name="alphanumeric">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890</string>
 
     <!-- strings related to attendance -->
     <string name="total_attendee_count">Total: 10</string>

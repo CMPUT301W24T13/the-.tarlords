@@ -42,13 +42,6 @@ public class ProfilePhoto extends Photo {
 
         this.setBitmap(bitmap);
 
-        //String path = "code/app/src/main/res/drawable";
-        //OutputStream fOut = null;
-        //File photoFile = new File(path, "profilePhoto.png");
-        //fOut = new FileOutputStream(photoFile);
-        //bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
-        //fOut.flush();
-        //fOut.close();
     }
 
     public boolean isDefault() {

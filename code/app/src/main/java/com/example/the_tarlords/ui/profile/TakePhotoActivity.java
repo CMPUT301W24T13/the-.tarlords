@@ -34,6 +34,8 @@ import java.util.Objects;
  */
 public class TakePhotoActivity extends AppCompatActivity {
     private static final int REQUEST_CAMERA_PERMISSION = 1;
+    private static final int REQUEST_IMAGE_CAPTURE = 100;
+    private Bitmap photoBitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,16 +55,19 @@ public class TakePhotoActivity extends AppCompatActivity {
      */
     public void takePicture() {
         Intent open_camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(open_camera, 100);
+        startActivityForResult(open_camera, REQUEST_IMAGE_CAPTURE);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        Bitmap capturedPhoto = (Bitmap) (data.getExtras().get("data"));
-        ImageView imageView = findViewById(R.id.profilePic);
-        imageView.setImageBitmap(capturedPhoto);
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bitmap capturedPhoto = (Bitmap) (data.getExtras().get("data"));
+            ImageView imageView = findViewById(R.id.profilePic);
+            imageView.setImageBitmap(capturedPhoto);
+            //saveImage(capturedPhoto);
+        }
 
         //WHICH SCREEN DO WE START?? SHOULD JUST BE ABLE TO LINK BACK
         Intent intent = new Intent(TakePhotoActivity.this, MainActivity.class);
