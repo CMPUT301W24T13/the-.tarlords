@@ -147,7 +147,7 @@ public class ProfileViewFragment extends Fragment implements MenuProvider{
                         .setNegativeButton("Remove", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                //Todo : a thorough test, removes the users not sure about their events and such 
+                                //Todo : a thorough test, removes the users not sure about their events and such
                                 user.removeFromFirestore();
                                 try {
                                     // Return to profile browse fragment

@@ -63,6 +63,7 @@ public class ProfileFragment extends Fragment implements MenuProvider {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             user = MainActivity.user;
+            Log.d("profile", user.getFirstName());
         }
 
     }
