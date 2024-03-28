@@ -214,6 +214,7 @@ public class Event implements Attendance, Parcelable {
                     for (QueryDocumentSnapshot alertDoc : task.getResult()) {
                         Alert alert = new Alert(alertDoc.getString("title"), alertDoc.getString("message"), alertDoc.getString("currentDateTime"));
                         //alert.setCurrentDateTime(alertDoc.getString("currentDateTime"));
+                        alert.setId(alertDoc.getId());
                         alertList.add(alert);
 
                     }

@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,6 +31,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -136,7 +138,12 @@ public class AlertFragment extends Fragment implements AddAlertDialogListener,Me
             alertListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    new AddAlertFragment(alertList.get(position)).show(getChildFragmentManager(),"Edit / delete alert" );
+                    //new AddAlertFragment(alertList.get(position)).show(getChildFragmentManager(),"Edit / delete alert" );
+                    //addAlertFragment.setAddAlertDialogListener(this);
+                    AddAlertFragment addAlertFragment = new AddAlertFragment(alertList.get(position));
+                    addAlertFragment.setAddAlertDialogListener(AlertFragment.this);
+                    addAlertFragment.show(getChildFragmentManager(), "Add alert");
+
                 }
             });
         }
@@ -197,8 +204,23 @@ public class AlertFragment extends Fragment implements AddAlertDialogListener,Me
     @Override
     public void deleteAlert(Alert alert) {
         //TODO update from firebase
-        alertListAdapter.remove(alert);
-        refreshList();
+
+        DocumentReference alertRef = MainActivity.db.collection("Events/"+event.getId()+"/alerts").document(alert.getId());
+        alertRef.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Log.d("Firestore", "Document successfully removed!");
+                    //alertListAdapter.remove(alert);
+                    refreshList();
+                }else {
+                    Log.e("Firestore", "Error removing document: " + task.getException());
+                    // Handle error accordingly
+                }
+
+            }
+        });
+
     }
 
     /**
@@ -224,11 +246,19 @@ public class AlertFragment extends Fragment implements AddAlertDialogListener,Me
                 ListView listView = getView().findViewById(R.id.alert_list);
                 alertListAdapter = new AlertListAdapter(requireContext(), alertList, 1);
                 listView.setAdapter(alertListAdapter);
+                TextView noAnnouncementTextView = getView().findViewById(R.id.no_announcement_textview);
+                // todo: sorting not working correctly, newest alerts should be at the top
+                //Collections.sort(alertList);
+                alertListAdapter.notifyDataSetChanged();
+                if(alertList.isEmpty()){
+                    noAnnouncementTextView.setVisibility(View.VISIBLE);
+                }else{
+                    noAnnouncementTextView.setVisibility(View.GONE);
+
+                }
             }
         });
-            // todo: sorting not working correctly, newest alerts should be at the top
-            Collections.sort(alertList);
-            alertListAdapter.notifyDataSetChanged();
+
 
 
 
@@ -285,12 +315,15 @@ public class AlertFragment extends Fragment implements AddAlertDialogListener,Me
         JSONObject jsonObject = new JSONObject();
         JSONObject notificationObject = new JSONObject();
         JSONObject dataObject = new JSONObject();
+        JSONObject androidPriorityObject = new JSONObject();
         notificationObject.put("title", event.getName());
         notificationObject.put("body",text);
         dataObject.put("event",event.getId());
+        androidPriorityObject.put("priority","high");
         jsonObject.put("notification",notificationObject);
         jsonObject.put("data",dataObject);
         jsonObject.put("to", fcmToken);
+        jsonObject.put("android",androidPriorityObject);
         return jsonObject;
     }
 
