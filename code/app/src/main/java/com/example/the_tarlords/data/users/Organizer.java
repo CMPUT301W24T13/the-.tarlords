@@ -6,7 +6,7 @@ import com.example.the_tarlords.data.Alert.Alert;
 import com.example.the_tarlords.data.QR.QRCode;
 import com.example.the_tarlords.data.app.App;
 import com.example.the_tarlords.data.event.Event;
-import com.example.the_tarlords.data.event.EventPoster;
+import com.example.the_tarlords.data.photo.EventPoster;
 import com.example.the_tarlords.not_in_use.Map;
 
 import java.io.IOException;

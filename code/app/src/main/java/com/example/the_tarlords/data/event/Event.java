@@ -13,7 +13,11 @@ import com.example.the_tarlords.data.Alert.AlertCallback;
 import com.example.the_tarlords.data.QR.QRScanActivity;
 import com.example.the_tarlords.data.attendance.Attendance;
 import com.example.the_tarlords.data.map.LocationHelper;
+
+import com.example.the_tarlords.data.photo.EventPoster;
+
 import com.example.the_tarlords.data.map.ShareLocation;
+
 import com.example.the_tarlords.data.users.Attendee;
 import com.example.the_tarlords.data.users.User;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -52,6 +56,7 @@ public class Event implements Attendance, Parcelable {
     private String qrCodeCheckIns;
     private String qrCodePromo;
     private EventPoster poster;
+    private String posterData;
     Integer maxSignUps;
     Integer signUps;
     private CollectionReference usersRef = MainActivity.db.collection("Users");
@@ -194,7 +199,19 @@ public class Event implements Attendance, Parcelable {
     public void setSignUps(Integer signUps) {
         this.signUps = signUps;
     }
-
+    /**
+     * Gets profile photo data firestore by converting the base 64 string stored in firestore
+     * to a bitmask, then setting the profile photo to have that bitmask.
+     * @return String base 64 profile photo data
+     */
+    public String getPosterData() {
+        return posterData;
+    }
+    public void setPosterFromData(String photoB64) {
+        poster = new EventPoster(id,null,this);
+        poster.setBitmapFromPhotoData(photoB64);
+        posterData=photoB64;
+    }
     public boolean reachedMaxCap() {
         if (signUps == null || maxSignUps ==-1){
             return false;
@@ -272,7 +289,7 @@ public class Event implements Attendance, Parcelable {
      *
      * @param user to add
      */
-    public synchronized void signUp(User user) {
+    public void signUp(User user) {
 
         CollectionReference attendanceRef = MainActivity.db.collection("Events/" + id + "/Attendance");
         Map<String, Object> docData = new HashMap<>();
@@ -419,7 +436,7 @@ public class Event implements Attendance, Parcelable {
         docData.put("signUps", signUps);
         docData.put("qrCodeCheckIns",qrCodeCheckIns);
         docData.put("qrCodePromo", qrCodePromo);
-        //TODO: add event poster
+        docData.put("posterData",poster.getPhotoDataFromBitmap());
 
         eventsRef.document(id).set(docData)
                 .addOnSuccessListener(aVoid -> {

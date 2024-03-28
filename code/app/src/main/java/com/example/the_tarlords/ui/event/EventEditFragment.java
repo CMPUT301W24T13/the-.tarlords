@@ -27,6 +27,7 @@ import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.QR.QRCode;
 import com.example.the_tarlords.data.event.Event;
+import com.example.the_tarlords.data.photo.EventPoster;
 import com.example.the_tarlords.databinding.FragmentEventEditBinding;
 
 /**
@@ -313,6 +314,11 @@ public class EventEditFragment extends Fragment implements MenuProvider {
                     event.setQrCodePromo("EI" + event.getId()); //generate promo QR
                     event.setSignUps(0);
 
+                }
+                if (event.getPoster()==null){
+                    EventPoster poster = new EventPoster(event.getId(), null,event);
+                    poster.autoGenerate();
+                    event.setPoster(poster);
                 }
                 //upload event in firebase
                 event.sendToFirebase();
