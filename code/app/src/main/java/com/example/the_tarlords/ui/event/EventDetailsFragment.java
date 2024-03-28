@@ -237,7 +237,6 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
 
         }
         else if (menuItem.getItemId()==R.id.deleteOptionsMenu) {
-            //TODO : I think this works?, needs a check
             if (isAdded()) { // Check if the fragment is attached to an activity
                 AlertDialog dialog = new AlertDialog.Builder(requireContext())
                         .setMessage("Are you sure you would like to delete the event " + event.getName() + "?")

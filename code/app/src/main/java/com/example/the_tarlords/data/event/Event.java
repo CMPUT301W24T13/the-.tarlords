@@ -5,6 +5,7 @@ import android.os.Parcelable;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
 
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.data.Alert.Alert;
@@ -13,7 +14,11 @@ import com.example.the_tarlords.data.QR.QRScanActivity;
 import com.example.the_tarlords.data.attendance.Attendance;
 import com.example.the_tarlords.data.attendance.AttendanceCallback;
 import com.example.the_tarlords.data.map.LocationHelper;
+
 import com.example.the_tarlords.data.photo.EventPoster;
+
+import com.example.the_tarlords.data.map.ShareLocation;
+
 import com.example.the_tarlords.data.users.Attendee;
 import com.example.the_tarlords.data.users.User;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -354,9 +359,6 @@ public class Event implements Attendance, Parcelable {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-
-                        LocationHelper location = new LocationHelper(MainActivity.context); // Pass MainActivity instance to Location class constructor
-                        location.getMyLocation(id); // Call the getMyLocation method
                         QRScanActivity.showCheckInMessage(true);
                     }
                 }).addOnFailureListener(new OnFailureListener() {
