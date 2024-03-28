@@ -18,13 +18,16 @@ import androidx.fragment.app.Fragment;
 
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
-import com.example.the_tarlords.data.attendance.AttendanceCallback;
 import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.users.Attendee;
 import com.example.the_tarlords.databinding.FragmentAttendanceListBinding;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -40,8 +43,6 @@ public class AttendanceFragment extends Fragment implements MenuProvider {
     private static AttendanceArrayAdapter adapter;
     private CollectionReference attendanceRef;
     private CollectionReference usersRef = MainActivity.db.collection("Users");
-    private TextView totalCount;
-    private TextView checkInCount;
 
     private static final String ARG_COLUMN_COUNT = "column-count";
 
@@ -74,28 +75,24 @@ public class AttendanceFragment extends Fragment implements MenuProvider {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentAttendanceListBinding.inflate(inflater, container, false);
-        ListView attendanceListView = binding.getRoot().findViewById(R.id.attendanceListView);
-        attendanceRef = MainActivity.db.collection("Events/"+event.getId()+"/Attendance");
-        Log.d("attendance list", attendees.toString()+"hello");
 
-
-        attendees = event.getAttendanceList(new AttendanceCallback() {
-            @Override
-            public void onAttendanceLoaded(ArrayList<Attendee> attendanceList) {
-                // Set the adapter
-                adapter = new AttendanceArrayAdapter(requireContext(), attendanceList);
-                attendanceListView.setAdapter(adapter);
-            }
-        });
-        refreshList();
-        totalCount = binding.getRoot().findViewById(R.id.attendee_count);
-        checkInCount = binding.getRoot().findViewById(R.id.attendee_checkin_count);
         return binding.getRoot();
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         requireActivity().addMenuProvider(this);
+        ListView attendanceListView = view.findViewById(R.id.attendanceListView);
+        attendanceRef = MainActivity.db.collection("Events/"+event.getId()+"/Attendance");
+        Log.d("attendance list", attendees.toString()+"hello");
+
+        // Set the adapter
+        adapter = new AttendanceArrayAdapter(getContext(), attendees);
+        attendanceListView.setAdapter(adapter);
+
+        TextView totalCount = view.findViewById(R.id.attendee_count);
+        TextView checkInCount = view.findViewById(R.id.attendee_checkin_count);
+
 
         attendanceRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -106,26 +103,41 @@ public class AttendanceFragment extends Fragment implements MenuProvider {
                 }
                 if (querySnapshots != null) {
                     attendees.clear();
-                    refreshList();
+                    attendanceRef.get()
+                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot attendeeDoc : task.getResult()) {
+                                    usersRef.document(attendeeDoc.getId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> t) {
+                                            if (t.isSuccessful()) {
+                                                DocumentSnapshot userDoc = t.getResult();
+                                                Log.d("fire", userDoc.getData().toString()+"111");
+                                                Attendee attendee = userDoc.toObject(Attendee.class);
+                                                attendee.setCheckInStatus(attendeeDoc.getBoolean("checkedInStatus"));
+                                                attendee.setEvent(event);
+                                                attendees.add(attendee);
+                                                Log.d("attendance query", attendees.toString()+"0000");
+                                                adapter.notifyDataSetChanged();
+                                                totalCount.setText("Total: " + adapter.getItemCount());
+                                                checkInCount.setText("Checked In: " + adapter.getCheckInCount());
+                                            }
+                                        }
+                                    });
+                                }
+                                Log.d("firestore", attendees.toString()+":)");
+                            } else {
+                                Log.d("firestore", "Error getting documents: ", task.getException());
+                            }
+                        }
+                    });
                 }
 
             }
         });
 
-
-    }
-    public void refreshList(){
-        attendees = event.getAttendanceList(new AttendanceCallback() {
-            @Override
-            public void onAttendanceLoaded(ArrayList<Attendee> attendees) {
-                Integer count = adapter.getItemCount();
-                totalCount.setText(count.toString());
-                count = adapter.getCheckInCount();
-                checkInCount.setText(count.toString());
-
-            }
-        });
-        adapter.notifyDataSetChanged();
 
     }
 

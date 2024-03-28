@@ -49,8 +49,7 @@ public class Event implements Attendance, Parcelable {
     String startDate;
     String id;
     String organizerId;
-    private String qrCodeCheckIns;
-    private String qrCodePromo;
+    private String qrCode;
     private EventPoster poster;
     private String posterData;
     Integer maxSignUps;
@@ -158,21 +157,14 @@ public class Event implements Attendance, Parcelable {
         this.endTime = endTime;
     }
 
-    public void setQrCodeCheckIns(String qrCode) {
-        this.qrCodeCheckIns = qrCode;
+    public void setQrCode(String qrCode) {
+        this.qrCode = qrCode;
     }
 
-    public void setQrCodePromo(String qrCode) {
-        this.qrCodePromo = qrCode;
+    public String getQrCode() {
+        return qrCode;
     }
 
-    public String getQrCodeCheckIns() {
-        return qrCodeCheckIns;
-    }
-
-    public String getQrCodePromo() {
-        return qrCodePromo;
-    }
 
     public EventPoster getPoster() {
       if (poster == null && posterData!=null) {
@@ -440,8 +432,7 @@ public class Event implements Attendance, Parcelable {
         docData.put("organizerId",organizerId);
         docData.put("maxSignUps", maxSignUps);
         docData.put("signUps", signUps);
-        docData.put("qrCodeCheckIns",qrCodeCheckIns);
-        docData.put("qrCodePromo", qrCodePromo);
+        docData.put("qrCode",qrCode);
         docData.put("posterData",poster.getPhotoDataFromBitmap());
 
         eventsRef.document(id).set(docData)

@@ -2,11 +2,9 @@ package com.example.the_tarlords.data.photo;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Build;
 import android.util.Base64;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 
 public abstract class Photo {
     private String fileName;
@@ -43,7 +41,6 @@ public abstract class Photo {
      */
     public String getPhotoDataFromBitmap() {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
         //bitmap from user image file
         //too much increase in quality may result in firebase errors (ie string too long)
         bitmap.compress(Bitmap.CompressFormat.JPEG, 30, baos);

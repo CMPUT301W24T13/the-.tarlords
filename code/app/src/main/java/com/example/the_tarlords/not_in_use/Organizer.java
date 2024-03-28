@@ -1,4 +1,4 @@
-package com.example.the_tarlords.data.users;
+package com.example.the_tarlords.not_in_use;
 
 import android.widget.ImageView;
 
@@ -7,7 +7,9 @@ import com.example.the_tarlords.data.QR.QRCode;
 import com.example.the_tarlords.data.app.App;
 import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.photo.EventPoster;
-import com.example.the_tarlords.not_in_use.Map;
+import com.example.the_tarlords.data.users.Attendee;
+import com.example.the_tarlords.data.users.AttendeeCheckInList;
+import com.example.the_tarlords.data.users.Profile;
 
 import java.io.IOException;
 import java.util.ArrayList;

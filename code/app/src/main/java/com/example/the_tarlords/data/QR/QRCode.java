@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.example.the_tarlords.MainActivity;
 import com.google.firebase.firestore.CollectionReference;
@@ -19,7 +18,6 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
-
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import java.util.HashMap;
