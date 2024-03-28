@@ -21,6 +21,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -32,6 +33,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
@@ -165,7 +167,27 @@ public class ProfileFragment extends Fragment implements MenuProvider {
     public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
         menu.clear();
         menuInflater.inflate(R.menu.options_menu, menu);
-        menu.findItem(R.id.editOptionsMenu).setVisible(true);
+
+        if (!checkValidInput(this.getView())) {
+            Toast toast = Toast.makeText(getContext(), "Complete profile information to continue.", Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.TOP, 0, 0);
+            toast.show();
+
+            menu.findItem(R.id.editOptionsMenu).setVisible(false);
+            menu.findItem(R.id.saveOptionsMenu).setVisible(true);
+            menu.findItem(R.id.cancelOptionsMenu).setVisible(true);
+
+            profilePhotoImageView.setVisibility(View.INVISIBLE);
+            addProfilePhotoButton.setVisibility(View.VISIBLE);
+            firstNameEditText.setEnabled(true);
+            lastNameEditText.setEnabled(true);
+            phoneEditText.setEnabled(true);
+            emailEditText.setEnabled(true);
+        } else {
+            menu.findItem(R.id.editOptionsMenu).setVisible(true);
+            menu.findItem(R.id.saveOptionsMenu).setVisible(false);
+            menu.findItem(R.id.cancelOptionsMenu).setVisible(false);
+        }
     }
 
     /**
@@ -178,9 +200,11 @@ public class ProfileFragment extends Fragment implements MenuProvider {
     public void onPrepareMenu(@NonNull Menu menu) {
         if (isAdded() && getContext() != null) { //bug fix for IllegalStateException: Fragment not attached to an activity
             if (getView().findViewById(R.id.button_add_profile_photo).getVisibility() != getView().GONE) {
+                // puts user in edit mode immediately
                 menu.findItem(R.id.editOptionsMenu).setVisible(false);
                 menu.findItem(R.id.saveOptionsMenu).setVisible(true);
                 menu.findItem(R.id.cancelOptionsMenu).setVisible(true);
+
             } else {
                 menu.findItem(R.id.editOptionsMenu).setVisible(true);
                 menu.findItem(R.id.saveOptionsMenu).setVisible(false);
@@ -211,6 +235,7 @@ public class ProfileFragment extends Fragment implements MenuProvider {
             }
             else if (menuItem.getItemId() == R.id.saveOptionsMenu || menuItem.getItemId() == R.id.cancelOptionsMenu) {
                 if (checkValidInput(this.getView())) {
+                    // if the profile info has been filled out they can leave edit mode
                     profilePhotoImageView.setVisibility(View.VISIBLE);
                     addProfilePhotoButton.setVisibility(View.GONE);
                     firstNameEditText.setEnabled(false);
