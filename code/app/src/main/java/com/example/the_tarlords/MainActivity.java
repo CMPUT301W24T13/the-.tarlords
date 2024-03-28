@@ -124,7 +124,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
                             // needs to be above the setBinding()
-                            isAdmin = user.getIsAdmin();
+                            if (user.getIsAdmin() != null){
+                                isAdmin = user.getIsAdmin();
+                            }
+
 
                             //sets content binding now that userId is no longer null (must stay above updateNavigationDrawerHeader()
                             setBinding();
