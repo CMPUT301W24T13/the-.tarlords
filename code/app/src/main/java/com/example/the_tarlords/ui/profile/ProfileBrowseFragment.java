@@ -33,7 +33,7 @@ import java.util.ArrayList;
  * Use the {@link ProfileBrowseFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ProfileBrowseFragment extends Fragment implements MenuProvider {
+public class ProfileBrowseFragment extends Fragment implements MenuProvider{
 
     // the fragment initialization parameters
 
@@ -69,6 +69,9 @@ public class ProfileBrowseFragment extends Fragment implements MenuProvider {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        //MANDATORY for MenuProvider implementation
+        requireActivity().addMenuProvider(this);
+
         View view = inflater.inflate(R.layout.fragment_profile_browse, container, false);
         ListView listView = view.findViewById(R.id.profileListView);
         adapter = new ProfileListAdapter(getContext(), users);
@@ -88,7 +91,7 @@ public class ProfileBrowseFragment extends Fragment implements MenuProvider {
         Bundle args = new Bundle();
         args.putParcelable("user", user);
         args.putBoolean("fromAdmin", true);
-        NavHostFragment.findNavController(ProfileBrowseFragment.this).navigate(R.id.action_profileBrowseFragment_to_profileFragment, args);
+        NavHostFragment.findNavController(ProfileBrowseFragment.this).navigate(R.id.action_profileBrowseFragment_to_profileViewFragment, args);
 
     }
     private void fetchUsersFromFirebase() {
@@ -103,7 +106,6 @@ public class ProfileBrowseFragment extends Fragment implements MenuProvider {
             Log.d("profiles", "failed to get profiles");
         });
     }
-
 
     @Override
     public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
