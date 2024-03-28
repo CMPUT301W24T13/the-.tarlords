@@ -24,6 +24,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.the_tarlords.data.QR.QRScanActivity;
 import com.example.the_tarlords.data.event.Event;
+import com.example.the_tarlords.data.map.ShareLocation;
 import com.example.the_tarlords.data.users.User;
 import com.example.the_tarlords.databinding.ActivityMainBinding;
 import com.google.android.gms.maps.GoogleMap;
@@ -43,8 +44,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     CollectionReference usersRef = db.collection("Users");
 
     public static User user;
-    // TODO : do not hardcode
+
     public static Boolean isAdmin = false;
+
     private static String userId;
     private static View hView;
     public static Context context;
@@ -119,7 +121,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                             //creates 'user' object from firestore data, now you can use 'user' object
                             user = documentSnapshot.toObject(User.class);
-                            //isAdmin = user.getIsAdmin(); should also check null and set null = false, also for user.sendToFirestore()
+
+
+                            // needs to be above the setBinding()
+                            isAdmin = user.getIsAdmin();
 
                             //sets content binding now that userId is no longer null (must stay above updateNavigationDrawerHeader()
                             setBinding();
@@ -155,20 +160,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         }
 
-
-        //TODO take out this test case, to show you guys how to call it
-        //LocationHelper location = new LocationHelper(MainActivity.this); // Pass MainActivity instance to Location class constructor
-
-        //location.getMyLocation("LBm1Cpj48GOnEulAK613"); // Call the getMyLocation method
-        // TODO : putting this here for now, Khushi
-        /**
-        if (user!= null){
-            isAdmin = user.getIsAdmin();
-            Log.d("admin", String.valueOf(isAdmin));
-        }else{
-            Log.d("admin", "wtf");
-        }
-        */
     }
 
     /**
@@ -279,6 +270,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 Bitmap bitmap = user.getProfilePhoto().getBitmap();
                 profilePic.setImageBitmap(bitmap);
             }
+
         } else {
             Log.e("debug", "User object is null");
             // Handle the case where the User object is null
