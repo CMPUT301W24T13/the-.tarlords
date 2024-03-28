@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.example.the_tarlords.MainActivity;
-import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.map.ShareLocation;
 import com.example.the_tarlords.data.users.User;
@@ -41,9 +40,6 @@ public class QRScanActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        context = this;
-        setContentView(R.layout.content_main);
-
         userId = getIntent().getStringExtra("userId");
 
         // Check camera permission and initiate QR code scanning if permission is granted
@@ -59,6 +55,7 @@ public class QRScanActivity extends AppCompatActivity {
      */
     public void scanQr() {
         IntentIntegrator intentIntegrator = new IntentIntegrator(this);
+        intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
         intentIntegrator.setPrompt("Scan QR code");
         intentIntegrator.setOrientationLocked(true); // Enable rotation
         intentIntegrator.initiateScan();
@@ -167,6 +164,7 @@ public class QRScanActivity extends AppCompatActivity {
                 linkQRtoEventID(qrValue);
             } else {
                 Toast.makeText(this, "Unable to scan", Toast.LENGTH_SHORT).show();
+                finish();
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);

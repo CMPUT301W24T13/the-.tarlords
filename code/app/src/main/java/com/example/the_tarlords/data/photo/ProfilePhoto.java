@@ -19,6 +19,10 @@ public class ProfilePhoto extends Photo {
         this.photoLastName = lastName;
     }
 
+    public ProfilePhoto(String fileName, Bitmap bitmap){
+        super(fileName,bitmap);
+    }
+
     public void autoGenerate() {
         //get profile info - using initials for photo
         String firstInitial = photoFirstName.substring(0,1);

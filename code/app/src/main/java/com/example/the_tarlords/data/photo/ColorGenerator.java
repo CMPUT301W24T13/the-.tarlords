@@ -8,7 +8,7 @@ public class ColorGenerator {
 
     public static int getRandomColor() {
         Random rand = new Random();
-        int randInt = rand.nextInt(colors.length + 1);
+        int randInt = rand.nextInt(colors.length);
 
         int c = colors[randInt];
         return c;

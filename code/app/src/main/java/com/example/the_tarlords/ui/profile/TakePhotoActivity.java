@@ -4,18 +4,8 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.view.View;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.util.Log;
-
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -23,10 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.example.the_tarlords.MainActivity;
-import com.example.the_tarlords.R;
-
-import java.io.File;
-import java.util.Objects;
 
 /**
  * The TakePhotoActivity class facilitates capturing photos using the device's camera.
@@ -35,12 +21,10 @@ import java.util.Objects;
 public class TakePhotoActivity extends AppCompatActivity {
     private static final int REQUEST_CAMERA_PERMISSION = 1;
     private static final int REQUEST_IMAGE_CAPTURE = 100;
-    private Bitmap photoBitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_profile);
 
         // Check camera permission and initiate photo capture if permission is granted
         if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -64,14 +48,14 @@ public class TakePhotoActivity extends AppCompatActivity {
 
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bitmap capturedPhoto = (Bitmap) (data.getExtras().get("data"));
-            ImageView imageView = findViewById(R.id.profilePic);
-            imageView.setImageBitmap(capturedPhoto);
-            //saveImage(capturedPhoto);
+            MainActivity.user.getProfilePhoto().setBitmap(capturedPhoto);
+            MainActivity.user.getProfilePhoto().setDefault(false);
+            MainActivity.updateNavigationDrawerHeader();
+            finish();
         }
-
-        //WHICH SCREEN DO WE START?? SHOULD JUST BE ABLE TO LINK BACK
-        Intent intent = new Intent(TakePhotoActivity.this, MainActivity.class);
-        startActivity(intent);
+        else {
+            finish();
+        }
     }
 
     @Override
