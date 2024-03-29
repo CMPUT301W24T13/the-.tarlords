@@ -5,7 +5,6 @@ import android.os.Parcelable;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentManager;
 
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.data.Alert.Alert;
@@ -13,12 +12,7 @@ import com.example.the_tarlords.data.Alert.AlertCallback;
 import com.example.the_tarlords.data.QR.QRScanActivity;
 import com.example.the_tarlords.data.attendance.Attendance;
 import com.example.the_tarlords.data.attendance.AttendanceCallback;
-import com.example.the_tarlords.data.map.LocationHelper;
-
 import com.example.the_tarlords.data.photo.EventPoster;
-
-import com.example.the_tarlords.data.map.ShareLocation;
-
 import com.example.the_tarlords.data.users.Attendee;
 import com.example.the_tarlords.data.users.User;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -59,6 +53,7 @@ public class Event implements Attendance, Parcelable {
     private String posterData;
     Integer maxSignUps;
     Integer signUps;
+    Integer checkIns;
     private CollectionReference usersRef = MainActivity.db.collection("Users");
 
     private static CollectionReference eventsRef = MainActivity.db.collection("Events");
@@ -189,7 +184,10 @@ public class Event implements Attendance, Parcelable {
     public void setMaxSignUps(Integer maxSignUps) {
         this.maxSignUps = maxSignUps;
     }
-
+    public void setCheckIns(Integer checkIns){
+        this.checkIns = checkIns;
+    }
+    public Integer getCheckIns(){return checkIns;}
     public Integer getSignUps() {return signUps;}
 
     public void setSignUps(Integer signUps) {
@@ -359,7 +357,12 @@ public class Event implements Attendance, Parcelable {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-                        QRScanActivity.showCheckInMessage(true);
+                        if (status) {
+                            QRScanActivity.showCheckInMessage(true);
+                            checkIns += 1;
+                        } else {
+                            checkIns -= 1;
+                        }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -423,7 +426,7 @@ public class Event implements Attendance, Parcelable {
      */
     public void sendToFirebase() {
         // Add the new user document to Firestore
-        if (signUps==null){signUps=0;}
+        if (signUps==null){signUps=0;checkIns=0;}
         Map<String, Object> docData = new HashMap<>();
         docData.put("id", id);
         docData.put("name", name);
@@ -434,6 +437,7 @@ public class Event implements Attendance, Parcelable {
         docData.put("organizerId",organizerId);
         docData.put("maxSignUps", maxSignUps);
         docData.put("signUps", signUps);
+        docData.put("checkIns", checkIns);
         docData.put("qrCode",qrCode);
         docData.put("posterData",poster.getPhotoDataFromBitmap());
 

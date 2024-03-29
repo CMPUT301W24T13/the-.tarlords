@@ -24,7 +24,6 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.the_tarlords.data.QR.QRScanActivity;
 import com.example.the_tarlords.data.event.Event;
-import com.example.the_tarlords.data.map.ShareLocation;
 import com.example.the_tarlords.data.users.User;
 import com.example.the_tarlords.databinding.ActivityMainBinding;
 import com.google.android.gms.maps.GoogleMap;
@@ -92,7 +91,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             // the profile fields are going to have to be filled with some default info the first time, but the ID is the one we generated
 
-            user = new User(userId,"First Name","Last Name","Phone Number","email");
+            user = new User();
+            user.setUserId(userId);
             isAdmin = false;
             setDeviceFCMToken();
 
