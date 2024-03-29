@@ -1,18 +1,9 @@
 package com.example.the_tarlords.data.photo;
 
-import android.graphics.Color;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Stack;
-
 import java.util.Random;
 
 public class ColorGenerator {
-    //private static Stack<Integer> colors;
-    //private static Stack<Integer> recycler;
+
     private static Integer[] colors = {0xFFFFC0CB, 0xFFDB7093, 0xFFADD8E6, 0xFF90EE90, 0xFFFFDAB9, 0xFFE6E6FA, 0xFF87CEEB, 0xFF98FB98, 0xFFD8BFD8};
     /*
     public void RandomColor() {
@@ -28,16 +19,9 @@ public class ColorGenerator {
 
     public static int getRandomColor() {
         Random rand = new Random();
-        int randInt = rand.nextInt(colors.length + 1);
-        //if (colors.size() == 0) {
-            //while(!recycler.isEmpty()) {
-                //colors.push(recycler.pop());
-            //}
-            //Collections.shuffle(colors);
-        //}
-        //Collections.shuffle(colors);
+        int randInt = rand.nextInt(colors.length);
+
         int c = colors[randInt];
-        //recycler.push(c);
         return c;
     }
 

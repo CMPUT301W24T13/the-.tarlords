@@ -7,49 +7,24 @@
     android:background="#ececec"
     tools:context=".ui.profile.ProfileFragment">
 
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="394dp"
-        android:layout_height="712dp"
-        android:src="@drawable/dashboard_background"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.058"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="376dp"
-        android:layout_height="694dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/dashboard_background2"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/imageView1"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
-
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/image_view_profile"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:contentDescription="@string/profile_picture"
         android:src="@drawable/profile"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView1"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="@dimen/menu_bar_vertical_offset"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imageView1"
-        app:layout_constraintVertical_bias="0.253" />
+        tools:layout_editor_absoluteY="134dp" />
 
     <Button
         android:id="@+id/button_add_profile_photo"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:background="@drawable/button_border"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:background="@color/cardview_shadow_start_color"
         android:fontFamily="@font/helvetica_rounded_bold"
         android:text="@string/add_profile_photo"
         android:textSize="20sp"
@@ -60,92 +35,99 @@
         app:layout_constraintTop_toTopOf="@id/image_view_profile"
         tools:visibility="visible" />
 
+
     <EditText
         android:id="@+id/edit_text_first_name"
-        android:layout_width="131dp"
-        android:layout_height="44dp"
+        android:layout_width="140dp"
+        android:layout_height="45dp"
         android:background="@drawable/rounded_corner"
         android:clickable="false"
-        android:fontFamily="@font/averia_sans_libre_bold"
+        android:enabled="false"
+        android:fontFamily="@font/helvetica_light"
+
         android:gravity="center"
         android:hint="@string/first_name"
-        android:inputType="text"
+        android:inputType="textPersonName"
+        android:digits="@string/accepted_name_chars"
         android:textColor="#000000"
         android:textColorHint="#887D7D"
-        android:textSize="22sp"
+        android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/edit_text_email"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.26"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/image_view_profile"
-        app:layout_constraintVertical_bias="0.123" />
-
+        app:layout_constraintHorizontal_bias="0.23"
+        app:layout_constraintVertical_bias="0.45" />
 
     <EditText
         android:id="@+id/edit_text_last_name"
-        android:layout_width="131dp"
-        android:layout_height="44dp"
+        android:layout_width="140dp"
+        android:layout_height="45dp"
         android:background="@drawable/rounded_corner"
         android:clickable="false"
-        android:fontFamily="@font/averia_sans_libre_bold"
+        android:enabled="false"
+        android:fontFamily="@font/helvetica_light"
+
         android:gravity="center"
         android:hint="@string/last_name"
-        android:inputType="text"
+        android:inputType="textPersonName"
+        android:digits="@string/accepted_name_chars"
         android:textColor="#000000"
         android:textColorHint="#887D7D"
-        android:textSize="22sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/edit_text_first_name"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.21"
-        app:layout_constraintStart_toEndOf="@+id/edit_text_first_name"
-        app:layout_constraintTop_toTopOf="@+id/edit_text_first_name"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintHorizontal_bias="0.77"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/edit_text_first_name" />
 
     <EditText
         android:id="@+id/edit_text_phone"
         android:layout_width="290dp"
-        android:layout_height="44dp"
-        android:layout_marginBottom="268dp"
+        android:layout_height="45dp"
+        android:layout_marginBottom="285dp"
         android:background="@drawable/rounded_corner"
         android:clickable="false"
-        android:fontFamily="@font/averia_sans_libre_bold"
+        android:enabled="false"
+        android:fontFamily="@font/helvetica_light"
+
         android:gravity="center"
         android:hint="@string/phone_number"
         android:inputType="phone"
         android:textColor="#000000"
         android:textColorHint="#887D7D"
-        android:textSize="22sp"
+        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/edit_text_last_name"
-        app:layout_constraintHorizontal_bias="0.583"
-        app:layout_constraintStart_toStartOf="@+id/edit_text_first_name"
-        app:layout_constraintTop_toBottomOf="@+id/edit_text_first_name"
-        app:layout_constraintVertical_bias="0.361" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/image_view_profile"
+        app:layout_constraintVertical_bias="0.65"/>
 
     <EditText
         android:id="@+id/edit_text_email"
         android:layout_width="290dp"
-        android:layout_height="44dp"
+        android:layout_height="45dp"
         android:layout_marginBottom="216dp"
         android:background="@drawable/rounded_corner"
         android:clickable="false"
-        android:fontFamily="@font/averia_sans_libre_bold"
+        android:enabled="false"
+        android:fontFamily="@font/helvetica_light"
+
         android:gravity="center"
         android:hint="@string/email"
         android:inputType="textEmailAddress"
         android:textColor="#000000"
         android:textColorHint="#887D7D"
-        android:textSize="22sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/edit_text_phone"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/edit_text_phone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_text_phone"
-        app:layout_constraintVertical_bias="0.368" />
+        app:layout_constraintVertical_bias="0.2" />
 
 
 

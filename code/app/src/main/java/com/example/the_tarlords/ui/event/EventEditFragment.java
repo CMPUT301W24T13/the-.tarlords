@@ -229,7 +229,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
             eventEndTimeTextView.setHint("4:30pm");
         }
         //check if QR codes have already been generated
-        if (event.getQrCodeCheckIns() == null) {
+        if (event.getQrCode() == null) {
             //hide QR code placeholder views
             view.findViewById(R.id.tv_checkin).setVisibility(view.GONE);
             view.findViewById(R.id.tv_info).setVisibility(view.GONE);
@@ -237,8 +237,8 @@ public class EventEditFragment extends Fragment implements MenuProvider {
             eventInfoQR.setVisibility(view.GONE);
         } else {
             //display QR codes
-            QRCode.generateQR("CI" + event.getId(), checkInQR);
-            QRCode.generateQR("EI" + event.getId(), eventInfoQR);
+            QRCode.generateQR("CI" + event.getQrCode(), checkInQR);
+            QRCode.generateQR("EI" + event.getQrCode(), eventInfoQR);
         }
 
 
@@ -310,8 +310,9 @@ public class EventEditFragment extends Fragment implements MenuProvider {
                 //if eventId is null, treat as new event and generate a new id
                 if (event.getId() == null) {
                     event.makeNewDocID(); //generate new event id
-                    event.setQrCodeCheckIns("CI" + event.getId()); //generate check in QR
-                    event.setQrCodePromo("EI" + event.getId()); //generate promo QR
+                    QRCode qr = new QRCode();
+                    qr.makeQR(event.getId());
+                    event.setQrCode(qr.getQrID()); //generate check in QR
                     event.setSignUps(0);
 
                 }

@@ -84,9 +84,7 @@ public class User implements Profile , Parcelable {
     }
 
     public ProfilePhoto getProfilePhoto() {
-        if (profilePhoto != null){
-            return profilePhoto;
-        } else if (profilePhotoData!=null) {
+        if (profilePhoto == null && profilePhotoData!=null) {
             setProfilePhotoFromData(profilePhotoData);
         }
         return profilePhoto;
