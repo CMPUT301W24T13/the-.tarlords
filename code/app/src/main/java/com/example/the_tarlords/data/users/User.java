@@ -4,20 +4,18 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.photo.ProfilePhoto;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
-
-import java.util.HashMap;
-
-import androidx.annotation.NonNull;
-
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class User implements Profile , Parcelable {
@@ -86,6 +84,9 @@ public class User implements Profile , Parcelable {
     }
 
     public ProfilePhoto getProfilePhoto() {
+        if (profilePhoto == null && profilePhotoData!=null) {
+            setProfilePhotoFromData(profilePhotoData);
+        }
         return profilePhoto;
     }
     public void setProfilePhoto(ProfilePhoto profilePhoto) {
