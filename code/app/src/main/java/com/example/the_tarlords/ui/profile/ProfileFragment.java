@@ -115,7 +115,7 @@ public class ProfileFragment extends Fragment implements MenuProvider {
                     } else if (item.getItemId() == R.id.remove_current_photo) {
                         //remove current photo:
                         user.getProfilePhoto().autoGenerate();
-                        user.getProfilePhoto().setDefault(true);
+                        user.setPhotoIsDefault(true);
                         return true;
                     } else {
                         return false;
@@ -327,6 +327,7 @@ public class ProfileFragment extends Fragment implements MenuProvider {
                     null, user.getFirstName(), user.getLastName());
             profilePhoto.autoGenerate();
             user.setProfilePhoto(profilePhoto);
+            user.setPhotoIsDefault(true);
             profilePhotoImageView.setImageBitmap(profilePhoto.getBitmap());
         }
     }
