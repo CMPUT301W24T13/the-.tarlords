@@ -147,6 +147,7 @@ public class QRScanActivity extends AppCompatActivity {
                 }
             }
         });
+        Toast.makeText(this, "Invalid QR", Toast.LENGTH_SHORT).show();
     }
 
     @Override
