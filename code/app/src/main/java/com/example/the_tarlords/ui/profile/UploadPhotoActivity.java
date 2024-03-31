@@ -69,7 +69,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
             try {
                 photoUpload = MediaStore.Images.Media.getBitmap(getContentResolver(),uploadPath);
                 MainActivity.user.getProfilePhoto().setBitmap(photoUpload);
-                MainActivity.user.getProfilePhoto().setDefault(false);
+                MainActivity.user.setPhotoIsDefault(false);
                 MainActivity.updateNavigationDrawerHeader();
                 finish();
             } catch (IOException e) {

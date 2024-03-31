@@ -11,7 +11,6 @@ import com.example.the_tarlords.R;
 public class ProfilePhoto extends Photo {
     private String photoFirstName;
     private String photoLastName;
-    private boolean isDefault;
 
     public ProfilePhoto(String fileName, Bitmap bitmap, String firstName, String lastName) {
         super(fileName, bitmap);
@@ -46,13 +45,6 @@ public class ProfilePhoto extends Photo {
 
         this.setBitmap(bitmap);
 
-    }
-
-    public boolean isDefault() {
-        return isDefault;
-    }
-    public void setDefault(boolean newIsDefault) {
-        isDefault = newIsDefault;
     }
 
     public String getPhotoFirstName() {

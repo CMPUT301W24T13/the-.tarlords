@@ -22,6 +22,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -51,6 +52,7 @@ public class Event implements Attendance, Parcelable {
     private String qrCode;
     private EventPoster poster;
     private String posterData;
+    private Boolean posterIsDefault;
     Integer maxSignUps;
     Integer signUps;
     Integer checkIns;
@@ -350,18 +352,25 @@ public class Event implements Attendance, Parcelable {
      * @param status boolean check-in status to set
      */
     public void setCheckIn(User user, Boolean status) {
-        CollectionReference attendanceRef = MainActivity.db.collection("Events/"+ id +"/Attendance");
-        attendanceRef
-                .document(user.getUserId())
-                .update("checkedInStatus", status)
+        Integer attendeeCheckIns;
+        DocumentReference attendeeRef = MainActivity.db.collection("Events/"+ id +"/Attendance").document(user.getUserId());
+        Boolean alreadyCheckedIn = (Boolean) attendeeRef.get().getResult().get("checkedInStatus");
+
+        if (status) { attendeeCheckIns =1;}
+        else {attendeeCheckIns=-1;}
+        attendeeRef.update("checkedInStatus", status,"checkIns", FieldValue.increment(attendeeCheckIns))
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
                         if (status) {
                             QRScanActivity.showCheckInMessage(true);
-                            checkIns += 1;
+                            if(!alreadyCheckedIn) {
+                                checkIns += 1;
+                            }
                         } else {
-                            checkIns -= 1;
+                            if (alreadyCheckedIn) {
+                                checkIns -= 1;
+                            }
                         }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
@@ -376,7 +385,10 @@ public class Event implements Attendance, Parcelable {
                     }
                 });
     }
-
+    public int getAttendeeCheckIns(User user){
+        DocumentReference attendeeRef = MainActivity.db.collection("Events/"+id+"/Attendance").document(user.getUserId());
+        return (Integer) attendeeRef.get().getResult().get("checkIns");
+    }
     /**
      * Mandatory method for Parcelable interface.
      * @return int
@@ -440,6 +452,7 @@ public class Event implements Attendance, Parcelable {
         docData.put("checkIns", checkIns);
         docData.put("qrCode",qrCode);
         docData.put("posterData",poster.getPhotoDataFromBitmap());
+        docData.put("posterIsDefault", posterIsDefault);
 
         eventsRef.document(id).set(docData)
                 .addOnSuccessListener(aVoid -> {
@@ -537,5 +550,12 @@ public class Event implements Attendance, Parcelable {
         return attendees;
     }
 
+    public Boolean getPosterIsDefault() {
+        return posterIsDefault;
+    }
+
+    public void setPosterIsDefault(Boolean posterIsDefault) {
+        this.posterIsDefault = posterIsDefault;
+    }
 }
 
