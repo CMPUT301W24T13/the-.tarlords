@@ -31,6 +31,7 @@ import android.widget.Toast;
 
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
+import com.example.the_tarlords.data.photo.Photo;
 import com.example.the_tarlords.ui.image.placeholder.PlaceholderContent;
 import com.example.the_tarlords.ui.profile.ProfileViewFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -54,7 +55,7 @@ public class ImageBrowseFragment extends Fragment implements MenuProvider {
     // if photo class deals with all images then type could change from String to Image
     private CollectionReference eventsRef = MainActivity.db.collection("Events");
     private CollectionReference usersRef = MainActivity.db.collection("Users");
-    private ArrayList<Image> images = new ArrayList<>();
+    private ArrayList<Photo> images = new ArrayList<>();
     private ImageListAdapter adapter;
 
 
@@ -97,7 +98,7 @@ public class ImageBrowseFragment extends Fragment implements MenuProvider {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Image image = images.get(position); // use this to delete the image
+                Photo image = images.get(position); // use this to delete the image
                 // should we inflate to a dialog fragment to display image?
                 AlertDialog dialog = new AlertDialog.Builder(requireContext())
                         .setMessage("Are you sure you would like to remove ?")
@@ -144,7 +145,7 @@ public class ImageBrowseFragment extends Fragment implements MenuProvider {
                                 Boolean posterIsDefault = document.getBoolean("posterIsDefault");
                                 if (Boolean.FALSE.equals(posterIsDefault)){ // if false then it is NOT the default photo
                                     if (posterData != null && posterData.length() >= 5) {
-                                        images.add(new Image(posterData, "Events", name, docId));
+                                        images.add(new Photo(posterData, "Events", name, docId));
                                         Log.d(TAG, "Poster Data: " + posterData.substring(0, 5));
                                     } else {
                                         Log.d(TAG, "Poster Data is null or shorter than 5 characters");
@@ -174,7 +175,7 @@ public class ImageBrowseFragment extends Fragment implements MenuProvider {
                                 Boolean photoIsDefault = document.getBoolean("photoIsDefault");
                                 if (Boolean.FALSE.equals(photoIsDefault)){
                                     if (profilePhotoData != null && profilePhotoData.length() >= 5) {
-                                        images.add(new Image(profilePhotoData, "Users", name, docId));
+                                        images.add(new Photo(profilePhotoData, "Users", name, docId));
                                         Log.d(TAG, "Profile Photo Data: " + profilePhotoData.substring(0, 5));
                                     } else {
                                         Log.d(TAG, "Profile Photo Data is null or shorter than 5 characters");
@@ -191,7 +192,7 @@ public class ImageBrowseFragment extends Fragment implements MenuProvider {
 
     }
 
-    private void removeFromFirestore(Image image) {
+    private void removeFromFirestore(Photo image) {
         String collection = image.getCollection();
         String docId = image.getDocId();
         DocumentReference docRef;
