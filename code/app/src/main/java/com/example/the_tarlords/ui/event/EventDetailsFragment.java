@@ -131,8 +131,7 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
             eventEndTimeTextView.setText(event.getEndTime());
             // set additional fields here as desired
 
-            if (event.getPosterData()!=null){ //if poster data exists, display uploaded poster
-                event.setPosterFromData(event.getPosterData());
+            if (event.getPoster()!=null){ //if poster data exists, display uploaded poster
                 eventPosterImageView.setImageBitmap(event.getPoster().getBitmap());
             }
             else { //otherwise generate poster
@@ -151,15 +150,15 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
 
         //display event QR codes if user has organizer perms
         if (isOrganizer == true) {
-            if (event.getQrCodeCheckIns()!=null){
+            if (event.getQrCode()!=null){
                 view.findViewById(R.id.tv_checkin_details).setVisibility(view.VISIBLE);
                 view.findViewById(R.id.tv_info_details).setVisibility(view.VISIBLE);
                 ImageView checkInQr = view.findViewById(R.id.iv_checkin_details);
                 ImageView eventInfoQr = view.findViewById(R.id.iv_info_details);
                 checkInQr.setVisibility(view.VISIBLE);
                 eventInfoQr.setVisibility(view.VISIBLE);
-                QRCode.generateQR("CI"+event.getId(),checkInQr);
-                QRCode.generateQR("EI"+event.getId(),eventInfoQr);
+                QRCode.generateQR("CI"+event.getQrCode(),checkInQr);
+                QRCode.generateQR("EI"+event.getQrCode(),eventInfoQr);
             }
         }
     }
@@ -278,8 +277,12 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
                 }
         } else if (menuItem.getItemId()==R.id.signUpOptionsMenu) {
             if (!event.reachedMaxCap()){
-                event.signUp(MainActivity.user);
-                Toast.makeText(getContext(),"Sign Up Successful", Toast.LENGTH_SHORT).show();
+                try {
+                    event.signUp(MainActivity.user);
+                    Toast.makeText(getContext(), "Sign Up Successful", Toast.LENGTH_SHORT).show();
+                } catch (Exception ignored) {
+                    Toast.makeText(getContext(), "Error. Is this event out of date? If not let Isabelle know. ", Toast.LENGTH_SHORT).show();
+                }
             }
             else {
                 Toast.makeText(getContext(), "Max capacity reached. Unable to sign up.", Toast.LENGTH_SHORT).show();
