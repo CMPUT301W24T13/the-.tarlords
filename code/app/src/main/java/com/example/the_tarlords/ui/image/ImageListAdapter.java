@@ -13,12 +13,12 @@ import android.widget.TextView;
 import com.example.the_tarlords.R;
 import java.util.ArrayList;
 
-public class ImageListAdapter extends ArrayAdapter<String> {
+public class ImageListAdapter extends ArrayAdapter<Image> {
 
-    private ArrayList<String> imageList;
+    private ArrayList<Image> imageList;
     private LayoutInflater inflater;
 
-    public ImageListAdapter(Context context, ArrayList<String> images) {
+    public ImageListAdapter(Context context, ArrayList<Image> images) {
         super(context, 0, images);
         this.imageList = images;
         inflater = LayoutInflater.from(context);
@@ -36,14 +36,18 @@ public class ImageListAdapter extends ArrayAdapter<String> {
 
             //getting the textviews
             holder.imageViewTV = view.findViewById(R.id.imageViewTV);
+            holder.collectionTV = view.findViewById(R.id.collectionTV);
+            holder.nameTV = view.findViewById(R.id.nameTV);
             view.setTag(holder);
         } else {
             holder = (ViewHolder) view.getTag();
         }
 
-        String image = imageList.get(position);
-        //setting the textviews
-        //holder.firstNameTextView.setText(user.getFirstName());
+        Image image = imageList.get(position);
+        // setting the textviews to the first 5 characters of the posterData
+        holder.imageViewTV.setText(image.getImageData().subSequence(0,5).toString());
+        holder.collectionTV.setText(image.getCollection());
+        holder.nameTV.setText(image.getName());
 
         return view;
     }
@@ -52,5 +56,7 @@ public class ImageListAdapter extends ArrayAdapter<String> {
      */
     static class ViewHolder {
         TextView imageViewTV;
+        TextView collectionTV;
+        TextView nameTV;
     }
 }
