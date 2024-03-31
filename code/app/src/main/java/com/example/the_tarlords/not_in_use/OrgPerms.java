@@ -1,15 +1,14 @@
-package com.example.the_tarlords.data.users;
+package com.example.the_tarlords.not_in_use;
 
 import android.widget.ImageView;
-
-import androidx.fragment.app.FragmentActivity;
 
 import com.example.the_tarlords.data.Alert.Alert;
 import com.example.the_tarlords.data.QR.QRCode;
 import com.example.the_tarlords.data.app.App;
 import com.example.the_tarlords.data.event.Event;
-import com.example.the_tarlords.data.event.EventPoster;
-import com.example.the_tarlords.data.map.Map;
+import com.example.the_tarlords.data.users.Attendee;
+import com.example.the_tarlords.data.users.AttendeeCheckInList;
+import com.example.the_tarlords.not_in_use.Map;
 
 import java.util.ArrayList;
 

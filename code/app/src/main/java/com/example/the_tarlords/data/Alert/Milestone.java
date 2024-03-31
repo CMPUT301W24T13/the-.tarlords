@@ -3,12 +3,21 @@ package com.example.the_tarlords.data.Alert;
 import com.example.the_tarlords.data.event.Event;
 
 public class Milestone extends Alert{
-    /**
-     * constructor for milestone class
-     * @param title
-     * @param message
-     */
-    public Milestone(String title, String message) {
+    private String title;
+    private String message;
+    private int count;
+
+    public Milestone(String title, String message, int count) {
         super(title, message,null);
+        this.title = title;
+        this.message = message;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 }

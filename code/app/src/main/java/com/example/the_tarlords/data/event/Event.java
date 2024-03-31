@@ -1,11 +1,5 @@
 package com.example.the_tarlords.data.event;
 
-import static androidx.fragment.app.FragmentManager.TAG;
-
-import static com.example.the_tarlords.MainActivity.db;
-import static com.example.the_tarlords.MainActivity.user;
-import static com.google.firebase.firestore.FirebaseFirestore.*;
-
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
@@ -15,34 +9,26 @@ import androidx.annotation.NonNull;
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.data.Alert.Alert;
 import com.example.the_tarlords.data.Alert.AlertCallback;
-import com.example.the_tarlords.data.QR.QRCode;
+import com.example.the_tarlords.data.QR.QRScanActivity;
 import com.example.the_tarlords.data.attendance.Attendance;
+import com.example.the_tarlords.data.attendance.AttendanceCallback;
+import com.example.the_tarlords.data.photo.EventPoster;
 import com.example.the_tarlords.data.users.Attendee;
-import com.example.the_tarlords.data.users.Organizer;
 import com.example.the_tarlords.data.users.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.AggregateQuery;
-import com.google.firebase.firestore.AggregateQuerySnapshot;
-import com.google.firebase.firestore.AggregateSource;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.Filter;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import org.checkerframework.common.returnsreceiver.qual.This;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * This class defines an event
@@ -63,10 +49,13 @@ public class Event implements Attendance, Parcelable {
     String startDate;
     String id;
     String organizerId;
-    private String qrCodeCheckIns;
-    private String qrCodePromo;
+    private String qrCode;
     private EventPoster poster;
+    private String posterData;
+    private Boolean posterIsDefault;
     Integer maxSignUps;
+    Integer signUps;
+    Integer checkIns;
     private CollectionReference usersRef = MainActivity.db.collection("Users");
 
     private static CollectionReference eventsRef = MainActivity.db.collection("Events");
@@ -96,6 +85,8 @@ public class Event implements Attendance, Parcelable {
         startTime = in.readString();
         endTime = in.readString();
         startDate = in.readString();
+        maxSignUps = in.readInt();
+        signUps = in.readInt();
     }
     public Event (){};
 
@@ -168,23 +159,19 @@ public class Event implements Attendance, Parcelable {
         this.endTime = endTime;
     }
 
-    public void setQrCodeCheckIns(String qrCode) {
-        this.qrCodeCheckIns = qrCode;
+    public void setQrCode(String qrCode) {
+        this.qrCode = qrCode;
     }
 
-    public void setQrCodePromo(String qrCode) {
-        this.qrCodePromo = qrCode;
+    public String getQrCode() {
+        return qrCode;
     }
 
-    public String getQrCodeCheckIns() {
-        return qrCodeCheckIns;
-    }
-
-    public String getQrCodePromo() {
-        return qrCodePromo;
-    }
 
     public EventPoster getPoster() {
+      if (poster == null && posterData!=null) {
+            setPosterFromData(posterData);
+        }
         return poster;
     }
 
@@ -199,9 +186,34 @@ public class Event implements Attendance, Parcelable {
     public void setMaxSignUps(Integer maxSignUps) {
         this.maxSignUps = maxSignUps;
     }
+    public void setCheckIns(Integer checkIns){
+        this.checkIns = checkIns;
+    }
+    public Integer getCheckIns(){return checkIns;}
+    public Integer getSignUps() {return signUps;}
 
+    public void setSignUps(Integer signUps) {
+        this.signUps = signUps;
+    }
+    /**
+     * Gets profile photo data firestore by converting the base 64 string stored in firestore
+     * to a bitmask, then setting the profile photo to have that bitmask.
+     * @return String base 64 profile photo data
+     */
+    public String getPosterData() {
+        return posterData;
+    }
+    public void setPosterFromData(String photoB64) {
+        poster = new EventPoster(id,null,this);
+        poster.setBitmapFromPhotoData(photoB64);
+        posterData=photoB64;
+    }
     public boolean reachedMaxCap() {
-        return true;
+        if (signUps == null || maxSignUps ==-1){
+            return false;
+        } else {
+            return maxSignUps <= signUps;
+        }
     }
 
     public ArrayList<Alert> getAlertList(AlertCallback callback){
@@ -242,12 +254,16 @@ public class Event implements Attendance, Parcelable {
     }
 
     /**
+     * NOT WORKING
      * Populates an array list with Attendee objects attending the event using firestore data.
      * This is the default "signup" list.
-     * @param attendees array list of Attendee objects
+     *
+     * @param callback attendance callback
+     * @return ArrayList<Attendee> attendees
      */
-    public void populateAttendanceList(ArrayList<Attendee> attendees) {
+    public ArrayList<Attendee> getAttendanceList(AttendanceCallback callback){
         CollectionReference attendanceRef = MainActivity.db.collection("Events/"+ id +"/Attendance");
+        ArrayList<Attendee> attendees = new ArrayList<>();
         attendees.clear();
         attendanceRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
@@ -255,9 +271,9 @@ public class Event implements Attendance, Parcelable {
                 for (QueryDocumentSnapshot attendeeDoc : queryDocumentSnapshots) {
                     DocumentSnapshot userDoc = usersRef.document(attendeeDoc.getId()).get().getResult();
                     Attendee attendee = userDoc.toObject(Attendee.class);
-                    attendee.setProfilePhotoFromData(attendee.getProfilePhotoData());
                     attendees.add(attendee);
                 }
+                callback.onAttendanceLoaded(attendees);
             }
         })
        .addOnFailureListener(new OnFailureListener() {
@@ -266,6 +282,7 @@ public class Event implements Attendance, Parcelable {
                 Log.d("Firestore", e.getMessage());
             }
         });
+        return attendees;
     }
 
     /**
@@ -274,30 +291,36 @@ public class Event implements Attendance, Parcelable {
      * @param user to add
      */
     public void signUp(User user) {
-        CollectionReference attendanceRef = MainActivity.db.collection("Events/"+ id +"/Attendance");
+
+        CollectionReference attendanceRef = MainActivity.db.collection("Events/" + id + "/Attendance");
         Map<String, Object> docData = new HashMap<>();
         docData.put("user", user.getUserId());
         docData.put("event", id);
         docData.put("checkedInStatus", false);
-        attendanceRef
-                .document(user.getUserId())
-                .set(docData)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("Firestore", "DocumentSnapshot successfully written!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d("Firestore", e.getMessage());
-                    }
-                });
+        if (!reachedMaxCap()) {
+             attendanceRef
+                    .document(user.getUserId())
+                    .set(docData)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d("Firestore", "DocumentSnapshot successfully written!");
+                            signUps += 1;
+                            eventsRef.document(id).update("signUps", signUps);
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.d("Firestore", e.getMessage());
+                        }
+                    });
+        }
+
     }
 
     /**
-     * Removes a user from the attendance list of an event.
+     * Removes a user from the attendance list of an event and updates sign ups.
      *
      * @param user to remove
      */
@@ -309,6 +332,8 @@ public class Event implements Attendance, Parcelable {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        signUps-=1;
+                        eventsRef.document(id).update("signUps",signUps);
                         Log.d("Firestore", "DocumentSnapshot successfully written!");
                     }
                 })
@@ -321,33 +346,50 @@ public class Event implements Attendance, Parcelable {
     }
 
     /**
-     * Sets check in status of a user for an event.
-     * @param user to check in, status to set (boolean)
+     * Sets check in status of a user for an event, the user is not already signed up for that event,
+     * the method will attempt to first sign them up, then check them in.
+     *
+     * @param user   to check in, status to set (boolean)
      * @param status boolean check-in status to set
      */
     public void setCheckIn(User user, Boolean status) {
-        CollectionReference attendanceRef = MainActivity.db.collection("Events/"+ id +"/Attendance");
-        Map<String, Object> docData = new HashMap<>();
-        docData.put("user", user.getUserId());
-        docData.put("event", id);
-        docData.put("checkedInStatus", status);
-        attendanceRef
-                .document(user.getUserId())
-                .set(docData) //updates checkedInStatus field in firebase
+        Integer attendeeCheckIns;
+        DocumentReference attendeeRef = MainActivity.db.collection("Events/"+ id +"/Attendance").document(user.getUserId());
+        Boolean alreadyCheckedIn = (Boolean) attendeeRef.get().getResult().get("checkedInStatus");
+
+        if (status) { attendeeCheckIns =1;}
+        else {attendeeCheckIns=-1;}
+        attendeeRef.update("checkedInStatus", status,"checkIns", FieldValue.increment(attendeeCheckIns))
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("Firestore", "DocumentSnapshot successfully written!");
+                    public void onSuccess(Void unused) {
+                        if (status) {
+                            QRScanActivity.showCheckInMessage(true);
+                            if(!alreadyCheckedIn) {
+                                checkIns += 1;
+                            }
+                        } else {
+                            if (alreadyCheckedIn) {
+                                checkIns -= 1;
+                            }
+                        }
                     }
-                })
-                .addOnFailureListener(new OnFailureListener() {
+                }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.d("Firestore", e.getMessage());
+                        if (!reachedMaxCap()){
+                            signUp(user);
+                            setCheckIn(user, true);
+                        } else {
+                            QRScanActivity.showCheckInMessage(false);
+                        }
                     }
                 });
     }
-
+    public int getAttendeeCheckIns(User user){
+        DocumentReference attendeeRef = MainActivity.db.collection("Events/"+id+"/Attendance").document(user.getUserId());
+        return (Integer) attendeeRef.get().getResult().get("checkIns");
+    }
     /**
      * Mandatory method for Parcelable interface.
      * @return int
@@ -376,6 +418,8 @@ public class Event implements Attendance, Parcelable {
         dest.writeString(startTime);
         dest.writeString(endTime);
         dest.writeString(startDate);
+        dest.writeInt(maxSignUps);
+        dest.writeInt(signUps);
     }
 
     /**
@@ -395,6 +439,7 @@ public class Event implements Attendance, Parcelable {
      */
     public void sendToFirebase() {
         // Add the new user document to Firestore
+        if (signUps==null){signUps=0;checkIns=0;}
         Map<String, Object> docData = new HashMap<>();
         docData.put("id", id);
         docData.put("name", name);
@@ -404,9 +449,11 @@ public class Event implements Attendance, Parcelable {
         docData.put("endTime", endTime);
         docData.put("organizerId",organizerId);
         docData.put("maxSignUps", maxSignUps);
-        docData.put("qrCodeCheckIns",qrCodeCheckIns);
-        docData.put("qrCodePromo", qrCodePromo);
-        //TODO: add event poster
+        docData.put("signUps", signUps);
+        docData.put("checkIns", checkIns);
+        docData.put("qrCode",qrCode);
+        docData.put("posterData",poster.getPhotoDataFromBitmap());
+        docData.put("posterIsDefault", posterIsDefault);
 
         eventsRef.document(id).set(docData)
                 .addOnSuccessListener(aVoid -> {
@@ -504,5 +551,12 @@ public class Event implements Attendance, Parcelable {
         return attendees;
     }
 
+    public Boolean getPosterIsDefault() {
+        return posterIsDefault;
+    }
+
+    public void setPosterIsDefault(Boolean posterIsDefault) {
+        this.posterIsDefault = posterIsDefault;
+    }
 }
 

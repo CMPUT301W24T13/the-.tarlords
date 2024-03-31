@@ -14,6 +14,15 @@
         android:textAlignment="center"
         android:textSize="34sp" />
 
+    <TextView
+        android:id="@+id/no_announcement_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="No announcements"
+        android:textAlignment="center"
+        android:visibility="gone" />
+
     <ListView
         android:layout_width="match_parent"
         android:layout_height="0dp"

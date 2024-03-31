@@ -1,23 +1,10 @@
 package com.example.the_tarlords.ui.event;
 
 
-import static androidx.core.content.PermissionChecker.checkSelfPermission;
-
 import android.Manifest;
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.content.DialogInterface;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.PermissionChecker;
-import androidx.core.view.MenuProvider;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,11 +14,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.PermissionChecker;
+import androidx.core.view.MenuProvider;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.QR.QRCode;
 import com.example.the_tarlords.data.event.Event;
+import com.example.the_tarlords.data.photo.EventPoster;
 import com.example.the_tarlords.databinding.FragmentEventDetailsBinding;
 
 /**
@@ -46,6 +43,11 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
 
     private static Event event;
     private boolean isOrganizer;
+
+    private boolean browse;
+
+    private boolean isAdmin;
+
     private FragmentEventDetailsBinding binding;
     private static final int REQUEST_NOTIFICATION_PERMISSION = 101;
 
@@ -79,6 +81,7 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
         if (getArguments() != null) {
             event = getArguments().getParcelable("event");
             isOrganizer = getArguments().getBoolean("isOrganizer");
+            browse = getArguments().getBoolean("browse");
         }
         requestNotificationPermissions();
     }
@@ -103,6 +106,9 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        //intialize isAdmin, this part is working
+        isAdmin = MainActivity.isAdmin;
+        Log.d("admin", String.valueOf(isAdmin));
         //MANDATORY: required for MenuProvider options menu
         requireActivity().addMenuProvider(this);
 
@@ -113,6 +119,7 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
         TextView eventStartTimeTextView = view.findViewById(R.id.tv_event_startTime);
         TextView eventEndTimeTextView = view.findViewById(R.id.tv_event_endTime);
         TextView eventMaxAttendees = view.findViewById(R.id.tv_max_attendees);
+        ImageView eventPosterImageView = view.findViewById(R.id.iv_poster);
         //add additional views here as desired
 
         // Check if event is not null before accessing its attributes
@@ -124,6 +131,16 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
             eventEndTimeTextView.setText(event.getEndTime());
             // set additional fields here as desired
 
+            if (event.getPoster()!=null){ //if poster data exists, display uploaded poster
+                eventPosterImageView.setImageBitmap(event.getPoster().getBitmap());
+            }
+            else { //otherwise generate poster
+                EventPoster eventPoster = new EventPoster(event.getId(),null, event);
+                eventPoster.autoGenerate();
+                event.setPoster(eventPoster);
+                eventPosterImageView.setImageBitmap(eventPoster.getBitmap());
+            }
+
             try {
                 //TODO: this is kinda broken
                 eventMaxAttendees.setText(event.getMaxSignUps().toString());
@@ -131,17 +148,17 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
             }
         }
 
-        //display event QR codes if user has organizer perms, this is extra code now , organizer will never touch this fragment
+        //display event QR codes if user has organizer perms
         if (isOrganizer == true) {
-            if (event.getQrCodeCheckIns()!=null){
+            if (event.getQrCode()!=null){
                 view.findViewById(R.id.tv_checkin_details).setVisibility(view.VISIBLE);
                 view.findViewById(R.id.tv_info_details).setVisibility(view.VISIBLE);
                 ImageView checkInQr = view.findViewById(R.id.iv_checkin_details);
                 ImageView eventInfoQr = view.findViewById(R.id.iv_info_details);
                 checkInQr.setVisibility(view.VISIBLE);
                 eventInfoQr.setVisibility(view.VISIBLE);
-                QRCode.generateQR("CI"+event.getId(),checkInQr);
-                QRCode.generateQR("EI"+event.getId(),eventInfoQr);
+                QRCode.generateQR("CI"+event.getQrCode(),checkInQr);
+                QRCode.generateQR("EI"+event.getQrCode(),eventInfoQr);
             }
         }
     }
@@ -166,9 +183,18 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
             menu.findItem(R.id.deleteOptionsMenu).setVisible(true);
             menu.findItem(R.id.mapOptionsMenu).setVisible(true);
         }
-
+        //if user came from browse fragment display sign up button
+        if (browse) {
+            menu.findItem(R.id.signUpOptionsMenu).setVisible(true);
+        }
         //display announcement icon for all users
         menu.findItem(R.id.anouncementsOptionsMenu).setVisible(true);
+        //if user is also an admin, display delete options icon
+
+        if (isAdmin) {
+            menu.findItem(R.id.deleteOptionsMenu).setVisible(true);
+        }
+
     }
 
     /**
@@ -211,24 +237,32 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
 
         }
         else if (menuItem.getItemId()==R.id.deleteOptionsMenu) {
-            AlertDialog dialog = new AlertDialog.Builder(getContext())
-                    .setMessage("Are you sure you would like to delete the event "+event.getName()+"?")
-                    .setNegativeButton("Delete", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            event.removeFromFirestore();
-                            try {
-                                //return to event organizer list fragment
-                                NavHostFragment.findNavController(EventDetailsFragment.this)
-                                        .navigate(R.id.action_eventDetailsFragment_pop);
-                            } catch (Exception ignored) {}
-                        }
-                    })
-                    .setCancelable(true)
-                    .setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {}
-                    }).show();
+            if (isAdded()) { // Check if the fragment is attached to an activity
+                AlertDialog dialog = new AlertDialog.Builder(requireContext())
+                        .setMessage("Are you sure you would like to delete the event " + event.getName() + "?")
+                        .setNegativeButton("Delete", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                event.removeFromFirestore();
+                                try {
+                                    // Return to event organizer list fragment
+                                    NavHostFragment.findNavController(EventDetailsFragment.this)
+                                            .navigate(R.id.action_eventDetailsFragment_pop);
+                                } catch (Exception ignored) {
+                                }
+                            }
+                        })
+                        .setCancelable(true)
+                        .setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Handle cancel action if needed
+                            }
+                        }).show();
+            } else {
+                // Fragment is not attached to an activity, handle the situation accordingly
+                Log.d("admin", "fragment not attached to activity");
+            }
         }
         //Navigate to Maps Fragment
         else if(menuItem.getItemId()==R.id.mapOptionsMenu) {
@@ -241,6 +275,19 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
                 {
                     Log.e("maps", Log.getStackTraceString(e));
                 }
+        } else if (menuItem.getItemId()==R.id.signUpOptionsMenu) {
+            if (!event.reachedMaxCap()){
+                try {
+                    event.signUp(MainActivity.user);
+                    Toast.makeText(getContext(), "Sign Up Successful", Toast.LENGTH_SHORT).show();
+                } catch (Exception ignored) {
+                    Toast.makeText(getContext(), "Error. Is this event out of date? If not let Isabelle know. ", Toast.LENGTH_SHORT).show();
+                }
+            }
+            else {
+                Toast.makeText(getContext(), "Max capacity reached. Unable to sign up.", Toast.LENGTH_SHORT).show();
+            }
+            return true;
         }
         //should return false to prevent crashing
         return false;
