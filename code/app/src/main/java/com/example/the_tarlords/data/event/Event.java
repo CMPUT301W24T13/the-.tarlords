@@ -47,6 +47,7 @@ public class Event implements Attendance, Parcelable {
     String startTime;
     String endTime;
     String startDate;
+    String endDate;
     String id;
     String organizerId;
     private String qrCode;
@@ -149,8 +150,13 @@ public class Event implements Attendance, Parcelable {
     public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
+    public String getEndDate() {
+        return endDate;
+    }
 
-
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
     public String getEndTime() {
         return endTime;
     }

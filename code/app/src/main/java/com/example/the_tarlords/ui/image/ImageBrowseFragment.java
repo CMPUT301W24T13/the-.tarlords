@@ -149,7 +149,7 @@ public class ImageBrowseFragment extends Fragment implements MenuProvider {
                                     } else {
                                         Log.d(TAG, "Poster Data is null or shorter than 5 characters");
                                     }
-                                } // else do nothing 
+                                } // else do nothing
 
 
                             }
