@@ -11,7 +11,7 @@ import com.example.the_tarlords.data.Alert.Alert;
 import com.example.the_tarlords.data.Alert.AlertCallback;
 import com.example.the_tarlords.data.QR.QRScanActivity;
 import com.example.the_tarlords.data.attendance.Attendance;
-import com.example.the_tarlords.data.map.LocationHelper;
+import com.example.the_tarlords.data.attendance.AttendanceCallback;
 import com.example.the_tarlords.data.photo.EventPoster;
 import com.example.the_tarlords.data.users.Attendee;
 import com.example.the_tarlords.data.users.User;
@@ -48,12 +48,12 @@ public class Event implements Attendance, Parcelable {
     String startDate;
     String id;
     String organizerId;
-    private String qrCodeCheckIns;
-    private String qrCodePromo;
+    private String qrCode;
     private EventPoster poster;
     private String posterData;
     Integer maxSignUps;
     Integer signUps;
+    Integer checkIns;
     private CollectionReference usersRef = MainActivity.db.collection("Users");
 
     private static CollectionReference eventsRef = MainActivity.db.collection("Events");
@@ -157,23 +157,19 @@ public class Event implements Attendance, Parcelable {
         this.endTime = endTime;
     }
 
-    public void setQrCodeCheckIns(String qrCode) {
-        this.qrCodeCheckIns = qrCode;
+    public void setQrCode(String qrCode) {
+        this.qrCode = qrCode;
     }
 
-    public void setQrCodePromo(String qrCode) {
-        this.qrCodePromo = qrCode;
+    public String getQrCode() {
+        return qrCode;
     }
 
-    public String getQrCodeCheckIns() {
-        return qrCodeCheckIns;
-    }
-
-    public String getQrCodePromo() {
-        return qrCodePromo;
-    }
 
     public EventPoster getPoster() {
+      if (poster == null && posterData!=null) {
+            setPosterFromData(posterData);
+        }
         return poster;
     }
 
@@ -188,7 +184,10 @@ public class Event implements Attendance, Parcelable {
     public void setMaxSignUps(Integer maxSignUps) {
         this.maxSignUps = maxSignUps;
     }
-
+    public void setCheckIns(Integer checkIns){
+        this.checkIns = checkIns;
+    }
+    public Integer getCheckIns(){return checkIns;}
     public Integer getSignUps() {return signUps;}
 
     public void setSignUps(Integer signUps) {
@@ -255,10 +254,13 @@ public class Event implements Attendance, Parcelable {
      * NOT WORKING
      * Populates an array list with Attendee objects attending the event using firestore data.
      * This is the default "signup" list.
-     * @param attendees array list of Attendee objects
+     *
+     * @param callback attendance callback
+     * @return ArrayList<Attendee> attendees
      */
-    public void populateAttendanceList(ArrayList<Attendee> attendees) {
+    public ArrayList<Attendee> getAttendanceList(AttendanceCallback callback){
         CollectionReference attendanceRef = MainActivity.db.collection("Events/"+ id +"/Attendance");
+        ArrayList<Attendee> attendees = new ArrayList<>();
         attendees.clear();
         attendanceRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
@@ -266,9 +268,9 @@ public class Event implements Attendance, Parcelable {
                 for (QueryDocumentSnapshot attendeeDoc : queryDocumentSnapshots) {
                     DocumentSnapshot userDoc = usersRef.document(attendeeDoc.getId()).get().getResult();
                     Attendee attendee = userDoc.toObject(Attendee.class);
-                    attendee.setProfilePhotoFromData(attendee.getProfilePhotoData());
                     attendees.add(attendee);
                 }
+                callback.onAttendanceLoaded(attendees);
             }
         })
        .addOnFailureListener(new OnFailureListener() {
@@ -277,6 +279,7 @@ public class Event implements Attendance, Parcelable {
                 Log.d("Firestore", e.getMessage());
             }
         });
+        return attendees;
     }
 
     /**
@@ -354,10 +357,12 @@ public class Event implements Attendance, Parcelable {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-
-                        LocationHelper location = new LocationHelper(MainActivity.context); // Pass MainActivity instance to Location class constructor
-                        location.getMyLocation(id); // Call the getMyLocation method
-                        QRScanActivity.showCheckInMessage(true);
+                        if (status) {
+                            QRScanActivity.showCheckInMessage(true);
+                            checkIns += 1;
+                        } else {
+                            checkIns -= 1;
+                        }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -421,7 +426,7 @@ public class Event implements Attendance, Parcelable {
      */
     public void sendToFirebase() {
         // Add the new user document to Firestore
-        if (signUps==null){signUps=0;}
+        if (signUps==null){signUps=0;checkIns=0;}
         Map<String, Object> docData = new HashMap<>();
         docData.put("id", id);
         docData.put("name", name);
@@ -432,8 +437,8 @@ public class Event implements Attendance, Parcelable {
         docData.put("organizerId",organizerId);
         docData.put("maxSignUps", maxSignUps);
         docData.put("signUps", signUps);
-        docData.put("qrCodeCheckIns",qrCodeCheckIns);
-        docData.put("qrCodePromo", qrCodePromo);
+        docData.put("checkIns", checkIns);
+        docData.put("qrCode",qrCode);
         docData.put("posterData",poster.getPhotoDataFromBitmap());
 
         eventsRef.document(id).set(docData)

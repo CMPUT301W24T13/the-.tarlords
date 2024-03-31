@@ -1,72 +1,85 @@
 package com.example.the_tarlords.ui.profile;
 
+import static com.example.the_tarlords.MainActivity.context;
+
+import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
-import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.PickVisualMediaRequest;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
-import com.example.the_tarlords.R;
+import com.example.the_tarlords.MainActivity;
 
-import java.net.URI;
-import java.util.Objects;
+import java.io.IOException;
 
 public class UploadPhotoActivity extends AppCompatActivity {
     private static final int REQUEST_GALLERY_PERMISSION = 1;
-    private Uri imageUri;
+    private static final int REQUEST_IMAGE_PICK = 1000;
+    private Uri uploadPath;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_profile);
 
-        if (checkSelfPermission(android.Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(UploadPhotoActivity.this, new String[]{android.Manifest.permission.READ_MEDIA_IMAGES}, REQUEST_GALLERY_PERMISSION);
+        if (checkSelfPermission(android.Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED ) {
+            ActivityCompat.requestPermissions((Activity) context, new String[]{android.Manifest.permission.READ_MEDIA_IMAGES}, REQUEST_GALLERY_PERMISSION);
         } else {
             uploadPicture();
         }
     }
+    private boolean checkGalleryPermission() {
+        if ( ContextCompat.checkSelfPermission(context, Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
+            // Permission not granted, request it
+            ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.READ_MEDIA_IMAGES}, REQUEST_GALLERY_PERMISSION);
+            return false;
+        }
+        return true;
+    }
+
 
     /**
-     * Initiate device's camera to capture a photo.
+     * Initiate device's gallery to upload a photo.
      */
     public void uploadPicture() {
-        //from android studio official references site:
-        //using PickVisualMedia opens photo picker in half-screen mode.
-        // Registers a photo picker activity launcher in single-select mode.
-        ActivityResultLauncher<PickVisualMediaRequest> pickMedia = registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
-            // Callback is invoked after the user selects a media item or closes the photo picker
-            if (uri != null) {
-                Log.d("PhotoPicker", "Selected URI: " + uri);
-                imageUri = (Uri) uri;
-            } else {
-                Log.d("PhotoPicker", "No image selected");
-                imageUri = null;
+        if (checkGalleryPermission()) {
+            Intent open_gallery = new Intent(Intent.ACTION_PICK);
+            open_gallery.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(open_gallery, REQUEST_IMAGE_PICK);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK && requestCode == REQUEST_IMAGE_PICK && data != null) {
+            Bitmap photoUpload;
+            uploadPath = data.getData();
+
+            try {
+                photoUpload = MediaStore.Images.Media.getBitmap(getContentResolver(),uploadPath);
+                MainActivity.user.getProfilePhoto().setBitmap(photoUpload);
+                MainActivity.user.getProfilePhoto().setDefault(false);
+                MainActivity.updateNavigationDrawerHeader();
+                finish();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        });
+        }
+        else {
+            finish();
+        }
 
-        // Launch the photo picker and let the user choose only images (no video).
-        pickMedia.launch(new PickVisualMediaRequest.Builder()
-                .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
-                .build());
-
-        // Retrieve the captured photo from the camera intent
-        Log.e("image name", imageUri.getPath());
-        Bitmap capturedPhoto = BitmapFactory.decodeFile(imageUri.getPath());;
-        ImageView imageView = findViewById(R.id.profilePic);
-        imageView.setImageBitmap(capturedPhoto);
     }
 
     @Override
@@ -74,11 +87,11 @@ public class UploadPhotoActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_GALLERY_PERMISSION) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Retry takePicture() after receiving camera permission
+                // Retry uploadPicture() after receiving camera permission
                 uploadPicture();
             } else {
                 // Inform the user to enable camera permissions and finish the activity
-                Toast.makeText(this, "Open Photo Library", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Gallery Permission Denied", Toast.LENGTH_SHORT).show();
                 finish();
             }
         }
