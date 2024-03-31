@@ -20,8 +20,15 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * QRCode class provides functionalities for generating, sharing, and managing QR codes
@@ -30,6 +37,7 @@ public class QRCode {
     private String qrID;
     private FirebaseFirestore db;
     private static CollectionReference QRRef = MainActivity.db.collection("QRCodes");
+    private static CollectionReference EventsRef = MainActivity.db.collection("Events");
 
     /**
      * Generates new QR code for a given event ID and stores it in Firebase
@@ -120,14 +128,41 @@ public class QRCode {
     }
 
     /**
-     * Replaces the EventID field in the Firebase, thus linking the QR Code to a different event
-     * @param qrID The id of the QR Code (should not have CI and EI)
-     * @param eventID  The id of the linked event
+     * Reuses a QR code from one event to another
+     * @param user         The organizer's user ID
+     * @param sel_event    The name of the selected event
+     * @param new_eventId  The ID of the new event to which the QR code will be linked
      */
-    public void reuseQR(String qrID, String eventID) {
+    public void reuseQR(String user, String sel_event, String new_eventId) {
         db = FirebaseFirestore.getInstance();
-        QRRef = db.collection("QRCodes");
 
+        EventsRef.addSnapshotListener((querySnapshots, error) -> {
+            if (error != null) {
+                Log.e("Firestore", error.toString());
+                return;
+            }
+            if (querySnapshots != null) {
+                for (QueryDocumentSnapshot doc: querySnapshots) {
+                    String eventID = doc.getId();
+                    try {
+                        if (Objects.equals(doc.getString("organizerId"), user) && Objects.equals(doc.getString("name"), sel_event)) {
+                            //Found event
+                            String QRId = (doc.getString("qrCodePromo")).substring(2);
+                            QRRef.document(eventID).update("qrCodePromo", "NULL");
+                            replaceQR(QRId, new_eventId);
+                        }
+                    } catch (Exception e) { }
+                }
+            }
+        });
+    }
+
+    /**
+     * Replaces the QR code's event ID with a new event ID, helper function to reuseQR
+     * @param QRId     The ID of the QR code to be replaced
+     * @param eventID  The ID of the new event to which the QR code will be linked
+     */
+    public void replaceQR(String QRId, String eventID) {
         QRRef.addSnapshotListener((querySnapshots, error) -> {
             if (error != null) {
                 Log.e("Firestore", error.toString());
@@ -137,7 +172,7 @@ public class QRCode {
                 for (QueryDocumentSnapshot doc: querySnapshots) {
                     String DocCodeID = doc.getId();
                     try {
-                        if (DocCodeID.equals(qrID)) {
+                        if (DocCodeID.equals(QRId)) {
                             //Replace and put in new EventID
                             QRRef.document(DocCodeID).update("EventId", eventID);
                         }
@@ -145,6 +180,78 @@ public class QRCode {
                 }
             }
         });
+    }
+
+    /**
+     * Finds past events organized by a specific user and returns them via a callback
+     * @param user      The user ID of the organizer
+     * @param callback  The callback to be invoked when events are loaded
+     */
+    /*To USE:
+            QRCode qrCode = new QRCode();
+            qrCode.findPastEvents("USERID", new QRCode.EventsCallback() {
+                @Override
+                public void onEventsLoaded(ArrayList<String> events) {
+                    Log.e("Event", String.valueOf(events));
+                    //list is loaded
+                }
+            });
+     */
+    public void findPastEvents(String user,  EventsCallback callback) {
+        db = FirebaseFirestore.getInstance();
+        ArrayList<String> events = new ArrayList<String>();
+
+        EventsRef.addSnapshotListener((querySnapshots, error) -> {
+            if (error != null) {
+                Log.e("Firestore", error.toString());
+                return;
+            }
+            if (querySnapshots != null) {
+                for (QueryDocumentSnapshot doc: querySnapshots) {
+                    String eventID = doc.getId();
+                    try {
+                        if (Objects.equals(doc.getString("organizerId"), user)  && pastEvent(doc.getString("startDate"), doc.getString("endTime"))) {
+                            // Event has user = organizer AND event has passed
+                            Log.e("Event", eventID + " " + doc.getString("name") + " added");
+                            events.add(doc.getString("name"));
+                        }
+                    } catch (Exception e) {
+                        Log.e("Event", "Incorrect formatting on event");
+                    }
+                }
+            }
+            callback.onEventsLoaded(events);
+        });
+    }
+
+    /**
+     * Checks if an event has already occurred based on its start date and end time
+     * @param startDate  The start date of the event
+     * @param endTime    The end time of the event
+     * @return           True if the event has passed; otherwise, false
+     */
+    public boolean pastEvent(String startDate, String endTime) {
+        DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("MMMM d, yyyy", Locale.ENGLISH);
+        LocalDate date = LocalDate.parse(startDate, formatter1);
+
+        DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("hh:mm a", Locale.ENGLISH);
+        LocalTime time = LocalTime.parse(endTime, formatter2);
+
+        LocalDateTime eventDateTime = LocalDateTime.of(date, time);
+        LocalDateTime currentDateTime = LocalDateTime.now();
+
+        Log.e("Event Date", String.valueOf(eventDateTime));
+        Log.e("My Date", String.valueOf(currentDateTime));
+        Log.e("Has Event Passed?", String.valueOf(currentDateTime.isAfter(eventDateTime)));
+
+        return currentDateTime.isAfter(eventDateTime);
+    }
+
+    /**
+     * Callback interface for handling loaded events
+     */
+    public interface EventsCallback {
+        void onEventsLoaded(ArrayList<String> events);
     }
 
     /**
