@@ -17,11 +17,14 @@
         android:layout_marginStart="25dp"
         android:layout_marginTop="30dp"
         android:layout_marginEnd="25dp"
-        android:hint="Event Name"
+
+        android:hint="@string/event_name"
+        android:textColorHint="@color/mauve_medium_light"
+        android:fontFamily="@font/helvetica_bold"
         android:textAllCaps="true"
-        android:textColor="#0B0B0B"
+        android:textColor="@color/plum_dark"
         android:textSize="30sp"
-        android:textStyle="bold"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -34,8 +37,13 @@
         android:layout_marginTop="3dp"
         android:layout_marginEnd="25dp"
         android:layout_weight="0.5"
-        android:hint="Date"
+
+        android:hint="@string/date"
+        android:textColorHint="@color/mauve_medium_light"
+        android:fontFamily="@font/helvetica"
+        android:textColor="@color/bordeaux_medium"
         android:textSize="20sp"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/et_event_name" />
@@ -58,23 +66,33 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.45"
-            android:hint="Start Time"
+
+            android:hint="@string/start_time"
+            android:textColorHint="@color/mauve_medium_light"
+            android:fontFamily="@font/helvetica"
+            android:textColor="@color/bordeaux_medium"
             android:textSize="20sp" />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.10"
-            android:text=" to"
-            android:textSize="20sp"
-            android:textStyle="normal" />
+
+            android:text="@string/to"
+            android:fontFamily="@font/helvetica"
+            android:textColor="@color/bordeaux_medium"
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/tv_edit_event_endTime"
             android:layout_width="20dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.45"
-            android:hint="End Time"
+
+            android:hint="@string/end_time"
+            android:textColorHint="@color/mauve_medium_light"
+            android:fontFamily="@font/helvetica"
+            android:textColor="@color/bordeaux_medium"
             android:textSize="20sp" />
 
     </LinearLayout>
@@ -86,11 +104,16 @@
         android:layout_marginStart="25dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="25dp"
-        android:hint="Location"
+
+        android:hint="@string/location"
         android:inputType="textPostalAddress"
+        android:textColorHint="@color/mauve_medium_light"
+        android:fontFamily="@font/helvetica"
+        android:textColor="@color/aubergine_main"
+        android:textSize="23sp"
+
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
-        android:textSize="23sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ll_time_edit"
@@ -103,8 +126,12 @@
         android:layout_marginStart="25dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="506dp"
-        android:text="Set Max Attendees: "
+
+        android:text="@string/set_max_attendees"
+        android:fontFamily="@font/helvetica"
+        android:textColor="@color/bordeaux_medium"
         android:textSize="20sp"
+
         app:layout_constraintEnd_toStartOf="@+id/et_max_attendees"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_event_location" />
@@ -117,8 +144,14 @@
         android:layout_marginEnd="25dp"
         android:layout_marginBottom="498dp"
         android:ems="10"
+
         android:inputType="number"
-        android:hint="100"
+        android:hint="@string/sample_attendees"
+        android:textColorHint="@color/mauve_medium_light"
+        android:fontFamily="@font/helvetica"
+        android:textColor="@color/bordeaux_medium"
+        android:textSize="20sp"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView"
         app:layout_constraintTop_toBottomOf="@+id/et_event_location" />
@@ -137,6 +170,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_checkin" />
 
+    <TextView
+        android:id="@+id/tv_checkin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="57dp"
+        android:layout_marginTop="38dp"
+        android:layout_marginEnd="120dp"
+        android:layout_marginBottom="17dp"
+
+        android:fontFamily="@font/helvetica_bold"
+        android:text="@string/check_in_qr"
+        android:textColor="@color/bordeaux_medium"
+        android:textSize="16sp"
+
+        app:layout_constraintBottom_toTopOf="@+id/iv_checkin"
+        app:layout_constraintEnd_toStartOf="@+id/tv_info"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
     <ImageView
         android:id="@+id/iv_info"
         android:layout_width="150dp"
@@ -151,29 +203,18 @@
         tools:srcCompat="@drawable/qr_code_scan_svgrepo_com" />
 
     <TextView
-        android:id="@+id/tv_checkin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="57dp"
-        android:layout_marginTop="38dp"
-        android:layout_marginEnd="120dp"
-        android:layout_marginBottom="17dp"
-        android:text="Check In QR:"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/iv_checkin"
-        app:layout_constraintEnd_toStartOf="@+id/tv_info"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
-
-    <TextView
         android:id="@+id/tv_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="27dp"
         android:layout_marginEnd="57dp"
         android:layout_marginBottom="18dp"
-        android:text="Event Info QR:"
+
+        android:text="@string/event_info_qr"
+        android:fontFamily="@font/helvetica_bold"
+        android:textColor="@color/bordeaux_medium"
         android:textSize="16sp"
+
         app:layout_constraintBottom_toTopOf="@+id/iv_info"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/tv_checkin"

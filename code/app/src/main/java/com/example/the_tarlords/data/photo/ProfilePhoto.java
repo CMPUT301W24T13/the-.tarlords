@@ -36,7 +36,7 @@ public class ProfilePhoto extends Photo {
         int color = ColorGenerator.getRandomColor();
         canvas.drawColor(color);
         paint.setTextAlign(Paint.Align.CENTER);
-        paint.setTypeface(Typeface.create(String.valueOf(R.font.helvetica_bold), Typeface.BOLD ));
+        paint.setTypeface(Typeface.create(String.valueOf(R.font.helvetica_bold), Typeface.BOLD));
         paint.setTextSize(180);
         paint.setColor(Color.WHITE);
 

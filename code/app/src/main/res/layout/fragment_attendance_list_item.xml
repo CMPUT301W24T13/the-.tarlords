@@ -10,7 +10,7 @@
         android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        app:cardBackgroundColor="#54009688"
+        app:cardBackgroundColor="@color/cold_grey_light"
         app:cardCornerRadius="10dp"
         app:contentPadding="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -40,10 +40,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="5dp"
-                android:fontFamily="sans-serif-condensed-medium"
-                android:text="First_Name"
+
                 android:textAppearance="?attr/textAppearanceListItem"
-                android:textSize="22sp"
+                android:fontFamily="@font/helvetica_bold"
+                android:text="@string/first_name"
+                android:textSize="20sp"
+                android:textColor="@color/plum_dark"
+
                 app:layout_constraintStart_toEndOf="@+id/item_profile_pic"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -53,10 +56,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="18dp"
                 android:layout_marginTop="5dp"
-                android:fontFamily="sans-serif-condensed-medium"
-                android:text="Last_Name"
+
                 android:textAppearance="?attr/textAppearanceListItem"
-                android:textSize="22sp"
+                android:fontFamily="@font/helvetica_bold"
+                android:text="@string/last_name"
+                android:textSize="20sp"
+                android:textColor="@color/plum_dark"
+
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/item_first_name"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -68,9 +74,12 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="11dp"
-                android:fontFamily="sans-serif-condensed"
-                android:text="Phone Number"
-                android:textSize="22sp"
+
+                android:fontFamily="@font/helvetica"
+                android:text="@string/phone_number"
+                android:textSize="14sp"
+                android:textColor="@color/bordeaux_medium"
+
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/item_check_in_box"
                 app:layout_constraintStart_toEndOf="@+id/item_profile_pic"
@@ -82,7 +91,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:layout_marginEnd="5dp"
-                android:text="Check In"
+
+                android:fontFamily="@font/helvetica"
+                android:text="@string/check_in"
+                android:textColor="@color/bordeaux_medium"
+
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

@@ -10,4 +10,11 @@
     <color name="fab_colour">#FFC107</color>
     <color name="actionBar">#018B8A</color>
     <color name="list_item_background">#94E7DF</color>
+
+    <color name="aubergine_main">#481222</color>
+    <color name="bordeaux_medium">#4D0A2A</color>
+    <color name="plum_dark">#2D030F</color>
+    <color name="cold_grey_light">#EAE8ED</color>
+    <color name="mauve_medium_light">#9D9197</color>
+    <color name="peach_contrast">#EEA38C</color>
 </resources>

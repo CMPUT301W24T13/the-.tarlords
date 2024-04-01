@@ -4,18 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linearLayout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="150dp">
 
 
     <androidx.cardview.widget.CardView
-        android:layout_width="0dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="1dp"
-        android:layout_marginBottom="1dp"
-        app:cardBackgroundColor="@color/list_item_background"
-        app:cardCornerRadius="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+
+        app:cardBackgroundColor="@color/cold_grey_light"
+        app:cardCornerRadius="15dp"
         app:cardElevation="10dp"
-        app:contentPadding="8dp"
+        app:contentPadding="15dp"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,11 +33,13 @@
                 android:id="@+id/titleTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-medium"
-                android:text="Event Name"
+
+                android:text="@string/event_name"
+                android:fontFamily="@font/helvetica_bold"
+                android:textColor="@color/plum_dark"
                 android:textAppearance="?attr/textAppearanceListItem"
-                android:textSize="24sp"
-                android:textStyle="bold"
+                android:textSize="22sp"
+
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -45,10 +51,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="16dp"
-                android:fontFamily="sans-serif-light"
-                android:text="Location"
-                android:textSize="20dp"
-                android:textStyle="bold"
+
+                android:text="@string/location"
+                android:fontFamily="@font/helvetica"
+                android:textColor="@color/bordeaux_medium"
+                android:textSize="18sp"
+
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -61,10 +69,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="15dp"
-                android:fontFamily="sans-serif-medium"
-                android:text="Start Date"
+
+                android:text="@string/start_date"
+                android:fontFamily="@font/helvetica_oblique"
+                android:textColor="@color/bordeaux_medium"
                 android:textSize="15sp"
-                android:textStyle="italic"
+
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"

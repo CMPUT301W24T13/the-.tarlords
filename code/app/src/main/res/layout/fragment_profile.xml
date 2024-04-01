@@ -25,7 +25,7 @@
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:background="@color/cardview_shadow_start_color"
-        android:fontFamily="@font/helvetica_rounded_bold"
+        android:fontFamily="@font/helvetica_bold"
         android:text="@string/add_profile_photo"
         android:textSize="20sp"
         android:visibility="gone"
@@ -43,7 +43,7 @@
         android:background="@drawable/rounded_corner"
         android:clickable="false"
         android:enabled="false"
-        android:fontFamily="@font/helvetica_light"
+        android:fontFamily="@font/helvetica"
 
         android:gravity="center"
         android:hint="@string/first_name"
@@ -52,7 +52,6 @@
         android:textColor="#000000"
         android:textColorHint="#887D7D"
         android:textSize="20sp"
-        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/edit_text_email"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -67,7 +66,7 @@
         android:background="@drawable/rounded_corner"
         android:clickable="false"
         android:enabled="false"
-        android:fontFamily="@font/helvetica_light"
+        android:fontFamily="@font/helvetica"
 
         android:gravity="center"
         android:hint="@string/last_name"
@@ -76,7 +75,6 @@
         android:textColor="#000000"
         android:textColorHint="#887D7D"
         android:textSize="20sp"
-        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/edit_text_first_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.77"
@@ -91,7 +89,7 @@
         android:background="@drawable/rounded_corner"
         android:clickable="false"
         android:enabled="false"
-        android:fontFamily="@font/helvetica_light"
+        android:fontFamily="@font/helvetica_regular"
 
         android:gravity="center"
         android:hint="@string/phone_number"
@@ -99,7 +97,6 @@
         android:textColor="#000000"
         android:textColorHint="#887D7D"
         android:textSize="18sp"
-        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -114,7 +111,7 @@
         android:background="@drawable/rounded_corner"
         android:clickable="false"
         android:enabled="false"
-        android:fontFamily="@font/helvetica_light"
+        android:fontFamily="@font/helvetica"
 
         android:gravity="center"
         android:hint="@string/email"
@@ -122,14 +119,11 @@
         android:textColor="#000000"
         android:textColorHint="#887D7D"
         android:textSize="20sp"
-        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edit_text_phone"
         app:layout_constraintVertical_bias="0.2" />
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

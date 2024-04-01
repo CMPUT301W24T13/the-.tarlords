@@ -17,11 +17,13 @@
         android:layout_marginStart="25dp"
         android:layout_marginTop="30dp"
         android:layout_marginEnd="25dp"
-        android:text="BBQ"
+
+        android:text="@string/sample_event_name"
+        android:fontFamily="@font/helvetica_bold"
         android:textAllCaps="true"
-        android:textColor="#0B0B0B"
+        android:textColor="@color/plum_dark"
         android:textSize="30sp"
-        android:textStyle="bold"
+
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,9 +37,12 @@
         android:layout_marginTop="3dp"
         android:layout_marginEnd="25dp"
         android:layout_weight="0.5"
-        android:text="July 4, 2024"
+
+        android:text="@string/sample_date"
+        android:fontFamily="@font/helvetica"
+        android:textColor="@color/bordeaux_medium"
         android:textSize="20sp"
-        android:textStyle="bold"
+
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -61,18 +66,22 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.45"
-            android:text="9:35 PM"
+
+            android:text="@string/sample_time"
+            android:fontFamily="@font/helvetica"
+            android:textColor="@color/bordeaux_medium"
             android:textSize="20sp"
-            android:textStyle="bold"
             android:visibility="visible" />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.1"
-            android:text="to"
+
+            android:text="@string/to"
+            android:fontFamily="@font/helvetica"
+            android:textColor="@color/bordeaux_medium"
             android:textSize="20sp"
-            android:textStyle="normal"
             android:visibility="visible" />
 
         <TextView
@@ -80,9 +89,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.45"
-            android:text="9:35 PM"
+
+            android:text="@string/sample_time"
+            android:fontFamily="@font/helvetica"
+            android:textColor="@color/bordeaux_medium"
             android:textSize="20sp"
-            android:textStyle="bold"
             android:visibility="visible" />
 
     </LinearLayout>
@@ -94,10 +105,13 @@
         android:layout_marginStart="25dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="25dp"
-        android:text="My Backyard"
+
+        android:text="@string/sample_location"
+        android:fontFamily="@font/helvetica_bold"
+        android:textColor="@color/aubergine_main"
         android:textSize="20sp"
-        android:textStyle="bold"
         android:visibility="visible"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ll_time" />
@@ -109,9 +123,13 @@
         android:layout_marginStart="25dp"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="506dp"
-        android:text="Max Attendees: "
+
+        android:text="@string/max_attendees"
+        android:fontFamily="@font/helvetica"
+        android:textColor="@color/bordeaux_medium"
         android:textSize="20sp"
         android:visibility="visible"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/tv_max_attendees"
         app:layout_constraintStart_toStartOf="parent"
@@ -126,10 +144,13 @@
         android:layout_marginEnd="25dp"
         android:layout_marginBottom="506dp"
         android:ems="10"
-        android:inputType="number"
-        android:text="Unlimited"
+
+        android:text="@string/unlimited_attendees"
+        android:fontFamily="@font/helvetica"
+        android:textColor="@color/bordeaux_medium"
         android:textSize="20sp"
         android:visibility="visible"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView"
@@ -172,9 +193,13 @@
         android:layout_marginStart="40dp"
         android:layout_marginTop="47dp"
         android:layout_marginEnd="70dp"
-        android:text="Check In QR: "
+
+        android:text="@string/check_in_qr"
+        android:fontFamily="@font/helvetica"
+        android:textColor="@color/bordeaux_medium"
         android:textSize="16sp"
         android:visibility="gone"
+
         app:layout_constraintEnd_toStartOf="@+id/tv_info_details"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -186,9 +211,13 @@
         android:layout_marginTop="45dp"
         android:layout_marginEnd="40dp"
         android:layout_marginBottom="18dp"
-        android:text="Event Info QR:"
+
+        android:text="@string/event_info_qr"
+        android:fontFamily="@font/helvetica"
+        android:textColor="@color/bordeaux_medium"
         android:textSize="16sp"
         android:visibility="gone"
+
         app:layout_constraintBottom_toTopOf="@+id/iv_info_details"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/tv_checkin_details"
