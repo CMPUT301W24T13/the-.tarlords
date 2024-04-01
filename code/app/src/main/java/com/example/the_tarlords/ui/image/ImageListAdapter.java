@@ -11,14 +11,16 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.the_tarlords.R;
+import com.example.the_tarlords.data.photo.Photo;
+
 import java.util.ArrayList;
 
-public class ImageListAdapter extends ArrayAdapter<Image> {
+public class ImageListAdapter extends ArrayAdapter<Photo> {
 
-    private ArrayList<Image> imageList;
+    private ArrayList<Photo> imageList;
     private LayoutInflater inflater;
 
-    public ImageListAdapter(Context context, ArrayList<Image> images) {
+    public ImageListAdapter(Context context, ArrayList<Photo> images) {
         super(context, 0, images);
         this.imageList = images;
         inflater = LayoutInflater.from(context);
@@ -43,7 +45,7 @@ public class ImageListAdapter extends ArrayAdapter<Image> {
             holder = (ViewHolder) view.getTag();
         }
 
-        Image image = imageList.get(position);
+        Photo image = imageList.get(position);
         // setting the textviews to the first 5 characters of the posterData
         holder.imageViewTV.setText(image.getImageData().subSequence(0,5).toString());
         holder.collectionTV.setText(image.getCollection());
