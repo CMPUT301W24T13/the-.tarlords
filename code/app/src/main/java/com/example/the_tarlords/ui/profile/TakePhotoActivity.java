@@ -49,7 +49,7 @@ public class TakePhotoActivity extends AppCompatActivity {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bitmap capturedPhoto = (Bitmap) (data.getExtras().get("data"));
             MainActivity.user.getProfilePhoto().setBitmap(capturedPhoto);
-            MainActivity.user.getProfilePhoto().setDefault(false);
+            MainActivity.user.setPhotoIsDefault(false);
             MainActivity.updateNavigationDrawerHeader();
             finish();
         }

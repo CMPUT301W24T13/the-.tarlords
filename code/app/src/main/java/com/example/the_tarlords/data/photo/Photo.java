@@ -6,13 +6,23 @@ import android.util.Base64;
 
 import java.io.ByteArrayOutputStream;
 
-public abstract class Photo {
+public class Photo {
     private String fileName;
     private Bitmap bitmap;
+    private String imageData;
+    private String collection;
+    private String name;
+    private String docId;
 
     public Photo(String fileName, Bitmap bitmap) {
         this.fileName = fileName;
         this.bitmap = bitmap;
+    }
+    public Photo(String imageData, String collection, String name, String docId) {
+        this.imageData = imageData;
+        this.collection = collection;
+        this.name = name;
+        this.docId = docId;
     }
 
     public String getFileName() {
@@ -62,6 +72,37 @@ public abstract class Photo {
         byte[] byteArray = Base64.decode(photoB64, Base64.URL_SAFE);
         Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray,0,byteArray.length);
         this.bitmap = bitmap;
+    }
+    public String getImageData() {
+        return imageData;
+    }
+
+    public void setImageData(String imageData) {
+        this.imageData = imageData;
+    }
+
+    public String getCollection() {
+        return collection;
+    }
+
+    public void setCollection(String collection) {
+        this.collection = collection;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDocId() {
+        return docId;
+    }
+
+    public void setDocId(String docId) {
+        this.docId = docId;
     }
 
 }

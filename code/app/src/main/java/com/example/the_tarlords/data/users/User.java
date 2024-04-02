@@ -30,6 +30,7 @@ public class User implements Profile , Parcelable {
 
     private String fCMToken;
     private Boolean isAdmin;
+    private Boolean photoIsDefault;
 
 
 
@@ -150,6 +151,7 @@ public class User implements Profile , Parcelable {
         docData.put("phoneNum", phoneNum);
         docData.put("FCM",fCMToken);
         docData.put("profilePhotoData", profilePhoto.getPhotoDataFromBitmap()); //stores profile photo data as base 64 string
+        docData.put("photoIsDefualt", photoIsDefault);
         docData.put("isAdmin", isAdmin);
         usersRef.document(userId).set(docData)
                 .addOnSuccessListener(aVoid -> {
@@ -252,6 +254,14 @@ public class User implements Profile , Parcelable {
         dest.writeString(phoneNum);
         dest.writeString(email);
 
+    }
+
+    public Boolean getPhotoIsDefault() {
+        return photoIsDefault;
+    }
+
+    public void setPhotoIsDefault(Boolean photoIsDefault) {
+        this.photoIsDefault = photoIsDefault;
     }
 }
 
