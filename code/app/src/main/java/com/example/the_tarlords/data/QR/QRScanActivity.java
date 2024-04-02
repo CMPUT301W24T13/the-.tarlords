@@ -13,8 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.example.the_tarlords.MainActivity;
-import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.event.Event;
+import com.example.the_tarlords.data.map.ShareLocation;
 import com.example.the_tarlords.data.users.User;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -40,9 +40,6 @@ public class QRScanActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        context = this;
-        setContentView(R.layout.content_main);
-
         userId = getIntent().getStringExtra("userId");
 
         // Check camera permission and initiate QR code scanning if permission is granted
@@ -58,6 +55,7 @@ public class QRScanActivity extends AppCompatActivity {
      */
     public void scanQr() {
         IntentIntegrator intentIntegrator = new IntentIntegrator(this);
+        intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
         intentIntegrator.setPrompt("Scan QR code");
         intentIntegrator.setOrientationLocked(true); // Enable rotation
         intentIntegrator.initiateScan();
@@ -126,6 +124,14 @@ public class QRScanActivity extends AppCompatActivity {
                                 User user = new User();
                                 user.setUserId(userId);
                                 event.setCheckIn(user, true);
+
+                                // Seperate from check-In so its fine here
+                                ShareLocation shareLocationDialog = new ShareLocation(event.getId(),event.getName());
+                                shareLocationDialog.show(getSupportFragmentManager(), "ShareLocationDialog");
+
+                                Log.e("QrCode", "In CI" + eventID);
+                                Log.e("QrCode", "EventName is " + event.getName());
+
                                 finish();
 
                             } else {
@@ -147,6 +153,7 @@ public class QRScanActivity extends AppCompatActivity {
                 }
             }
         });
+        Toast.makeText(this, "Invalid QR", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -158,6 +165,7 @@ public class QRScanActivity extends AppCompatActivity {
                 linkQRtoEventID(qrValue);
             } else {
                 Toast.makeText(this, "Unable to scan", Toast.LENGTH_SHORT).show();
+                finish();
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);

@@ -34,11 +34,24 @@
         android:layout_marginTop="3dp"
         android:layout_marginEnd="25dp"
         android:layout_weight="0.5"
-        android:hint="Date"
+        android:hint="Start Date"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/et_event_name" />
+    <TextView
+        android:id="@+id/tv_edit_event_endDate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="25dp"
+        android:layout_weight="0.5"
+        android:hint="End Date"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_edit_event_startDate" />
 
     <LinearLayout
         android:id="@+id/ll_time_edit"

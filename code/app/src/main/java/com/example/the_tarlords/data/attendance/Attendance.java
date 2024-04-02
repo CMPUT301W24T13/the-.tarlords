@@ -1,5 +1,7 @@
 package com.example.the_tarlords.data.attendance;
 
+import android.app.FragmentManager;
+
 import com.example.the_tarlords.data.users.Attendee;
 import com.example.the_tarlords.data.users.User;
 
@@ -10,9 +12,10 @@ public interface Attendance {       //could be made into interface
     /**
      * Populates a list of Attendee objects attending the event.
      *
-     * @param attendees array list of Attendee objects to populate
+     * @param callback attendance callback
+     * @return ArrayList of attendee objects
      */
-    public void populateAttendanceList(ArrayList<Attendee> attendees);
+    public ArrayList<Attendee> getAttendanceList(AttendanceCallback callback);
 
     /**
      * Signs up a user to attend an event by adding their name to the attendance list.
