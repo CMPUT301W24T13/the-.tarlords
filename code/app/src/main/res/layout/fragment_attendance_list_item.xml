@@ -26,64 +26,50 @@
                 android:id="@+id/item_profile_pic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:maxHeight="75dp"
+                android:maxWidth="75dp"
+                android:src="@drawable/profile"
                 android:layout_marginEnd="20dp"
                 android:adjustViewBounds="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/item_first_name"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:srcCompat="@mipmap/ic_launcher_round" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/item_first_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
+                android:layout_marginStart="15dp"
                 android:layout_marginTop="5dp"
 
                 android:textAppearance="?attr/textAppearanceListItem"
-                android:fontFamily="@font/helvetica_bold"
+                android:fontFamily="@font/helvetica"
                 android:text="@string/first_name"
                 android:textSize="20sp"
                 android:textColor="@color/plum_dark"
 
                 app:layout_constraintStart_toEndOf="@+id/item_profile_pic"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/item_last_name"/>
 
             <TextView
-                android:id="@+id/item_phone_num"
+                android:id="@+id/item_last_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="18dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginBottom="5dp"
 
                 android:textAppearance="?attr/textAppearanceListItem"
-                android:fontFamily="@font/helvetica_bold"
+                android:fontFamily="@font/helvetica"
                 android:text="@string/last_name"
                 android:textSize="20sp"
                 android:textColor="@color/plum_dark"
 
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/item_first_name"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="11dp"
-
-                android:fontFamily="@font/helvetica"
-                android:text="@string/phone_number"
-                android:textSize="14sp"
-                android:textColor="@color/bordeaux_medium"
-
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/item_check_in_box"
                 app:layout_constraintStart_toEndOf="@+id/item_profile_pic"
-                app:layout_constraintTop_toBottomOf="@+id/item_first_name" />
+                app:layout_constraintTop_toBottomOf="@+id/item_first_name"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
             <CheckBox
                 android:id="@+id/item_check_in_box"

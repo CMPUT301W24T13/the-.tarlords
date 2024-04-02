@@ -37,9 +37,9 @@ public class AttendanceArrayAdapter extends ArrayAdapter<Attendee> {
         if (attendee != null) {
             TextView firstName = view.findViewById(R.id.item_first_name);
             firstName.setText(attendee.getFirstName());
-            TextView lastName = view.findViewById(R.id.item_phone_num);
+            TextView lastName = view.findViewById(R.id.item_last_name);
             lastName.setText(attendee.getLastName());
-            TextView phoneNum = view.findViewById(R.id.item_phone_num);
+            TextView phoneNum = view.findViewById(R.id.item_last_name);
             phoneNum.setText(attendee.getPhoneNum());
             CheckBox checkInStatus = view.findViewById(R.id.item_check_in_box);
             checkInStatus.setChecked(attendee.getCheckInStatus());
