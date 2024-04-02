@@ -2,16 +2,8 @@ package com.example.the_tarlords.ui.profile;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.view.MenuProvider;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,12 +14,16 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.view.MenuProvider;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
+
 import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.photo.ProfilePhoto;
 import com.example.the_tarlords.data.users.User;
 import com.example.the_tarlords.databinding.FragmentProfileBinding;
-import com.example.the_tarlords.databinding.FragmentProfileViewBinding;
-import com.example.the_tarlords.ui.event.EventDetailsFragment;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -45,7 +41,7 @@ public class ProfileViewFragment extends Fragment implements MenuProvider{
     EditText lastNameEditText;
     EditText phoneEditText;
     EditText emailEditText;
-    private FragmentProfileViewBinding binding;
+    private FragmentProfileBinding binding;
 
     public ProfileViewFragment() {
         // Required empty public constructor
@@ -78,7 +74,7 @@ public class ProfileViewFragment extends Fragment implements MenuProvider{
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        binding = FragmentProfileViewBinding.inflate(inflater, container, false);
+        binding = FragmentProfileBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
     @Override
