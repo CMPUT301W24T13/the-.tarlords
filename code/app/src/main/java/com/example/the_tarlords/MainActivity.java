@@ -224,6 +224,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         Bundle args = new Bundle();
         args.putParcelable("event", event);
         args.putBoolean("isOrganizer", false);
+        args.putBoolean("browse",true);
         try {
             Navigation.findNavController(this, R.id.nav_host_fragment_content_main)
                     .navigate(R.id.action_eventFragment_to_eventDetailsFragment, args);
