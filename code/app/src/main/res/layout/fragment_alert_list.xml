@@ -2,19 +2,19 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/eventList"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.home.EventListFragment">
+    tools:context=".ui.home.EventListFragment" >
 
     <TextView
-        android:id="@+id/tv_event_list_header"
+        android:id="@+id/tv_alert_list_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
         android:layout_marginTop="15dp"
 
-        android:text="@string/event_list_header"
+        android:text="@string/announcements"
         android:fontFamily="@font/helvetica_bold"
         android:textColor="@color/plum_dark"
         android:textSize="30sp"
@@ -22,10 +22,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/eventListView"/>
+        app:layout_constraintBottom_toTopOf="@+id/alert_listView"/>
 
     <ListView
-        android:id="@+id/eventListView"
+        android:id="@+id/alert_listView"
         android:layout_marginLeft="5dp"
         android:layout_marginBottom="5dp"
         android:layout_marginTop="5dp"
@@ -33,14 +33,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
-        tools:listitem="@layout/fragment_event_list_item"
+        tools:listitem="@layout/fragment_alert_list_item"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_event_list_header"/>
+        app:layout_constraintTop_toBottomOf="@+id/tv_alert_list_header"/>
 
-    <!--TODO : Move FAB (QR button) into fragment_event_list instead of app_bar_main-->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/scan_qr_button"
+        android:id="@+id/button_add_alert"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="15dp"
@@ -53,6 +52,6 @@
         app:fabCustomSize="70dp"
         app:fabSize="normal"
         app:maxImageSize="35dp"
-        app:srcCompat="@drawable/qr_scan" />
+        app:srcCompat="@drawable/edit_notifications" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,6 +35,8 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -76,6 +79,9 @@ public class EventOrganizerListFragment extends Fragment implements MenuProvider
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         requireActivity().addMenuProvider(this);
+        TextView eventListHeader = view.findViewById(R.id.tv_event_list_header);
+        eventListHeader.setText("My Events");
+
         ListView eventListView = view.findViewById(R.id.eventListView);
         Log.d("events list", events.toString()+"hello");
         //set adapter

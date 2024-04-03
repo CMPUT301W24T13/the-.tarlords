@@ -84,6 +84,8 @@ public class Event implements Parcelable {
         maxSignUps = in.readInt();
         signUps = in.readInt();
         checkIns = in.readInt();
+        //do i need to parcel in poster???
+        //posterData = in.readString
     }
     public Event (){};
 
@@ -285,6 +287,8 @@ public class Event implements Parcelable {
         dest.writeInt(maxSignUps);
         dest.writeInt(signUps);
         dest.writeInt(checkIns);
+        //is this where the parcel needs to go for poster????
+        //dest.writeString(posterData)
     }
 
     /**

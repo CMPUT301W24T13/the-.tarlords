@@ -90,12 +90,12 @@ public class AlertFragment extends Fragment implements AddAlertDialogListener,Me
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         //requireActivity().addMenuProvider(this);
-        View view = inflater.inflate(R.layout.fragment_alert, container, false);
+        View view = inflater.inflate(R.layout.fragment_alert_list, container, false);
 
         alertList = event.getAlertList(new AlertCallback() {
             @Override
             public void onAlertsLoaded(ArrayList<Alert> alertList) {
-                ListView listView = view.findViewById(R.id.alert_list);
+                ListView listView = view.findViewById(R.id.alert_listView);
                 alertListAdapter = new AlertListAdapter(requireContext(), alertList,1);
                 listView.setAdapter(alertListAdapter);
                 refreshList();
@@ -115,7 +115,7 @@ public class AlertFragment extends Fragment implements AddAlertDialogListener,Me
 
         });
 
-        ListView alertListView = (ListView) view.findViewById(R.id.alert_list);
+        ListView alertListView = (ListView) view.findViewById(R.id.alert_listView);
         if(isOrganizer){
             alertListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -205,7 +205,7 @@ public class AlertFragment extends Fragment implements AddAlertDialogListener,Me
         alertList = event.getAlertList(new AlertCallback() {
             @Override
             public void onAlertsLoaded(ArrayList<Alert> alertList) {
-                ListView listView = getView().findViewById(R.id.alert_list);
+                ListView listView = getView().findViewById(R.id.alert_listView);
                 alertListAdapter = new AlertListAdapter(requireContext(), alertList, 1);
                 listView.setAdapter(alertListAdapter);
             }

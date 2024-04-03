@@ -36,12 +36,12 @@
                 android:src="@drawable/ic_menu_gallery"
 
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/titleTextView"
+                app:layout_constraintEnd_toStartOf="@id/tv_event_title"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
             <TextView
-                android:id="@+id/titleTextView"
+                android:id="@+id/tv_event_title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
@@ -55,10 +55,10 @@
 
                 app:layout_constraintStart_toEndOf="@+id/iv_event_icon"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/locationTextView"/>
+                app:layout_constraintBottom_toTopOf="@id/tv_location"/>
 
             <TextView
-                android:id="@+id/locationTextView"
+                android:id="@+id/tv_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
@@ -71,11 +71,11 @@
                 android:textSize="18sp"
 
                 app:layout_constraintStart_toEndOf="@+id/iv_event_icon"
-                app:layout_constraintTop_toBottomOf="@+id/titleTextView"
+                app:layout_constraintTop_toBottomOf="@+id/tv_event_title"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
             <TextView
-                android:id="@+id/startDateTextView"
+                android:id="@+id/tv_start_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="15dp"
@@ -88,7 +88,7 @@
                 android:textSize="15sp"
 
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/titleTextView"
+                app:layout_constraintTop_toBottomOf="@+id/tv_event_title"
                 app:layout_constraintBottom_toBottomOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -1,5 +1,7 @@
 package com.example.the_tarlords.ui.event;
 
+import static android.view.View.GONE;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +24,7 @@ import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.databinding.FragmentEventListBinding;
 import com.example.the_tarlords.ui.home.EventArrayAdapter;
+import com.example.the_tarlords.ui.image.ImageBrowseFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -73,6 +76,12 @@ public class EventBrowseFragment extends Fragment implements MenuProvider {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         requireActivity().addMenuProvider(this);
+
+        //************************************
+        //it doesn't like this, probably bc something other than the image_browse xml is being parcelled in
+        //ListView eventListView = view.findViewById(R.id.imageListView);
+        //************************************
+
         ListView eventListView = view.findViewById(R.id.eventListView);
         Log.d("events list", events.toString()+"hello");
         //events.add(event1);
@@ -117,11 +126,34 @@ public class EventBrowseFragment extends Fragment implements MenuProvider {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Event event = events.get(position);
                 Bundle args = new Bundle();
+
+                //*******************************************
+                //is this necessary if you're parcelling the entire event?
+                //args.putParcelable("poster", event.getPosterData());
+                //*******************************************
+
                 args.putParcelable("event",event);
                 args.putBoolean("isOrganizer", false);
                 args.putBoolean("browse", true);
                 NavHostFragment.findNavController(EventBrowseFragment.this)
                         .navigate(R.id.action_eventBrowseFragment_to_eventDetailsFragment,args);
+
+                //*******************************************
+                /* //k i'm really not sure here but we have to get to the selected item and either
+                // switch the item out for the fragment_image_list_item_back
+                // or have all the text views on the same card and make the image view gone
+                // and set the text views to visible
+                ListView imageListView = view.findViewById(R.id.imageListView);
+                View itemFragment = imageListView.getSelectedItem();
+
+                // long click listener my proposed solution for clicking same list item redirection
+                // if this is super awful and bad i can easily put a button instead
+                imageListView.setOnItemLongClickListener();
+
+                NavHostFragment.findNavController(ImageBrowseFragment.this)
+                        .navigate(R.id.action_imageBrowseFragment_to_eventDetailsFragment,args);
+                 */
+                //*******************************************
             }
         });
     }

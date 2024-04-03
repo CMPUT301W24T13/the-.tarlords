@@ -1,5 +1,6 @@
 package com.example.the_tarlords.ui.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
+import com.example.the_tarlords.data.QR.QRScanActivity;
 import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.databinding.FragmentEventListBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -67,6 +69,19 @@ public class EventListFragment extends Fragment implements MenuProvider {
                              Bundle savedInstanceState) {
         binding = FragmentEventListBinding.inflate(inflater, container, false);
         return binding.getRoot();
+
+        /* //yeah i didn't know what was up here
+        //scanQrButton is clearly passed to main via some other parcel or something idk how to get it here
+        binding.eventListView.scanQrButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //passes in user info in case of check-in QR scan
+                Intent intent = new Intent(MainActivity.this, QRScanActivity.class);
+                intent.putExtra("userId", user.getUserId());
+
+                startActivity(intent);
+            }
+        }); */
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {

@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -30,11 +31,16 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
             view = convertView;
         }
         Event event = (Event) getItem(position);
-        TextView name = view.findViewById(R.id.titleTextView);
+        //this is currently breaking the app bc i don't think i'm parcelling in correctly
+        //i have made lines in event that i think correspond to the correct items but i am unsure
+        //so they are commented like this
+        //ImageView image = view.findViewById(R.id.iv_event_icon);
+        //image.setImageBitmap(event.getPoster().getBitmap());
+        TextView name = view.findViewById(R.id.tv_event_title);
         name.setText(event.getName());
-        TextView location = view.findViewById(R.id.locationTextView);
+        TextView location = view.findViewById(R.id.tv_location);
         location.setText(event.getLocation());
-        TextView startDate = view.findViewById(R.id.startDateTextView);
+        TextView startDate = view.findViewById(R.id.tv_start_date);
         startDate.setText(event.getStartDate());
         return view;
     }

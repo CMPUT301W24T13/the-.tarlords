@@ -34,6 +34,7 @@
     <string name="qr_scan_fab">Scan QR Code</string>
 
     <!-- Strings related to addAlert -->
+    <string name="announcements">Announcements</string>
     <string name="alert_message">Alert Message</string>
     <string name="alert_message_hint">
         "My alert message"
@@ -70,7 +71,8 @@
     <string name="start_time">Start Time</string>
     <string name="to">to</string>
     <string name="tv_end_time">End Time</string>
-    <string name="check_in">Check In</string>
+    <string name="checked_in">Checked In</string>
+    <string name="signed_up">Signed Up</string>
     <string name="set_max_attendees">Set Max Attendees:</string>
     <string name="max_attendees">Max Attendees:</string>
     <string name="unlimited_attendees">Unlimited</string>
@@ -78,6 +80,7 @@
     <string name="check_in_qr">Check In QR:</string>
     <string name="poster_description">Event poster thumbnail</string>
     <string name="event_description">Brief event description</string>
+    <string name="event_list_header">Upcoming Events</string>
 
     <!-- event sample inputs -->
     <string name="sample_event_name">BBQ</string>
@@ -108,10 +111,8 @@
     <string name="edit">Edit</string>
     <string name="save">Save</string>
     <string name="add">Add</string>
-    <string name="announcements">Announcements</string>
     <string name="map">Map</string>
     <string name="delete">Delete</string>
-    <string name="sign_up">SIGN UP</string>
-
+    <string name="sign_up_button">SIGN UP</string>
 
 </resources>

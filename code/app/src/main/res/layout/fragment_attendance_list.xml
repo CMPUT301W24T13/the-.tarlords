@@ -9,53 +9,102 @@
     android:layout_marginLeft="2dp"
     android:layout_marginTop="2dp"
     android:layout_marginRight="2dp"
-    android:background="@color/white"
     app:layoutManager="LinearLayoutManager"
     tools:context=".ui.attendance_page.AttendanceFragment"
     tools:listitem="@layout/fragment_attendance_list_item">
 
     <TextView
-        android:id="@+id/attendee_count"
-        android:layout_width="100dp"
+        android:id="@+id/tv_attendance_page_title"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginTop="15dp"
 
-        android:fontFamily="@font/helvetica"
-        android:textColor="@color/bordeaux_medium"
-        android:text="@string/attendee_count"
-        android:textSize="16sp"
-
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/attendee_checkin_count"
+        android:text="Attendees"
+        android:fontFamily="@font/helvetica_bold"
+        android:textSize="30sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/attendanceListView" />
-
-    <TextView
-        android:id="@+id/attendee_checkin_count"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
-
-        android:fontFamily="@font/helvetica"
-        android:textColor="@color/bordeaux_medium"
-        android:text="@string/attendee_checkin_count"
-        android:textSize="16sp"
-
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@id/attendee_count"
-        app:layout_constraintBottom_toTopOf="@+id/attendanceListView" />
+        app:layout_constraintBottom_toTopOf="@+id/ll_attendance_header"/>
+
+    <LinearLayout
+        android:id="@+id/ll_attendance_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_attendance_page_title">
+
+        <TextView
+            android:id="@+id/tv_sign_ups"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+
+            android:text="@string/signed_up"
+            android:fontFamily="@font/helvetica"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/attendee_signup_count"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+
+            android:fontFamily="@font/helvetica"
+            android:text="@string/attendee_count"
+            android:textColor="@color/bordeaux_medium"
+            android:textSize="18sp"
+
+            app:layout_constraintBottom_toTopOf="@+id/attendanceListView"
+            app:layout_constraintEnd_toStartOf="@id/attendee_checkin_count"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_check_ins"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+
+            android:text="@string/checked_in"
+            android:fontFamily="@font/helvetica"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/attendee_checkin_count"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="25dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+
+            android:fontFamily="@font/helvetica"
+            android:text="@string/attendee_checkin_count"
+            android:textColor="@color/bordeaux_medium"
+            android:textSize="16sp"
+
+            app:layout_constraintBottom_toTopOf="@+id/attendanceListView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@id/attendee_signup_count"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </LinearLayout>
 
     <ListView
         android:id="@+id/attendanceListView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/attendee_count"
+        app:layout_constraintTop_toBottomOf="@+id/ll_attendance_header"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"

@@ -90,7 +90,7 @@ public class AttendanceFragment extends Fragment implements MenuProvider {
         adapter = new AttendanceArrayAdapter(getContext(), attendees);
         attendanceListView.setAdapter(adapter);
 
-        totalCount = view.findViewById(R.id.attendee_count);
+        totalCount = view.findViewById(R.id.attendee_signup_count);
         checkInCount = view.findViewById(R.id.attendee_checkin_count);
 
 

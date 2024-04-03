@@ -5,6 +5,8 @@
         <item name="colorPrimary">@color/aubergine_main</item>
         <item name="colorPrimaryVariant">@color/bordeaux_medium</item>
         <item name="colorPrimaryDark">@color/plum_dark</item>
+        <item name="android:textColorPrimary">@color/plum_dark</item>
+        <item name="android:textColorPrimaryInverse">@color/cold_grey_light</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/cold_grey_light</item>
@@ -21,8 +23,10 @@
         <item name="android:subtitleTextColor">?attr/colorPrimary</item>
         <item name="android:textColor">?attr/colorPrimaryVariant</item>
         <item name="android:textColorHint">?attr/colorSecondaryVariant</item>
-        <item name="android:colorBackground">?attr/colorSecondary</item>
+        <item name="android:colorBackground">?attr/colorOnPrimary</item>
         <item name="android:buttonTint">?attr/colorAccent</item>
+        <item name="android:fontFamily">@font/helvetica_bold</item>
+        <item name="android:font">@font/helvetica</item>
     </style>
 
     <style name="Theme.Thetarlords.NoActionBar">

@@ -8,11 +8,16 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="100dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginEnd="5dp"
         app:cardBackgroundColor="@color/cold_grey_light"
-        app:cardCornerRadius="10dp"
-        app:contentPadding="10dp"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="10dp"
+        app:contentPadding="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/item_profile_pic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -31,17 +36,17 @@
                 android:src="@drawable/profile"
                 android:layout_marginEnd="20dp"
                 android:adjustViewBounds="true"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/item_first_name"
+
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
 
             <TextView
                 android:id="@+id/item_first_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginBottom="25dp"
 
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:fontFamily="@font/helvetica"
@@ -51,14 +56,14 @@
 
                 app:layout_constraintStart_toEndOf="@+id/item_profile_pic"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/item_last_name"/>
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
             <TextView
                 android:id="@+id/item_last_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="25dp"
 
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:fontFamily="@font/helvetica"
@@ -66,25 +71,24 @@
                 android:textSize="20sp"
                 android:textColor="@color/plum_dark"
 
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/item_profile_pic"
-                app:layout_constraintTop_toBottomOf="@+id/item_first_name"
+                app:layout_constraintStart_toEndOf="@+id/item_first_name"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
             <CheckBox
                 android:id="@+id/item_check_in_box"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:layout_marginEnd="5dp"
+                android:layout_marginStart="25dp"
+                android:buttonTint="@color/bordeaux_medium"
 
                 android:fontFamily="@font/helvetica"
-                android:text="@string/check_in"
+                android:text="@string/checked_in"
                 android:textColor="@color/bordeaux_medium"
 
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toStartOf="@id/item_first_name"
+                app:layout_constraintTop_toBottomOf="@+id/item_first_name"
+                app:layout_constraintBottom_toBottomOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
