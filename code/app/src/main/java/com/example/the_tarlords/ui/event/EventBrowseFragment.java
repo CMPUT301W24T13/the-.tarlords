@@ -24,12 +24,9 @@ import com.example.the_tarlords.data.event.EventListCallback;
 import com.example.the_tarlords.data.event.EventListDBHelper;
 import com.example.the_tarlords.databinding.FragmentEventListBinding;
 import com.example.the_tarlords.ui.home.EventArrayAdapter;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -82,25 +79,7 @@ public class EventBrowseFragment extends Fragment implements MenuProvider {
                 }
                 if (querySnapshots != null) {
                     events.clear();
-                    //TODO: tried putting this in a different class but it wasn't working, maybe someone else will have better luck?
-                    eventsRef
-                            .get()
-                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                    if (task.isSuccessful()) {
-                                        for (QueryDocumentSnapshot document : task.getResult()) {
-
-                                            events.add(document.toObject(Event.class));
-                                            adapter.notifyDataSetChanged();
-                                            Log.d("query events", document.getId() + " => " + document.getData());
-                                        }
-                                    }
-                                    else {
-                                        Log.d("query events", "Error getting documents: ", task.getException());
-                                    }
-                                }
-                            });
+                    refreshList();
                 }
             }
         });
