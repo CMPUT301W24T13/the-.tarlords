@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginLeft="5dp"
     android:layout_marginTop="5dp"
     android:layout_marginRight="5dp"
@@ -11,11 +12,48 @@
     android:id="@+id/imageList"
     tools:context="ui.image.ImageBrowseFragment">
 
+    <TextView
+        android:id="@+id/tv_browse_posters_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginTop="15dp"
+
+        android:text="What's on tonight?"
+        android:fontFamily="@font/helvetica_bold"
+        android:textSize="30sp"
+        android:textColor="@color/plum_dark"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_browse_posters_subtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+
+        android:text="Browse upcoming events by poster."
+        android:fontFamily="@font/helvetica"
+        android:textSize="18sp"
+        android:textColor="@color/bordeaux_medium"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_browse_posters_title"/>
+
     <ListView
         android:id="@+id/imageListView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="5dp"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="-193dp"
-        tools:listitem="@layout/fragment_image_list_item" />
+        tools:listitem="@layout/fragment_image_list_item_front"
+
+        app:layout_constraintTop_toBottomOf="@id/tv_browse_posters_subtitle"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -15,62 +15,93 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="25dp"
         android:layout_marginEnd="25dp"
 
         android:text="@string/sample_event_name"
         android:fontFamily="@font/helvetica_bold"
         android:textAllCaps="true"
         android:textColor="@color/plum_dark"
-        android:textSize="30sp"
+        android:textSize="26sp"
 
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tv_event_startDate"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:id="@+id/start_end_dates"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
-        android:layout_marginTop="3dp"
+        android:layout_marginTop="5dp"
         android:layout_marginEnd="25dp"
-        android:layout_weight="0.5"
-
-        android:text="@string/sample_date"
-        android:fontFamily="@font/helvetica"
-        android:textColor="@color/bordeaux_medium"
-        android:textSize="20sp"
-
+        android:orientation="horizontal"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_event_name" />
+        app:layout_constraintTop_toBottomOf="@id/tv_event_name" >
+
+        <TextView
+            android:id="@+id/tv_event_startDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+
+            android:text="@string/sample_date"
+            android:fontFamily="@font/helvetica"
+            android:textColor="@color/bordeaux_medium"
+            android:textSize="18sp"
+            android:visibility="visible" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.073"
+
+            android:text="@string/to"
+            android:fontFamily="@font/helvetica"
+            android:textColor="@color/bordeaux_medium"
+            android:textSize="18sp"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/tv_event_endDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.325"
+
+            android:text="@string/sample_date"
+            android:fontFamily="@font/helvetica"
+            android:textColor="@color/bordeaux_medium"
+            android:textSize="18sp"
+            android:visibility="visible" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/ll_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
-        android:layout_marginTop="3dp"
+        android:layout_marginTop="5dp"
         android:layout_marginEnd="25dp"
         android:orientation="horizontal"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_event_startDate">
+        app:layout_constraintTop_toBottomOf="@id/start_end_dates">
 
         <TextView
             android:id="@+id/tv_event_startTime"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.45"
+            android:layout_weight="0.415"
 
             android:text="@string/sample_time"
             android:fontFamily="@font/helvetica"
             android:textColor="@color/bordeaux_medium"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:visibility="visible" />
 
         <TextView
@@ -81,7 +112,7 @@
             android:text="@string/to"
             android:fontFamily="@font/helvetica"
             android:textColor="@color/bordeaux_medium"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:visibility="visible" />
 
         <TextView
@@ -93,7 +124,7 @@
             android:text="@string/sample_time"
             android:fontFamily="@font/helvetica"
             android:textColor="@color/bordeaux_medium"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:visibility="visible" />
 
     </LinearLayout>
@@ -103,13 +134,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="5dp"
         android:layout_marginEnd="25dp"
 
         android:text="@string/sample_location"
         android:fontFamily="@font/helvetica_bold"
         android:textColor="@color/aubergine_main"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:visibility="visible"
 
         app:layout_constraintEnd_toEndOf="parent"
@@ -117,59 +148,208 @@
         app:layout_constraintTop_toBottomOf="@id/ll_time" />
 
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
+        android:id="@+id/tv_event_description"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="506dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginTop="5dp"
 
-        android:text="@string/max_attendees"
+
+        android:hint="@string/event_description"
+        android:text="@string/sample_description"
+        android:gravity="start|center_vertical"
+
+        android:textColorHint="@color/mauve_medium_light"
         android:fontFamily="@font/helvetica"
         android:textColor="@color/bordeaux_medium"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:visibility="visible"
 
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/tv_max_attendees"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_event_location" />
 
-    <TextView
-        android:id="@+id/tv_max_attendees"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_event_poster"
+        android:layout_width="175dp"
+        android:layout_height="250dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="25dp"
+        app:cardCornerRadius="15dp"
+        app:cardBackgroundColor="@color/cold_grey_light"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_event_description" >
+
+        <ImageView
+            android:id="@+id/iv_event_poster"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:contentDescription="@string/poster_description"
+            android:src="@drawable/ic_menu_gallery"
+            android:clickable="true" />
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_attendance_thumbnail"
+        android:layout_width="175dp"
+        android:layout_height="250dp"
         android:layout_marginTop="15dp"
         android:layout_marginEnd="25dp"
-        android:layout_marginBottom="506dp"
-        android:ems="10"
+        app:cardCornerRadius="15dp"
+        app:cardBackgroundColor="@color/cold_grey_light"
 
-        android:text="@string/unlimited_attendees"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_event_description" >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_attendance_thumbnail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:id="@+id/tv_sign_ups"
+                android:layout_width="75dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+
+                android:text="@string/sign_up"
+                android:fontFamily="@font/helvetica"
+                android:textColor="@color/bordeaux_medium"
+                android:textSize="14sp"
+                android:visibility="visible"
+
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+                android:id="@+id/tv_sign_up_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+
+                android:text="@string/sample_attendees"
+                android:fontFamily="@font/helvetica"
+                android:textColor="@color/bordeaux_medium"
+                android:textSize="14sp"
+                android:visibility="visible"
+
+                app:layout_constraintStart_toEndOf="@id/tv_sign_ups"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+                android:id="@+id/tv_check_ins"
+                android:layout_width="75dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="5dp"
+
+                android:text="@string/check_in"
+                android:fontFamily="@font/helvetica"
+                android:textColor="@color/bordeaux_medium"
+                android:textSize="14sp"
+                android:visibility="visible"
+
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_sign_ups"/>
+
+            <TextView
+                android:id="@+id/tv_check_in_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+
+                android:text="@string/sample_attendees"
+                android:fontFamily="@font/helvetica"
+                android:textColor="@color/bordeaux_medium"
+                android:textSize="14sp"
+                android:visibility="visible"
+
+                app:layout_constraintStart_toStartOf="@id/tv_sign_up_count"
+                app:layout_constraintTop_toBottomOf="@id/tv_sign_up_count"/>
+            <TextView
+                android:id="@+id/tv_max_attendees_label"
+                android:layout_width="75dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="5dp"
+
+                android:text="@string/max_attendees"
+                android:fontFamily="@font/helvetica"
+                android:textColor="@color/bordeaux_medium"
+                android:textSize="14sp"
+                android:visibility="visible"
+
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_check_ins"/>
+            <TextView
+                android:id="@+id/tv_max_attendees"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+
+                android:text="@string/unlimited_attendees"
+                android:fontFamily="@font/helvetica"
+                android:textColor="@color/bordeaux_medium"
+                android:textSize="14sp"
+                android:visibility="visible"
+
+                app:layout_constraintStart_toStartOf="@id/tv_check_in_count"
+                app:layout_constraintTop_toBottomOf="@id/tv_check_in_count"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/tv_checkin_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+
+        android:text="@string/check_in_qr"
         android:fontFamily="@font/helvetica"
         android:textColor="@color/bordeaux_medium"
-        android:textSize="20sp"
+        android:textSize="16sp"
         android:visibility="visible"
 
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView"
-        app:layout_constraintTop_toBottomOf="@+id/tv_event_location" />
+        app:layout_constraintStart_toStartOf="@id/cv_event_poster"
+        app:layout_constraintEnd_toEndOf="@id/cv_event_poster"
+        app:layout_constraintTop_toBottomOf="@id/cv_event_poster"
+        app:layout_constraintBottom_toTopOf="@+id/iv_checkin_details" />
+
+    <TextView
+        android:id="@+id/tv_info_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+
+        android:text="@string/event_info_qr"
+        android:fontFamily="@font/helvetica"
+        android:textColor="@color/bordeaux_medium"
+        android:textSize="16sp"
+        android:visibility="visible"
+
+        app:layout_constraintStart_toStartOf="@+id/cv_attendance_thumbnail"
+        app:layout_constraintEnd_toEndOf="@id/cv_attendance_thumbnail"
+        app:layout_constraintTop_toBottomOf="@id/cv_attendance_thumbnail"
+        app:layout_constraintBottom_toTopOf="@+id/iv_info_details" />
 
     <ImageView
         android:id="@+id/iv_checkin_details"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="21dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginBottom="274dp"
         android:background="@color/white"
         android:src="@drawable/qr_code_scan_svgrepo_com"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/iv_info_details"
-        app:layout_constraintStart_toStartOf="parent"
+
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="@id/cv_event_poster"
+        app:layout_constraintEnd_toEndOf="@id/cv_event_poster"
         app:layout_constraintTop_toBottomOf="@+id/tv_checkin_details"
         app:srcCompat="@drawable/qr_code_scan_svgrepo_com" />
 
@@ -177,65 +357,14 @@
         android:id="@+id/iv_info_details"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:layout_marginEnd="25dp"
-        android:layout_marginBottom="274dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/iv_checkin_details"
+        android:background="@color/white"
+        android:src="@drawable/qr_code_scan_svgrepo_com"
+
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="@+id/cv_attendance_thumbnail"
+        app:layout_constraintEnd_toEndOf="@id/cv_attendance_thumbnail"
         app:layout_constraintTop_toBottomOf="@+id/tv_info_details"
         app:srcCompat="@drawable/qr_code_scan_svgrepo_com" />
-
-    <TextView
-        android:id="@+id/tv_checkin_details"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="47dp"
-        android:layout_marginEnd="70dp"
-
-        android:text="@string/check_in_qr"
-        android:fontFamily="@font/helvetica"
-        android:textColor="@color/bordeaux_medium"
-        android:textSize="16sp"
-        android:visibility="gone"
-
-        app:layout_constraintEnd_toStartOf="@+id/tv_info_details"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
-
-    <TextView
-        android:id="@+id/tv_info_details"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="45dp"
-        android:layout_marginEnd="40dp"
-        android:layout_marginBottom="18dp"
-
-        android:text="@string/event_info_qr"
-        android:fontFamily="@font/helvetica"
-        android:textColor="@color/bordeaux_medium"
-        android:textSize="16sp"
-        android:visibility="gone"
-
-        app:layout_constraintBottom_toTopOf="@+id/iv_info_details"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/tv_checkin_details"
-        app:layout_constraintTop_toBottomOf="@+id/tv_max_attendees" />
-
-    <ImageView
-        android:id="@+id/iv_poster"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="280dp"
-        android:layout_marginEnd="186dp"
-        android:layout_marginBottom="33dp"
-        android:src="@drawable/ic_menu_gallery"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

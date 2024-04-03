@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="0dp"
+        android:layout_height="400dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+
+        app:cardBackgroundColor="@color/cold_grey_light"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="10dp"
+        app:contentPadding="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_browse_event_details"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:id="@+id/tv_event_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginTop="15dp"
+
+                android:text="@string/event_name"
+                android:fontFamily="@font/helvetica_bold"
+                android:textColor="@color/plum_dark"
+                android:textSize="30sp"
+
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_event_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginTop="5dp"
+
+                android:text="@string/location"
+                android:fontFamily="@font/helvetica"
+                android:textColor="@color/bordeaux_medium"
+                android:textSize="18sp"
+
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_event_name" />
+
+            <TextView
+                android:id="@+id/tv_event_startDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginTop="15dp"
+
+                android:text="@string/start_date"
+                android:fontFamily="@font/helvetica"
+                android:textColor="@color/bordeaux_medium"
+                android:textSize="16sp"
+
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_event_location" />
+
+            <TextView
+                android:id="@+id/tv_event_startTime"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="5dp"
+
+                android:text="@string/start_time"
+                android:fontFamily="@font/helvetica"
+                android:textColor="@color/bordeaux_medium"
+                android:textSize="16sp"
+
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/tv_to_separator"
+                app:layout_constraintTop_toBottomOf="@+id/tv_event_startDate" />
+
+            <TextView
+                android:id="@+id/tv_to_separator"
+                android:layout_width="15dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+
+                android:text="@string/to"
+                android:fontFamily="@font/helvetica"
+                android:textColor="@color/bordeaux_medium"
+                android:textSize="16sp"
+
+                app:layout_constraintStart_toEndOf="@id/tv_event_startTime"
+                app:layout_constraintEnd_toStartOf="@id/tv_event_endTime"
+                app:layout_constraintTop_toBottomOf="@id/tv_event_startDate"/>
+
+            <TextView
+                android:id="@+id/tv_event_endTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
+                android:layout_marginTop="5dp"
+
+                android:paddingStart="40dp"
+                android:fontFamily="@font/helvetica"
+                android:text="@string/tv_end_time"
+                android:textColor="@color/bordeaux_medium"
+                android:textSize="16sp"
+
+                tools:layout_editor_absoluteX="208dp"
+                tools:layout_editor_absoluteY="144dp"
+
+                app:layout_constraintStart_toEndOf="@id/tv_to_separator"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_event_startDate"/>
+
+            <TextView
+                android:id="@+id/tv_event_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginTop="15dp"
+
+
+                android:text="@string/sample_description"
+                android:gravity="start|center_vertical"
+                android:fontFamily="@font/helvetica"
+                android:textColor="@color/bordeaux_medium"
+                android:textSize="18sp"
+
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_event_startTime" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

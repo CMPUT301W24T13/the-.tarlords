@@ -124,7 +124,7 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
         TextView eventStartTimeTextView = view.findViewById(R.id.tv_event_startTime);
         TextView eventEndTimeTextView = view.findViewById(R.id.tv_event_endTime);
         TextView eventMaxAttendees = view.findViewById(R.id.tv_max_attendees);
-        ImageView eventPosterImageView = view.findViewById(R.id.iv_poster);
+        ImageView eventPosterImageView = view.findViewById(R.id.iv_event_poster);
         //add additional views here as desired
 
         // Check if event is not null before accessing its attributes
