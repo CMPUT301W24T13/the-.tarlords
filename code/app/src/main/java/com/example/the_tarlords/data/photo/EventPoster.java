@@ -41,4 +41,7 @@ public class EventPoster extends Photo{
         this.setBitmap(bitmap);
 
     }
+    public Event getEvent() {
+        return this.event;
+    }
 }

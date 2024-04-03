@@ -13,7 +13,7 @@
     tools:context="ui.image.ImageBrowseFragment">
 
     <TextView
-        android:id="@+id/tv_browse_posters_title"
+        android:id="@+id/tv_browse_images_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
@@ -29,7 +29,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tv_browse_posters_subtitle"
+        android:id="@+id/tv_browse_images_subtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
@@ -41,7 +41,7 @@
         android:textColor="@color/bordeaux_medium"
 
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_browse_posters_title"/>
+        app:layout_constraintTop_toBottomOf="@+id/tv_browse_images_title"/>
 
     <ListView
         android:id="@+id/imageListView"
@@ -50,10 +50,10 @@
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginTop="5dp"
-        tools:listitem="@layout/fragment_image_list_item_front"
+        tools:listitem="@layout/fragment_image_list_item"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_browse_posters_subtitle"/>
+        app:layout_constraintTop_toBottomOf="@id/tv_browse_images_subtitle"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/scan_qr_button"

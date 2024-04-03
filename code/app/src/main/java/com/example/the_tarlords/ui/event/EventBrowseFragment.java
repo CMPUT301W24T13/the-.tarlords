@@ -77,16 +77,15 @@ public class EventBrowseFragment extends Fragment implements MenuProvider {
         super.onViewCreated(view, savedInstanceState);
         requireActivity().addMenuProvider(this);
 
-        //************************************
-        //it doesn't like this, probably bc something other than the image_browse xml is being parcelled in
-        //ListView eventListView = view.findViewById(R.id.imageListView);
-        //************************************
-
         ListView eventListView = view.findViewById(R.id.eventListView);
         Log.d("events list", events.toString()+"hello");
+
         //events.add(event1);
         EventArrayAdapter adapter = new EventArrayAdapter(getContext(),events);
         eventListView.setAdapter(adapter);
+
+        //EventPosterArrayAdapter adapter = new EventPosterArrayAdapter(getContext(),events);
+        //eventListView.setAdapter(adapter);
 
         eventsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override

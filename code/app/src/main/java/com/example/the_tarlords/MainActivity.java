@@ -265,7 +265,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             TextView email = hView.findViewById(R.id.email);
             ImageView profilePic = hView.findViewById(R.id.profilePic);
 
-            name.setText(user.getFirstName() + " " + user.getLastName());
+            String fullName = user.getFirstName() + " " + user.getLastName();
+            name.setText(fullName);
+            //name.setText(user.getFirstName() + " " + user.getLastName());
             phoneNum.setText(user.getPhoneNum());
             email.setText(user.getEmail());
             if (user != null && user.getProfilePhoto() != null && user.getProfilePhoto().getBitmap() != null) {

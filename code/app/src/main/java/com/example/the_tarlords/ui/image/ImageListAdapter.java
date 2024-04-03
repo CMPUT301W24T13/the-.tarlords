@@ -34,11 +34,11 @@ public class ImageListAdapter extends ArrayAdapter<Photo> {
         ViewHolder holder;
 
         if (view == null) {
-            view = inflater.inflate(R.layout.fragment_image_list_item_front, parent, false);
+            view = inflater.inflate(R.layout.fragment_image_list_item, parent, false);
             holder = new ViewHolder();
 
             //getting the textviews
-            holder.imageViewTV = view.findViewById(R.id.imageViewTV);
+            holder.imageViewTV = view.findViewById(R.id.iv_image_browse_item);
             //holder.collectionTV = view.findViewById(R.id.collectionTV);
             //holder.nameTV = view.findViewById(R.id.nameTV);
             view.setTag(holder);

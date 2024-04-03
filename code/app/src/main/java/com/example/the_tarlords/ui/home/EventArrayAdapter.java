@@ -31,11 +31,7 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
             view = convertView;
         }
         Event event = (Event) getItem(position);
-        //this is currently breaking the app bc i don't think i'm parcelling in correctly
-        //i have made lines in event that i think correspond to the correct items but i am unsure
-        //so they are commented like this
-        //ImageView image = view.findViewById(R.id.iv_event_icon);
-        //image.setImageBitmap(event.getPoster().getBitmap());
+
         TextView name = view.findViewById(R.id.tv_event_title);
         name.setText(event.getName());
         TextView location = view.findViewById(R.id.tv_location);

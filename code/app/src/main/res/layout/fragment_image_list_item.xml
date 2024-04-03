@@ -7,7 +7,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_image_list_item"
         android:layout_width="0dp"
-        android:layout_height="400dp"
+        android:layout_height="450dp"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
         android:layout_marginStart="5dp"
@@ -23,7 +23,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/imageViewTV"
+            android:id="@+id/iv_image_browse_item"
             android:src="@drawable/ic_menu_gallery"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
