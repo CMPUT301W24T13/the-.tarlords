@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Attendance {
+public class AttendanceDBHelper {
     private static CollectionReference eventsRef = MainActivity.db.collection("Events");
     private static CollectionReference usersRef = MainActivity.db.collection("Users");
     public static int FALSE = 0;
@@ -170,29 +170,41 @@ public class Attendance {
     }
 
     /**
-     * Removes a user from the attendance list of an event and updates sign ups.
+     * Removes a user from the attendance list of an event and updates sign ups and returns the result via callback.
      *
+     * @param event to update attendance for
      * @param user to remove
+     * @param callback
      */
-    public static void removeSignUp(Event event, User user) {
+    public static void removeSignUp(Event event, User user, AttendanceQueryCallback callback) {
         CollectionReference attendanceRef = MainActivity.db.collection("Events/"+ event.getId() +"/Attendance");
-        attendanceRef
-                .document(user.getUserId())
-                .delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        event.signUps-=1;
-                        eventsRef.document(event.getId()).update("signUps",event.getSignUps());
-                        Log.d("Firestore", "DocumentSnapshot successfully written!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d("Firestore", e.getMessage());
-                    }
-                });
+        isSignedUp(event, user, new AttendanceQueryCallback() {
+            @Override
+            public void onQueryComplete(int result) {
+                if (result==TRUE){
+                    attendanceRef
+                            .document(user.getUserId())
+                            .delete()
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    event.signUps-=1;
+                                    eventsRef.document(event.getId()).update("signUps",event.getSignUps());
+                                    Log.d("Firestore", "DocumentSnapshot successfully written!");
+                                    callback.onQueryComplete(SUCCESSFUL);
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.d("Firestore", e.getMessage());
+                                    callback.onQueryComplete(UNSUCCESSFUL);
+                                }
+                            });
+                }
+            }
+        });
+
     }
 
     /**

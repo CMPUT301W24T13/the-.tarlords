@@ -18,7 +18,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
-import com.example.the_tarlords.data.attendance.Attendance;
+import com.example.the_tarlords.data.attendance.AttendanceDBHelper;
 import com.example.the_tarlords.data.attendance.AttendanceListCallback;
 import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.users.Attendee;
@@ -44,8 +44,6 @@ public class AttendanceFragment extends Fragment implements MenuProvider {
     TextView totalCount;
     TextView checkInCount;
     ListView attendanceListView;
-
-    private static final String ARG_COLUMN_COUNT = "column-count";
 
     @SuppressWarnings("unused")
     public static AttendanceFragment newInstance(Event event) {
@@ -110,7 +108,7 @@ public class AttendanceFragment extends Fragment implements MenuProvider {
 
     }
     public void refreshAttendance(){
-        Attendance.getAttendanceList(event, new AttendanceListCallback() {
+        AttendanceDBHelper.getAttendanceList(event, new AttendanceListCallback() {
             @Override
             public void onAttendanceLoaded(ArrayList<Attendee> attendanceList) {
                 attendees.clear();

@@ -20,6 +20,8 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.event.Event;
+import com.example.the_tarlords.data.event.EventListCallback;
+import com.example.the_tarlords.data.event.EventListDBHelper;
 import com.example.the_tarlords.databinding.FragmentEventListBinding;
 import com.example.the_tarlords.ui.home.EventArrayAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -34,17 +36,12 @@ import java.util.ArrayList;
 
 public class EventBrowseFragment extends Fragment implements MenuProvider {
 
-
-    private static final String ARG_COLUMN_COUNT = "column-count";
-    private int mColumnCount = 1;
     private FragmentEventListBinding binding;
     private CollectionReference eventsRef = MainActivity.db.collection("Events");
+    ListView eventListView;
+    EventArrayAdapter adapter;
     ArrayList<Event> events = new ArrayList<>();
 
-    /**
-     * EventListFragment has a list of events called eventsList
-     */
-    //private EventRecyclerViewAdapter adapter;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -58,9 +55,7 @@ public class EventBrowseFragment extends Fragment implements MenuProvider {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
-
     }
 
     @Override
@@ -73,10 +68,8 @@ public class EventBrowseFragment extends Fragment implements MenuProvider {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         requireActivity().addMenuProvider(this);
-        ListView eventListView = view.findViewById(R.id.eventListView);
-        Log.d("events list", events.toString()+"hello");
-        //events.add(event1);
-        EventArrayAdapter adapter = new EventArrayAdapter(getContext(),events);
+        eventListView = view.findViewById(R.id.eventListView);
+        adapter = new EventArrayAdapter(getContext(),events);
         eventListView.setAdapter(adapter);
 
         eventsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -115,21 +108,27 @@ public class EventBrowseFragment extends Fragment implements MenuProvider {
         eventListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Event event = events.get(position);
-                Bundle args = new Bundle();
-                args.putParcelable("event",event);
-                args.putBoolean("isOrganizer", false);
-                args.putBoolean("browse", true);
-                NavHostFragment.findNavController(EventBrowseFragment.this)
-                        .navigate(R.id.action_eventBrowseFragment_to_eventDetailsFragment,args);
+                navigateToDetails(events.get(position));
+            }
+        });
+    }
+    public void refreshList(){
+        EventListDBHelper.getEventsList( new EventListCallback() {
+            @Override
+            public void onEventListLoaded(ArrayList<Event> eventList) {
+                events.clear();
+                events.addAll(eventList);
+                adapter.notifyDataSetChanged();
             }
         });
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
+    public void navigateToDetails(Event event){
+        Bundle args = new Bundle();
+        args.putParcelable("event",event);
+        args.putBoolean("browse", true);
+        NavHostFragment.findNavController(EventBrowseFragment.this)
+                .navigate(R.id.action_eventBrowseFragment_to_eventDetailsFragment,args);
     }
 
     @Override
