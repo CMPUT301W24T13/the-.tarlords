@@ -54,6 +54,7 @@ public class Event implements Attendance, Parcelable {
     private EventPoster poster;
     private String posterData;
     private Boolean posterIsDefault;
+    private String additionalInfo;
     Integer maxSignUps;
     Integer signUps;
     Integer checkIns;
@@ -562,6 +563,14 @@ public class Event implements Attendance, Parcelable {
 
     public void setPosterIsDefault(Boolean posterIsDefault) {
         this.posterIsDefault = posterIsDefault;
+    }
+
+    public void setAdditionalInfo(String additionalInfo) {
+        this.additionalInfo = additionalInfo;
+    }
+
+    public String getAdditionalInfo() {
+        return additionalInfo;
     }
 }
 

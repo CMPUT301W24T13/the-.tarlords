@@ -8,12 +8,14 @@
 
 
     <androidx.cardview.widget.CardView
-        android:layout_width="0dp"
-        android:layout_height="100dp"
+        android:layout_width="423dp"
+        android:layout_height="141dp"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="1dp"
+        android:layout_marginEnd="15dp"
         android:layout_marginBottom="1dp"
         app:cardBackgroundColor="@color/list_item_background"
-        app:cardCornerRadius="10dp"
+        app:cardCornerRadius="15dp"
         app:cardElevation="10dp"
         app:contentPadding="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -25,111 +27,96 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+
             <TextView
                 android:id="@+id/titleTextView"
-                android:layout_width="271dp"
-                android:layout_height="36dp"
-                android:fontFamily="@font/amaranth_bold"
+                android:layout_width="285dp"
+                android:layout_height="44dp"
+                android:layout_marginStart="120dp"
+                android:fontFamily="@font/helvetica_bold"
                 android:gravity="left"
                 android:text="Event Name"
                 android:textAppearance="?attr/textAppearanceListItem"
-                android:textSize="24sp"
+                android:textSize="30sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.944"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.285" />
-
+                app:layout_constraintVertical_bias="0.125" />
 
             <TextView
                 android:id="@+id/locationTextView"
-                android:layout_width="181dp"
-                android:layout_height="24dp"
-                android:layout_marginEnd="96dp"
+                android:layout_width="194dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="33dp"
+                android:layout_marginEnd="4dp"
                 android:layout_marginBottom="8dp"
-                android:fontFamily="@font/almendra"
+                android:fontFamily="@font/helvetica"
                 android:gravity="left"
                 android:text="Location"
-                android:textColor="#403636"
-                android:textSize="20dp"
+                android:textColor="#481222"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.961" />
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/location"
+                app:layout_constraintTop_toBottomOf="@+id/titleTextView"
+                app:layout_constraintVertical_bias="1.0" />
 
             <ImageView
                 android:id="@+id/imageView6"
-                android:layout_width="142dp"
-                android:layout_height="91dp"
+                android:layout_width="121dp"
+                android:layout_height="102dp"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.428"
+                app:layout_constraintVertical_bias="0.478"
                 app:srcCompat="@drawable/plant" />
 
             <TextView
-                android:id="@+id/startDateTextView"
+                android:id="@+id/time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/averia_sans_libre_bold"
-                android:text="Start Date"
-                android:textColor="#403636"
-                android:textSize="14sp"
-                android:textStyle="italic"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/dash"
-                app:layout_constraintHorizontal_bias="0.951"
+                android:layout_marginStart="120dp"
+                android:fontFamily="@font/helvetica"
+                android:text="Time: "
+                android:textColor="#481222"
+                android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.014" />
+                app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
 
             <TextView
-                android:id="@+id/dash"
-                android:layout_width="27dp"
-                android:layout_height="15dp"
-                android:gravity="center"
-                android:text="---"
-                android:textColor="#403636"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@+id/titleTextView"
-                app:layout_constraintHorizontal_bias="0.598"
-                app:layout_constraintStart_toStartOf="@+id/titleTextView"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.028" />
-
-            <TextView
-                android:id="@+id/endDateTextView"
+                android:id="@+id/location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/averia_sans_libre_bold"
-                android:text="End Date"
-                android:textColor="#403636"
-                android:textSize="14sp"
-                android:textStyle="italic"
+                android:layout_marginStart="120dp"
+                android:layout_marginTop="32dp"
+                android:fontFamily="@font/helvetica"
+                android:text="Location: "
+                android:textColor="#481222"
+                android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.296"
-                app:layout_constraintStart_toEndOf="@+id/dash"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.014" />
-
-            <TextView
-                android:id="@+id/organizerNameTextView"
-                android:layout_width="99dp"
-                android:layout_height="24dp"
-                android:layout_marginEnd="4dp"
-                android:fontFamily="@font/averia_sans_libre_bold"
-                android:text="Org Name"
-                android:textColor="#204220"
-                android:textSize="15sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/titleTextView"
                 app:layout_constraintVertical_bias="0.0" />
+
+            <TextView
+                android:id="@+id/startTimeTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="144dp"
+                android:fontFamily="@font/helvetica"
+                android:text="Start time"
+                android:textColor="#481222"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/time"
+                app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -138,3 +125,51 @@
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+
+<!--<TextView-->
+<!--android:id="@+id/startDateTextView"-->
+<!--android:layout_width="wrap_content"-->
+<!--android:layout_height="wrap_content"-->
+<!--android:fontFamily="@font/averia_sans_libre_bold"-->
+<!--android:text="Start Date"-->
+<!--android:textColor="#403636"-->
+<!--android:textSize="14sp"-->
+<!--android:textStyle="italic"-->
+<!--app:layout_constraintBottom_toBottomOf="parent"-->
+<!--app:layout_constraintEnd_toStartOf="@+id/dash"-->
+<!--app:layout_constraintHorizontal_bias="0.951"-->
+<!--app:layout_constraintStart_toStartOf="parent"-->
+<!--app:layout_constraintTop_toTopOf="parent"-->
+<!--app:layout_constraintVertical_bias="0.014" />-->
+
+<!--<TextView-->
+<!--android:id="@+id/dash"-->
+<!--android:layout_width="27dp"-->
+<!--android:layout_height="15dp"-->
+<!--android:gravity="center"-->
+<!--android:text="-&#45;&#45;"-->
+<!--android:textColor="#403636"-->
+<!--android:textSize="14sp"-->
+<!--app:layout_constraintBottom_toBottomOf="parent"-->
+<!--app:layout_constraintEnd_toEndOf="@+id/titleTextView"-->
+<!--app:layout_constraintHorizontal_bias="0.598"-->
+<!--app:layout_constraintStart_toStartOf="@+id/titleTextView"-->
+<!--app:layout_constraintTop_toTopOf="parent"-->
+<!--app:layout_constraintVertical_bias="0.028" />-->
+
+<!--<TextView-->
+<!--android:id="@+id/endDateTextView"-->
+<!--android:layout_width="wrap_content"-->
+<!--android:layout_height="wrap_content"-->
+<!--android:fontFamily="@font/averia_sans_libre_bold"-->
+<!--android:text="End Date"-->
+<!--android:textColor="#403636"-->
+<!--android:textSize="14sp"-->
+<!--android:textStyle="italic"-->
+<!--app:layout_constraintBottom_toBottomOf="parent"-->
+<!--app:layout_constraintEnd_toEndOf="parent"-->
+<!--app:layout_constraintHorizontal_bias="0.296"-->
+<!--app:layout_constraintStart_toEndOf="@+id/dash"-->
+<!--app:layout_constraintTop_toTopOf="parent"-->
+<!--app:layout_constraintVertical_bias="0.014" />-->

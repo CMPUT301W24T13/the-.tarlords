@@ -3,18 +3,25 @@ package com.example.the_tarlords.ui.event;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -22,6 +29,7 @@ import androidx.annotation.NonNull;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
@@ -50,6 +58,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
     private EditText eventNameEditText;
     private TextView eventEndTimeTextView;
     private EditText maxAttendees;
+    private CheckBox cbMaxAttendees;
     private ImageView checkInQR;
     private ImageView eventInfoQR;
     private FragmentEventEditBinding binding;
@@ -210,8 +219,31 @@ public class EventEditFragment extends Fragment implements MenuProvider {
         eventEndDateTextView = view.findViewById(R.id.tv_edit_event_endDate);
         eventEndTimeTextView = view.findViewById(R.id.tv_edit_event_endTime);
         maxAttendees = view.findViewById(R.id.et_max_attendees);
+        cbMaxAttendees = view.findViewById(R.id.cb_max_attendees);
         checkInQR = view.findViewById(R.id.iv_checkin);
         eventInfoQR = view.findViewById(R.id.iv_info);
+
+        // this is for imageslider for event images
+        ViewPager2 viewPager = view.findViewById(R.id.viewPager);
+        int[] images = new int[]{R.drawable.plant, R.drawable.profile, R.drawable.participants};
+        ImageSliderAdapter adapter = new ImageSliderAdapter(images);
+        viewPager.setAdapter(adapter);
+
+        // this is for navigating to maps fragment by clicking on the map imageView5
+        ImageView imageView2 = view.findViewById(R.id.mapImage);
+        imageView2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle args = new Bundle();
+                args.putParcelable("event", event);
+                try {
+                    NavHostFragment.findNavController(EventEditFragment.this)
+                            .navigate(R.id.action_eventEditFragment_to_MapsFragment, args);
+                } catch (Exception e) {
+                    Log.e("maps", Log.getStackTraceString(e));
+                }
+            }
+        });
 
         //add more attributes as desired
 
@@ -224,7 +256,22 @@ public class EventEditFragment extends Fragment implements MenuProvider {
             eventStartDateTextView.setText(event.getStartDate());
             eventEndDateTextView.setText(event.getEndDate());
             eventEndTimeTextView.setText(event.getEndTime());
-            maxAttendees.setText(event.getMaxSignUps().toString());
+            //maxAttendees.setText(event.getMaxSignUps().toString());
+            maxAttendees.setEnabled(false);
+            cbMaxAttendees.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                maxAttendees.setEnabled(isChecked);
+                if (isChecked) {
+                    maxAttendees.setFocusableInTouchMode(true);
+                    maxAttendees.setFocusable(true);
+                    maxAttendees.setClickable(true);
+                    maxAttendees.setText(event.getMaxSignUps().toString());
+                } else {
+                    maxAttendees.setFocusableInTouchMode(false);
+                    maxAttendees.setFocusable(false);
+                    maxAttendees.setClickable(false);
+                    maxAttendees.setText(""); // Clear the text when the checkbox is unchecked
+                }
+            });
             // Populate more attributes as desired
         }
         //if event is null, create new event
@@ -261,6 +308,18 @@ public class EventEditFragment extends Fragment implements MenuProvider {
 
         // Set an OnClickListener for the eventEndDateTextView
         eventEndTimeTextView.setOnClickListener(v -> showTimePickerDialog("end"));
+
+        // this is for reuse QR code dropdown/spinner
+        Spinner spinner = view.findViewById(R.id.reuseQrCode);
+        String[] items = new String[]{"Item 1", "Item 2", "Item 3", "Item 4"};
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_dropdown_item, items);
+        spinner.setAdapter(adapter2);
+
+        Drawable spinnerDrawable = spinner.getBackground().getConstantState().newDrawable();
+        spinnerDrawable.setColorFilter(getResources().getColor(R.color.black), PorterDuff.Mode.SRC_ATOP);
+
+        spinner.setBackground(spinnerDrawable);
+
     }
 
     /**
