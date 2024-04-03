@@ -7,8 +7,6 @@ import android.os.Bundle;
 
 import androidx.fragment.app.DialogFragment;
 
-import com.example.the_tarlords.R;
-
 public class ShareLocation extends DialogFragment {
 
     private String eventId;
@@ -29,11 +27,13 @@ public class ShareLocation extends DialogFragment {
                         // calling location helper
                         LocationHelper locationHelper = new LocationHelper(getActivity());
                         locationHelper.getMyLocation(eventId);
+                        getActivity().finish();
                     }
                 })
                 .setNegativeButton("NO", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // User cancels the dialog. Nothing happens
+                        getActivity().finish();
                     }
                 });
         // Create the AlertDialog object and return it.

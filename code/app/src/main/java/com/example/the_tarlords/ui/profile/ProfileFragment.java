@@ -115,7 +115,7 @@ public class ProfileFragment extends Fragment implements MenuProvider {
                     } else if (item.getItemId() == R.id.remove_current_photo) {
                         //remove current photo:
                         user.getProfilePhoto().autoGenerate();
-                        user.getProfilePhoto().setDefault(true);
+                        user.setPhotoIsDefault(true);
                         return true;
                     } else {
                         return false;
@@ -142,28 +142,30 @@ public class ProfileFragment extends Fragment implements MenuProvider {
      */
     @Override
     public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
-        menu.clear();
-        menuInflater.inflate(R.menu.options_menu, menu);
+        if (isAdded() && getContext() != null) {
+            menu.clear();
+            menuInflater.inflate(R.menu.options_menu, menu);
 
-        if (!checkValidInput(this.getView())) {
-            Toast toast = Toast.makeText(getContext(), "Complete profile information to continue.", Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.TOP, 0, 0);
-            toast.show();
+            if (!checkValidInput(this.getView())) {
+                Toast toast = Toast.makeText(getContext(), "Complete profile information to continue.", Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.TOP, 0, 0);
+                toast.show();
 
-            menu.findItem(R.id.editOptionsMenu).setVisible(false);
-            menu.findItem(R.id.saveOptionsMenu).setVisible(true);
-            menu.findItem(R.id.cancelOptionsMenu).setVisible(true);
+                menu.findItem(R.id.editOptionsMenu).setVisible(false);
+                menu.findItem(R.id.saveOptionsMenu).setVisible(true);
+                menu.findItem(R.id.cancelOptionsMenu).setVisible(true);
 
-            profilePhotoImageView.setVisibility(View.INVISIBLE);
-            addProfilePhotoButton.setVisibility(View.VISIBLE);
-            firstNameEditText.setEnabled(true);
-            lastNameEditText.setEnabled(true);
-            phoneEditText.setEnabled(true);
-            emailEditText.setEnabled(true);
-        } else {
-            menu.findItem(R.id.editOptionsMenu).setVisible(true);
-            menu.findItem(R.id.saveOptionsMenu).setVisible(false);
-            menu.findItem(R.id.cancelOptionsMenu).setVisible(false);
+                profilePhotoImageView.setVisibility(View.INVISIBLE);
+                addProfilePhotoButton.setVisibility(View.VISIBLE);
+                firstNameEditText.setEnabled(true);
+                lastNameEditText.setEnabled(true);
+                phoneEditText.setEnabled(true);
+                emailEditText.setEnabled(true);
+            } else {
+                menu.findItem(R.id.editOptionsMenu).setVisible(true);
+                menu.findItem(R.id.saveOptionsMenu).setVisible(false);
+                menu.findItem(R.id.cancelOptionsMenu).setVisible(false);
+            }
         }
     }
 
@@ -327,6 +329,7 @@ public class ProfileFragment extends Fragment implements MenuProvider {
                     null, user.getFirstName(), user.getLastName());
             profilePhoto.autoGenerate();
             user.setProfilePhoto(profilePhoto);
+            user.setPhotoIsDefault(true);
             profilePhotoImageView.setImageBitmap(profilePhoto.getBitmap());
         }
     }
