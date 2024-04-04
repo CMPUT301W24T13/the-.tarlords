@@ -6,43 +6,46 @@
     android:name="com.example.the_tarlords.ui.attendance.AttendanceFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="2dp"
-    android:layout_marginTop="2dp"
-    android:layout_marginRight="2dp"
     app:layoutManager="LinearLayoutManager"
     tools:context=".ui.attendance_page.AttendanceFragment"
     tools:listitem="@layout/fragment_attendance_list_item">
 
     <TextView
-        android:id="@+id/tv_attendance_page_title"
+        android:id="@+id/tv_attendance_page_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
         android:layout_marginEnd="25dp"
         android:layout_marginTop="15dp"
+        android:layout_marginBottom="5dp"
 
         android:text="Attendees"
         android:fontFamily="@font/helvetica_bold"
         android:textSize="30sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/ll_attendance_header"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/milestone_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAlignment="center"
-
-        android:text="Milestones" />
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:text="Milestones"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_attendance_page_header" />
 
     <ListView
         android:id="@+id/milestone_list_view"
         android:layout_width="match_parent"
-        android:layout_weight="1"
-        tools:listitem="@layout/content_alerts"
-
-        android:layout_height="0dp" />
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/milestone_text_view"
+        tools:listitem="@layout/content_milestone" />
 
     <LinearLayout
         android:id="@+id/ll_attendance_header"
@@ -50,7 +53,8 @@
         android:layout_height="wrap_content"
 
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_attendance_page_title">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/milestone_list_view">
 
         <TextView
             android:id="@+id/tv_sign_ups"
@@ -120,10 +124,14 @@
         android:id="@+id/attendanceListView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/ll_attendance_header"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ll_attendance_header"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:listitem="@layout/fragment_attendance_list_item" />
 

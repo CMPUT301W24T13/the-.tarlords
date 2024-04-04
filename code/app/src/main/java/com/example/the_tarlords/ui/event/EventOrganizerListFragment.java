@@ -1,5 +1,6 @@
 package com.example.the_tarlords.ui.event;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,11 +21,13 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
+import com.example.the_tarlords.data.QR.QRScanActivity;
 import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.event.EventListCallback;
 import com.example.the_tarlords.data.event.EventListDBHelper;
 import com.example.the_tarlords.databinding.FragmentEventListBinding;
 import com.example.the_tarlords.ui.home.EventArrayAdapter;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -96,6 +99,20 @@ public class EventOrganizerListFragment extends Fragment implements MenuProvider
                 navigateToDetails(events.get(position));
             }
         });
+
+        //QR code scanner button set up
+        FloatingActionButton scanQrButton = view.findViewById(R.id.scan_qr_button);
+        scanQrButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //passes in user info in case of check-in QR scan
+                Intent intent = new Intent(MainActivity.context, QRScanActivity.class);
+                intent.putExtra("userId", MainActivity.user.getUserId());
+
+                startActivity(intent);
+            }
+        });
+
     }
 
     public void navigateToDetails(Event event){

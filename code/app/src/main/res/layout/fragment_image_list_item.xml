@@ -23,7 +23,7 @@
             android:id="@+id/iv_image_browse_item"
             android:layout_height="match_parent"
             android:layout_width="match_parent"
-            android:src="@drawable/life_lol"
+            android:src="@drawable/ic_menu_gallery"
             android:foreground="@drawable/image_browse_gradient"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"

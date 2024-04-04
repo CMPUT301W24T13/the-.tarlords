@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
         android:layout_marginTop="15dp"
 
         android:text="@string/event_list_header"
@@ -21,8 +22,20 @@
 
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/eventListView"/>
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_event_list_subheader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="15dp"
+        android:text="@string/poster_browse_subtitle"
+        android:fontFamily="@font/helvetica"
+        android:textSize="18sp"
+        android:textColor="@color/bordeaux_medium"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_event_list_header"/>
 
     <ListView
         android:id="@+id/eventListView"
@@ -37,7 +50,7 @@
         tools:listitem="@layout/fragment_event_list_item"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_event_list_header" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_event_list_subheader" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/scan_qr_button"
