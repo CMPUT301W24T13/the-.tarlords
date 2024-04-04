@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="CustomFragmentStyle">
+        <item name="android:layout_marginTop">80dp</item>
+    </style>
+</resources>

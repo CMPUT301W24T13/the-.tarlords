@@ -4,7 +4,7 @@
         <!-- Primary brand color. -->
         <item name="colorPrimary">#cc4e5c</item>
         <item name="colorPrimaryVariant">#cc4e5c</item>
-        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorOnPrimary">@color/black</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
         <item name="colorSecondaryVariant">@color/teal_700</item>
@@ -23,3 +23,5 @@
 
     <style name="Theme.Thetarlords.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
+
+<!--nice color #ecd5dc-->

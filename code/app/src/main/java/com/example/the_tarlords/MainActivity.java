@@ -299,12 +299,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private void setDeviceFCMToken(){
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task ->{
-           if(task.isSuccessful()){
-               String token = task.getResult();
-               Log.d("FCM token",token);
-               user.setFCM(token);
-               db.collection("Users").document(user.getUserId()).update("FCM",token);
-           }
+            if(task.isSuccessful()){
+                String token = task.getResult();
+                Log.d("FCM token",token);
+                user.setFCM(token);
+                db.collection("Users").document(user.getUserId()).update("FCM",token);
+            }
         });
     }
 

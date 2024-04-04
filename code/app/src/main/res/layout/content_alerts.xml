@@ -1,32 +1,104 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
     android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/title_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:text="Header"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+    <androidx.cardview.widget.CardView
+        android:layout_width="400dp"
+        android:layout_height="162dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="1dp"
+        app:cardBackgroundColor="@color/list_item_background"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="10dp"
+        app:contentPadding="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/message_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:textSize="20sp"
-        android:text="Content" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/ldt_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:text="ldt"
-        android:textSize="14sp" />
+            <TextView
+                android:id="@+id/title_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/helvetica_bold"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="Header"
+                android:textColor="#481222"
+                android:textSize="25sp"
+                android:textStyle="bold" />
 
-</LinearLayout>
+            <TextView
+                android:id="@+id/message_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/helvetica"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="Content"
+                android:textColor="#481222"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/ldt_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/helvetica"
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="ldt"
+                android:textColor="#481222"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+<!--old one-->
+
+<!--    <?xml version="1.0" encoding="utf-8"?>-->
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--android:layout_width="match_parent"-->
+<!--android:orientation="vertical"-->
+<!--android:layout_height="match_parent">-->
+
+<!--<TextView-->
+<!--    android:id="@+id/title_text"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="wrap_content"-->
+<!--    android:padding="8dp"-->
+<!--    android:text="Header"-->
+<!--    android:textSize="20sp"-->
+<!--    android:textStyle="bold" />-->
+
+<!--<TextView-->
+<!--    android:id="@+id/message_text"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="wrap_content"-->
+<!--    android:padding="8dp"-->
+<!--    android:textSize="20sp"-->
+<!--    android:text="Content" />-->
+
+<!--<TextView-->
+<!--    android:id="@+id/ldt_text"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="wrap_content"-->
+<!--    android:padding="8dp"-->
+<!--    android:text="ldt"-->
+<!--    android:textSize="14sp" />-->
+
+<!--</LinearLayout>-->
