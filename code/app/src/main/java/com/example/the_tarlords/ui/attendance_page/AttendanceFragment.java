@@ -54,8 +54,6 @@ public class AttendanceFragment extends Fragment implements MenuProvider {
     private AlertListAdapter milestoneListAdapter;
     private static AttendanceArrayAdapter attendanceArrayAdapter;
 
-    private static AttendanceArrayAdapter adapter;
-
     private CollectionReference attendanceRef;
     private CollectionReference usersRef = MainActivity.db.collection("Users");
     TextView totalCount;
@@ -134,9 +132,9 @@ public class AttendanceFragment extends Fragment implements MenuProvider {
             public void onAttendanceLoaded(ArrayList<Attendee> attendanceList) {
                 attendees.clear();
                 attendees.addAll(attendanceList);
-                adapter.notifyDataSetChanged();
-                totalCount.setText("Total: " + adapter.getItemCount());
-                checkInCount.setText("Checked In: " + adapter.getCheckInCount());
+                attendanceArrayAdapter.notifyDataSetChanged();
+                totalCount.setText("Total: " + attendanceArrayAdapter.getItemCount());
+                checkInCount.setText("Checked In: " + attendanceArrayAdapter.getCheckInCount());
             }
         });
 
@@ -164,6 +162,6 @@ public class AttendanceFragment extends Fragment implements MenuProvider {
         return false;
     }
     public static void notifyComplete(){
-        adapter.notifyDataSetChanged();
+        attendanceArrayAdapter.notifyDataSetChanged();
     }
 }
