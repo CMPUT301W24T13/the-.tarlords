@@ -214,7 +214,6 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
             menu.findItem(R.id.editOptionsMenu).setVisible(true);
             menu.findItem(R.id.attendanceOptionsMenu).setVisible(true);
             menu.findItem(R.id.deleteOptionsMenu).setVisible(true);
-            menu.findItem(R.id.mapOptionsMenu).setVisible(true);
         }
         //if user came from browse fragment display sign up button
         if (browse) {
@@ -296,18 +295,6 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
                 // Fragment is not attached to an activity, handle the situation accordingly
                 Log.d("admin", "fragment not attached to activity");
             }
-        }
-        //Navigate to Maps Fragment
-        else if(menuItem.getItemId()==R.id.mapOptionsMenu) {
-            Bundle args = new Bundle();
-            args.putParcelable("event",event);
-            try {
-                NavHostFragment.findNavController(EventDetailsFragment.this)
-                        .navigate(R.id.action_eventDetailsFragment_to_MapsFragment, args);
-            }catch(Exception e)
-                {
-                    Log.e("maps", Log.getStackTraceString(e));
-                }
         } else if (menuItem.getItemId()==R.id.signUpOptionsMenu) {
 
             AttendanceDBHelper.signUp(event, MainActivity.user, new AttendanceQueryCallback() {

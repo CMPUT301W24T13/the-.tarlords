@@ -51,14 +51,6 @@
         android:visible="false"
         app:showAsAction="always" />
     <item
-        android:id="@+id/mapOptionsMenu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:icon="@drawable/map"
-        android:title="Map"
-        android:visible="false"
-        app:showAsAction="always" />
-    <item
         android:id="@+id/deleteOptionsMenu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
