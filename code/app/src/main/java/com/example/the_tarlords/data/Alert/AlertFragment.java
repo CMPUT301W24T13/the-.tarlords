@@ -28,6 +28,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -187,7 +188,6 @@ public class AlertFragment extends Fragment implements AddAlertDialogListener,Me
      */
     @Override
     public void deleteAlert(Alert alert) {
-        //TODO update from firebase
 
         DocumentReference alertRef = MainActivity.db.collection("Events/"+event.getId()+"/alerts").document(alert.getId());
         alertRef.delete().addOnCompleteListener(new OnCompleteListener<Void>() {

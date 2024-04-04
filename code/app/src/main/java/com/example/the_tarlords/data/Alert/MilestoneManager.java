@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.data.event.Event;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -34,48 +35,56 @@ public class MilestoneManager {
     private int maxCount;
     private static Event event;
 
-    public MilestoneManager(Event event,int currentCount){
+    public MilestoneManager(Event event){
         this.event = event;
         this.maxCount = event.getMaxSignUps();
-        this.currentCount = currentCount;
+        this.currentCount = event.getCheckIns();
 
     }
     public void updateMilestone() {
+        sendMilestoneNotification();
+
         if(currentCount == 1){
-            setMilestone(new Milestone("First milestone","First attendee checked in",currentCount));
+            setMilestone(new Milestone("First milestone","First attendee checked in",String.valueOf(currentCount)));
             sendMilestoneNotification();
 
         } else if (currentCount == maxCount / 2) {
-            setMilestone(new Milestone("Half capacity milestone","Half of the attendees,"+String.valueOf(currentCount)+"/"+String.valueOf(maxCount)+", are checked in",currentCount));
+            setMilestone(new Milestone("Half capacity milestone","Half of the attendees,"+String.valueOf(currentCount)+"/"+String.valueOf(maxCount)+", are checked in",String.valueOf(currentCount)));
+            sendMilestoneNotification();
+
+        }else if(currentCount >0 && currentCount % 5 == 0){
+            setMilestone(new Milestone("Checkpoint Milestone",String.valueOf(currentCount)+" attendees now are checked in",String.valueOf(currentCount)));
+            sendMilestoneNotification();
+
+        }else if(currentCount == maxCount){
+            setMilestone(new Milestone("Full capacity milestone","All attendees "+ String.valueOf(currentCount)+", now are checked in",String.valueOf(currentCount)));
+            sendMilestoneNotification();
+
         }
+
 
     }
 
     void sendMilestoneNotification(){
-        MainActivity.db.collection("Events/").document(event.getId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+
+        MainActivity.db.collection("Users").document(event.getOrganizerId()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if(task.isSuccessful()){
-                    String organizerId = task.getResult().getString("organizerId");
-                    MainActivity.db.collection("Users/").document(organizerId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> t) {
-                            if(t.isSuccessful()){
-                                String fcmToken = t.getResult().getString("FCM");
-                                if(fcmToken != null){
-                                    try {
-                                        JSONObject jsonObject = getJsonObject(fcmToken,"New milestone");
-                                        callApi(jsonObject);
-                                    } catch (JSONException e) {
-                                        throw new RuntimeException(e);
-                                    }
-                                }
-                            }
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if(documentSnapshot.exists()){
+                    String fcmToken = documentSnapshot.getString("FCM");
+                    if(fcmToken != null){
+                        Log.d("fcm Token organizer ",fcmToken);
+                        try {
+                            JSONObject jsonObject = getJsonObject(fcmToken,"New Milestone");
+                            callApi(jsonObject);
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
                         }
-                    });
+                    }
                 }
             }
         });
+
     }
     public void setMilestone(Milestone milestone){
         CollectionReference milestoneRef = MainActivity.db.collection("Events/"+event.getId()+"/milestones");
