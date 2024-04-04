@@ -2,6 +2,7 @@ package com.example.the_tarlords.ui.profile;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -41,7 +43,9 @@ public class ProfileViewFragment extends Fragment implements MenuProvider{
     EditText lastNameEditText;
     EditText phoneEditText;
     EditText emailEditText;
+    private FragmentProfileViewBinding binding;
     private FragmentProfileBinding binding;
+
 
     public ProfileViewFragment() {
         // Required empty public constructor
@@ -74,6 +78,7 @@ public class ProfileViewFragment extends Fragment implements MenuProvider{
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }

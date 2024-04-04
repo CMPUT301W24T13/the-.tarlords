@@ -20,9 +20,15 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.event.Event;
+
+import com.example.the_tarlords.databinding.FragmentEventListBinding;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+
 import com.example.the_tarlords.data.event.EventListCallback;
 import com.example.the_tarlords.data.event.EventListDBHelper;
 import com.example.the_tarlords.databinding.FragmentEventListBinding;
+
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
