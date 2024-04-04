@@ -36,7 +36,6 @@ import java.util.ArrayList;
  */
 public class EventListFragment extends Fragment implements MenuProvider {
 
-    private int mColumnCount = 1;
     private FragmentEventListBinding binding;
     private CollectionReference eventsRef = MainActivity.db.collection("Events");
     private ListView eventListView;
