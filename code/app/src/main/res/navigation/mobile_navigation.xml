@@ -27,6 +27,7 @@
             app:destination="@id/profileBrowseFragment" />
         <action
             android:id="@+id/action_profileFragment_to_imageBrowseFragment"
+
             app:destination="@id/imageBrowseFragment"
             app:popUpTo="@id/imageBrowseFragment"/>
     </fragment>
@@ -57,6 +58,7 @@
             app:popUpTo="@id/eventBrowseFragment" />
         <action
             android:id="@+id/eventListBrowseFragment_to_imageBrowseFragment"
+
             app:destination="@id/imageBrowseFragment"
             app:popUpTo="@id/imageBrowseFragment"/>
     </fragment>
@@ -103,6 +105,9 @@
             app:launchSingleTop="true"
             app:popUpTo="@id/eventEditFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_eventEditFragment_to_MapsFragment"
+            app:destination="@id/mapsFragment" />
     </fragment>
         <fragment
             android:id="@+id/eventOrganizerListFragment"
@@ -131,6 +136,7 @@
                 app:destination="@id/eventDetailsFragment" />
             <action
                 android:id="@+id/action_eventOrganizerListFragment_to_imageBrowseFragment"
+
                 app:destination="@id/imageBrowseFragment"
                 app:popUpTo="@id/imageBrowseFragment"/>
         </fragment>
@@ -166,6 +172,7 @@
             app:destination="@id/eventDetailsFragment" />
         <action
             android:id="@+id/action_eventBrowseFragment_to_imageBrowseFragment"
+
             app:destination="@id/imageBrowseFragment"
             app:popUpTo="@id/imageBrowseFragment"/>
     </fragment>
@@ -204,6 +211,7 @@
             app:destination="@id/profileViewFragment"/>
         <action
             android:id="@+id/action_profileBrowseFragment_to_imageBrowseFragment"
+
             app:destination="@id/imageBrowseFragment"
             app:popUpTo="@id/imageBrowseFragment"/>
     </fragment>
@@ -218,6 +226,7 @@
     </fragment>
     <fragment
         android:id="@+id/imageBrowseFragment"
+
         android:name="com.example.the_tarlords.ui.image.ImageBrowseFragment"
         android:label="ImageBrowseFragment">
         <action
@@ -227,6 +236,7 @@
         <action
             android:id="@+id/action_imageBrowseFragment_to_eventOrganizerListFragment"
             app:destination="@id/eventOrganizerListFragment"
+
             app:popUpTo="@id/eventOrganizerListFragment" />
         <action
             android:id="@+id/action_imageBrowseFragment_to_profileFragment"

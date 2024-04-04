@@ -108,6 +108,7 @@ dependencies {
 
     implementation("com.google.firebase:firebase-messaging:23.4.1")
     implementation("com.google.firebase:firebase-database:20.3.1")
+    implementation("androidx.databinding:databinding-runtime:8.3.1")
     testImplementation("junit:junit:4.13.2")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.3.2")
@@ -125,6 +126,12 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     implementation("de.hdodenhof:circleimageview:3.1.0")
+
+    implementation("androidx.viewpager2:viewpager2:1.0.0")
+    implementation("com.makeramen:roundedimageview:2.3.0")
+
+    implementation("com.github.bumptech.glide:glide:4.12.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
 
 
 }

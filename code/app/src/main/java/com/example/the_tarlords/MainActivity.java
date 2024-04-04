@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             if (user.getIsAdmin() != null){
                                 isAdmin = user.getIsAdmin();
                             }
-
+                            setDeviceFCMToken();
 
                             //sets content binding now that userId is no longer null (must stay above updateNavigationDrawerHeader()
                             setBinding();
@@ -313,11 +313,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private void setDeviceFCMToken(){
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task ->{
-           if(task.isSuccessful()){
-               String token = task.getResult();
-               Log.d("FCM token",token);
-               user.setfCMToken(token);
-           }
+            if(task.isSuccessful()){
+                String token = task.getResult();
+                Log.d("FCM token",token);
+                user.setFCM(token);
+                db.collection("Users").document(user.getUserId()).update("FCM",token);
+            }
         });
     }
 

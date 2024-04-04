@@ -1,5 +1,6 @@
 package com.example.the_tarlords.ui.image;
 
+
 import static android.content.ContentValues.TAG;
 
 import android.app.AlertDialog;
@@ -13,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
@@ -41,6 +43,7 @@ public class ImageBrowseFragment extends Fragment implements MenuProvider {
     // the fragment initialization parameters
 
     // if photo class deals with all images then type could change from String to Image
+
     private CollectionReference eventsRef = MainActivity.db.collection("Events");
     private CollectionReference usersRef = MainActivity.db.collection("Users");
     private ArrayList<Photo> images = new ArrayList<>();
@@ -86,6 +89,7 @@ public class ImageBrowseFragment extends Fragment implements MenuProvider {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
                 Photo image = images.get(position); // use this to delete the image
                 // should we inflate to a dialog fragment to display image?
                 AlertDialog dialog = new AlertDialog.Builder(requireContext())
@@ -109,6 +113,7 @@ public class ImageBrowseFragment extends Fragment implements MenuProvider {
         fetchImagesFromFirebase();
         return view;
     }
+
 
     /**
      * Fetches the posterData and profilePhotoData which are
