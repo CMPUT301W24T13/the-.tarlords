@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public static User user;
 
-    public static Boolean isAdmin = true;
+    public static Boolean isAdmin = false;
 
     private static String userId;
     private static View hView;
@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
          * Next line can be used for testing and debugging (eg testing admin). Uncomment
          * and set user value to your choice of ID. PLEASE COMMENT IT OUT AFTER TESTING
          */
-        userId = "1";
+        //userId = "1";
 
         if (userId == null) {
             // user has not used app before
