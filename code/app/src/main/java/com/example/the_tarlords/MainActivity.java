@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             if (user.getIsAdmin() != null){
                                 isAdmin = user.getIsAdmin();
                             }
-
+                            setDeviceFCMToken();
 
                             //sets content binding now that userId is no longer null (must stay above updateNavigationDrawerHeader()
                             setBinding();
@@ -184,8 +184,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .build();
 
         //QR code scanner button set up
-        /*
-        binding.appBarMain.scanQrButton.setOnClickListener(new View.OnClickListener() {
+        /*binding.appBarMain.scanQrButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //passes in user info in case of check-in QR scan
@@ -194,8 +193,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 startActivity(intent);
             }
-        });
-         */
+        });*/
 
         //navigation set up (must go below appBar config)
         NavigationView navigationView = binding.navView;
@@ -265,9 +263,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             TextView email = hView.findViewById(R.id.email);
             ImageView profilePic = hView.findViewById(R.id.profilePic);
 
-            String fullName = user.getFirstName() + " " + user.getLastName();
-            name.setText(fullName);
-            //name.setText(user.getFirstName() + " " + user.getLastName());
+            name.setText(user.getFirstName() + " " + user.getLastName());
             phoneNum.setText(user.getPhoneNum());
             email.setText(user.getEmail());
             if (user != null && user.getProfilePhoto() != null && user.getProfilePhoto().getBitmap() != null) {
@@ -306,7 +302,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
            if(task.isSuccessful()){
                String token = task.getResult();
                Log.d("FCM token",token);
-               user.setfCMToken(token);
+               user.setFCM(token);
+               db.collection("Users").document(user.getUserId()).update("FCM",token);
            }
         });
     }

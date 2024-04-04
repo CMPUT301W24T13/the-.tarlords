@@ -29,7 +29,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.QR.QRCode;
-import com.example.the_tarlords.data.attendance.Attendance;
+import com.example.the_tarlords.data.attendance.AttendanceDBHelper;
 import com.example.the_tarlords.data.attendance.AttendanceQueryCallback;
 import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.photo.EventPoster;
@@ -282,14 +282,14 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
                     Log.e("maps", Log.getStackTraceString(e));
                 }
         } else if (menuItem.getItemId()==R.id.signUpOptionsMenu) {
-            Attendance.signUp(event, MainActivity.user, new AttendanceQueryCallback() {
+            AttendanceDBHelper.signUp(event, MainActivity.user, new AttendanceQueryCallback() {
                 @Override
                 public void onQueryComplete(int result) {
-                    if (result==Attendance.SUCCESSFUL){
+                    if (result== AttendanceDBHelper.SUCCESSFUL){
                         Toast.makeText(context, "Sign up successful!", Toast.LENGTH_SHORT).show();
-                    } else if (result == Attendance.ALREADY_SIGNED_UP) {
+                    } else if (result == AttendanceDBHelper.ALREADY_SIGNED_UP) {
                         Toast.makeText(context, "Already signed up!", Toast.LENGTH_SHORT).show();
-                    } else if (result==Attendance.EVENT_FULL) {
+                    } else if (result== AttendanceDBHelper.EVENT_FULL) {
                         Toast.makeText(context, "Unable to sign up. Max capacity reached.", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(context, "Error. Sign up failed.", Toast.LENGTH_SHORT).show();

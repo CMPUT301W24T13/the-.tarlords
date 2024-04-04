@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/linearLayout"
     android:layout_width="match_parent"
-    android:layout_height="150dp">
+    android:layout_height="300dp">
 
 
     <androidx.cardview.widget.CardView
@@ -18,7 +18,6 @@
         app:cardBackgroundColor="@color/cold_grey_light"
         app:cardCornerRadius="15dp"
         app:cardElevation="10dp"
-        app:contentPadding="15dp"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -30,15 +29,16 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/iv_event_icon"
-                android:layout_width="85dp"
-                android:layout_height="85dp"
+                android:id="@+id/iv_event_poster_list"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
                 android:src="@drawable/ic_menu_gallery"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
 
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/tv_event_title"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tv_event_title"
@@ -53,8 +53,8 @@
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:textSize="22sp"
 
-                app:layout_constraintStart_toEndOf="@+id/iv_event_icon"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/iv_event_poster_list"
                 app:layout_constraintBottom_toTopOf="@id/tv_location"/>
 
             <TextView
@@ -62,7 +62,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
-                android:layout_marginTop="15dp"
                 android:layout_marginBottom="15dp"
 
                 android:text="@string/location"
@@ -70,16 +69,14 @@
                 android:textColor="@color/bordeaux_medium"
                 android:textSize="18sp"
 
-                app:layout_constraintStart_toEndOf="@+id/iv_event_icon"
-                app:layout_constraintTop_toBottomOf="@+id/tv_event_title"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_event_title" />
 
             <TextView
                 android:id="@+id/tv_start_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="15dp"
-                android:layout_marginTop="15dp"
                 android:layout_marginBottom="15dp"
 
                 android:text="@string/start_date"

@@ -1,6 +1,5 @@
 package com.example.the_tarlords.ui.home;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,15 +19,13 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
-import com.example.the_tarlords.data.QR.QRScanActivity;
 import com.example.the_tarlords.data.event.Event;
+import com.example.the_tarlords.data.event.EventListCallback;
+import com.example.the_tarlords.data.event.EventListDBHelper;
 import com.example.the_tarlords.databinding.FragmentEventListBinding;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -39,11 +36,11 @@ import java.util.ArrayList;
  */
 public class EventListFragment extends Fragment implements MenuProvider {
 
-    private static final String ARG_COLUMN_COUNT = "column-count";
-    private int mColumnCount = 1;
     private FragmentEventListBinding binding;
     private CollectionReference eventsRef = MainActivity.db.collection("Events");
-    ArrayList<Event> events = new ArrayList<>();
+    private ListView eventListView;
+    protected EventArrayAdapter adapter;
+    protected ArrayList<Event> events;
 
 
     /**
@@ -61,7 +58,6 @@ public class EventListFragment extends Fragment implements MenuProvider {
         if (getArguments() != null) {
             //parse any args here
         }
-
     }
 
     @Override
@@ -69,19 +65,6 @@ public class EventListFragment extends Fragment implements MenuProvider {
                              Bundle savedInstanceState) {
         binding = FragmentEventListBinding.inflate(inflater, container, false);
         return binding.getRoot();
-
-        /* //yeah i didn't know what was up here
-        //scanQrButton is clearly passed to main via some other parcel or something idk how to get it here
-        binding.eventListView.scanQrButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //passes in user info in case of check-in QR scan
-                Intent intent = new Intent(MainActivity.this, QRScanActivity.class);
-                intent.putExtra("userId", user.getUserId());
-
-                startActivity(intent);
-            }
-        }); */
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
@@ -89,82 +72,52 @@ public class EventListFragment extends Fragment implements MenuProvider {
 
         //MANDATORY: this enables the options menu
         requireActivity().addMenuProvider(this);
-
-        ListView eventListView = view.findViewById(R.id.eventListView);
-        EventArrayAdapter adapter = new EventArrayAdapter(getContext(),events);
+        events = new ArrayList<>();
+        eventListView = view.findViewById(R.id.eventListView);
+        adapter = new EventArrayAdapter(getContext(),events);
         eventListView.setAdapter(adapter);
 
-        if (MainActivity.user != null) {
-            String userId = MainActivity.user.getUserId();
-            // Use userId...
-
-            // This updates the displayed list on an event
-            eventsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
-                @Override
-                public void onEvent(@Nullable QuerySnapshot querySnapshots,
-                                    @Nullable FirebaseFirestoreException error) {
-                    if (error != null) {
-                        Log.e("Firestore", error.toString());
-                        return;
-                    }
-                    if (querySnapshots != null) {
-                        events.clear();
-                        //This queries firestore for a list of events the user is attending
-                        eventsRef
-                                .get()
-                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                        if (task.isSuccessful()) {
-                                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                                MainActivity.db.collection("Events/"+document.getId()+"/Attendance")
-                                                        .whereEqualTo("user", userId).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                                            @Override
-                                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                                                if (task.isSuccessful()) {
-                                                                    for (QueryDocumentSnapshot doc : task.getResult()) {
-                                                                        events.add(document.toObject(Event.class));
-                                                                        adapter.notifyDataSetChanged();
-                                                                    }
-                                                                    Log.d("query events", document.getId() + " => " + document.getData());
-                                                                }
-                                                                else {
-                                                                    Log.d("query events", "Error getting documents: ", task.getException());
-                                                                }
-                                                            }
-                                                        });
-                                            }
-                                        } else {
-                                            Log.d("query events", "Error getting documents: ", task.getException());
-                                        }
-                                    }
-                                });
-                    }
+        // This updates the displayed list on an event
+        eventsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot querySnapshots,
+                                @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    Log.e("Firestore", error.toString());
+                    return;
                 }
-            });
-        } else {
-            Log.e("debug", "User object is null in EventListFragment");
-            // Handle the case where the User object is null
-        }
+                if (querySnapshots != null) {
+                    refreshList();
+                }
+            }
+        });
+
         //listens for user to click on an event, could maybe be its own method outside onCreate?
         eventListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Event event = events.get(position);
-                Bundle args = new Bundle();
-                args.putParcelable("event",event);
-                args.putBoolean("isOrganizer", false);
-                NavHostFragment.findNavController(EventListFragment.this)
-                        .navigate(R.id.action_eventFragment_to_eventDetailsFragment,args);
+                navigateToDetails(events.get(position));
             }
         });
     }
 
-    //possibly unnecessary
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
+    public void refreshList(){
+        EventListDBHelper.getEventsAttendingList(MainActivity.user, new EventListCallback() {
+            @Override
+            public void onEventListLoaded(ArrayList<Event> eventList) {
+                events.clear();
+                events.addAll(eventList);
+                adapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    public void navigateToDetails(Event event){
+        Bundle args = new Bundle();
+        args.putParcelable("event",event);
+        args.putBoolean("isOrganizer", false);
+        NavHostFragment.findNavController(EventListFragment.this)
+                .navigate(R.id.action_eventFragment_to_eventDetailsFragment,args);
     }
 
 
@@ -178,7 +131,6 @@ public class EventListFragment extends Fragment implements MenuProvider {
     public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
         menu.clear();
     }
-
 
     /**
      * Mandatory MenuProvider interface method.

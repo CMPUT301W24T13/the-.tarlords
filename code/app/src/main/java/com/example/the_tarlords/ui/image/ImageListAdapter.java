@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.the_tarlords.R;
@@ -48,7 +47,7 @@ public class ImageListAdapter extends ArrayAdapter<Photo> {
 
         Photo image = imageList.get(position);
         // setting the textviews to the first 5 characters of the posterData
-        //holder.imageViewTV.setText(image.getImageData().subSequence(0,5).toString());
+        holder.imageViewTV.setText(image.getImageData().subSequence(0,5).toString());
         //holder.collectionTV.setText(image.getCollection());
         //holder.nameTV.setText(image.getName());
 
@@ -58,7 +57,7 @@ public class ImageListAdapter extends ArrayAdapter<Photo> {
      * Add the text views you want to display here
      */
     static class ViewHolder {
-        ImageView imageViewTV;
+        TextView imageViewTV;
         TextView collectionTV;
         TextView nameTV;
     }
