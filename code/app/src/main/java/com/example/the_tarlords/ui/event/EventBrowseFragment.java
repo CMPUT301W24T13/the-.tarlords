@@ -87,6 +87,7 @@ public class EventBrowseFragment extends Fragment implements MenuProvider {
         eventListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
                 navigateToDetails(events.get(position));
             }
         });
@@ -98,6 +99,7 @@ public class EventBrowseFragment extends Fragment implements MenuProvider {
                 events.clear();
                 events.addAll(eventList);
                 adapter.notifyDataSetChanged();
+
             }
         });
     }
