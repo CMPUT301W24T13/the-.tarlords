@@ -36,6 +36,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
+
     private AppBarConfiguration mAppBarConfiguration;
     public static FirebaseFirestore db = FirebaseFirestore.getInstance();
     // Create a reference to the users collection
@@ -76,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
          * Next line can be used for testing and debugging (eg testing admin). Uncomment
          * and set user value to your choice of ID. PLEASE COMMENT IT OUT AFTER TESTING
          */
-        userId = "1";
+        //userId = "whatever you want";
 
         if (userId == null) {
             // user has not used app before
@@ -298,12 +299,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private void setDeviceFCMToken(){
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task ->{
-           if(task.isSuccessful()){
-               String token = task.getResult();
-               Log.d("FCM token",token);
-               user.setFCM(token);
-               db.collection("Users").document(user.getUserId()).update("FCM",token);
-           }
+            if(task.isSuccessful()){
+                String token = task.getResult();
+                Log.d("FCM token",token);
+                user.setFCM(token);
+                db.collection("Users").document(user.getUserId()).update("FCM",token);
+            }
         });
     }
 
