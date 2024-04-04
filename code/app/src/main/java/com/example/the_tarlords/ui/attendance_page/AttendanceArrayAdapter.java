@@ -50,7 +50,9 @@ public class AttendanceArrayAdapter extends ArrayAdapter<Attendee> {
         holder.lastName.setText(attendee.getLastName());
         holder.email.setText(attendee.getEmail());
         holder.phoneNum.setText(attendee.getPhoneNum());
-        holder.profilePic.setImageBitmap(attendee.getProfilePhoto().getBitmap());
+        if (attendee.getProfilePhoto()!=null) {
+            holder.profilePic.setImageBitmap(attendee.getProfilePhoto().getBitmap());
+        }
 
         return view;
     }

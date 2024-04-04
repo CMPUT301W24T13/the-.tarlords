@@ -49,6 +49,7 @@ public class Event implements Parcelable {
     private EventPoster poster;
     private String posterData;
     private Boolean posterIsDefault;
+    private String additionalInfo;
     Integer maxSignUps;
     public Integer signUps;
     public Integer checkIns;
@@ -428,6 +429,14 @@ public class Event implements Parcelable {
 
     public void setPosterIsDefault(Boolean posterIsDefault) {
         this.posterIsDefault = posterIsDefault;
+    }
+
+    public void setAdditionalInfo(String additionalInfo) {
+        this.additionalInfo = additionalInfo;
+    }
+
+    public String getAdditionalInfo() {
+        return additionalInfo;
     }
 }
 

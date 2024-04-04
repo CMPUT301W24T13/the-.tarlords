@@ -23,6 +23,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.the_tarlords.data.event.Event;
+import com.example.the_tarlords.data.map.LocationHelper;
 import com.example.the_tarlords.data.users.User;
 import com.example.the_tarlords.databinding.ActivityMainBinding;
 import com.google.android.gms.maps.GoogleMap;
@@ -45,6 +46,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public static User user;
 
     public static Boolean isAdmin = false;
+    private LocationHelper locationHelper;
+    public static Boolean locationGranted;
 
     private static String userId;
     private static View hView;
@@ -157,6 +160,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
 
+        }
+        //request location permissions
+        locationHelper = new LocationHelper(this);
+        if(!locationHelper.checkLocationPermission()){
+            locationHelper.requestLocationPermission();
+        }else{
+            locationGranted = true;
         }
 
     }
@@ -303,6 +313,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
 
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        // Delegate handling to LocationHelper
+        locationHelper.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        // Update locationGranted based on permission result
+        locationGranted = locationHelper.checkLocationPermission();
     }
 
 

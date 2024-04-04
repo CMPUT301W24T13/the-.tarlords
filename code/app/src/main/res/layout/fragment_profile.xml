@@ -39,7 +39,7 @@
         android:id="@+id/edit_text_first_name"
         android:layout_width="140dp"
         android:layout_height="45dp"
-        android:background="@drawable/rounded_corner"
+        android:background="@drawable/rounded_corner_profile_page"
         android:layout_marginTop="50dp"
         android:clickable="false"
         android:enabled="false"
@@ -63,7 +63,7 @@
         android:id="@+id/edit_text_last_name"
         android:layout_width="140dp"
         android:layout_height="45dp"
-        android:background="@drawable/rounded_corner"
+        android:background="@drawable/rounded_corner_profile_page"
         android:clickable="false"
         android:enabled="false"
 
@@ -85,7 +85,7 @@
         android:id="@+id/edit_text_phone"
         android:layout_width="290dp"
         android:layout_height="45dp"
-        android:background="@drawable/rounded_corner"
+        android:background="@drawable/rounded_corner_profile_page"
         android:clickable="false"
         android:enabled="false"
 
@@ -107,7 +107,7 @@
         android:layout_width="290dp"
         android:layout_height="45dp"
         android:layout_marginBottom="250dp"
-        android:background="@drawable/rounded_corner"
+        android:background="@drawable/rounded_corner_profile_page"
         android:clickable="false"
         android:enabled="false"
 
