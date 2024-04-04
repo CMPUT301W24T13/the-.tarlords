@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,7 +15,6 @@ import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.users.User;
 
 import java.util.ArrayList;
-
 public class ProfileListAdapter extends ArrayAdapter<User> {
 
     private ArrayList<User> userList;
@@ -36,7 +36,11 @@ public class ProfileListAdapter extends ArrayAdapter<User> {
             view = inflater.inflate(R.layout.fragment_profile_list_item, parent, false);
             holder = new ViewHolder();
             //getting the textviews
-            holder.firstNameTextView = view.findViewById(R.id.firstNameTV);
+            holder.firstName = view.findViewById(R.id.firstNameTV);
+            holder.lastName = view.findViewById(R.id.lastNameTV);
+            holder.email = view.findViewById(R.id.emailTV);
+            holder.phoneNum = view.findViewById(R.id.phoneNumberTV);
+            holder.profilePic = view.findViewById(R.id.profile_photo_image_view);
             view.setTag(holder);
         } else {
             holder = (ViewHolder) view.getTag();
@@ -44,7 +48,13 @@ public class ProfileListAdapter extends ArrayAdapter<User> {
 
         User user = userList.get(position);
         //setting the textviews
-        holder.firstNameTextView.setText(user.getFirstName());
+        holder.firstName.setText(user.getFirstName());
+        holder.lastName.setText(user.getLastName());
+        holder.email.setText(user.getEmail());
+        holder.phoneNum.setText(user.getPhoneNum());
+        if (user.getProfilePhoto()!= null) {
+            holder.profilePic.setImageBitmap(user.getProfilePhoto().getBitmap());
+        }
 
         return view;
     }
@@ -53,6 +63,10 @@ public class ProfileListAdapter extends ArrayAdapter<User> {
      * Add the text views you want to display here
      */
     static class ViewHolder {
-        TextView firstNameTextView;
+        TextView firstName;
+        TextView lastName;
+        TextView email;
+        TextView phoneNum;
+        ImageView profilePic;
     }
 }

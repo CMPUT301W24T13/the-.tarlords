@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.the_tarlords.R;
@@ -38,10 +39,9 @@ public class ImageListAdapter extends ArrayAdapter<Photo> {
             holder = new ViewHolder();
 
             //getting the textviews
-            holder.imageViewTV = view.findViewById(R.id.imageViewTV);
-
-            holder.collectionTV = view.findViewById(R.id.collectionTV);
-            holder.nameTV = view.findViewById(R.id.nameTV);
+            holder.imageViewTV = view.findViewById(R.id.iv_image_browse_item);
+            //holder.collectionTV = view.findViewById(R.id.collectionTV);
+            //holder.nameTV = view.findViewById(R.id.nameTV);
             view.setTag(holder);
         } else {
             holder = (ViewHolder) view.getTag();
@@ -50,9 +50,9 @@ public class ImageListAdapter extends ArrayAdapter<Photo> {
 
         Photo image = imageList.get(position);
         // setting the textviews to the first 5 characters of the posterData
-        holder.imageViewTV.setText(image.getImageData().subSequence(0,5).toString());
-        holder.collectionTV.setText(image.getCollection());
-        holder.nameTV.setText(image.getName());
+        holder.imageViewTV.setImageBitmap(image.getBitmap());
+        //holder.collectionTV.setText(image.getCollection());
+        //holder.nameTV.setText(image.getName());
 
         return view;
     }
@@ -60,8 +60,7 @@ public class ImageListAdapter extends ArrayAdapter<Photo> {
      * Add the text views you want to display here
      */
     static class ViewHolder {
-        TextView imageViewTV;
-
+        ImageView imageViewTV;
         TextView collectionTV;
         TextView nameTV;
     }

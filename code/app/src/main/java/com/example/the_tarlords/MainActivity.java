@@ -2,7 +2,6 @@ package com.example.the_tarlords;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -23,7 +22,6 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.example.the_tarlords.data.QR.QRScanActivity;
 import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.users.User;
 import com.example.the_tarlords.databinding.ActivityMainBinding;
@@ -180,18 +178,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.eventListFragment, R.id.eventOrganizerListFragment, R.id.eventBrowseFragment, R.id.profileFragment, R.id.profileBrowseFragment, R.id.imageBrowseFragment)
                 .setOpenableLayout(drawer)
                 .build();
-
-        //QR code scanner button set up
-        binding.appBarMain.scanQrButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //passes in user info in case of check-in QR scan
-                Intent intent = new Intent(MainActivity.this, QRScanActivity.class);
-                intent.putExtra("userId", user.getUserId());
-
-                startActivity(intent);
-            }
-        });
 
         //navigation set up (must go below appBar config)
         NavigationView navigationView = binding.navView;

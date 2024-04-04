@@ -7,27 +7,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:icon="@drawable/events"
-        android:title="Events Attending" />
+        android:title="@string/events_attending" />
     <item
         android:id="@+id/eventOrganizerListFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:enabled="true"
         android:icon="@drawable/event_organizing"
-        android:title="Events Organizing" />
+        android:title="@string/events_organizing" />
     <item
         android:id="@+id/eventBrowseFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:icon="@drawable/browse_events"
-        android:title="Browse Events" />
+        android:title="@string/browse_events" />
     <item
         android:id="@+id/profileFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:enabled="true"
         android:icon="@drawable/profile_icon"
-        android:title="Profile" />
+        android:title="@string/profile" />
     <item
         android:id="@+id/profileBrowseFragment"
         android:layout_width="wrap_content"
@@ -35,7 +35,7 @@
         android:enabled="false"
         android:icon="@drawable/browse_events"
         android:visible="false"
-        android:title="Browse Profiles"
+        android:title="@string/browse_profiles"
         />
     <item
         android:id="@+id/imageBrowseFragment"
@@ -44,7 +44,7 @@
         android:enabled="false"
         android:icon="@drawable/browse_events"
         android:visible="false"
-        android:title="Browse Images"
+        android:title="@string/browse_images"
         />
 
 </menu>
