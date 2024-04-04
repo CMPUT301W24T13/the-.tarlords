@@ -1,8 +1,11 @@
 package com.example.the_tarlords;
 
+import static com.example.the_tarlords.data.map.LocationHelper.REQUEST_LOCATION_PERMISSION;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -12,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -293,12 +297,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private void setDeviceFCMToken(){
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task ->{
-           if(task.isSuccessful()){
-               String token = task.getResult();
-               Log.d("FCM token",token);
-               user.setFCM(token);
-               db.collection("Users").document(user.getUserId()).update("FCM",token);
-           }
+            if(task.isSuccessful()){
+                String token = task.getResult();
+                Log.d("FCM token",token);
+                user.setFCM(token);
+                db.collection("Users").document(user.getUserId()).update("FCM",token);
+            }
         });
     }
 
