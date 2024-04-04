@@ -34,8 +34,10 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
         name.setText(event.getName());
         TextView location = view.findViewById(R.id.locationTextView);
         location.setText(event.getLocation());
-        TextView startDate = view.findViewById(R.id.startDateTextView);
-        startDate.setText(event.getStartDate());
+        //TextView startDate = view.findViewById(R.id.startDateTextView);
+        //startDate.setText(event.getStartDate());
+        TextView startTime = view.findViewById(R.id.startTimeTextView);
+        startTime.setText(event.getStartTime());
         return view;
     }
 }

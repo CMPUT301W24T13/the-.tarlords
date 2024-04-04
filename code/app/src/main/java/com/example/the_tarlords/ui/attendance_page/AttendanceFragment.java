@@ -18,16 +18,26 @@ import androidx.fragment.app.Fragment;
 
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
+
+import com.example.the_tarlords.data.Alert.Alert;
+import com.example.the_tarlords.data.Alert.AlertCallback;
+import com.example.the_tarlords.data.Alert.AlertListAdapter;
+import com.example.the_tarlords.data.Alert.Milestone;
+import com.example.the_tarlords.data.Alert.MilestoneHelper;
+
+import com.example.the_tarlords.data.attendance.AttendanceDBHelper;
+
+import com.example.the_tarlords.data.attendance.AttendanceListCallback;
 import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.users.Attendee;
 import com.example.the_tarlords.databinding.FragmentAttendanceListBinding;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -40,9 +50,18 @@ public class AttendanceFragment extends Fragment implements MenuProvider {
     FragmentAttendanceListBinding binding;
     private Event event;
     private ArrayList<Attendee> attendees = new ArrayList<>();
+    private ArrayList<Alert> milestoneList = new ArrayList<>();
+    private AlertListAdapter milestoneListAdapter;
+    private static AttendanceArrayAdapter attendanceArrayAdapter;
+
     private static AttendanceArrayAdapter adapter;
+
     private CollectionReference attendanceRef;
     private CollectionReference usersRef = MainActivity.db.collection("Users");
+    TextView totalCount;
+    TextView checkInCount;
+    ListView attendanceListView;
+
 
     private static final String ARG_COLUMN_COUNT = "column-count";
 
@@ -82,16 +101,15 @@ public class AttendanceFragment extends Fragment implements MenuProvider {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         requireActivity().addMenuProvider(this);
-        ListView attendanceListView = view.findViewById(R.id.attendanceListView);
+        attendanceListView = view.findViewById(R.id.attendanceListView);
         attendanceRef = MainActivity.db.collection("Events/"+event.getId()+"/Attendance");
-        Log.d("attendance list", attendees.toString()+"hello");
 
         // Set the adapter
-        adapter = new AttendanceArrayAdapter(getContext(), attendees);
-        attendanceListView.setAdapter(adapter);
+        attendanceArrayAdapter = new AttendanceArrayAdapter(getContext(), attendees);
+        attendanceListView.setAdapter(attendanceArrayAdapter);
 
-        TextView totalCount = view.findViewById(R.id.attendee_count);
-        TextView checkInCount = view.findViewById(R.id.attendee_checkin_count);
+        totalCount = view.findViewById(R.id.attendee_count);
+        checkInCount = view.findViewById(R.id.attendee_checkin_count);
 
 
         attendanceRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -102,45 +120,47 @@ public class AttendanceFragment extends Fragment implements MenuProvider {
                     return;
                 }
                 if (querySnapshots != null) {
-                    attendees.clear();
-                    attendanceRef.get()
-                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful()) {
-                                for (QueryDocumentSnapshot attendeeDoc : task.getResult()) {
-                                    usersRef.document(attendeeDoc.getId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<DocumentSnapshot> t) {
-                                            if (t.isSuccessful()) {
-                                                DocumentSnapshot userDoc = t.getResult();
-                                                Log.d("fire", userDoc.getData().toString()+"111");
-                                                Attendee attendee = userDoc.toObject(Attendee.class);
-                                                attendee.setCheckInStatus(attendeeDoc.getBoolean("checkedInStatus"));
-                                                attendee.setEvent(event);
-                                                attendees.add(attendee);
-                                                Log.d("attendance query", attendees.toString()+"0000");
-                                                adapter.notifyDataSetChanged();
-                                                totalCount.setText("Total: " + adapter.getItemCount());
-                                                checkInCount.setText("Checked In: " + adapter.getCheckInCount());
-                                            }
-                                        }
-                                    });
-                                }
-                                Log.d("firestore", attendees.toString()+":)");
-                            } else {
-                                Log.d("firestore", "Error getting documents: ", task.getException());
-                            }
-                        }
-                    });
+                    refreshAttendance();
                 }
-
             }
         });
+        refreshMilestoneList();
 
 
     }
+    public void refreshAttendance(){
+        AttendanceDBHelper.getAttendanceList(event, new AttendanceListCallback() {
+            @Override
+            public void onAttendanceLoaded(ArrayList<Attendee> attendanceList) {
+                attendees.clear();
+                attendees.addAll(attendanceList);
+                adapter.notifyDataSetChanged();
+                totalCount.setText("Total: " + adapter.getItemCount());
+                checkInCount.setText("Checked In: " + adapter.getCheckInCount());
+            }
+        });
 
+    }
+
+
+
+         */
+
+
+    
+
+    private void refreshMilestoneList(){
+        MilestoneHelper helper = new MilestoneHelper(event.getId());
+        milestoneList = helper.getMilestoneList(new AlertCallback() {
+            @Override
+            public void onAlertsLoaded(ArrayList<Alert> alertList) {
+                ListView milestoneListView = getView().findViewById(R.id.milestone_list_view);
+                milestoneListAdapter = new AlertListAdapter(requireContext(),milestoneList,1);
+                milestoneListView.setAdapter(milestoneListAdapter);
+                milestoneListAdapter.notifyDataSetChanged();
+            }
+        });
+    }
     @Override
     public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
         menu.clear();

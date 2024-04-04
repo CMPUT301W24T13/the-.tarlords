@@ -1,7 +1,6 @@
 package com.example.the_tarlords.data.QR;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -13,10 +12,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.example.the_tarlords.MainActivity;
-import com.example.the_tarlords.R;
+import com.example.the_tarlords.data.attendance.AttendanceDBHelper;
+import com.example.the_tarlords.data.attendance.AttendanceQueryCallback;
+import com.example.the_tarlords.data.Alert.MilestoneManager;
+
 import com.example.the_tarlords.data.event.Event;
+import com.example.the_tarlords.data.map.ShareLocation;
 import com.example.the_tarlords.data.users.User;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -27,22 +34,13 @@ import com.google.zxing.integration.android.IntentResult;
  */
 public class QRScanActivity extends AppCompatActivity {
     private String userId;
-    private String firstName;
-    private String lastName;
-    private String phoneNum;
-    private String email;
     private static final int REQUEST_CAMERA_PERMISSION = 1;
     private FirebaseFirestore db;
-    private CollectionReference eventsRef;
     private CollectionReference QRRef;
-    private static Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        context = this;
-        setContentView(R.layout.content_main);
-
         userId = getIntent().getStringExtra("userId");
 
         // Check camera permission and initiate QR code scanning if permission is granted
@@ -58,6 +56,7 @@ public class QRScanActivity extends AppCompatActivity {
      */
     public void scanQr() {
         IntentIntegrator intentIntegrator = new IntentIntegrator(this);
+        intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
         intentIntegrator.setPrompt("Scan QR code");
         intentIntegrator.setOrientationLocked(true); // Enable rotation
         intentIntegrator.initiateScan();
@@ -65,6 +64,7 @@ public class QRScanActivity extends AppCompatActivity {
 
     /**
      * Links the scanned QR code to the corresponding event ID and processes it
+     *
      * @param QrID The QR code value to be linked to an event ID
      */
     public void linkQRtoEventID(String QrID) {
@@ -79,74 +79,88 @@ public class QRScanActivity extends AppCompatActivity {
                 return;
             }
             if (querySnapshots != null) {
-                for (QueryDocumentSnapshot doc: querySnapshots) {
+                for (QueryDocumentSnapshot doc : querySnapshots) {
                     String DocCodeID = doc.getId();
-                    try {
-                        if (DocCodeID.equals(QrString)) {
-                            //Found QRcode ID, now get eventID
-                            String eventID = doc.getString("EventId");
-                            getEvent(QRtype, eventID);
-                        }
-                    } catch (Exception e) {
-                        Toast.makeText(this, "Invalid QR", Toast.LENGTH_SHORT).show();
-                        finish();
-                        //throw new RuntimeException("This is not a valid QR code for this app");
+                    if (DocCodeID.equals(QrString)) {
+                        //Found QRcode ID, now get eventID
+                        String eventID = doc.getString("EventId");
+                        getEvent(QRtype, eventID);
                     }
                 }
             }
         });
+
     }
 
     /**
      * Retrieves the event details corresponding to the given event ID and QR code type
+     *
      * @param QRtype  The type of QR code (CheckIn or EventInfo)
      * @param eventID The ID of the event associated with the QR code
      */
     public void getEvent(String QRtype, String eventID) {
         db = FirebaseFirestore.getInstance();
-        eventsRef = db.collection("Events");
+        DocumentReference eventRef = db.collection("Events").document(eventID);
 
-        eventsRef.addSnapshotListener((querySnapshots, error) -> {
-            if (error != null) {
-                Log.e("Firestore", error.toString());
-                return;
-            }
-            if (querySnapshots != null) {
-                for (QueryDocumentSnapshot doc: querySnapshots) {
-                    String docEventID = doc.getId();
-                    try {
-                        if (docEventID.equals(eventID)) {
-                            Event event = doc.toObject(Event.class);
+        eventRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                Event event = task.getResult().toObject(Event.class);
+                if (QRtype.equals("CI")) {
+                    //This is a CheckIn QR
+                    Log.e("QrCode", "In CI" + event.getId());
+                    Log.e("QrCode", "EventName is " + event.getName());
 
-                            if (QRtype.equals("CI")) {
-                                //This is a CheckIn QR
-                                Log.e("QrCode", "In CI" + docEventID);
-                                Log.e("QrCode", "EventName is " + doc.getString("name"));
 
-                                User user = new User();
-                                user.setUserId(userId);
-                                event.setCheckIn(user, true);
+                    User user = new User();
+                    user.setUserId(userId);
+                    AttendanceDBHelper.setCheckIn(event, user, true, new AttendanceQueryCallback() {
+                        @Override
+                        public void onQueryComplete(int result) {
+                            if (result == AttendanceDBHelper.SUCCESSFUL) {
+                                // Separate from check-In so its fine here
+                                ShareLocation shareLocationDialog = new ShareLocation(event.getId(), event.getName());
+                                shareLocationDialog.show(getSupportFragmentManager(), "ShareLocationDialog");
+                                MilestoneManager milestoneManager = new MilestoneManager(event);
+                                milestoneManager.updateMilestone();
+                                Toast.makeText(MainActivity.context, "Check in successful!", Toast.LENGTH_SHORT).show();
+                            } else if (result == AttendanceDBHelper.ALREADY_CHECKED_IN) {
+                                // Separate from check-In so its fine here
+                                ShareLocation shareLocationDialog = new ShareLocation(event.getId(), event.getName());
+
+                                shareLocationDialog.show(getSupportFragmentManager(), "ShareLocationDialog");
+                                Toast.makeText(MainActivity.context, "Already checked in!", Toast.LENGTH_SHORT).show();
+                            } else if (result == AttendanceDBHelper.EVENT_FULL) {
                                 finish();
-
+                                Toast.makeText(MainActivity.context, "Unable to check-in. Max capacity reached.", Toast.LENGTH_SHORT).show();
                             } else {
-                                //This is a EventInfo QR
-                                Log.e("QrCode", "In EI" + docEventID);
-                                Log.e("QrCode", "EventName is " + doc.getString("name"));
-
-                                //Go to EventDetails Fragment through main
-                                Intent intent = new Intent(QRScanActivity.this, MainActivity.class);
-                                intent.putExtra("event", event);
-                                startActivity(intent);
+                                finish();
+                                Toast.makeText(MainActivity.context, "Error. Check in failed.", Toast.LENGTH_SHORT).show();
                             }
                         }
-                    } catch (Exception e) {
-                        Toast.makeText(this, "Invalid QR", Toast.LENGTH_SHORT).show();
-                        finish();
-                        //throw new RuntimeException("This is not a valid QR code for this app");
-                    }
+
+                    });
+
+                    Log.e("QrCode", "In CI" + event.getId());
+                    Log.e("QrCode", "EventName is " + event.getName());
+
+
+                } else if (QRtype.equals("EI")) {
+                    //This is a EventInfo QR
+                    Log.e("QrCode", "In EI" + event.getId());
+                    Log.e("QrCode", "EventName is " + event.getName());
+
+                    //Go to EventDetails Fragment through main
+                    Intent intent = new Intent(QRScanActivity.this, MainActivity.class);
+                    intent.putExtra("event", event);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(MainActivity.context, "Invalid QR", Toast.LENGTH_SHORT).show();
+                    finish();
                 }
             }
         });
+
     }
 
     @Override
@@ -158,6 +172,7 @@ public class QRScanActivity extends AppCompatActivity {
                 linkQRtoEventID(qrValue);
             } else {
                 Toast.makeText(this, "Unable to scan", Toast.LENGTH_SHORT).show();
+                finish();
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
@@ -176,15 +191,6 @@ public class QRScanActivity extends AppCompatActivity {
                 Toast.makeText(this, "Enable Camera to Scan QR", Toast.LENGTH_SHORT).show();
                 finish();
             }
-        }
-    }
-
-    public static void showCheckInMessage(Boolean success) {
-        if (success) {
-            Toast.makeText(context, "Check In Successful!", Toast.LENGTH_SHORT).show();
-        }
-        else {
-            Toast.makeText(context, "Unable to check-in. Max capacity reached.", Toast.LENGTH_SHORT).show();
         }
     }
 }

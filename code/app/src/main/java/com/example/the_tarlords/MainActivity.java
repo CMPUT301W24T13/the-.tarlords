@@ -43,8 +43,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     CollectionReference usersRef = db.collection("Users");
 
     public static User user;
-    // TODO : do not hardcode
+
     public static Boolean isAdmin = false;
+
     private static String userId;
     private static View hView;
     public static Context context;
@@ -90,7 +91,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             // the profile fields are going to have to be filled with some default info the first time, but the ID is the one we generated
 
-            user = new User(userId,"First Name","Last Name","Phone Number","email");
+            user = new User();
+            user.setUserId(userId);
             isAdmin = false;
             setDeviceFCMToken();
 
@@ -119,7 +121,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                             //creates 'user' object from firestore data, now you can use 'user' object
                             user = documentSnapshot.toObject(User.class);
-                            //isAdmin = user.getIsAdmin(); should also check null and set null = false, also for user.sendToFirestore()
+
+
+                            // needs to be above the setBinding()
+                            if (user.getIsAdmin() != null){
+                                isAdmin = user.getIsAdmin();
+                            }
+                            setDeviceFCMToken();
 
                             //sets content binding now that userId is no longer null (must stay above updateNavigationDrawerHeader()
                             setBinding();
@@ -155,20 +163,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         }
 
-
-        //TODO take out this test case, to show you guys how to call it
-        //LocationHelper location = new LocationHelper(MainActivity.this); // Pass MainActivity instance to Location class constructor
-
-        //location.getMyLocation("LBm1Cpj48GOnEulAK613"); // Call the getMyLocation method
-        // TODO : putting this here for now, Khushi
-        /**
-        if (user!= null){
-            isAdmin = user.getIsAdmin();
-            Log.d("admin", String.valueOf(isAdmin));
-        }else{
-            Log.d("admin", "wtf");
-        }
-        */
     }
 
     /**
@@ -185,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         setSupportActionBar(binding.appBarMain.toolbar);
         DrawerLayout drawer = binding.drawerLayout;
         // Passing each menu ID as a set of Ids because each menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.eventListFragment, R.id.eventOrganizerListFragment, R.id.eventBrowseFragment, R.id.profileFragment, R.id.profileBrowseFragment)
+        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.eventListFragment, R.id.eventOrganizerListFragment, R.id.eventBrowseFragment, R.id.profileFragment, R.id.profileBrowseFragment, R.id.imageBrowseFragment)
                 .setOpenableLayout(drawer)
                 .build();
 
@@ -230,6 +224,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         Bundle args = new Bundle();
         args.putParcelable("event", event);
         args.putBoolean("isOrganizer", false);
+        args.putBoolean("browse",true);
         try {
             Navigation.findNavController(this, R.id.nav_host_fragment_content_main)
                     .navigate(R.id.action_eventFragment_to_eventDetailsFragment, args);
@@ -279,6 +274,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 Bitmap bitmap = user.getProfilePhoto().getBitmap();
                 profilePic.setImageBitmap(bitmap);
             }
+
         } else {
             Log.e("debug", "User object is null");
             // Handle the case where the User object is null
@@ -303,11 +299,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private void setDeviceFCMToken(){
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task ->{
-           if(task.isSuccessful()){
-               String token = task.getResult();
-               Log.d("FCM token",token);
-               user.setfCMToken(token);
-           }
+            if(task.isSuccessful()){
+                String token = task.getResult();
+                Log.d("FCM token",token);
+                user.setFCM(token);
+                db.collection("Users").document(user.getUserId()).update("FCM",token);
+            }
         });
     }
 

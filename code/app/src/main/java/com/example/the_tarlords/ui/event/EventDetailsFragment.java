@@ -1,5 +1,7 @@
 package com.example.the_tarlords.ui.event;
 
+import static com.example.the_tarlords.MainActivity.context;
+
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -12,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +30,8 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.QR.QRCode;
+import com.example.the_tarlords.data.attendance.AttendanceDBHelper;
+import com.example.the_tarlords.data.attendance.AttendanceQueryCallback;
 import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.photo.EventPoster;
 import com.example.the_tarlords.databinding.FragmentEventDetailsBinding;
@@ -40,7 +45,7 @@ import com.example.the_tarlords.databinding.FragmentEventDetailsBinding;
  * The nav bar should handle going back to the listview????
  */
 public class EventDetailsFragment extends Fragment implements MenuProvider {
-
+    private Button shareQrCode;
     private static Event event;
     private boolean isOrganizer;
 
@@ -116,6 +121,7 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
         TextView eventNameTextView = view.findViewById(R.id.tv_event_name);
         TextView eventLocationTextView = view.findViewById(R.id.tv_event_location);
         TextView eventStartDateTextView = view.findViewById(R.id.tv_event_startDate);
+        TextView eventEndDateTextView = view.findViewById(R.id.tv_event_endDate);
         TextView eventStartTimeTextView = view.findViewById(R.id.tv_event_startTime);
         TextView eventEndTimeTextView = view.findViewById(R.id.tv_event_endTime);
         TextView eventMaxAttendees = view.findViewById(R.id.tv_max_attendees);
@@ -128,11 +134,11 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
             eventLocationTextView.setText(event.getLocation());
             eventStartTimeTextView.setText(event.getStartTime());
             eventStartDateTextView.setText(event.getStartDate());
+            eventEndDateTextView.setText(event.getEndDate());
             eventEndTimeTextView.setText(event.getEndTime());
             // set additional fields here as desired
 
-            if (event.getPosterData()!=null){ //if poster data exists, display uploaded poster
-                event.setPosterFromData(event.getPosterData());
+            if (event.getPoster()!=null){ //if poster data exists, display uploaded poster
                 eventPosterImageView.setImageBitmap(event.getPoster().getBitmap());
             }
             else { //otherwise generate poster
@@ -151,17 +157,27 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
 
         //display event QR codes if user has organizer perms
         if (isOrganizer == true) {
-            if (event.getQrCodeCheckIns()!=null){
+            if (event.getQrCode()!=null){
                 view.findViewById(R.id.tv_checkin_details).setVisibility(view.VISIBLE);
                 view.findViewById(R.id.tv_info_details).setVisibility(view.VISIBLE);
                 ImageView checkInQr = view.findViewById(R.id.iv_checkin_details);
                 ImageView eventInfoQr = view.findViewById(R.id.iv_info_details);
                 checkInQr.setVisibility(view.VISIBLE);
                 eventInfoQr.setVisibility(view.VISIBLE);
-                QRCode.generateQR("CI"+event.getId(),checkInQr);
-                QRCode.generateQR("EI"+event.getId(),eventInfoQr);
+                QRCode.generateQR("CI"+event.getQrCode(),checkInQr);
+                QRCode.generateQR("EI"+event.getQrCode(),eventInfoQr);
             }
         }
+
+        ImageView imageView = view.findViewById(R.id.iv_checkin_details);
+        shareQrCode = view.findViewById(R.id.shareQrCode);
+        shareQrCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                QRCode qrcode = new QRCode();
+                qrcode.shareQR(imageView, getActivity());
+            }
+        });
     }
 
     /**
@@ -238,7 +254,6 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
 
         }
         else if (menuItem.getItemId()==R.id.deleteOptionsMenu) {
-            //TODO : I think this works?, needs a check
             if (isAdded()) { // Check if the fragment is attached to an activity
                 AlertDialog dialog = new AlertDialog.Builder(requireContext())
                         .setMessage("Are you sure you would like to delete the event " + event.getName() + "?")
@@ -278,14 +293,23 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
                     Log.e("maps", Log.getStackTraceString(e));
                 }
         } else if (menuItem.getItemId()==R.id.signUpOptionsMenu) {
-            if (!event.reachedMaxCap()){
-                event.signUp(MainActivity.user);
-                Toast.makeText(getContext(),"Sign Up Successful", Toast.LENGTH_SHORT).show();
-            }
-            else {
-                Toast.makeText(getContext(), "Max capacity reached. Unable to sign up.", Toast.LENGTH_SHORT).show();
-            }
-            return true;
+
+            AttendanceDBHelper.signUp(event, MainActivity.user, new AttendanceQueryCallback() {
+                @Override
+                public void onQueryComplete(int result) {
+                    if (result== AttendanceDBHelper.SUCCESSFUL){
+                        Toast.makeText(context, "Sign up successful!", Toast.LENGTH_SHORT).show();
+                    } else if (result == AttendanceDBHelper.ALREADY_SIGNED_UP) {
+                        Toast.makeText(context, "Already signed up!", Toast.LENGTH_SHORT).show();
+                    } else if (result== AttendanceDBHelper.EVENT_FULL) {
+                        Toast.makeText(context, "Unable to sign up. Max capacity reached.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(context, "Error. Sign up failed.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+            return false;
+
         }
         //should return false to prevent crashing
         return false;

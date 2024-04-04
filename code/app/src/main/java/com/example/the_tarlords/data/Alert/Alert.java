@@ -14,6 +14,7 @@ public class Alert implements Comparable{
     private Event event;
     private String currentDateTime;
     private LocalDateTime ldt;
+    private String id;
 
     /**
      * Constructor for the Alert object
@@ -124,8 +125,17 @@ public class Alert implements Comparable{
     @Override
     public int compareTo(Object o) {
         Alert obj = (Alert) o;
-        return obj.getLdt().compareTo(this.ldt);
+        //return obj.getLdt().compareTo(this.ldt);
+        return 0;
 
 
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

@@ -3,11 +3,11 @@ package com.example.the_tarlords.data.Alert;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -16,10 +16,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.the_tarlords.R;
-import com.example.the_tarlords.data.event.Event;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class AddAlertFragment extends DialogFragment {
 
@@ -57,6 +53,7 @@ public class AddAlertFragment extends DialogFragment {
     public void setAddAlertDialogListener(AddAlertDialogListener listener) {
         this.listener = listener;
     }
+
     /*
     @Override
     public void onAttach(@NonNull Context context) {
@@ -114,8 +111,9 @@ public class AddAlertFragment extends DialogFragment {
                     .setNegativeButton("Cancel", null)
 
                     .setPositiveButton("Delete",(dialog, which) -> {
-                        // TODO: fix delete alert and update firebase
-                        //listener.deleteAlert(alert);
+                        listener.deleteAlert(alert);
+
+
                     })
 
 
