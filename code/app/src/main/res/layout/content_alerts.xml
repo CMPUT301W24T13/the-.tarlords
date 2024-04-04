@@ -14,7 +14,7 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/message_text"
+        android:id="@+id/tv_alert_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="8dp"

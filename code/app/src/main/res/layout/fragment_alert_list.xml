@@ -20,9 +20,23 @@
         android:textSize="30sp"
 
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/alert_listView"/>
+
+    <TextView
+        android:id="@+id/no_announcement_textview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:text="@string/empty_alert_list"
+        android:fontFamily="@font/helvetica"
+        android:textSize="25sp"
+        android:textAlignment="center"
+        android:visibility="gone"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_alert_list_header" />
 
     <ListView
         android:id="@+id/alert_listView"

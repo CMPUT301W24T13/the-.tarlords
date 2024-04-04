@@ -116,5 +116,6 @@
     <string name="sign_up_button">SIGN UP</string>
     <string name="poster_browse_header">What\'s on tonight?</string>
     <string name="poster_browse_subtitle">Browse upcoming events by poster.</string>
+    <string name="empty_alert_list">No announcements yet...</string>
 
 </resources>
