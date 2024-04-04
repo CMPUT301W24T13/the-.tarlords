@@ -43,7 +43,6 @@ public class ProfileViewFragment extends Fragment implements MenuProvider{
     EditText lastNameEditText;
     EditText phoneEditText;
     EditText emailEditText;
-    private FragmentProfileViewBinding binding;
     private FragmentProfileBinding binding;
 
 

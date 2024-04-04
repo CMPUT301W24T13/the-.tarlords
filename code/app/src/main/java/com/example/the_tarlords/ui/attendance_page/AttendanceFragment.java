@@ -18,23 +18,15 @@ import androidx.fragment.app.Fragment;
 
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
-
 import com.example.the_tarlords.data.Alert.Alert;
 import com.example.the_tarlords.data.Alert.AlertCallback;
 import com.example.the_tarlords.data.Alert.AlertListAdapter;
-import com.example.the_tarlords.data.Alert.Milestone;
 import com.example.the_tarlords.data.Alert.MilestoneHelper;
-
 import com.example.the_tarlords.data.attendance.AttendanceDBHelper;
-
 import com.example.the_tarlords.data.attendance.AttendanceListCallback;
 import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.users.Attendee;
 import com.example.the_tarlords.databinding.FragmentAttendanceListBinding;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -144,7 +136,7 @@ public class AttendanceFragment extends Fragment implements MenuProvider {
 
 
 
-         */
+
 
 
     
