@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.example.the_tarlords.MainActivity;
-import com.example.the_tarlords.data.attendance.Attendance;
+import com.example.the_tarlords.data.attendance.AttendanceDBHelper;
 import com.example.the_tarlords.data.attendance.AttendanceQueryCallback;
 import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.map.ShareLocation;
@@ -111,20 +111,20 @@ public class QRScanActivity extends AppCompatActivity {
 
                     User user = new User();
                     user.setUserId(userId);
-                    Attendance.setCheckIn(event, user, true, new AttendanceQueryCallback() {
+                    AttendanceDBHelper.setCheckIn(event, user, true, new AttendanceQueryCallback() {
                         @Override
                         public void onQueryComplete(int result) {
-                            if (result == Attendance.SUCCESSFUL) {
+                            if (result == AttendanceDBHelper.SUCCESSFUL) {
                                 // Separate from check-In so its fine here
                                 ShareLocation shareLocationDialog = new ShareLocation(event.getId(), event.getName());
                                 shareLocationDialog.show(getSupportFragmentManager(), "ShareLocationDialog");
                                 Toast.makeText(MainActivity.context, "Check in successful!", Toast.LENGTH_SHORT).show();
-                            } else if (result == Attendance.ALREADY_CHECKED_IN) {
+                            } else if (result == AttendanceDBHelper.ALREADY_CHECKED_IN) {
                                 // Separate from check-In so its fine here
                                 ShareLocation shareLocationDialog = new ShareLocation(event.getId(), event.getName());
                                 shareLocationDialog.show(getSupportFragmentManager(), "ShareLocationDialog");
                                 Toast.makeText(MainActivity.context, "Already checked in!", Toast.LENGTH_SHORT).show();
-                            } else if (result == Attendance.EVENT_FULL) {
+                            } else if (result == AttendanceDBHelper.EVENT_FULL) {
                                 finish();
                                 Toast.makeText(MainActivity.context, "Unable to check-in. Max capacity reached.", Toast.LENGTH_SHORT).show();
                             } else {
