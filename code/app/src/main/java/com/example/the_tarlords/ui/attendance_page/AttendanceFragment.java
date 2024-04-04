@@ -23,6 +23,7 @@ import com.example.the_tarlords.data.Alert.AlertCallback;
 import com.example.the_tarlords.data.Alert.AlertListAdapter;
 import com.example.the_tarlords.data.Alert.Milestone;
 import com.example.the_tarlords.data.Alert.MilestoneHelper;
+import com.example.the_tarlords.data.attendance.AttendanceListCallback;
 import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.users.Attendee;
 import com.example.the_tarlords.databinding.FragmentAttendanceListBinding;
@@ -109,39 +110,22 @@ public class AttendanceFragment extends Fragment implements MenuProvider {
                     return;
                 }
                 if (querySnapshots != null) {
-                    attendees.clear();
-                    attendanceRef.get()
-                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful()) {
-                                for (QueryDocumentSnapshot attendeeDoc : task.getResult()) {
-                                    usersRef.document(attendeeDoc.getId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<DocumentSnapshot> t) {
-                                            if (t.isSuccessful()) {
-                                                DocumentSnapshot userDoc = t.getResult();
-                                                Log.d("fire", userDoc.getData().toString()+"111");
-                                                Attendee attendee = userDoc.toObject(Attendee.class);
-                                                attendee.setCheckInStatus(attendeeDoc.getBoolean("checkedInStatus"));
-                                                attendee.setEvent(event);
-                                                attendees.add(attendee);
-                                                Log.d("attendance query", attendees.toString()+"0000");
-                                                attendanceArrayAdapter.notifyDataSetChanged();
-                                                totalCount.setText("Total: " + attendanceArrayAdapter.getItemCount());
-                                                checkInCount.setText("Checked In: " + attendanceArrayAdapter.getCheckInCount());
-                                            }
-                                        }
-                                    });
-                                }
-                                Log.d("firestore", attendees.toString()+":)");
-                            } else {
-                                Log.d("firestore", "Error getting documents: ", task.getException());
-                            }
-                        }
-                    });
+                    refreshAttendance();
                 }
+            }
+        });
 
+
+    }
+    public void refreshAttendance(){
+        AttendanceDBHelper.getAttendanceList(event, new AttendanceListCallback() {
+            @Override
+            public void onAttendanceLoaded(ArrayList<Attendee> attendanceList) {
+                attendees.clear();
+                attendees.addAll(attendanceList);
+                adapter.notifyDataSetChanged();
+                totalCount.setText("Total: " + adapter.getItemCount());
+                checkInCount.setText("Checked In: " + adapter.getCheckInCount());
             }
         });
         // place holder values

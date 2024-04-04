@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             if (user.getIsAdmin() != null){
                                 isAdmin = user.getIsAdmin();
                             }
-
+                            setDeviceFCMToken();
 
                             //sets content binding now that userId is no longer null (must stay above updateNavigationDrawerHeader()
                             setBinding();
@@ -179,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         setSupportActionBar(binding.appBarMain.toolbar);
         DrawerLayout drawer = binding.drawerLayout;
         // Passing each menu ID as a set of Ids because each menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.eventListFragment, R.id.eventOrganizerListFragment, R.id.eventBrowseFragment, R.id.profileFragment, R.id.profileBrowseFragment)
+        mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.eventListFragment, R.id.eventOrganizerListFragment, R.id.eventBrowseFragment, R.id.profileFragment, R.id.profileBrowseFragment, R.id.imageBrowseFragment)
                 .setOpenableLayout(drawer)
                 .build();
 
@@ -224,6 +224,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         Bundle args = new Bundle();
         args.putParcelable("event", event);
         args.putBoolean("isOrganizer", false);
+        args.putBoolean("browse",true);
         try {
             Navigation.findNavController(this, R.id.nav_host_fragment_content_main)
                     .navigate(R.id.action_eventFragment_to_eventDetailsFragment, args);
@@ -301,7 +302,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
            if(task.isSuccessful()){
                String token = task.getResult();
                Log.d("FCM token",token);
-               user.setfCMToken(token);
+               user.setFCM(token);
+               db.collection("Users").document(user.getUserId()).update("FCM",token);
            }
         });
     }
