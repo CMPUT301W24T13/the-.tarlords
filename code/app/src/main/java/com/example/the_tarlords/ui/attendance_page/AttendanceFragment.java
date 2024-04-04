@@ -18,22 +18,26 @@ import androidx.fragment.app.Fragment;
 
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
+
 import com.example.the_tarlords.data.Alert.Alert;
 import com.example.the_tarlords.data.Alert.AlertCallback;
 import com.example.the_tarlords.data.Alert.AlertListAdapter;
 import com.example.the_tarlords.data.Alert.Milestone;
 import com.example.the_tarlords.data.Alert.MilestoneHelper;
+
+import com.example.the_tarlords.data.attendance.AttendanceDBHelper;
+
 import com.example.the_tarlords.data.attendance.AttendanceListCallback;
 import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.users.Attendee;
 import com.example.the_tarlords.databinding.FragmentAttendanceListBinding;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -49,8 +53,15 @@ public class AttendanceFragment extends Fragment implements MenuProvider {
     private ArrayList<Alert> milestoneList = new ArrayList<>();
     private AlertListAdapter milestoneListAdapter;
     private static AttendanceArrayAdapter attendanceArrayAdapter;
+
+    private static AttendanceArrayAdapter adapter;
+
     private CollectionReference attendanceRef;
     private CollectionReference usersRef = MainActivity.db.collection("Users");
+    TextView totalCount;
+    TextView checkInCount;
+    ListView attendanceListView;
+
 
     private static final String ARG_COLUMN_COUNT = "column-count";
 
@@ -90,16 +101,15 @@ public class AttendanceFragment extends Fragment implements MenuProvider {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         requireActivity().addMenuProvider(this);
-        ListView attendanceListView = view.findViewById(R.id.attendanceListView);
+        attendanceListView = view.findViewById(R.id.attendanceListView);
         attendanceRef = MainActivity.db.collection("Events/"+event.getId()+"/Attendance");
-        Log.d("attendance list", attendees.toString()+"hello");
 
         // Set the adapter
         attendanceArrayAdapter = new AttendanceArrayAdapter(getContext(), attendees);
         attendanceListView.setAdapter(attendanceArrayAdapter);
 
-        TextView totalCount = view.findViewById(R.id.attendee_count);
-        TextView checkInCount = view.findViewById(R.id.attendee_checkin_count);
+        totalCount = view.findViewById(R.id.attendee_count);
+        checkInCount = view.findViewById(R.id.attendee_checkin_count);
 
 
         attendanceRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -114,6 +124,7 @@ public class AttendanceFragment extends Fragment implements MenuProvider {
                 }
             }
         });
+        refreshMilestoneList();
 
 
     }
@@ -128,18 +139,15 @@ public class AttendanceFragment extends Fragment implements MenuProvider {
                 checkInCount.setText("Checked In: " + adapter.getCheckInCount());
             }
         });
-        // place holder values
-        /*
-        ListView milestoneListView = view.findViewById(R.id.milestone_list_view);
-        milestoneListAdapter = new AlertListAdapter(requireContext(),milestoneList,1);
-        milestoneListView.setAdapter(milestoneListAdapter);
-        CollectionReference milestoneRef = MainActivity.db.collection("Events/"+event.getId()+"/milestones");
+
+    }
+
 
 
          */
-        refreshMilestoneList();
 
-    }
+
+    
 
     private void refreshMilestoneList(){
         MilestoneHelper helper = new MilestoneHelper(event.getId());
@@ -163,6 +171,6 @@ public class AttendanceFragment extends Fragment implements MenuProvider {
         return false;
     }
     public static void notifyComplete(){
-        attendanceArrayAdapter.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
     }
 }

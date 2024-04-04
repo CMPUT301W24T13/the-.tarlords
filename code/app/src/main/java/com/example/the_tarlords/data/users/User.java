@@ -129,11 +129,11 @@ public class User implements Profile , Parcelable {
         this.email = email;
     }
 
-    public String getfCMToken() {
+    public String getFCMToken() {
         return fCMToken;
     }
 
-    public void setfCMToken(String fCMToken) {
+    public void setFCM(String fCMToken) {
         this.fCMToken = fCMToken;
     }
 

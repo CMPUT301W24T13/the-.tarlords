@@ -49,7 +49,8 @@ public class ProfileFragment extends Fragment implements MenuProvider {
         super.onCreate(savedInstanceState);
         if (MainActivity.user != null) {
             user = MainActivity.user;
-            Log.d("profile", user.getFirstName());
+
+            Log.d("profile", "user.getFirstName()");
         }
 
     }
@@ -142,28 +143,31 @@ public class ProfileFragment extends Fragment implements MenuProvider {
      */
     @Override
     public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
-        menu.clear();
-        menuInflater.inflate(R.menu.options_menu, menu);
 
-        if (!checkValidInput(this.getView())) {
-            Toast toast = Toast.makeText(getContext(), "Complete profile information to continue.", Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.TOP, 0, 0);
-            toast.show();
+        if (isAdded() && getContext() != null) {
+            menu.clear();
+            menuInflater.inflate(R.menu.options_menu, menu);
 
-            menu.findItem(R.id.editOptionsMenu).setVisible(false);
-            menu.findItem(R.id.saveOptionsMenu).setVisible(true);
-            menu.findItem(R.id.cancelOptionsMenu).setVisible(true);
+            if (!checkValidInput(this.getView())) {
+                Toast toast = Toast.makeText(getContext(), "Complete profile information to continue.", Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.TOP, 0, 0);
+                toast.show();
 
-            profilePhotoImageView.setVisibility(View.INVISIBLE);
-            addProfilePhotoButton.setVisibility(View.VISIBLE);
-            firstNameEditText.setEnabled(true);
-            lastNameEditText.setEnabled(true);
-            phoneEditText.setEnabled(true);
-            emailEditText.setEnabled(true);
-        } else {
-            menu.findItem(R.id.editOptionsMenu).setVisible(true);
-            menu.findItem(R.id.saveOptionsMenu).setVisible(false);
-            menu.findItem(R.id.cancelOptionsMenu).setVisible(false);
+                menu.findItem(R.id.editOptionsMenu).setVisible(false);
+                menu.findItem(R.id.saveOptionsMenu).setVisible(true);
+                menu.findItem(R.id.cancelOptionsMenu).setVisible(true);
+
+                profilePhotoImageView.setVisibility(View.INVISIBLE);
+                addProfilePhotoButton.setVisibility(View.VISIBLE);
+                firstNameEditText.setEnabled(true);
+                lastNameEditText.setEnabled(true);
+                phoneEditText.setEnabled(true);
+                emailEditText.setEnabled(true);
+            } else {
+                menu.findItem(R.id.editOptionsMenu).setVisible(true);
+                menu.findItem(R.id.saveOptionsMenu).setVisible(false);
+                menu.findItem(R.id.cancelOptionsMenu).setVisible(false);
+            }
         }
     }
 
@@ -231,6 +235,8 @@ public class ProfileFragment extends Fragment implements MenuProvider {
                     user.setLastName(lastNameEditText.getText().toString());
                     user.setPhoneNum(phoneEditText.getText().toString());
                     user.setEmail(emailEditText.getText().toString());
+
+                    displayProfilePhoto(profilePhotoImageView);
                     MainActivity.user.sendToFireStore();
                     //update navigation header (slide out menu) with newly updated information
                     MainActivity.updateNavigationDrawerHeader();
@@ -322,7 +328,8 @@ public class ProfileFragment extends Fragment implements MenuProvider {
     public void displayProfilePhoto(ImageView profilePhotoImageView) {
         if (user.getProfilePhoto() != null) { //display user's profile photo if not null
             profilePhotoImageView.setImageBitmap(user.getProfilePhoto().getBitmap());
-        } else { //if user does not have a profile photo, generate one
+
+        } else if (user.getLastName()!=null){ //if user does not have a profile photo, generate one
             ProfilePhoto profilePhoto = new ProfilePhoto(user.getFirstName() + user.getLastName(),
                     null, user.getFirstName(), user.getLastName());
             profilePhoto.autoGenerate();
