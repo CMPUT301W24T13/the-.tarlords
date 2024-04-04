@@ -44,9 +44,7 @@ public class AttendanceFragment extends Fragment implements MenuProvider {
     private ArrayList<Attendee> attendees = new ArrayList<>();
     private ArrayList<Alert> milestoneList = new ArrayList<>();
     private AlertListAdapter milestoneListAdapter;
-    private static AttendanceArrayAdapter attendanceArrayAdapter;
-
-    private static AttendanceArrayAdapter adapter;
+    private AttendanceArrayAdapter attendanceArrayAdapter;
 
     private CollectionReference attendanceRef;
     private CollectionReference usersRef = MainActivity.db.collection("Users");
@@ -126,20 +124,13 @@ public class AttendanceFragment extends Fragment implements MenuProvider {
             public void onAttendanceLoaded(ArrayList<Attendee> attendanceList) {
                 attendees.clear();
                 attendees.addAll(attendanceList);
-                adapter.notifyDataSetChanged();
-                totalCount.setText("Total: " + adapter.getItemCount());
-                checkInCount.setText("Checked In: " + adapter.getCheckInCount());
+                attendanceArrayAdapter.notifyDataSetChanged();
+                totalCount.setText("Total: " + attendanceArrayAdapter.getItemCount());
+                checkInCount.setText("Checked In: " + attendanceArrayAdapter.getCheckInCount());
             }
         });
 
     }
-
-
-
-
-
-
-    
 
     private void refreshMilestoneList(){
         MilestoneHelper helper = new MilestoneHelper(event.getId());
@@ -162,7 +153,5 @@ public class AttendanceFragment extends Fragment implements MenuProvider {
     public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
         return false;
     }
-    public static void notifyComplete(){
-        adapter.notifyDataSetChanged();
-    }
+
 }
