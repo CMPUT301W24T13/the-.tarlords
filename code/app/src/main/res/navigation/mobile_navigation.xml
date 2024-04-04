@@ -214,12 +214,13 @@
     </fragment>
     <fragment
         android:id="@+id/profileViewFragment"
-        android:name="com.example.the_tarlords.ui.profile.ProfileViewFragment"
-        android:label="ProfileViewFragment">
+        android:name="com.example.the_tarlords.ui.profile.ProfileFragment"
+        android:label="ProfileViewFragment"
+        tools:layout="@layout/fragment_profile">
         <action
             android:id="@+id/action_profileViewFragment_to_profileBrowseFragment"
             app:destination="@+id/profileBrowseFragment"
-            app:popUpTo="@+id/profileBrowseFragment"/>
+            app:popUpTo="@+id/profileBrowseFragment" />
     </fragment>
     <fragment
         android:id="@+id/imageBrowseFragment"

@@ -152,8 +152,8 @@ public class AttendanceDBHelper {
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()){
                                         Log.d("Firestore", "DocumentSnapshot successfully written!");
-                                        event.signUps += 1;
-                                        eventsRef.document(event.getId()).update("signUps", FieldValue.increment(1));
+                                        event.setSignUps(event.getSignUps()+1);
+                                        eventsRef.document(event.getId()).update("signUps", event.getSignUps());
                                         callback.onQueryComplete(SUCCESSFUL);
                                     }
                                     else {
@@ -241,7 +241,7 @@ public class AttendanceDBHelper {
                                             public void onComplete(@NonNull Task<Void> task) {
                                                 if (task.isSuccessful()) {
                                                     Log.d("Attendance", "Check in successful!");
-                                                    event.checkIns+=1;
+                                                    event.setCheckIns(event.getCheckIns()+1);
                                                     eventsRef.document(event.getId()).update("checkIns", event.getCheckIns());
                                                     callback.onQueryComplete(SUCCESSFUL);
                                                 }

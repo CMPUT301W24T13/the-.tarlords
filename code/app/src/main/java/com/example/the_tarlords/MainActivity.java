@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -38,6 +39,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private AppBarConfiguration mAppBarConfiguration;
+    public static Toolbar toolbar;
     public static FirebaseFirestore db = FirebaseFirestore.getInstance();
     // Create a reference to the users collection
     CollectionReference usersRef = db.collection("Users");
@@ -60,9 +62,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = this;
-
-        //TODO: check if returning from profile pic activity, if so redirect to profile fragment
-
 
         /**
          * THIS IS THE USER STUFF
@@ -89,7 +88,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             editor.putString("user_id", userId);
             editor.apply();
 
-            // the profile fields are going to have to be filled with some default info the first time, but the ID is the one we generated
 
             user = new User();
             user.setUserId(userId);
@@ -174,9 +172,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         //content binding
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        toolbar =binding.appBarMain.toolbar;
         //app bar set up
-        setSupportActionBar(binding.appBarMain.toolbar);
+        setSupportActionBar(toolbar);
         DrawerLayout drawer = binding.drawerLayout;
         // Passing each menu ID as a set of Ids because each menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.eventListFragment, R.id.eventOrganizerListFragment, R.id.eventBrowseFragment, R.id.profileFragment, R.id.profileBrowseFragment, R.id.imageBrowseFragment)
