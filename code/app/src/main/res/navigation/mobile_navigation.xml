@@ -207,22 +207,10 @@
             android:id="@+id/action_profileBrowseFragment_to_eventBrowseFragment"
             app:destination="@id/eventBrowseFragment" />
         <action
-            android:id="@+id/action_profileBrowseFragment_to_profileViewFragment"
-            app:destination="@id/profileViewFragment"/>
-        <action
             android:id="@+id/action_profileBrowseFragment_to_imageBrowseFragment"
 
             app:destination="@id/imageBrowseFragment"
             app:popUpTo="@id/imageBrowseFragment"/>
-    </fragment>
-    <fragment
-        android:id="@+id/profileViewFragment"
-        android:name="com.example.the_tarlords.ui.profile.ProfileViewFragment"
-        android:label="ProfileViewFragment">
-        <action
-            android:id="@+id/action_profileViewFragment_to_profileBrowseFragment"
-            app:destination="@+id/profileBrowseFragment"
-            app:popUpTo="@+id/profileBrowseFragment"/>
     </fragment>
     <fragment
         android:id="@+id/imageBrowseFragment"

@@ -152,7 +152,7 @@ public class AttendanceDBHelper {
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()){
                                         Log.d("Firestore", "DocumentSnapshot successfully written!");
-                                        event.signUps += 1;
+                                        event.setSignUps(event.getSignUps()+1);
                                         eventsRef.document(event.getId()).update("signUps", event.getSignUps());
                                         callback.onQueryComplete(SUCCESSFUL);
                                     }
@@ -229,6 +229,7 @@ public class AttendanceDBHelper {
                         @Override
                         public void onQueryComplete(int result) {
                             if (result==TRUE) {
+                                attendeeRef.update("checkIns",FieldValue.increment(1));
                                 callback.onQueryComplete(ALREADY_CHECKED_IN);
                             }
                             else {
@@ -240,7 +241,7 @@ public class AttendanceDBHelper {
                                             public void onComplete(@NonNull Task<Void> task) {
                                                 if (task.isSuccessful()) {
                                                     Log.d("Attendance", "Check in successful!");
-                                                    event.checkIns+=1;
+                                                    event.setCheckIns(event.getCheckIns()+1);
                                                     eventsRef.document(event.getId()).update("checkIns", event.getCheckIns());
                                                     callback.onQueryComplete(SUCCESSFUL);
                                                 }

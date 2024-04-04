@@ -12,10 +12,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.example.the_tarlords.MainActivity;
+import com.example.the_tarlords.data.Alert.MilestoneManager;
 import com.example.the_tarlords.data.attendance.AttendanceDBHelper;
 import com.example.the_tarlords.data.attendance.AttendanceQueryCallback;
-import com.example.the_tarlords.data.Alert.MilestoneManager;
-
 import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.map.LocationHelper;
 import com.example.the_tarlords.data.map.ShareLocation;
