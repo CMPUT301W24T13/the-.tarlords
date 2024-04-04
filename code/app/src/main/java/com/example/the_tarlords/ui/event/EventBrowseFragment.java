@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,7 +24,7 @@ import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.event.EventListCallback;
 import com.example.the_tarlords.data.event.EventListDBHelper;
 import com.example.the_tarlords.databinding.FragmentEventListBinding;
-import com.example.the_tarlords.ui.home.EventArrayAdapter;
+import com.example.the_tarlords.ui.home.EventPosterBrowseAdapter;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -36,7 +37,7 @@ public class EventBrowseFragment extends Fragment implements MenuProvider {
     private FragmentEventListBinding binding;
     private CollectionReference eventsRef = MainActivity.db.collection("Events");
     ListView eventListView;
-    EventArrayAdapter adapter;
+    EventPosterBrowseAdapter adapter;
     ArrayList<Event> events = new ArrayList<>();
 
 
@@ -65,9 +66,13 @@ public class EventBrowseFragment extends Fragment implements MenuProvider {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         requireActivity().addMenuProvider(this);
+
         eventListView = view.findViewById(R.id.eventListView);
-        adapter = new EventArrayAdapter(getContext(),events);
+        adapter = new com.example.the_tarlords.ui.home.EventPosterBrowseAdapter(getContext(),events);
         eventListView.setAdapter(adapter);
+
+        TextView pageTitle = view.findViewById(R.id.tv_event_list_header);
+        pageTitle.setText(getResources().getString(R.string.poster_browse_header));
 
         eventsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -87,6 +92,7 @@ public class EventBrowseFragment extends Fragment implements MenuProvider {
         eventListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
                 navigateToDetails(events.get(position));
             }
         });
@@ -98,6 +104,7 @@ public class EventBrowseFragment extends Fragment implements MenuProvider {
                 events.clear();
                 events.addAll(eventList);
                 adapter.notifyDataSetChanged();
+
             }
         });
     }

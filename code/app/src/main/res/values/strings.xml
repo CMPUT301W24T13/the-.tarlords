@@ -114,5 +114,7 @@
     <string name="map">Map</string>
     <string name="delete">Delete</string>
     <string name="sign_up_button">SIGN UP</string>
+    <string name="poster_browse_header">What\'s on tonight?</string>
+    <string name="poster_browse_subtitle">Browse upcoming events by poster.</string>
 
 </resources>

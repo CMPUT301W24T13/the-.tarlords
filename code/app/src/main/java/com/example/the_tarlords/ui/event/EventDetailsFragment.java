@@ -1,7 +1,7 @@
 package com.example.the_tarlords.ui.event;
 
-
 import static com.example.the_tarlords.MainActivity.context;
+
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -118,8 +118,8 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
 
         //set fragment views
         TextView eventNameTextView = view.findViewById(R.id.tv_event_name);
-        TextView eventLocationTextView = view.findViewById(R.id.tv_event_location);
-        TextView eventStartDateTextView = view.findViewById(R.id.tv_event_startDate);
+        TextView eventLocationTextView = view.findViewById(R.id.tv_imageBrowse_subtitle);
+        TextView eventStartDateTextView = view.findViewById(R.id.tv_imageBrowse_subtext);
         TextView eventEndDateTextView = view.findViewById(R.id.tv_event_endDate);
         TextView eventStartTimeTextView = view.findViewById(R.id.tv_event_startTime);
         TextView eventEndTimeTextView = view.findViewById(R.id.tv_event_endTime);
@@ -282,6 +282,7 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
                     Log.e("maps", Log.getStackTraceString(e));
                 }
         } else if (menuItem.getItemId()==R.id.signUpOptionsMenu) {
+
             AttendanceDBHelper.signUp(event, MainActivity.user, new AttendanceQueryCallback() {
                 @Override
                 public void onQueryComplete(int result) {
@@ -297,6 +298,7 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
                 }
             });
             return false;
+
         }
         //should return false to prevent crashing
         return false;

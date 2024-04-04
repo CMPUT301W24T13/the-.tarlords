@@ -252,12 +252,6 @@
             android:id="@+id/action_imageBrowseFragment_to_eventBrowseFragment"
             app:destination="@id/eventBrowseFragment"
             app:popUpTo="@id/eventBrowseFragment"/>
-
-        <!-- added this for the image browse backside card click-through to details -->
-        <action
-            android:id="@+id/action_imageBrowseFragment_to_eventDetailsFragment"
-            app:destination="@+id/eventDetailsFragment"
-            app:popUpTo="@id/eventDetailsFragment"/>
     </fragment>
 
 </navigation>

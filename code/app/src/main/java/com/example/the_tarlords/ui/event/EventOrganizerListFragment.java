@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -69,6 +70,9 @@ public class EventOrganizerListFragment extends Fragment implements MenuProvider
         eventListView = view.findViewById(R.id.eventListView);
         adapter = new EventArrayAdapter(getContext(),events);
         eventListView.setAdapter(adapter);
+
+        TextView pageTitle = view.findViewById(R.id.tv_event_list_header);
+        pageTitle.setText(getResources().getString(R.string.my_events));
 
         // This updates the displayed list on an event
         eventsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {

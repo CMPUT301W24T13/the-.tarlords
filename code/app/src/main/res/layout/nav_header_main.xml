@@ -48,7 +48,7 @@
             android:id="@+id/phoneNumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/helvetica"
+            android:fontFamily="@font/helvetica_regular"
             android:text="@string/phone_number"
             android:textColor="@color/mauve_medium_light"
             android:textSize="12sp" />

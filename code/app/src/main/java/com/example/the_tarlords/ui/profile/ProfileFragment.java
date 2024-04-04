@@ -49,6 +49,7 @@ public class ProfileFragment extends Fragment implements MenuProvider {
         super.onCreate(savedInstanceState);
         if (MainActivity.user != null) {
             user = MainActivity.user;
+
             Log.d("profile", "user.getFirstName()");
         }
 
@@ -142,6 +143,7 @@ public class ProfileFragment extends Fragment implements MenuProvider {
      */
     @Override
     public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+
         if (isAdded() && getContext() != null) {
             menu.clear();
             menuInflater.inflate(R.menu.options_menu, menu);
@@ -233,6 +235,7 @@ public class ProfileFragment extends Fragment implements MenuProvider {
                     user.setLastName(lastNameEditText.getText().toString());
                     user.setPhoneNum(phoneEditText.getText().toString());
                     user.setEmail(emailEditText.getText().toString());
+
                     displayProfilePhoto(profilePhotoImageView);
                     MainActivity.user.sendToFireStore();
                     //update navigation header (slide out menu) with newly updated information
@@ -325,6 +328,7 @@ public class ProfileFragment extends Fragment implements MenuProvider {
     public void displayProfilePhoto(ImageView profilePhotoImageView) {
         if (user.getProfilePhoto() != null) { //display user's profile photo if not null
             profilePhotoImageView.setImageBitmap(user.getProfilePhoto().getBitmap());
+
         } else if (user.getLastName()!=null){ //if user does not have a profile photo, generate one
             ProfilePhoto profilePhoto = new ProfilePhoto(user.getFirstName() + user.getLastName(),
                     null, user.getFirstName(), user.getLastName());

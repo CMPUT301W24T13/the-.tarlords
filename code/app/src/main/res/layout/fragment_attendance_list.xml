@@ -28,6 +28,22 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/ll_attendance_header"/>
 
+    <TextView
+        android:id="@+id/milestone_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+
+        android:text="Milestones" />
+
+    <ListView
+        android:id="@+id/milestone_list_view"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        tools:listitem="@layout/content_alerts"
+
+        android:layout_height="0dp" />
+
     <LinearLayout
         android:id="@+id/ll_attendance_header"
         android:layout_width="match_parent"

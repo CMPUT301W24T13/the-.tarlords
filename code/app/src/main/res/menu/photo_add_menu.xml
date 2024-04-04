@@ -3,7 +3,7 @@
     <item
         android:id="@+id/camera_open"
         android:icon="@drawable/ic_menu_camera"
-        android:title="@string/take_photo"/>
+        android:title="@string/take_photo" />
     <item
         android:id="@+id/gallery_open"
         android:icon="@drawable/ic_menu_gallery"

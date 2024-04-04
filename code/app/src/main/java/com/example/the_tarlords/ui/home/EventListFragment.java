@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,9 +21,15 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.event.Event;
+
+import com.example.the_tarlords.databinding.FragmentEventListBinding;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+
 import com.example.the_tarlords.data.event.EventListCallback;
 import com.example.the_tarlords.data.event.EventListDBHelper;
 import com.example.the_tarlords.databinding.FragmentEventListBinding;
+
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -76,6 +83,9 @@ public class EventListFragment extends Fragment implements MenuProvider {
         eventListView = view.findViewById(R.id.eventListView);
         adapter = new EventArrayAdapter(getContext(),events);
         eventListView.setAdapter(adapter);
+
+        TextView pageTitle = view.findViewById(R.id.tv_event_list_header);
+        pageTitle.setText(getResources().getString(R.string.event_list_header));
 
         // This updates the displayed list on an event
         eventsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
