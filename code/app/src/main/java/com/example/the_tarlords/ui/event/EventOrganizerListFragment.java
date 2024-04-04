@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -82,9 +81,6 @@ public class EventOrganizerListFragment extends Fragment implements MenuProvider
         //set adapter
         EventArrayAdapter adapter = new EventArrayAdapter(getContext(),events);
         eventListView.setAdapter(adapter);
-
-        TextView title = view.findViewById(R.id.pinnedTitle);
-        title.setText("My Events");
 
         eventsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
