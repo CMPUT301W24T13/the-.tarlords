@@ -1,6 +1,8 @@
 package com.example.the_tarlords.ui.event;
 
 
+import static com.example.the_tarlords.MainActivity.context;
+
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -28,6 +30,8 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.QR.QRCode;
+import com.example.the_tarlords.data.attendance.AttendanceDBHelper;
+import com.example.the_tarlords.data.attendance.AttendanceQueryCallback;
 import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.photo.EventPoster;
 import com.example.the_tarlords.databinding.FragmentEventDetailsBinding;
@@ -289,18 +293,21 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
                     Log.e("maps", Log.getStackTraceString(e));
                 }
         } else if (menuItem.getItemId()==R.id.signUpOptionsMenu) {
-            if (!event.reachedMaxCap()){
-                try {
-                    event.signUp(MainActivity.user);
-                    Toast.makeText(getContext(), "Sign Up Successful", Toast.LENGTH_SHORT).show();
-                } catch (Exception ignored) {
-                    Toast.makeText(getContext(), "Error. Is this event out of date? If not let Isabelle know. ", Toast.LENGTH_SHORT).show();
+            AttendanceDBHelper.signUp(event, MainActivity.user, new AttendanceQueryCallback() {
+                @Override
+                public void onQueryComplete(int result) {
+                    if (result== AttendanceDBHelper.SUCCESSFUL){
+                        Toast.makeText(context, "Sign up successful!", Toast.LENGTH_SHORT).show();
+                    } else if (result == AttendanceDBHelper.ALREADY_SIGNED_UP) {
+                        Toast.makeText(context, "Already signed up!", Toast.LENGTH_SHORT).show();
+                    } else if (result== AttendanceDBHelper.EVENT_FULL) {
+                        Toast.makeText(context, "Unable to sign up. Max capacity reached.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(context, "Error. Sign up failed.", Toast.LENGTH_SHORT).show();
+                    }
                 }
-            }
-            else {
-                Toast.makeText(getContext(), "Max capacity reached. Unable to sign up.", Toast.LENGTH_SHORT).show();
-            }
-            return true;
+            });
+            return false;
         }
         //should return false to prevent crashing
         return false;
