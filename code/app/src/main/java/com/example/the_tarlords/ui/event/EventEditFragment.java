@@ -223,27 +223,6 @@ public class EventEditFragment extends Fragment implements MenuProvider {
         checkInQR = view.findViewById(R.id.iv_checkin);
         eventInfoQR = view.findViewById(R.id.iv_info);
 
-        // this is for imageslider for event images
-        ViewPager2 viewPager = view.findViewById(R.id.viewPager);
-        int[] images = new int[]{R.drawable.plant, R.drawable.profile, R.drawable.participants};
-        ImageSliderAdapter adapter = new ImageSliderAdapter(images);
-        viewPager.setAdapter(adapter);
-
-        // this is for navigating to maps fragment by clicking on the map imageView5
-        ImageView imageView2 = view.findViewById(R.id.mapImage);
-        imageView2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bundle args = new Bundle();
-                args.putParcelable("event", event);
-                try {
-                    NavHostFragment.findNavController(EventEditFragment.this)
-                            .navigate(R.id.action_eventEditFragment_to_MapsFragment, args);
-                } catch (Exception e) {
-                    Log.e("maps", Log.getStackTraceString(e));
-                }
-            }
-        });
 
         //add more attributes as desired
 

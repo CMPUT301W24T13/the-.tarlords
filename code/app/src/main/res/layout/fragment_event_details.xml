@@ -17,23 +17,6 @@
         tools:context=".ui.event.EventDetailsFragment">
 
 
-
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/viewPager"
-            android:layout_width="336dp"
-            android:layout_height="170dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="18dp"
-            android:adjustViewBounds="true"
-            android:background="@drawable/rounded_corners_r"
-            android:scaleType="fitCenter"
-            android:visibility="visible"
-            app:layout_constraintBottom_toTopOf="@+id/tv_event_name"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.48"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <TextView
             android:id="@+id/tv_event_name"
             android:layout_width="match_parent"
@@ -435,6 +418,18 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iv_checkin_details" />
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="382dp"
+            android:layout_height="157dp"
+            android:layout_marginBottom="24dp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_event_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0"
+            app:srcCompat="@drawable/ic_menu_gallery" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

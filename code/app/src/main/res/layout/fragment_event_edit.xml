@@ -15,6 +15,19 @@
         android:orientation="vertical"
         tools:context=".ui.event.EventEditFragment">
 
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="382dp"
+            android:layout_height="157dp"
+            android:layout_marginTop="28dp"
+            android:layout_marginBottom="19dp"
+            app:layout_constraintBottom_toTopOf="@+id/et_event_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.439"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_menu_gallery" />
+
         <TextView
             android:id="@+id/textView5"
             android:layout_width="42dp"
@@ -217,21 +230,6 @@
             app:layout_constraintStart_toEndOf="@+id/tv_checkin"
             app:layout_constraintTop_toBottomOf="@+id/et_max_attendees" />
 
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/viewPager"
-            android:layout_width="336dp"
-            android:layout_height="170dp"
-            android:layout_marginTop="16dp"
-            android:adjustViewBounds="true"
-            android:background="@drawable/rounded_corners_r"
-            android:scaleType="fitCenter"
-            app:layout_constraintBottom_toTopOf="@+id/et_event_name"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.48"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
-
         <TextView
             android:id="@+id/tv_edit_event_startTime"
             android:layout_width="184dp"
@@ -299,7 +297,6 @@
             android:id="@+id/textView6"
             android:layout_width="261dp"
             android:layout_height="42dp"
-            android:layout_marginTop="252dp"
             android:fontFamily="@font/helvetica_rounded_bold"
             android:gravity="center"
             android:text="Additional Information"
@@ -309,7 +306,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.155"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/viewPager" />
+            tools:layout_editor_absoluteY="438dp" />
 
         <EditText
             android:id="@+id/additional_info"
