@@ -175,6 +175,7 @@ public class QRCode {
                         if (DocCodeID.equals(QRId)) {
                             //Replace and put in new EventID
                             QRRef.document(DocCodeID).update("EventId", eventID);
+                            qrID = DocCodeID;
                         }
                     } catch (Exception e) { }
                 }

@@ -3,18 +3,24 @@ package com.example.the_tarlords.ui.event;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -30,6 +36,9 @@ import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.photo.EventPoster;
 import com.example.the_tarlords.databinding.FragmentEventEditBinding;
 
+import java.util.ArrayList;
+import java.util.Objects;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link EventEditFragment#newInstance} factory method to
@@ -38,7 +47,7 @@ import com.example.the_tarlords.databinding.FragmentEventEditBinding;
  * linked to fragment_event_edit.xml
  * Will also take in an event as a parameter
  */
-public class EventEditFragment extends Fragment implements MenuProvider {
+public class EventEditFragment extends Fragment implements MenuProvider, AdapterView.OnItemSelectedListener {
 
     // the fragment initialization parameters
     private static Event event;
@@ -58,6 +67,8 @@ public class EventEditFragment extends Fragment implements MenuProvider {
     //when QR -> event <- event detials
     // Define a class member variable to hold the menu
     private Menu menu;
+    private Spinner spinner;
+    private String spinnerText;
 
 
     public EventEditFragment() {
@@ -99,7 +110,6 @@ public class EventEditFragment extends Fragment implements MenuProvider {
         eventNameEditText.setEnabled(isEditable);
         maxAttendees.setEnabled(isEditable);
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -261,7 +271,33 @@ public class EventEditFragment extends Fragment implements MenuProvider {
 
         // Set an OnClickListener for the eventEndDateTextView
         eventEndTimeTextView.setOnClickListener(v -> showTimePickerDialog("end"));
+
+        // this is for reuse QR code dropdown/spinner
+        spinner = view.findViewById(R.id.reuseQrCode);
+        QRCode qrCode = new QRCode();
+        qrCode.findPastEvents(MainActivity.user.getUserId(), new QRCode.EventsCallback() {
+            @Override
+            public void onEventsLoaded(ArrayList<String> events) {
+                Log.e("Event", String.valueOf(events));   //list is loaded
+                events.add(0, "Optional Select Event QRCode for Reuse");
+
+                ArrayAdapter<String> adapter2 = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_dropdown_item, events);
+                spinner.setAdapter(adapter2);
+                spinner.setOnItemSelectedListener(EventEditFragment.this);
+
+                Drawable spinnerDrawable = spinner.getBackground().getConstantState().newDrawable();
+                spinnerDrawable.setColorFilter(getResources().getColor(R.color.black), PorterDuff.Mode.SRC_ATOP);
+                spinner.setBackground(spinnerDrawable);
+            }
+        });
     }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        spinnerText = parent.getItemAtPosition(position).toString();
+    }
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) { }
 
     /**
      * Mandatory MenuProvider interface method.
@@ -320,14 +356,32 @@ public class EventEditFragment extends Fragment implements MenuProvider {
                 }
 
                 //if eventId is null, treat as new event and generate a new id
-                if (event.getId() == null) {
+                /*if (event.getId() == null) {
                     event.makeNewDocID(); //generate new event id
                     QRCode qr = new QRCode();
                     qr.makeQR(event.getId());
                     event.setQrCode(qr.getQrID()); //generate check in QR
                     event.setSignUps(0);
+                }*/
 
+                if (Objects.equals(spinnerText, "Select Event for Reuse")) {
+                    //Normal event creation
+                    Log.e("SPINNER", "NORMAL");
+                    event.makeNewDocID(); //generate new event id
+                    QRCode qr = new QRCode();
+                    qr.makeQR(event.getId());
+                    event.setQrCode(qr.getQrID()); //generate check in QR
+                    event.setSignUps(0);
+                } else {
+                    //Reuse QR code event creation
+                    Log.e("SPINNER", "REUSE");
+                    event.makeNewDocID(); //generate new event id
+                    QRCode qr = new QRCode();
+                    qr.reuseQR(MainActivity.user.getUserId(), spinnerText, event.getId());
+                    event.setQrCode(qr.getQrID()); //generate check in QR
+                    event.setSignUps(0);
                 }
+
                 if (event.getPoster()==null){
                     EventPoster poster = new EventPoster(event.getId(), null,event);
                     poster.autoGenerate();
@@ -338,6 +392,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
 
                 //TODO : check valid input
             }
+
             //create event bundle to pass to details fragment
             Bundle args = new Bundle();
             args.putParcelable("event", event);
