@@ -15,6 +15,7 @@ import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.data.attendance.AttendanceDBHelper;
 import com.example.the_tarlords.data.attendance.AttendanceQueryCallback;
 import com.example.the_tarlords.data.event.Event;
+import com.example.the_tarlords.data.map.LocationHelper;
 import com.example.the_tarlords.data.map.ShareLocation;
 import com.example.the_tarlords.data.users.User;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -116,13 +117,19 @@ public class QRScanActivity extends AppCompatActivity {
                         public void onQueryComplete(int result) {
                             if (result == AttendanceDBHelper.SUCCESSFUL) {
                                 // Separate from check-In so its fine here
-                                ShareLocation shareLocationDialog = new ShareLocation(event.getId(), event.getName());
-                                shareLocationDialog.show(getSupportFragmentManager(), "ShareLocationDialog");
+                                if (MainActivity.locationGranted){
+                                    ShareLocation shareLocationDialog = new ShareLocation(event.getId(), event.getName());
+                                    shareLocationDialog.show(getSupportFragmentManager(), "ShareLocationDialog");
+                                }
+
                                 Toast.makeText(MainActivity.context, "Check in successful!", Toast.LENGTH_SHORT).show();
                             } else if (result == AttendanceDBHelper.ALREADY_CHECKED_IN) {
                                 // Separate from check-In so its fine here
-                                ShareLocation shareLocationDialog = new ShareLocation(event.getId(), event.getName());
-                                shareLocationDialog.show(getSupportFragmentManager(), "ShareLocationDialog");
+                                if (MainActivity.locationGranted){
+                                    ShareLocation shareLocationDialog = new ShareLocation(event.getId(), event.getName());
+                                    shareLocationDialog.show(getSupportFragmentManager(), "ShareLocationDialog");
+                                }
+
                                 Toast.makeText(MainActivity.context, "Already checked in!", Toast.LENGTH_SHORT).show();
                             } else if (result == AttendanceDBHelper.EVENT_FULL) {
                                 finish();
