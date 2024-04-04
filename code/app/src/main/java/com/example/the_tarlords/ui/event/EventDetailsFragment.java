@@ -126,6 +126,7 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
         TextView eventEndTimeTextView = view.findViewById(R.id.tv_event_endTime);
         TextView eventMaxAttendees = view.findViewById(R.id.tv_max_attendees);
         ImageView eventPosterImageView = view.findViewById(R.id.iv_poster);
+        ImageView eventMapImageView = view.findViewById(R.id.mapImage);
         //add additional views here as desired
 
         // Check if event is not null before accessing its attributes
@@ -176,6 +177,21 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
             public void onClick(View v) {
                 QRCode qrcode = new QRCode();
                 qrcode.shareQR(imageView, getActivity());
+            }
+        });
+        // On-click Listener for the map image
+        eventMapImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle args = new Bundle();
+                args.putParcelable("event",event);
+                try {
+                    NavHostFragment.findNavController(EventDetailsFragment.this)
+                            .navigate(R.id.action_eventDetailsFragment_to_MapsFragment, args);
+                }catch(Exception e)
+                {
+                    Log.e("maps", Log.getStackTraceString(e));
+                }
             }
         });
     }
@@ -326,5 +342,7 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
         }
 
     }
+
+
 
 }

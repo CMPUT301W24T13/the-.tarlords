@@ -26,6 +26,7 @@ import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.photo.ProfilePhoto;
 import com.example.the_tarlords.data.users.User;
 import com.example.the_tarlords.databinding.FragmentProfileBinding;
+import com.example.the_tarlords.databinding.FragmentProfileViewBinding;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -43,7 +44,7 @@ public class ProfileViewFragment extends Fragment implements MenuProvider{
     EditText lastNameEditText;
     EditText phoneEditText;
     EditText emailEditText;
-    private FragmentProfileViewBinding binding;
+    //private FragmentProfileViewBinding binding;
     private FragmentProfileBinding binding;
 
 
