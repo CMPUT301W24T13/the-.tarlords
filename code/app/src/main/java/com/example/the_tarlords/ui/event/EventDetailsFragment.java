@@ -45,7 +45,8 @@ import com.example.the_tarlords.databinding.FragmentEventDetailsBinding;
  * The nav bar should handle going back to the listview????
  */
 public class EventDetailsFragment extends Fragment implements MenuProvider {
-    private Button shareQrCode;
+    private Button shareQrCodeCI;
+    private Button shareQrCodeEI;
     private static Event event;
     private boolean isOrganizer;
 
@@ -179,13 +180,23 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
             }
         }
 
-        ImageView imageView = view.findViewById(R.id.iv_checkin_details);
-        shareQrCode = view.findViewById(R.id.shareQrCode);
-        shareQrCode.setOnClickListener(new View.OnClickListener() {
+        ImageView imageViewCI = view.findViewById(R.id.iv_checkin_details);
+        shareQrCodeCI = view.findViewById(R.id.shareQrCodeCI);
+        shareQrCodeCI.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 QRCode qrcode = new QRCode();
-                qrcode.shareQR(imageView, getActivity());
+                qrcode.shareQR(imageViewCI, getActivity());
+            }
+        });
+
+        ImageView imageViewEI = view.findViewById(R.id.iv_info_details);
+        shareQrCodeEI = view.findViewById(R.id.shareQrCodeEI);
+        shareQrCodeEI.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                QRCode qrcode = new QRCode();
+                qrcode.shareQR(imageViewEI, getActivity());
             }
         });
     }
