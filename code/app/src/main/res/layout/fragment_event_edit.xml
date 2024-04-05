@@ -1,0 +1,408 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/eventEdit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical"
+        tools:context=".ui.event.EventEditFragment">
+
+        <ImageView
+            android:id="@+id/edit_iv_poster"
+            android:layout_width="382dp"
+            android:layout_height="157dp"
+            android:layout_marginTop="28dp"
+            android:layout_marginBottom="19dp"
+            app:layout_constraintBottom_toTopOf="@+id/et_event_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.439"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_menu_gallery" />
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="42dp"
+            android:layout_height="33dp"
+            android:layout_marginTop="12dp"
+            android:layout_weight="0.10"
+            android:fontFamily="@font/helvetica"
+            android:text="----"
+            android:textColor="#4d0a2a"
+            android:textSize="20sp"
+            android:textStyle="normal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.521"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_event_name" />
+
+        <EditText
+            android:id="@+id/et_event_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="204dp"
+            android:layout_marginEnd="25dp"
+            android:background="@drawable/rounded_corners_r"
+            android:fontFamily="@font/helvetica_bold"
+            android:gravity="center"
+            android:hint="Event Name"
+            android:textAllCaps="true"
+            android:textColor="#2d030f"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_edit_event_startDate"
+            android:layout_width="184dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="20dp"
+            android:layout_weight="0.5"
+            android:background="@drawable/rounded_corners_r"
+            android:fontFamily="@font/helvetica"
+            android:gravity="center"
+            android:hint="Start Date"
+            android:textColor="#4d0a2a"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toStartOf="@+id/textView5"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/ll_time_edit" />
+
+        <TextView
+            android:id="@+id/tv_edit_event_endDate"
+            android:layout_width="184dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="20dp"
+            android:layout_weight="0.5"
+            android:background="@drawable/rounded_corners_r"
+            android:fontFamily="@font/helvetica"
+            android:gravity="center"
+            android:hint="End Date"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textView5"
+            app:layout_constraintTop_toBottomOf="@+id/et_event_name" />
+
+        <LinearLayout
+            android:id="@+id/ll_time_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_event_name">
+
+
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/et_event_location"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="132dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/rounded_corners_r"
+            android:fontFamily="@font/helvetica"
+            android:hint="Location"
+            android:inputType="textPostalAddress"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:textColor="#4d0a2a"
+            android:textSize="23sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_event_name" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="312dp"
+            android:layout_marginEnd="9dp"
+            android:fontFamily="@font/helvetica"
+            android:text="Set Max Attendees: "
+            android:textColor="#4d0a2a"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toStartOf="@+id/cb_max_attendees"
+            app:layout_constraintHorizontal_bias="0.25"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/ll_time_edit" />
+
+        <CheckBox
+            android:id="@+id/cb_max_attendees"
+            android:layout_width="48dp"
+            android:layout_height="33dp"
+            android:layout_marginTop="324dp"
+            android:textColor="#4d0a2a"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.525"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_event_name" />
+
+        <EditText
+            android:id="@+id/et_max_attendees"
+            android:layout_width="139dp"
+            android:layout_height="43dp"
+            android:layout_marginTop="320dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/rounded_corners_r"
+            android:ems="10"
+            android:enabled="false"
+            android:clickable="false"
+            android:fontFamily="@font/helvetica"
+            android:hint="100"
+            android:inputType="number"
+            android:textColor="#4d0a2a"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.4"
+            app:layout_constraintStart_toEndOf="@+id/cb_max_attendees"
+            app:layout_constraintTop_toBottomOf="@+id/et_event_name" />
+
+        <ImageView
+            android:id="@+id/iv_checkin"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="61dp"
+            android:src="@drawable/qr_code_scan_svgrepo_com"
+            app:layout_constraintEnd_toStartOf="@+id/iv_info"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_checkin" />
+
+        <ImageView
+            android:id="@+id/iv_info"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="25dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_checkin"
+            app:layout_constraintTop_toBottomOf="@+id/tv_info"
+            tools:srcCompat="@drawable/qr_code_scan_svgrepo_com" />
+
+        <TextView
+            android:id="@+id/tv_checkin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="57dp"
+            android:layout_marginTop="344dp"
+            android:layout_marginEnd="120dp"
+            android:fontFamily="@font/helvetica"
+            android:text="Check In QR:"
+            android:textColor="#4d0a2a"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toStartOf="@+id/tv_info"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+        <TextView
+            android:id="@+id/tv_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="340dp"
+            android:layout_marginEnd="57dp"
+            android:fontFamily="@font/helvetica"
+            android:text="Event Info QR:"
+            android:textColor="#4d0a2a"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tv_checkin"
+            app:layout_constraintTop_toBottomOf="@+id/et_max_attendees" />
+
+        <TextView
+            android:id="@+id/tv_edit_event_startTime"
+            android:layout_width="184dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="68dp"
+            android:layout_weight="0.45"
+            android:background="@drawable/rounded_corners_r"
+            android:fontFamily="@font/helvetica"
+            android:gravity="center"
+            android:hint="Start Time"
+            android:textColor="#4d0a2a"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toStartOf="@+id/textView7"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_event_name" />
+
+        <TextView
+            android:id="@+id/tv_edit_event_endTime"
+            android:layout_width="184dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="68dp"
+            android:layout_marginEnd="20dp"
+            android:layout_weight="0.45"
+            android:background="@drawable/rounded_corners_r"
+            android:fontFamily="@font/helvetica"
+            android:gravity="center"
+            android:hint="End Time"
+            android:textColor="#4d0a2a"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.272"
+            app:layout_constraintStart_toEndOf="@+id/textView7"
+            app:layout_constraintTop_toBottomOf="@+id/et_event_name" />
+
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="45dp"
+            android:layout_height="26dp"
+            android:layout_marginTop="76dp"
+            android:layout_weight="0.10"
+            android:fontFamily="@font/helvetica"
+            android:text="----"
+            android:textColor="#4d0a2a"
+            android:textSize="20sp"
+            android:textStyle="normal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.518"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_event_name" />
+
+        <Spinner
+            android:id="@+id/reuseQrCode"
+            android:layout_width="269dp"
+            android:layout_height="51dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.553"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/countOfCheckIns"
+            app:layout_constraintVertical_bias="0.965" />
+
+        <TextView
+            android:id="@+id/tv_event_detail_QR_label"
+            android:layout_width="261dp"
+            android:layout_height="42dp"
+            android:layout_marginTop="182dp"
+            android:fontFamily="@font/helvetica_rounded_bold"
+            android:gravity="center"
+            android:text="Additional Information"
+            android:textColor="#2d030f"
+            android:textSize="23sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.155"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_event_name" />
+
+        <EditText
+            android:id="@+id/additional_info"
+            android:layout_width="400dp"
+            android:layout_height="67dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="244dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/rounded_corners_r"
+            android:fontFamily="@font/helvetica"
+            android:hint="This event is about..."
+            android:textColor="#4d0a2a"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.479"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_event_name" />
+
+        <ImageView
+            android:id="@+id/mapImage"
+            android:layout_width="159dp"
+            android:layout_height="227dp"
+            android:layout_marginTop="464dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginBottom="268dp"
+            android:src="@drawable/map"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_event_name" />
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="160dp"
+            android:layout_height="46dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="368dp"
+            android:layout_marginEnd="18dp"
+            android:src="@drawable/participants"
+            app:layout_constraintEnd_toStartOf="@+id/countOfSignUps"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_event_name" />
+
+        <TextView
+            android:id="@+id/countOfSignUps"
+            android:layout_width="45dp"
+            android:layout_height="36dp"
+            android:layout_marginTop="370dp"
+            android:text="TextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_event_name" />
+
+        <TextView
+            android:id="@+id/countOfCheckIns"
+            android:layout_width="45dp"
+            android:layout_height="36dp"
+            android:layout_marginTop="7dp"
+            android:text="TextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.501"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/countOfSignUps" />
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="124dp"
+            android:layout_height="33dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="372dp"
+            android:layout_marginEnd="52dp"
+            android:background="@drawable/rounded_corners_r"
+            android:fontFamily="@font/helvetica"
+            android:text="signed up"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/countOfSignUps"
+            app:layout_constraintTop_toBottomOf="@+id/et_event_name" />
+
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="124dp"
+            android:layout_height="33dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="52dp"
+            android:background="@drawable/rounded_corners_r"
+            android:fontFamily="@font/helvetica"
+            android:text="checked in"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/countOfCheckIns"
+            app:layout_constraintTop_toBottomOf="@+id/textView10" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
