@@ -3,6 +3,7 @@ package com.example.the_tarlords.ui.event;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -32,9 +34,11 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.QR.QRCode;
+import com.example.the_tarlords.data.QR.TakePhotoActivity;
 import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.photo.EventPoster;
 import com.example.the_tarlords.databinding.FragmentEventEditBinding;
+import com.example.the_tarlords.ui.profile.UploadPhotoActivity;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -279,6 +283,40 @@ public class EventEditFragment extends Fragment implements MenuProvider {
             QRCode.generateQR("CI" + event.getQrCode(), checkInQR);
             QRCode.generateQR("EI" + event.getQrCode(), eventInfoQR);
         }
+
+
+
+        // Set an OnClickListener for the eventPosterImageView
+        eventPosterImageView.setOnClickListener(v -> {
+            PopupMenu addPhotoOptions = new PopupMenu(this.getContext(), v);
+            addPhotoOptions.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    if (item.getItemId() == R.id.camera_open) {
+                        //take photo
+                        Intent eventPosterCapture = new Intent(getActivity(), TakePhotoActivity.class);
+                        eventPosterCapture.putExtra("event", event);
+                        startActivity(eventPosterCapture);
+                        return true;
+                    } else if (item.getItemId() == R.id.gallery_open) {
+                        //upload photo
+                        Intent eventPosterUpload = new Intent(getActivity(), UploadPhotoActivity.class);
+                        eventPosterUpload.putExtra("event", event);
+                        startActivity(eventPosterUpload);
+                        return true;
+                    } else if (item.getItemId() == R.id.remove_current_photo) {
+                        //remove current photo:
+                        event.getPoster().autoGenerate();
+                        event.setPosterIsDefault(true);
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            });
+            addPhotoOptions.getMenuInflater().inflate(R.menu.photo_add_menu, addPhotoOptions.getMenu());
+            addPhotoOptions.show();
+        });
 
 
         // Set an OnClickListener for the eventStartDateTextView
