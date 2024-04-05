@@ -5,7 +5,6 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.TextUtils;
@@ -29,7 +28,6 @@ import androidx.annotation.NonNull;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
@@ -57,12 +55,13 @@ public class EventEditFragment extends Fragment implements MenuProvider {
     // the fragment initialization parameters
     private static Event event;
     // The views that the fragment will inflate
+    private ImageView eventPosterImageView;
+    private EditText eventNameEditText;
     private TextView eventStartDateTextView;
     private TextView eventEndDateTextView;
     private TextView eventStartTimeTextView;
-    private EditText eventLocationEditText;
-    private EditText eventNameEditText;
     private TextView eventEndTimeTextView;
+    private EditText eventLocationEditText;
     private EditText maxAttendees;
     private CheckBox cbMaxAttendees;
     private ImageView checkInQR;
@@ -111,12 +110,13 @@ public class EventEditFragment extends Fragment implements MenuProvider {
      * TODO are the QR codes ever editable?
      */
     private void setTextViewsClickablity(Boolean isEditable) {
+        eventPosterImageView.setClickable(isEditable);
+        eventNameEditText.setEnabled(isEditable);
         eventStartDateTextView.setClickable(isEditable);
         eventEndDateTextView.setClickable(isEditable);
         eventStartTimeTextView.setClickable(isEditable);
         eventEndTimeTextView.setClickable(isEditable);
         eventLocationEditText.setEnabled(isEditable);
-        eventNameEditText.setEnabled(isEditable);
         maxAttendees.setEnabled(isEditable);
     }
 
@@ -223,12 +223,13 @@ public class EventEditFragment extends Fragment implements MenuProvider {
         requireActivity().addMenuProvider(this);
 
         //Event id is a textview because user should not be able to edit it, assigned when event object created
+        eventPosterImageView = view.findViewById(R.id.edit_iv_poster);
         eventNameEditText = view.findViewById(R.id.et_event_name);
-        eventLocationEditText = view.findViewById(R.id.et_event_location);
-        eventStartTimeTextView = view.findViewById(R.id.tv_edit_event_startTime);
         eventStartDateTextView = view.findViewById(R.id.tv_edit_event_startDate);
         eventEndDateTextView = view.findViewById(R.id.tv_edit_event_endDate);
+        eventStartTimeTextView = view.findViewById(R.id.tv_edit_event_startTime);
         eventEndTimeTextView = view.findViewById(R.id.tv_edit_event_endTime);
+        eventLocationEditText = view.findViewById(R.id.et_event_location);
         maxAttendees = view.findViewById(R.id.et_max_attendees);
         cbMaxAttendees = view.findViewById(R.id.cb_max_attendees);
         checkInQR = view.findViewById(R.id.iv_checkin);
@@ -240,6 +241,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
         //check event is not null
         if (event.getId() != null) {
             // Populate UI elements with event details
+            eventPosterImageView.setImageBitmap(event.getPoster().getBitmap());
             eventNameEditText.setText(event.getName());
             eventLocationEditText.setText(event.getLocation());
             eventStartTimeTextView.setText(event.getStartTime());
@@ -264,16 +266,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
             });
             // Populate more attributes as desired
         }
-        //if event is null, create new event
-        else {
-            //set placeholder data
-            eventNameEditText.setHint("Event Name");
-            eventLocationEditText.setHint("Location");
-            eventStartDateTextView.setHint("January 1, 2000");
-            eventStartDateTextView.setHint("January 1, 2000");
-            eventStartTimeTextView.setHint("5:30am");
-            eventEndTimeTextView.setHint("4:30pm");
-        }
+
         //check if QR codes have already been generated
         if (event.getQrCode() == null) {
             //hide QR code placeholder views
@@ -363,11 +356,11 @@ public class EventEditFragment extends Fragment implements MenuProvider {
             if (menuItem.getItemId() == R.id.saveOptionsMenu) {
 
                 // Update the event details
+                event.setName(eventNameEditText.getText().toString());
                 event.setStartDate(eventStartDateTextView.getText().toString());
                 event.setEndDate(eventEndDateTextView.getText().toString());
                 event.setStartTime(eventStartTimeTextView.getText().toString());
                 event.setEndTime(eventEndTimeTextView.getText().toString());
-                event.setName(eventNameEditText.getText().toString());
                 event.setLocation(eventLocationEditText.getText().toString());
                 event.setOrganizerId(MainActivity.user.getUserId());
                 String max = maxAttendees.getText().toString();
@@ -469,4 +462,4 @@ public class EventEditFragment extends Fragment implements MenuProvider {
 
         return false;
     }
-}  
+}
