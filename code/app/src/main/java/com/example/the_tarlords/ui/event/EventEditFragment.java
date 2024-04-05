@@ -5,8 +5,8 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Parcelable;
 import android.text.TextUtils;
 import android.util.Log;
@@ -16,8 +16,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -29,6 +29,7 @@ import androidx.annotation.NonNull;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
@@ -36,12 +37,6 @@ import com.example.the_tarlords.data.QR.QRCode;
 import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.photo.EventPoster;
 import com.example.the_tarlords.databinding.FragmentEventEditBinding;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-
-import java.util.ArrayList;
-import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -63,6 +58,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
     private EditText eventNameEditText;
     private TextView eventEndTimeTextView;
     private EditText maxAttendees;
+    private CheckBox cbMaxAttendees;
     private ImageView checkInQR;
     private ImageView eventInfoQR;
     private FragmentEventEditBinding binding;
@@ -71,12 +67,6 @@ public class EventEditFragment extends Fragment implements MenuProvider {
     //when QR -> event <- event detials
     // Define a class member variable to hold the menu
     private Menu menu;
-    private Spinner spinner;
-    private ArrayList<String> eventsForReuse;
-    private FirebaseFirestore db;
-    private static CollectionReference QRRef = MainActivity.db.collection("QRCodes");
-    private static CollectionReference EventsRef = MainActivity.db.collection("Events");
-
 
 
     public EventEditFragment() {
@@ -118,6 +108,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
         eventNameEditText.setEnabled(isEditable);
         maxAttendees.setEnabled(isEditable);
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -228,8 +219,10 @@ public class EventEditFragment extends Fragment implements MenuProvider {
         eventEndDateTextView = view.findViewById(R.id.tv_edit_event_endDate);
         eventEndTimeTextView = view.findViewById(R.id.tv_edit_event_endTime);
         maxAttendees = view.findViewById(R.id.et_max_attendees);
+        cbMaxAttendees = view.findViewById(R.id.cb_max_attendees);
         checkInQR = view.findViewById(R.id.iv_checkin);
         eventInfoQR = view.findViewById(R.id.iv_info);
+
 
         //add more attributes as desired
 
@@ -242,7 +235,22 @@ public class EventEditFragment extends Fragment implements MenuProvider {
             eventStartDateTextView.setText(event.getStartDate());
             eventEndDateTextView.setText(event.getEndDate());
             eventEndTimeTextView.setText(event.getEndTime());
-            maxAttendees.setText(event.getMaxSignUps().toString());
+            //maxAttendees.setText(event.getMaxSignUps().toString());
+            maxAttendees.setEnabled(false);
+            cbMaxAttendees.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                maxAttendees.setEnabled(isChecked);
+                if (isChecked) {
+                    maxAttendees.setFocusableInTouchMode(true);
+                    maxAttendees.setFocusable(true);
+                    maxAttendees.setClickable(true);
+                    maxAttendees.setText(event.getMaxSignUps().toString());
+                } else {
+                    maxAttendees.setFocusableInTouchMode(false);
+                    maxAttendees.setFocusable(false);
+                    maxAttendees.setClickable(false);
+                    maxAttendees.setText(""); // Clear the text when the checkbox is unchecked
+                }
+            });
             // Populate more attributes as desired
         }
         //if event is null, create new event
@@ -281,25 +289,16 @@ public class EventEditFragment extends Fragment implements MenuProvider {
         eventEndTimeTextView.setOnClickListener(v -> showTimePickerDialog("end"));
 
         // this is for reuse QR code dropdown/spinner
-        spinner = view.findViewById(R.id.reuseQrCode);
-        QRCode qrCode = new QRCode();
-        qrCode.findPastEvents(MainActivity.user.getUserId(), new QRCode.EventsCallback() {
-            @Override
-            public void onEventsLoaded(ArrayList<String> events) {
-                try {
-                    Log.e("Old Events", String.valueOf(events));   //list is loaded
-                    events.add(0, "Optional Reuse QRCode");
-                    eventsForReuse = events;
+        Spinner spinner = view.findViewById(R.id.reuseQrCode);
+        String[] items = new String[]{"Item 1", "Item 2", "Item 3", "Item 4"};
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_dropdown_item, items);
+        spinner.setAdapter(adapter2);
 
-                    ArrayAdapter<String> adapter2 = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_dropdown_item, events);
-                    spinner.setAdapter(adapter2);
+        Drawable spinnerDrawable = spinner.getBackground().getConstantState().newDrawable();
+        spinnerDrawable.setColorFilter(getResources().getColor(R.color.black), PorterDuff.Mode.SRC_ATOP);
 
-                    Drawable spinnerDrawable = spinner.getBackground().getConstantState().newDrawable();
-                    spinnerDrawable.setColorFilter(getResources().getColor(R.color.black), PorterDuff.Mode.SRC_ATOP);
-                    spinner.setBackground(spinnerDrawable);
-                } catch(Exception e) { }
-            }
-        });
+        spinner.setBackground(spinnerDrawable);
+
     }
 
     /**
@@ -331,8 +330,6 @@ public class EventEditFragment extends Fragment implements MenuProvider {
     @Override
     public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
         if (menuItem.getItemId() == R.id.saveOptionsMenu || menuItem.getItemId() == R.id.cancelOptionsMenu) {
-            boolean reuse = false;
-            String eventID;
 
             //set clickability of views and edit texts
             setTextViewsClickablity(false);
@@ -361,40 +358,14 @@ public class EventEditFragment extends Fragment implements MenuProvider {
                 }
 
                 //if eventId is null, treat as new event and generate a new id
-                /*if (event.getId() == null) {
+                if (event.getId() == null) {
                     event.makeNewDocID(); //generate new event id
                     QRCode qr = new QRCode();
                     qr.makeQR(event.getId());
                     event.setQrCode(qr.getQrID()); //generate check in QR
                     event.setSignUps(0);
-                }*/
 
-                int position = spinner.getSelectedItemPosition();
-                String eventToReuse = eventsForReuse.get(position);
-
-                if (Objects.equals(eventToReuse, "Optional Reuse QRCode") && event.getId() == null) {
-                    eventID = "";
-                    //Normal event creation
-                    Log.e("SPINNERN", "NORMAL");
-                    event.makeNewDocID(); //generate new event id
-                    QRCode qr = new QRCode();
-                    qr.makeQR(event.getId());
-                    event.setQrCode(qr.getQrID()); //generate check in QR
-                    event.setSignUps(0);
-                } else if (event.getId() == null) {
-                    //Reuse QR code event creation
-                    Log.e("SPINNERR", "REUSE");
-                    event.makeNewDocID(); //generate new event id
-                    QRCode qr = new QRCode();
-                    qr.reuseQR(MainActivity.user.getUserId(), eventToReuse, event.getId());
-                    event.setQrCode(qr.getQrID()); //generate check in QR
-                    event.setSignUps(0);
-                    reuse = true;
-                    eventID = event.getId();
-                } else {
-                    eventID = "";
                 }
-
                 if (event.getPoster()==null){
                     EventPoster poster = new EventPoster(event.getId(), null,event);
                     poster.autoGenerate();
@@ -404,32 +375,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
                 event.sendToFirebase();
 
                 //TODO : check valid input
-            } else {
-                eventID = "";
             }
-
-            if (reuse) {
-                //find event id in qr collection, get qrid, set in original event
-                QRRef.addSnapshotListener((querySnapshots, error) -> {
-                    if (error != null) {
-                        Log.e("Firestore", error.toString());
-                        return;
-                    }
-                    if (querySnapshots != null) {
-                        for (QueryDocumentSnapshot doc: querySnapshots) {
-                            String DocCodeID = doc.getId();
-                            try {
-                                if (doc.getString("EventId") == eventID) {
-                                    //Replace and put in new EventID
-                                    EventsRef.document(eventID).update("qrCode", DocCodeID);
-                                }
-                            } catch (Exception e) { }
-                        }
-                    }
-                });
-                reuse = false;
-            }
-
             //create event bundle to pass to details fragment
             Bundle args = new Bundle();
             args.putParcelable("event", event);
