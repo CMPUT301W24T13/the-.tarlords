@@ -36,8 +36,7 @@ public class ProfileListAdapter extends ArrayAdapter<User> {
             view = inflater.inflate(R.layout.fragment_profile_list_item, parent, false);
             holder = new ViewHolder();
             //getting the textviews
-            holder.firstName = view.findViewById(R.id.firstNameTV);
-            holder.lastName = view.findViewById(R.id.lastNameTV);
+            holder.name = view.findViewById(R.id.nameTV);
             holder.email = view.findViewById(R.id.emailTV);
             holder.phoneNum = view.findViewById(R.id.phoneNumberTV);
             holder.profilePic = view.findViewById(R.id.profile_photo_image_view);
@@ -48,8 +47,7 @@ public class ProfileListAdapter extends ArrayAdapter<User> {
 
         User user = userList.get(position);
         //setting the textviews
-        holder.firstName.setText(user.getFirstName());
-        holder.lastName.setText(user.getLastName());
+        holder.name.setText(user.getFirstName()+" "+user.getLastName());
         holder.email.setText(user.getEmail());
         holder.phoneNum.setText(user.getPhoneNum());
         if (user.getProfilePhoto()!= null) {
@@ -63,8 +61,7 @@ public class ProfileListAdapter extends ArrayAdapter<User> {
      * Add the text views you want to display here
      */
     static class ViewHolder {
-        TextView firstName;
-        TextView lastName;
+        TextView name;
         TextView email;
         TextView phoneNum;
         ImageView profilePic;

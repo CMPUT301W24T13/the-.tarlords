@@ -22,40 +22,27 @@
                 android:id="@+id/profile_photo_image_view"
                 android:layout_width="75dp"
                 android:layout_height="75dp"
+                android:layout_marginStart="10dp"
                 android:src="@drawable/profile"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/firstNameTV"
-                android:layout_width="wrap_content"
+                android:id="@+id/nameTV"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
 
-                android:text="@string/first_name"
+                android:layout_marginStart="25dp"
                 android:fontFamily="@font/helvetica_bold"
+                android:text="@string/name"
+
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:textSize="24sp"
-
-                app:layout_constraintStart_toEndOf="@+id/profile_photo_image_view"
-                app:layout_constraintEnd_toStartOf="@+id/lastNameTV"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/phoneNumberTV" />
-
-            <TextView
-                android:id="@+id/lastNameTV"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:text="@string/last_name"
-                android:fontFamily="@font/helvetica_bold"
-                android:textAppearance="?attr/textAppearanceListItem"
-                android:textSize="24sp"
-
-                app:layout_constraintStart_toEndOf="@+id/firstNameTV"
+                app:layout_constraintBottom_toTopOf="@+id/phoneNumberTV"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/phoneNumberTV" />
+                app:layout_constraintStart_toEndOf="@+id/profile_photo_image_view"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/phoneNumberTV"
@@ -67,8 +54,8 @@
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:textSize="18sp"
 
-                app:layout_constraintStart_toStartOf="@+id/firstNameTV"
-                app:layout_constraintTop_toBottomOf="@+id/firstNameTV"
+                app:layout_constraintStart_toStartOf="@+id/nameTV"
+                app:layout_constraintTop_toBottomOf="@+id/nameTV"
                 app:layout_constraintBottom_toTopOf="@+id/emailTV" />
 
             <TextView
@@ -81,7 +68,7 @@
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:textSize="18sp"
 
-                app:layout_constraintStart_toStartOf="@id/firstNameTV"
+                app:layout_constraintStart_toStartOf="@id/nameTV"
                 app:layout_constraintTop_toBottomOf="@id/phoneNumberTV"
                 app:layout_constraintBottom_toBottomOf="parent" />
 

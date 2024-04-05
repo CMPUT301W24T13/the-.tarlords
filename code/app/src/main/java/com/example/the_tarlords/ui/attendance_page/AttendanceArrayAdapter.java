@@ -34,8 +34,7 @@ public class AttendanceArrayAdapter extends ArrayAdapter<Attendee> {
             view = inflater.inflate(R.layout.fragment_profile_list_item, parent, false);
             holder = new AttendanceArrayAdapter.ViewHolder();
             //getting the textviews
-            holder.firstName = view.findViewById(R.id.firstNameTV);
-            holder.lastName = view.findViewById(R.id.lastNameTV);
+            holder.name = view.findViewById(R.id.nameTV);
             holder.email = view.findViewById(R.id.emailTV);
             holder.phoneNum = view.findViewById(R.id.phoneNumberTV);
             holder.profilePic = view.findViewById(R.id.profile_photo_image_view);
@@ -46,8 +45,7 @@ public class AttendanceArrayAdapter extends ArrayAdapter<Attendee> {
 
         Attendee attendee = attendees.get(position);
         //setting the textviews
-        holder.firstName.setText(attendee.getFirstName());
-        holder.lastName.setText(attendee.getLastName());
+        holder.name.setText(attendee.getFirstName()+" "+attendee.getLastName());
         holder.email.setText(attendee.getEmail());
         holder.phoneNum.setText(attendee.getPhoneNum());
         if (attendee.getProfilePhoto()!=null) {
@@ -61,8 +59,7 @@ public class AttendanceArrayAdapter extends ArrayAdapter<Attendee> {
      * Add the text views you want to display here
      */
     static class ViewHolder {
-        TextView firstName;
-        TextView lastName;
+        TextView name;
         TextView email;
         TextView phoneNum;
         ImageView profilePic;
