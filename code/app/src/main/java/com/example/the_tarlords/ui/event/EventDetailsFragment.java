@@ -14,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,7 +45,7 @@ import com.example.the_tarlords.databinding.FragmentEventDetailsBinding;
  * The nav bar should handle going back to the listview????
  */
 public class EventDetailsFragment extends Fragment implements MenuProvider {
-
+    private Button shareQrCode;
     private static Event event;
     private boolean isOrganizer;
 
@@ -118,13 +119,13 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
 
         //set fragment views
         TextView eventNameTextView = view.findViewById(R.id.tv_event_name);
-        TextView eventLocationTextView = view.findViewById(R.id.tv_imageBrowse_subtitle);
-        TextView eventStartDateTextView = view.findViewById(R.id.tv_imageBrowse_subtext);
+        TextView eventLocationTextView = view.findViewById(R.id.tv_event_location);
+        TextView eventStartDateTextView = view.findViewById(R.id.tv_event_startDate);
         TextView eventEndDateTextView = view.findViewById(R.id.tv_event_endDate);
         TextView eventStartTimeTextView = view.findViewById(R.id.tv_event_startTime);
         TextView eventEndTimeTextView = view.findViewById(R.id.tv_event_endTime);
         TextView eventMaxAttendees = view.findViewById(R.id.tv_max_attendees);
-        ImageView eventPosterImageView = view.findViewById(R.id.iv_event_poster);
+        ImageView eventPosterImageView = view.findViewById(R.id.iv_poster);
         //add additional views here as desired
 
         // Check if event is not null before accessing its attributes
@@ -167,6 +168,16 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
                 QRCode.generateQR("EI"+event.getQrCode(),eventInfoQr);
             }
         }
+
+        ImageView imageView = view.findViewById(R.id.iv_checkin_details);
+        shareQrCode = view.findViewById(R.id.shareQrCode);
+        shareQrCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                QRCode qrcode = new QRCode();
+                qrcode.shareQR(imageView, getActivity());
+            }
+        });
     }
 
     /**

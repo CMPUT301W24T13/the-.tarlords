@@ -23,6 +23,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
@@ -47,7 +48,11 @@ public class ProfileFragment extends Fragment implements MenuProvider {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (MainActivity.user != null) {
+        if (getArguments() != null) {
+            user = (User) getArguments().getParcelable("user");
+
+        }
+        else if (MainActivity.user != null) {
             user = MainActivity.user;
 
             Log.d("profile", "user.getFirstName()");
@@ -163,7 +168,7 @@ public class ProfileFragment extends Fragment implements MenuProvider {
                 lastNameEditText.setEnabled(true);
                 phoneEditText.setEnabled(true);
                 emailEditText.setEnabled(true);
-            } else {
+            } else if (user == MainActivity.user){
                 menu.findItem(R.id.editOptionsMenu).setVisible(true);
                 menu.findItem(R.id.saveOptionsMenu).setVisible(false);
                 menu.findItem(R.id.cancelOptionsMenu).setVisible(false);
@@ -184,7 +189,7 @@ public class ProfileFragment extends Fragment implements MenuProvider {
                 menu.findItem(R.id.editOptionsMenu).setVisible(false);
                 menu.findItem(R.id.saveOptionsMenu).setVisible(true);
                 menu.findItem(R.id.cancelOptionsMenu).setVisible(true);
-            } else {
+            } else if (user ==MainActivity.user){
                 menu.findItem(R.id.editOptionsMenu).setVisible(true);
                 menu.findItem(R.id.saveOptionsMenu).setVisible(false);
                 menu.findItem(R.id.cancelOptionsMenu).setVisible(false);
@@ -223,6 +228,7 @@ public class ProfileFragment extends Fragment implements MenuProvider {
                     lastNameEditText.setEnabled(false);
                     phoneEditText.setEnabled(false);
                     emailEditText.setEnabled(false);
+                    Navigation.findNavController(getActivity(),R.id.eventListFragment);
 
                     }
                 if (menuItem.getItemId() == R.id.cancelOptionsMenu) {
