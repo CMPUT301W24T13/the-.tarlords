@@ -33,6 +33,8 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 public class EventBrowseFragment extends Fragment implements MenuProvider {
@@ -69,6 +71,7 @@ public class EventBrowseFragment extends Fragment implements MenuProvider {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         requireActivity().addMenuProvider(this);
+
         eventListView = view.findViewById(R.id.eventListView);
         adapter = new com.example.the_tarlords.ui.home.EventPosterBrowseAdapter(getContext(),events);
         eventListView.setAdapter(adapter);

@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -36,6 +37,10 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
         location.setText(event.getLocation());
         TextView startDate = view.findViewById(R.id.tv_eventList_start_date);
         startDate.setText(event.getStartDate());
+        ImageView poster = view.findViewById(R.id.iv_event_poster_list);
+        if (event.getPoster()!=null){
+            poster.setImageBitmap(event.getPoster().getBitmap());
+        }
         return view;
     }
 }

@@ -3,13 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
+    android:label="   "
     app:startDestination="@id/eventListFragment">
 
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.the_tarlords.ui.profile.ProfileFragment"
-        android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" >
+        android:label="   "
+        tools:layout="@layout/fragment_profile">
         <action
             android:id="@+id/action_profileFragment_to_eventOrganizerListFragment"
             app:destination="@id/eventOrganizerListFragment"
@@ -28,7 +29,7 @@
         <action
             android:id="@+id/action_profileFragment_to_imageBrowseFragment"
             app:destination="@id/imageBrowseFragment"
-            app:popUpTo="@id/imageBrowseFragment"/>
+            app:popUpTo="@id/imageBrowseFragment" />
     </fragment>
 
     <activity
@@ -40,8 +41,8 @@
     <fragment
         android:id="@+id/eventListFragment"
         android:name="com.example.the_tarlords.ui.home.EventListFragment"
-        android:label="fragment_event_list"
-        tools:layout="@layout/fragment_event_list" >
+        android:label="   "
+        tools:layout="@layout/fragment_event_list">
         <action
             android:id="@+id/action_eventFragment_to_eventDetailsFragment"
             app:destination="@id/eventDetailsFragment" />
@@ -60,14 +61,14 @@
         <action
             android:id="@+id/eventListBrowseFragment_to_imageBrowseFragment"
             app:destination="@id/imageBrowseFragment"
-            app:popUpTo="@id/imageBrowseFragment"/>
+            app:popUpTo="@id/imageBrowseFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/attendanceFragment"
         android:name="com.example.the_tarlords.ui.attendance_page.AttendanceFragment"
-        android:label="fragment_attendance_list"
-        tools:layout="@layout/fragment_attendance_list" >
+        android:label="   "
+        tools:layout="@layout/fragment_attendance_list">
         <action
             android:id="@+id/action_attendanceFragment_pop"
             app:launchSingleTop="true"
@@ -78,8 +79,8 @@
     <fragment
         android:id="@+id/eventDetailsFragment"
         android:name="com.example.the_tarlords.ui.event.EventDetailsFragment"
-        android:label="fragment_event_details"
-        tools:layout="@layout/fragment_event_details" >
+        android:label="   "
+        tools:layout="@layout/fragment_event_details">
         <action
             android:id="@+id/action_eventDetailsFragment_to_eventEditFragment"
             app:destination="@id/eventEditFragment" />
@@ -95,56 +96,56 @@
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_eventDetailsFragment_to_MapsFragment"
-            app:destination="@id/mapsFragment"/>
+            app:destination="@id/mapsFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/eventEditFragment"
         android:name="com.example.the_tarlords.ui.event.EventEditFragment"
-        android:label="fragment_event_edit"
-        tools:layout="@layout/fragment_event_edit" >
+        android:label="   "
+        tools:layout="@layout/fragment_event_edit">
         <action
             android:id="@+id/action_eventEditFragment_pop"
             app:launchSingleTop="true"
             app:popUpTo="@id/eventEditFragment"
             app:popUpToInclusive="true" />
-
     </fragment>
-        <fragment
-            android:id="@+id/eventOrganizerListFragment"
-            android:name="com.example.the_tarlords.ui.event.EventOrganizerListFragment"
-            android:label="fragment_event_organizer_list"
-            tools:layout="@layout/fragment_event_list">
 
-            <action
-                android:id="@+id/action_eventOrganizerListFragment_to_eventEditFragment"
-                app:destination="@id/eventEditFragment"
-                app:popUpTo="@id/eventEditFragment"/>
-            <action
-                android:id="@+id/action_eventOrganizerListFragment_to_eventListFragment"
-                app:destination="@id/eventListFragment"
-                app:popUpTo="@id/eventListFragment" />
-            <action
-                android:id="@+id/action_eventOrganizerListFragment_to_profileFragment"
-                app:destination="@id/profileFragment"
-                app:popUpTo="@id/profileFragment" />
-            <action
-                android:id="@+id/action_eventOrganizerListFragment_to_eventBrowseFragment2"
-                app:destination="@id/eventBrowseFragment"
-                app:popUpTo="@id/eventBrowseFragment" />
-            <action
-                android:id="@+id/action_eventOrganizerListFragment_to_eventDetailsFragment"
-                app:destination="@id/eventDetailsFragment" />
-            <action
-                android:id="@+id/action_eventOrganizerListFragment_to_imageBrowseFragment"
-                app:destination="@id/imageBrowseFragment"
-                app:popUpTo="@id/imageBrowseFragment"/>
-        </fragment>
+    <fragment
+        android:id="@+id/eventOrganizerListFragment"
+        android:name="com.example.the_tarlords.ui.event.EventOrganizerListFragment"
+        android:label="   "
+        tools:layout="@layout/fragment_event_list">
+
+        <action
+            android:id="@+id/action_eventOrganizerListFragment_to_eventEditFragment"
+            app:destination="@id/eventEditFragment"
+            app:popUpTo="@id/eventEditFragment" />
+        <action
+            android:id="@+id/action_eventOrganizerListFragment_to_eventListFragment"
+            app:destination="@id/eventListFragment"
+            app:popUpTo="@id/eventListFragment" />
+        <action
+            android:id="@+id/action_eventOrganizerListFragment_to_profileFragment"
+            app:destination="@id/profileFragment"
+            app:popUpTo="@id/profileFragment" />
+        <action
+            android:id="@+id/action_eventOrganizerListFragment_to_eventBrowseFragment2"
+            app:destination="@id/eventBrowseFragment"
+            app:popUpTo="@id/eventBrowseFragment" />
+        <action
+            android:id="@+id/action_eventOrganizerListFragment_to_eventDetailsFragment"
+            app:destination="@id/eventDetailsFragment" />
+        <action
+            android:id="@+id/action_eventOrganizerListFragment_to_imageBrowseFragment"
+            app:destination="@id/imageBrowseFragment"
+            app:popUpTo="@id/imageBrowseFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/alertFragment"
         android:name="com.example.the_tarlords.data.Alert.AlertFragment"
-        android:label="fragment_alert"
+        android:label="   "
         tools:layout="@layout/fragment_alert_list">
         <action
             android:id="@+id/action_alertFragment_pop"
@@ -156,7 +157,7 @@
     <fragment
         android:id="@+id/eventBrowseFragment"
         android:name="com.example.the_tarlords.ui.event.EventBrowseFragment"
-        android:label="EventBrowseFragment" >
+        android:label="   ">
         <action
             android:id="@+id/action_eventBrowseFragment_to_eventListFragment"
             app:destination="@id/eventListFragment"
@@ -175,23 +176,23 @@
         <action
             android:id="@+id/action_eventBrowseFragment_to_imageBrowseFragment"
             app:destination="@id/imageBrowseFragment"
-            app:popUpTo="@id/imageBrowseFragment"/>
+            app:popUpTo="@id/imageBrowseFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/mapsFragment"
         android:name="com.example.the_tarlords.ui.MapsFragment"
-        android:label="MapsFragment">
+        android:label="   ">
         <action
             android:id="@+id/action_mapsFragment_to_eventDetailsFragment"
             app:destination="@+id/eventDetailsFragment"
-            app:popUpTo="@id/eventDetailsFragment"/>
+            app:popUpTo="@id/eventDetailsFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/profileBrowseFragment"
         android:name="com.example.the_tarlords.ui.profile.ProfileBrowseFragment"
-        android:label="ProfileBrowseFragment">
+        android:label="   ">
         <action
             android:id="@+id/action_profileBrowseFragment_to_eventListFragment"
             app:destination="@id/eventListFragment"
@@ -202,7 +203,7 @@
             app:popUpTo="@id/mainActivity" />
         <action
             android:id="@+id/action_profileBrowseFragment_to_profileFragment"
-            app:destination="@id/profileFragment"/>
+            app:destination="@id/profileFragment" />
         <action
             android:id="@+id/action_profileBrowseFragment_to_eventDetailsFragment"
             app:destination="@id/eventDetailsFragment" />
@@ -211,27 +212,27 @@
             app:destination="@id/eventBrowseFragment" />
         <action
             android:id="@+id/action_profileBrowseFragment_to_profileViewFragment"
-            app:destination="@id/profileViewFragment"/>
+            app:destination="@id/profileViewFragment" />
         <action
             android:id="@+id/action_profileBrowseFragment_to_imageBrowseFragment"
             app:destination="@id/imageBrowseFragment"
-            app:popUpTo="@id/imageBrowseFragment"/>
+            app:popUpTo="@id/imageBrowseFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/profileViewFragment"
-        android:name="com.example.the_tarlords.ui.profile.ProfileViewFragment"
-        android:label="ProfileViewFragment">
+        android:name="com.example.the_tarlords.ui.profile.ProfileFragment"
+        android:label="   ">
         <action
-            android:id="@+id/action_profileViewFragment_to_profileBrowseFragment"
-            app:destination="@+id/profileBrowseFragment"
-            app:popUpTo="@+id/profileBrowseFragment"/>
+            android:id="@+id/action_profileViewFragment_pop"
+            app:popUpTo="@id/profileViewFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
         android:id="@+id/imageBrowseFragment"
         android:name="com.example.the_tarlords.ui.image.ImageBrowseFragment"
-        android:label="ImageBrowseFragment">
+        android:label="   ">
         <action
             android:id="@+id/action_imageBrowseFragment_to_eventListFragment"
             app:destination="@id/eventListFragment"
@@ -243,15 +244,15 @@
         <action
             android:id="@+id/action_imageBrowseFragment_to_profileFragment"
             app:destination="@id/profileFragment"
-            app:popUpTo="@id/profileFragment"/>
+            app:popUpTo="@id/profileFragment" />
         <action
             android:id="@+id/action_imageBrowseFragment_to_profileBrowseFragment"
             app:destination="@id/profileBrowseFragment"
-            app:popUpTo="@id/profileBrowseFragment"/>
+            app:popUpTo="@id/profileBrowseFragment" />
         <action
             android:id="@+id/action_imageBrowseFragment_to_eventBrowseFragment"
             app:destination="@id/eventBrowseFragment"
-            app:popUpTo="@id/eventBrowseFragment"/>
+            app:popUpTo="@id/eventBrowseFragment" />
     </fragment>
 
 </navigation>

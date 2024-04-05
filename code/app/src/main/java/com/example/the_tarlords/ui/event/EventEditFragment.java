@@ -51,16 +51,16 @@ public class EventEditFragment extends Fragment implements MenuProvider {
     // the fragment initialization parameters
     private static Event event;
     // The views that the fragment will inflate
+    private ImageView eventPosterImageView;
+    private EditText eventNameEditText;
     private TextView eventStartDateTextView;
     private TextView eventEndDateTextView;
     private TextView eventStartTimeTextView;
-    private EditText eventLocationEditText;
-    private EditText eventNameEditText;
     private TextView eventEndTimeTextView;
+    private EditText eventLocationEditText;
     private EditText maxAttendees;
     private CheckBox cbMaxAttendees;
-    private ImageView checkInQR;
-    private ImageView eventInfoQR;
+
     private FragmentEventEditBinding binding;
     //add the event poster to be able to edit the poster
     //event poster doenst need to be connected to event details. Make poster connected to event so
@@ -100,12 +100,13 @@ public class EventEditFragment extends Fragment implements MenuProvider {
      * TODO are the QR codes ever editable?
      */
     private void setTextViewsClickablity(Boolean isEditable) {
+        eventPosterImageView.setClickable(isEditable);
+        eventNameEditText.setEnabled(isEditable);
         eventStartDateTextView.setClickable(isEditable);
         eventEndDateTextView.setClickable(isEditable);
         eventStartTimeTextView.setClickable(isEditable);
         eventEndTimeTextView.setClickable(isEditable);
         eventLocationEditText.setEnabled(isEditable);
-        eventNameEditText.setEnabled(isEditable);
         maxAttendees.setEnabled(isEditable);
     }
 
@@ -212,16 +213,17 @@ public class EventEditFragment extends Fragment implements MenuProvider {
         requireActivity().addMenuProvider(this);
 
         //Event id is a textview because user should not be able to edit it, assigned when event object created
+        eventPosterImageView = view.findViewById(R.id.edit_iv_poster);
         eventNameEditText = view.findViewById(R.id.et_event_name);
-        eventLocationEditText = view.findViewById(R.id.et_event_location);
-        eventStartTimeTextView = view.findViewById(R.id.tv_edit_event_startTime);
         eventStartDateTextView = view.findViewById(R.id.tv_edit_event_startDate);
         eventEndDateTextView = view.findViewById(R.id.tv_edit_event_endDate);
+        eventStartTimeTextView = view.findViewById(R.id.tv_edit_event_startTime);
         eventEndTimeTextView = view.findViewById(R.id.tv_edit_event_endTime);
+        eventLocationEditText = view.findViewById(R.id.et_event_location);
         maxAttendees = view.findViewById(R.id.et_max_attendees);
         cbMaxAttendees = view.findViewById(R.id.cb_max_attendees);
-        checkInQR = view.findViewById(R.id.iv_checkin);
-        eventInfoQR = view.findViewById(R.id.iv_info);
+        //checkInQR = view.findViewById(R.id.iv_checkin);
+        //eventInfoQR = view.findViewById(R.id.iv_info);
 
 
         //add more attributes as desired
@@ -254,27 +256,21 @@ public class EventEditFragment extends Fragment implements MenuProvider {
             // Populate more attributes as desired
         }
         //if event is null, create new event
-        else {
-            //set placeholder data
-            eventNameEditText.setHint("Event Name");
-            eventLocationEditText.setHint("Location");
-            eventStartDateTextView.setHint("January 1, 2000");
-            eventStartDateTextView.setHint("January 1, 2000");
-            eventStartTimeTextView.setHint("5:30am");
-            eventEndTimeTextView.setHint("4:30pm");
-        }
+
+        /*
         //check if QR codes have already been generated
         if (event.getQrCode() == null) {
             //hide QR code placeholder views
-            view.findViewById(R.id.tv_checkin).setVisibility(view.GONE);
-            view.findViewById(R.id.tv_info).setVisibility(view.GONE);
-            checkInQR.setVisibility(view.GONE);
-            eventInfoQR.setVisibility(view.GONE);
+            //view.findViewById(R.id.tv_checkin).setVisibility(view.GONE);
+            //view.findViewById(R.id.tv_info).setVisibility(view.GONE);
+            //checkInQR.setVisibility(view.GONE);
+            //eventInfoQR.setVisibility(view.GONE);
         } else {
             //display QR codes
             QRCode.generateQR("CI" + event.getQrCode(), checkInQR);
             QRCode.generateQR("EI" + event.getQrCode(), eventInfoQR);
         }
+         */
 
 
         // Set an OnClickListener for the eventStartDateTextView
@@ -289,6 +285,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
         eventEndTimeTextView.setOnClickListener(v -> showTimePickerDialog("end"));
 
         // this is for reuse QR code dropdown/spinner
+        /*
         Spinner spinner = view.findViewById(R.id.reuseQrCode);
         String[] items = new String[]{"Item 1", "Item 2", "Item 3", "Item 4"};
         ArrayAdapter<String> adapter2 = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_dropdown_item, items);
@@ -298,6 +295,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
         spinnerDrawable.setColorFilter(getResources().getColor(R.color.black), PorterDuff.Mode.SRC_ATOP);
 
         spinner.setBackground(spinnerDrawable);
+         */
 
     }
 
@@ -338,11 +336,11 @@ public class EventEditFragment extends Fragment implements MenuProvider {
             if (menuItem.getItemId() == R.id.saveOptionsMenu) {
 
                 // Update the event details
+                event.setName(eventNameEditText.getText().toString());
                 event.setStartDate(eventStartDateTextView.getText().toString());
                 event.setEndDate(eventEndDateTextView.getText().toString());
                 event.setStartTime(eventStartTimeTextView.getText().toString());
                 event.setEndTime(eventEndTimeTextView.getText().toString());
-                event.setName(eventNameEditText.getText().toString());
                 event.setLocation(eventLocationEditText.getText().toString());
                 event.setOrganizerId(MainActivity.user.getUserId());
                 String max = maxAttendees.getText().toString();
