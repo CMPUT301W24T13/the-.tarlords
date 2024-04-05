@@ -38,6 +38,7 @@ import com.example.the_tarlords.data.photo.EventPoster;
 import com.example.the_tarlords.databinding.FragmentEventEditBinding;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -72,6 +73,10 @@ public class EventEditFragment extends Fragment implements MenuProvider {
     private Menu menu;
     private Spinner spinner;
     private ArrayList<String> eventsForReuse;
+    private FirebaseFirestore db;
+    private static CollectionReference QRRef = MainActivity.db.collection("QRCodes");
+    private static CollectionReference EventsRef = MainActivity.db.collection("Events");
+
 
 
     public EventEditFragment() {
@@ -326,6 +331,8 @@ public class EventEditFragment extends Fragment implements MenuProvider {
     @Override
     public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
         if (menuItem.getItemId() == R.id.saveOptionsMenu || menuItem.getItemId() == R.id.cancelOptionsMenu) {
+            boolean reuse = false;
+            String eventID;
 
             //set clickability of views and edit texts
             setTextViewsClickablity(false);
@@ -366,6 +373,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
                 String eventToReuse = eventsForReuse.get(position);
 
                 if (Objects.equals(eventToReuse, "Optional Reuse QRCode") && event.getId() == null) {
+                    eventID = "";
                     //Normal event creation
                     Log.e("SPINNERN", "NORMAL");
                     event.makeNewDocID(); //generate new event id
@@ -379,13 +387,12 @@ public class EventEditFragment extends Fragment implements MenuProvider {
                     event.makeNewDocID(); //generate new event id
                     QRCode qr = new QRCode();
                     qr.reuseQR(MainActivity.user.getUserId(), eventToReuse, event.getId());
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        public void run() {
-                            event.setQrCode(qr.getQrID()); //generate check in QR
-                            event.setSignUps(0);
-                        }
-                    }, 1000);
+                    event.setQrCode(qr.getQrID()); //generate check in QR
+                    event.setSignUps(0);
+                    reuse = true;
+                    eventID = event.getId();
+                } else {
+                    eventID = "";
                 }
 
                 if (event.getPoster()==null){
@@ -397,6 +404,30 @@ public class EventEditFragment extends Fragment implements MenuProvider {
                 event.sendToFirebase();
 
                 //TODO : check valid input
+            } else {
+                eventID = "";
+            }
+
+            if (reuse) {
+                //find event id in qr collection, get qrid, set in original event
+                QRRef.addSnapshotListener((querySnapshots, error) -> {
+                    if (error != null) {
+                        Log.e("Firestore", error.toString());
+                        return;
+                    }
+                    if (querySnapshots != null) {
+                        for (QueryDocumentSnapshot doc: querySnapshots) {
+                            String DocCodeID = doc.getId();
+                            try {
+                                if (doc.getString("EventId") == eventID) {
+                                    //Replace and put in new EventID
+                                    EventsRef.document(eventID).update("qrCode", DocCodeID);
+                                }
+                            } catch (Exception e) { }
+                        }
+                    }
+                });
+                reuse = false;
             }
 
             //create event bundle to pass to details fragment
