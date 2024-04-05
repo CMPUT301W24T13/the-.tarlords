@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
          * Next line can be used for testing and debugging (eg testing admin). Uncomment
          * and set user value to your choice of ID. PLEASE COMMENT IT OUT AFTER TESTING
          */
-        //userId = "whatever you want";
+        //userId = "1";
 
         if (userId == null) {
             // user has not used app before
