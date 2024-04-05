@@ -85,8 +85,13 @@ public class User implements Profile , Parcelable {
     }
 
     public ProfilePhoto getProfilePhoto() {
-        if (profilePhoto == null && profilePhotoData!=null) {
-            setProfilePhotoFromData(profilePhotoData);
+        if (profilePhoto == null) {
+            if (profilePhotoData!=null) {
+                setProfilePhotoFromData(profilePhotoData);
+            } else if (firstName != null && lastName != null){
+                profilePhoto = new ProfilePhoto(userId, null, firstName,lastName);
+                profilePhoto.autoGenerate();
+            }
         }
         return profilePhoto;
     }
@@ -129,11 +134,11 @@ public class User implements Profile , Parcelable {
         this.email = email;
     }
 
-    public String getfCMToken() {
+    public String getFCMToken() {
         return fCMToken;
     }
 
-    public void setfCMToken(String fCMToken) {
+    public void setFCM(String fCMToken) {
         this.fCMToken = fCMToken;
     }
 

@@ -1,5 +1,6 @@
 package com.example.the_tarlords.ui.image;
 
+
 import static android.content.ContentValues.TAG;
 
 import android.app.AlertDialog;
@@ -13,7 +14,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.view.MenuProvider;
@@ -41,6 +44,7 @@ public class ImageBrowseFragment extends Fragment implements MenuProvider {
     // the fragment initialization parameters
 
     // if photo class deals with all images then type could change from String to Image
+
     private CollectionReference eventsRef = MainActivity.db.collection("Events");
     private CollectionReference usersRef = MainActivity.db.collection("Users");
     private ArrayList<Photo> images = new ArrayList<>();
@@ -83,9 +87,13 @@ public class ImageBrowseFragment extends Fragment implements MenuProvider {
         adapter = new ImageListAdapter(getContext(), images);
         listView.setAdapter(adapter);
 
+        TextView pageHeader = view.findViewById(R.id.tv_browse_images_header);
+        pageHeader.setText(getResources().getString(R.string.browse_images));
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
                 Photo image = images.get(position); // use this to delete the image
                 // should we inflate to a dialog fragment to display image?
                 AlertDialog dialog = new AlertDialog.Builder(requireContext())
@@ -109,6 +117,7 @@ public class ImageBrowseFragment extends Fragment implements MenuProvider {
         fetchImagesFromFirebase();
         return view;
     }
+
 
     /**
      * Fetches the posterData and profilePhotoData which are

@@ -1,39 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="150dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <androidx.cardview.widget.CardView
-        android:layout_width="0dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="1dp"
-        android:layout_marginBottom="1dp"
-        app:cardBackgroundColor="@color/list_item_background"
-        app:cardCornerRadius="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        app:cardBackgroundColor="@color/cold_grey_light"
+        app:cardCornerRadius="15dp"
         app:cardElevation="10dp"
-        app:contentPadding="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:contentPadding="15dp" >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent" >
 
-            <TextView
-                android:id="@+id/firstNameTV"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-medium"
-                android:text="Profile Name"
-                android:textAppearance="?attr/textAppearanceListItem"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profile_photo_image_view"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_marginStart="10dp"
+                android:src="@drawable/profile"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/nameTV"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+
+                android:layout_marginStart="25dp"
+                android:fontFamily="@font/helvetica_bold"
+                android:text="@string/name"
+
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toTopOf="@+id/phoneNumberTV"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/profile_photo_image_view"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/phoneNumberTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="@string/phone_number"
+                android:fontFamily="@font/helvetica"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="18sp"
+
+                app:layout_constraintStart_toStartOf="@+id/nameTV"
+                app:layout_constraintTop_toBottomOf="@+id/nameTV"
+                app:layout_constraintBottom_toTopOf="@+id/emailTV" />
+
+            <TextView
+                android:id="@+id/emailTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="@string/email"
+                android:fontFamily="@font/helvetica"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="18sp"
+
+                app:layout_constraintStart_toStartOf="@id/nameTV"
+                app:layout_constraintTop_toBottomOf="@id/phoneNumberTV"
+                app:layout_constraintBottom_toBottomOf="parent" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -29,7 +29,7 @@ public class EventPoster extends Photo{
         canvas.drawColor(color);
         paint.setTextAlign(Paint.Align.CENTER);
         paint.setTypeface(Typeface.create(String.valueOf(R.font.helvetica_bold), Typeface.BOLD ));
-        paint.setTextSize(75);
+        paint.setTextSize(90);
         paint.setColor(Color.BLACK);
 
         int x = canvas.getWidth()/2;

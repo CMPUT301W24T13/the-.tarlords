@@ -18,6 +18,10 @@ import androidx.fragment.app.Fragment;
 
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
+import com.example.the_tarlords.data.Alert.Alert;
+import com.example.the_tarlords.data.Alert.AlertCallback;
+import com.example.the_tarlords.data.Alert.AlertListAdapter;
+import com.example.the_tarlords.data.Alert.MilestoneHelper;
 import com.example.the_tarlords.data.attendance.AttendanceDBHelper;
 import com.example.the_tarlords.data.attendance.AttendanceListCallback;
 import com.example.the_tarlords.data.event.Event;
@@ -38,12 +42,18 @@ public class AttendanceFragment extends Fragment implements MenuProvider {
     FragmentAttendanceListBinding binding;
     private Event event;
     private ArrayList<Attendee> attendees = new ArrayList<>();
-    private static AttendanceArrayAdapter adapter;
+    private ArrayList<Alert> milestoneList = new ArrayList<>();
+    private AlertListAdapter milestoneListAdapter;
+    private AttendanceArrayAdapter attendanceListAdapter;
+
     private CollectionReference attendanceRef;
     private CollectionReference usersRef = MainActivity.db.collection("Users");
     TextView totalCount;
     TextView checkInCount;
     ListView attendanceListView;
+
+
+    private static final String ARG_COLUMN_COUNT = "column-count";
 
     @SuppressWarnings("unused")
     public static AttendanceFragment newInstance(Event event) {
@@ -85,10 +95,10 @@ public class AttendanceFragment extends Fragment implements MenuProvider {
         attendanceRef = MainActivity.db.collection("Events/"+event.getId()+"/Attendance");
 
         // Set the adapter
-        adapter = new AttendanceArrayAdapter(getContext(), attendees);
-        attendanceListView.setAdapter(adapter);
+        attendanceListAdapter = new AttendanceArrayAdapter(getContext(), attendees);
+        attendanceListView.setAdapter(attendanceListAdapter);
 
-        totalCount = view.findViewById(R.id.attendee_count);
+        totalCount = view.findViewById(R.id.attendee_signup_count);
         checkInCount = view.findViewById(R.id.attendee_checkin_count);
 
 
@@ -104,6 +114,7 @@ public class AttendanceFragment extends Fragment implements MenuProvider {
                 }
             }
         });
+        refreshMilestoneList();
 
 
     }
@@ -113,13 +124,26 @@ public class AttendanceFragment extends Fragment implements MenuProvider {
             public void onAttendanceLoaded(ArrayList<Attendee> attendanceList) {
                 attendees.clear();
                 attendees.addAll(attendanceList);
-                adapter.notifyDataSetChanged();
-                totalCount.setText("Total: " + adapter.getItemCount());
-                checkInCount.setText("Checked In: " + adapter.getCheckInCount());
+                attendanceListAdapter.notifyDataSetChanged();
+                totalCount.setText("Total: " + attendanceListAdapter.getItemCount());
+                checkInCount.setText("Checked In: " + attendanceListAdapter.getCheckInCount());
+            }
+        });
+
+    }
+
+    private void refreshMilestoneList(){
+        MilestoneHelper helper = new MilestoneHelper(event.getId());
+        milestoneList = helper.getMilestoneList(new AlertCallback() {
+            @Override
+            public void onAlertsLoaded(ArrayList<Alert> alertList) {
+                ListView milestoneListView = getView().findViewById(R.id.milestone_list_view);
+                milestoneListAdapter = new AlertListAdapter(requireContext(),milestoneList,1);
+                milestoneListView.setAdapter(milestoneListAdapter);
+                milestoneListAdapter.notifyDataSetChanged();
             }
         });
     }
-
     @Override
     public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
         menu.clear();
@@ -129,7 +153,5 @@ public class AttendanceFragment extends Fragment implements MenuProvider {
     public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
         return false;
     }
-    public static void notifyComplete(){
-        adapter.notifyDataSetChanged();
-    }
+
 }

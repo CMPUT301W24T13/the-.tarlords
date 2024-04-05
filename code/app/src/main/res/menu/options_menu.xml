@@ -7,7 +7,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:icon="@drawable/attendance"
-        android:title="Attendance"
+        android:title="@string/attendance"
         android:visible="false"
         app:showAsAction="always|withText" />
     <item
@@ -15,7 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:icon="@drawable/baseline_edit_24"
-        android:title="Edit"
+        android:title="@string/edit"
         android:visible="false"
         app:showAsAction="always|withText" />
     <item
@@ -23,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:icon="@drawable/baseline_save_24"
-        android:title="Save"
+        android:title="@string/save"
         android:visible="false"
         app:showAsAction="always" />
     <item
@@ -31,7 +31,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:icon="@drawable/cancel"
-        android:title="Cancel"
+        android:title="@string/cancel"
         android:visible="false"
         app:showAsAction="always" />
     <item
@@ -39,7 +39,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:icon="@drawable/add"
-        android:title="Add"
+        android:title="@string/add"
         android:visible="false"
         app:showAsAction="always" />
     <item
@@ -47,7 +47,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:icon="@drawable/notifications"
-        android:title="Announcements"
+        android:title="@string/announcements"
         android:visible="false"
         app:showAsAction="always" />
     <item
@@ -55,7 +55,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:icon="@drawable/map"
-        android:title="Map"
+        android:title="@string/map"
         android:visible="false"
         app:showAsAction="always" />
     <item
@@ -63,14 +63,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:icon="@drawable/delete"
-        android:title="Delete"
+        android:title="@string/delete"
         android:visible="false"
         app:showAsAction="always" />
     <item
         android:id="@+id/signUpOptionsMenu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:title="SIGN UP"
+        android:title="@string/sign_up_button"
         android:visible="false"
         app:showAsAction="always" />
 </menu>

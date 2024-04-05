@@ -2,7 +2,6 @@ package com.example.the_tarlords;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -16,14 +15,15 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.example.the_tarlords.data.QR.QRScanActivity;
 import com.example.the_tarlords.data.event.Event;
+import com.example.the_tarlords.data.map.LocationHelper;
 import com.example.the_tarlords.data.users.User;
 import com.example.the_tarlords.databinding.ActivityMainBinding;
 import com.google.android.gms.maps.GoogleMap;
@@ -38,6 +38,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private AppBarConfiguration mAppBarConfiguration;
+    public static Toolbar toolbar;
     public static FirebaseFirestore db = FirebaseFirestore.getInstance();
     // Create a reference to the users collection
     CollectionReference usersRef = db.collection("Users");
@@ -45,6 +46,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public static User user;
 
     public static Boolean isAdmin = false;
+    private LocationHelper locationHelper;
+    public static Boolean locationGranted;
 
     private static String userId;
     private static View hView;
@@ -60,9 +63,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = this;
-
-        //TODO: check if returning from profile pic activity, if so redirect to profile fragment
-
 
         /**
          * THIS IS THE USER STUFF
@@ -89,7 +89,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             editor.putString("user_id", userId);
             editor.apply();
 
-            // the profile fields are going to have to be filled with some default info the first time, but the ID is the one we generated
 
             user = new User();
             user.setUserId(userId);
@@ -127,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             if (user.getIsAdmin() != null){
                                 isAdmin = user.getIsAdmin();
                             }
-
+                            setDeviceFCMToken();
 
                             //sets content binding now that userId is no longer null (must stay above updateNavigationDrawerHeader()
                             setBinding();
@@ -162,6 +161,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
         }
+        //request location permissions
+        locationHelper = new LocationHelper(this);
+        if(!locationHelper.checkLocationPermission()){
+            locationHelper.requestLocationPermission();
+        }else{
+            locationGranted = true;
+        }
 
     }
 
@@ -174,26 +180,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         //content binding
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        toolbar =binding.appBarMain.toolbar;
         //app bar set up
-        setSupportActionBar(binding.appBarMain.toolbar);
+        setSupportActionBar(toolbar);
         DrawerLayout drawer = binding.drawerLayout;
         // Passing each menu ID as a set of Ids because each menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(R.id.eventListFragment, R.id.eventOrganizerListFragment, R.id.eventBrowseFragment, R.id.profileFragment, R.id.profileBrowseFragment, R.id.imageBrowseFragment)
                 .setOpenableLayout(drawer)
                 .build();
-
-        //QR code scanner button set up
-        binding.appBarMain.scanQrButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //passes in user info in case of check-in QR scan
-                Intent intent = new Intent(MainActivity.this, QRScanActivity.class);
-                intent.putExtra("userId", user.getUserId());
-
-                startActivity(intent);
-            }
-        });
 
         //navigation set up (must go below appBar config)
         NavigationView navigationView = binding.navView;
@@ -302,7 +296,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
            if(task.isSuccessful()){
                String token = task.getResult();
                Log.d("FCM token",token);
-               user.setfCMToken(token);
+               user.setFCM(token);
+               db.collection("Users").document(user.getUserId()).update("FCM",token);
            }
         });
     }
@@ -318,6 +313,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
 
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        // Delegate handling to LocationHelper
+        locationHelper.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        // Update locationGranted based on permission result
+        locationGranted = locationHelper.checkLocationPermission();
     }
 
 

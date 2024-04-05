@@ -16,25 +16,11 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/actionBar"
+            android:background="@color/aubergine_main"
             app:popupTheme="@style/Theme.Thetarlords.PopupOverlay" />
 
   </com.google.android.material.appbar.AppBarLayout>
 
   <include layout="@layout/content_main"/>
-<!--TODO : Move FAB (QR button) into fragment_event_list instead-->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/scan_qr_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginEnd="@dimen/fab_dimension"
-        android:layout_marginBottom="@dimen/fab_dimension"
-        android:contentDescription="@string/qr_scan_fab"
-        app:backgroundTint="@color/fab_colour"
-        app:fabCustomSize="70dp"
-        app:fabSize="normal"
-        app:maxImageSize="35dp"
-        app:srcCompat="@drawable/qr_scan" />
 
   </androidx.coordinatorlayout.widget.CoordinatorLayout>
