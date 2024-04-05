@@ -118,8 +118,11 @@
     <string name="poster_browse_subtitle">Browse upcoming events by poster.</string>
     <string name="empty_alert_list">No announcements yet...</string>
     <string name="name">Name</string>
+<<<<<<< HEAD
     <string name="event_add_info">Additional Information</string>
     <string name="end_date">End Date</string>
     <string name="add_info_hint">This event is about...</string>
+=======
+>>>>>>> master
 
 </resources>

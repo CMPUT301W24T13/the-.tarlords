@@ -19,7 +19,10 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.the_tarlords.MainActivity;
+<<<<<<< HEAD
 import com.example.the_tarlords.data.event.Event;
+=======
+>>>>>>> master
 
 import java.io.IOException;
 
@@ -63,14 +66,18 @@ public class UploadPhotoActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+<<<<<<< HEAD
         Event event = (Event) data.getExtras().get("event");
 
+=======
+>>>>>>> master
         if (resultCode == RESULT_OK && requestCode == REQUEST_IMAGE_PICK && data != null) {
             Bitmap photoUpload;
             uploadPath = data.getData();
 
             try {
                 photoUpload = MediaStore.Images.Media.getBitmap(getContentResolver(),uploadPath);
+<<<<<<< HEAD
                 if (event == null) {
                     MainActivity.user.getProfilePhoto().setBitmap(photoUpload);
                     MainActivity.user.setPhotoIsDefault(false);
@@ -79,6 +86,11 @@ public class UploadPhotoActivity extends AppCompatActivity {
                     event.getPoster().setBitmap(photoUpload);
                     event.setPosterIsDefault(false);
                 }
+=======
+                MainActivity.user.getProfilePhoto().setBitmap(photoUpload);
+                MainActivity.user.setPhotoIsDefault(false);
+                MainActivity.updateNavigationDrawerHeader();
+>>>>>>> master
                 finish();
             } catch (IOException e) {
                 e.printStackTrace();

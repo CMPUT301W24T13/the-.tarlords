@@ -3,9 +3,15 @@ package com.example.the_tarlords.ui.event;
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+<<<<<<< HEAD
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+=======
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
+>>>>>>> master
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.TextUtils;
@@ -21,7 +27,10 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+<<<<<<< HEAD
 import android.widget.PopupMenu;
+=======
+>>>>>>> master
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -30,6 +39,7 @@ import androidx.annotation.NonNull;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
@@ -38,7 +48,10 @@ import com.example.the_tarlords.data.QR.TakePhotoActivity;
 import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.photo.EventPoster;
 import com.example.the_tarlords.databinding.FragmentEventEditBinding;
+<<<<<<< HEAD
 import com.example.the_tarlords.ui.profile.UploadPhotoActivity;
+=======
+>>>>>>> master
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -59,7 +72,14 @@ public class EventEditFragment extends Fragment implements MenuProvider {
     // the fragment initialization parameters
     private static Event event;
     // The views that the fragment will inflate
+<<<<<<< HEAD
     private ImageView eventPosterImageView;
+=======
+    private TextView eventStartDateTextView;
+    private TextView eventEndDateTextView;
+    private TextView eventStartTimeTextView;
+    private EditText eventLocationEditText;
+>>>>>>> master
     private EditText eventNameEditText;
     private TextView eventStartDateTextView;
     private TextView eventEndDateTextView;
@@ -231,7 +251,10 @@ public class EventEditFragment extends Fragment implements MenuProvider {
         eventNameEditText = view.findViewById(R.id.et_event_name);
         eventStartDateTextView = view.findViewById(R.id.tv_edit_event_startDate);
         eventEndDateTextView = view.findViewById(R.id.tv_edit_event_endDate);
+<<<<<<< HEAD
         eventStartTimeTextView = view.findViewById(R.id.tv_edit_event_startTime);
+=======
+>>>>>>> master
         eventEndTimeTextView = view.findViewById(R.id.tv_edit_event_endTime);
         eventLocationEditText = view.findViewById(R.id.et_event_location);
         maxAttendees = view.findViewById(R.id.et_max_attendees);
@@ -270,7 +293,20 @@ public class EventEditFragment extends Fragment implements MenuProvider {
             });
             // Populate more attributes as desired
         }
+<<<<<<< HEAD
 
+=======
+        //if event is null, create new event
+        else {
+            //set placeholder data
+            eventNameEditText.setHint("Event Name");
+            eventLocationEditText.setHint("Location");
+            eventStartDateTextView.setHint("January 1, 2000");
+            eventStartDateTextView.setHint("January 1, 2000");
+            eventStartTimeTextView.setHint("5:30am");
+            eventEndTimeTextView.setHint("4:30pm");
+        }
+>>>>>>> master
         //check if QR codes have already been generated
         if (event.getQrCode() == null) {
             //hide QR code placeholder views

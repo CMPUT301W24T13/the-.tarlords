@@ -216,7 +216,11 @@
         <TextView
             android:id="@+id/additional_info"
             android:layout_width="0dp"
+<<<<<<< HEAD
             android:layout_height="wrap_content"
+=======
+            android:layout_height="100dp"
+>>>>>>> master
             android:layout_marginHorizontal="15dp"
             android:background="@drawable/rounded_corners_r"
             android:fontFamily="@font/helvetica"
@@ -226,7 +230,11 @@
             android:textSize="18sp"
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
+<<<<<<< HEAD
             app:layout_constraintHeight_min="100dp"
+=======
+            app:layout_constraintHorizontal_bias="0.0"
+>>>>>>> master
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_event_detail_additional_info_label" />
 
