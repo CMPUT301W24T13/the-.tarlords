@@ -138,10 +138,10 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
                 date = String.format("  %s %s -\n  %s %s", event.getStartDate(), event.getStartTime(), event.getEndDate(), event.getEndTime());
             }
             eventStartDateTextView.setText(date);
-            if (event.getMaxSignUps()==-1){
+            if (event.getMaxSignUps()==(Integer) (-1)){
                 eventMaxAttendees.setText("Max Capacity: Unlimited");
             } else {
-                eventMaxAttendees.setText("Max Capacity: "+event.getMaxSignUps());
+                eventMaxAttendees.setText("Max Capacity: "+event.getMaxSignUps()+"");
             }
             signUps.setText("  "+event.getSignUps()+" Sign Ups");
             checkIns.setText("  "+event.getCheckIns()+" Check Ins");

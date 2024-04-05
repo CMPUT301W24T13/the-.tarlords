@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    tools:visibility="visible">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/eventDetails"
@@ -87,7 +87,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_event_detail_QR_label">
+            app:layout_constraintTop_toBottomOf="@id/tv_event_detail_QR_label"
+            tools:visibility="gone">
 
             <ImageView
                 android:id="@+id/iv_checkin_details"
@@ -99,7 +100,8 @@
                 app:layout_constraintEnd_toStartOf="@+id/iv_info_details"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_checkin_details"
-                app:srcCompat="@drawable/qr_code_scan_svgrepo_com" />
+                app:srcCompat="@drawable/qr_code_scan_svgrepo_com"
+                tools:visibility="gone" />
 
             <ImageView
                 android:id="@+id/iv_info_details"
@@ -110,7 +112,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/iv_checkin_details"
                 app:layout_constraintTop_toBottomOf="@+id/tv_info_details"
-                app:srcCompat="@drawable/qr_code_scan_svgrepo_com" />
+                app:srcCompat="@drawable/qr_code_scan_svgrepo_com"
+                tools:visibility="gone" />
 
             <TextView
                 android:id="@+id/tv_checkin_details"
@@ -123,7 +126,8 @@
                 android:visibility="visible"
                 app:layout_constraintEnd_toStartOf="@+id/tv_info_details"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="gone" />
 
             <TextView
                 android:id="@+id/tv_info_details"
@@ -136,7 +140,8 @@
                 android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tv_checkin_details"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="gone" />
 
             <Button
                 android:id="@+id/shareQrCode"
@@ -147,7 +152,8 @@
                 android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/iv_checkin_details" />
+                app:layout_constraintTop_toBottomOf="@+id/iv_checkin_details"
+                tools:visibility="gone" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
@@ -166,7 +172,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/attendanceConstraint" />
+            app:layout_constraintTop_toBottomOf="@id/attendanceConstraint"
+            tools:visibility="gone" />
 
         <TextView
             android:id="@+id/tv_event_detail_attendance_label"
@@ -266,9 +273,6 @@
                 android:id="@+id/tv_max_attendees"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:clickable="false"
-                android:ems="10"
-                android:enabled="false"
                 android:fontFamily="@font/helvetica_bold"
                 android:gravity="center_vertical"
                 android:padding="2dp"
