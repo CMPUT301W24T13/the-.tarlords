@@ -120,22 +120,32 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
         //set fragment views
         TextView eventNameTextView = view.findViewById(R.id.tv_event_name);
         TextView eventLocationTextView = view.findViewById(R.id.tv_event_location);
-        TextView eventStartDateTextView = view.findViewById(R.id.tv_event_startDate);
-        TextView eventEndDateTextView = view.findViewById(R.id.tv_event_endDate);
-        TextView eventStartTimeTextView = view.findViewById(R.id.tv_event_startTime);
-        TextView eventEndTimeTextView = view.findViewById(R.id.tv_event_endTime);
+        TextView eventStartDateTextView = view.findViewById(R.id.tv_event_date_time);
         TextView eventMaxAttendees = view.findViewById(R.id.tv_max_attendees);
+        TextView signUps = view.findViewById(R.id.countOfSignUps);
+        TextView checkIns = view.findViewById(R.id.countOfCheckIns);
         ImageView eventPosterImageView = view.findViewById(R.id.iv_poster);
         //add additional views here as desired
 
         // Check if event is not null before accessing its attributes
         if (event != null) {
             eventNameTextView.setText(event.getName());
-            eventLocationTextView.setText(event.getLocation());
-            eventStartTimeTextView.setText(event.getStartTime());
-            eventStartDateTextView.setText(event.getStartDate());
-            eventEndDateTextView.setText(event.getEndDate());
-            eventEndTimeTextView.setText(event.getEndTime());
+            eventLocationTextView.setText("  "+event.getLocation());
+            String date;
+            if (event.getEndDate() == event.getStartDate()&&event.getEndDate()!=null) {
+                date = String.format("  %s\n %s - %s", event.getStartDate(), event.getStartTime(), event.getEndTime());
+            } else {
+                date = String.format("  %s %s -\n  %s %s", event.getStartDate(), event.getStartTime(), event.getEndDate(), event.getEndTime());
+            }
+            eventStartDateTextView.setText(date);
+            if (event.getMaxSignUps()==-1){
+                eventMaxAttendees.setText("Max Capacity: Unlimited");
+            } else {
+                eventMaxAttendees.setText("Max Capacity: "+event.getMaxSignUps());
+            }
+            signUps.setText("  "+event.getSignUps()+" Sign Ups");
+            checkIns.setText("  "+event.getCheckIns()+" Check Ins");
+
             // set additional fields here as desired
 
             if (event.getPoster()!=null){ //if poster data exists, display uploaded poster
