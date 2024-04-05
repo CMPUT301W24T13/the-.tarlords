@@ -30,11 +30,13 @@
             app:destination="@id/imageBrowseFragment"
             app:popUpTo="@id/imageBrowseFragment"/>
     </fragment>
+
     <activity
         android:id="@+id/mainActivity"
         android:name="com.example.the_tarlords.MainActivity"
         android:label="app_bar_main"
         tools:layout="@layout/app_bar_main" />
+
     <fragment
         android:id="@+id/eventListFragment"
         android:name="com.example.the_tarlords.ui.home.EventListFragment"
@@ -60,6 +62,7 @@
             app:destination="@id/imageBrowseFragment"
             app:popUpTo="@id/imageBrowseFragment"/>
     </fragment>
+
     <fragment
         android:id="@+id/attendanceFragment"
         android:name="com.example.the_tarlords.ui.attendance_page.AttendanceFragment"
@@ -71,6 +74,7 @@
             app:popUpTo="@id/attendanceFragment"
             app:popUpToInclusive="true" />
     </fragment>
+
     <fragment
         android:id="@+id/eventDetailsFragment"
         android:name="com.example.the_tarlords.ui.event.EventDetailsFragment"
@@ -93,6 +97,7 @@
             android:id="@+id/action_eventDetailsFragment_to_MapsFragment"
             app:destination="@id/mapsFragment"/>
     </fragment>
+
     <fragment
         android:id="@+id/eventEditFragment"
         android:name="com.example.the_tarlords.ui.event.EventEditFragment"
@@ -103,10 +108,8 @@
             app:launchSingleTop="true"
             app:popUpTo="@id/eventEditFragment"
             app:popUpToInclusive="true" />
-        <action
-            android:id="@+id/action_eventEditFragment_to_MapsFragment"
-            app:destination="@id/mapsFragment" />
     </fragment>
+
         <fragment
             android:id="@+id/eventOrganizerListFragment"
             android:name="com.example.the_tarlords.ui.event.EventOrganizerListFragment"
@@ -137,17 +140,19 @@
                 app:destination="@id/imageBrowseFragment"
                 app:popUpTo="@id/imageBrowseFragment"/>
         </fragment>
+
     <fragment
         android:id="@+id/alertFragment"
         android:name="com.example.the_tarlords.data.Alert.AlertFragment"
         android:label="fragment_alert"
-        tools:layout="@layout/fragment_alert">
+        tools:layout="@layout/fragment_alert_list">
         <action
             android:id="@+id/action_alertFragment_pop"
             app:launchSingleTop="true"
             app:popUpTo="@id/alertFragment"
             app:popUpToInclusive="true" />
     </fragment>
+
     <fragment
         android:id="@+id/eventBrowseFragment"
         android:name="com.example.the_tarlords.ui.event.EventBrowseFragment"
@@ -172,6 +177,7 @@
             app:destination="@id/imageBrowseFragment"
             app:popUpTo="@id/imageBrowseFragment"/>
     </fragment>
+
     <fragment
         android:id="@+id/mapsFragment"
         android:name="com.example.the_tarlords.ui.MapsFragment"
@@ -181,6 +187,7 @@
             app:destination="@+id/eventDetailsFragment"
             app:popUpTo="@id/eventDetailsFragment"/>
     </fragment>
+
     <fragment
         android:id="@+id/profileBrowseFragment"
         android:name="com.example.the_tarlords.ui.profile.ProfileBrowseFragment"
@@ -210,15 +217,17 @@
             app:destination="@id/imageBrowseFragment"
             app:popUpTo="@id/imageBrowseFragment"/>
     </fragment>
+
     <fragment
         android:id="@+id/profileViewFragment"
-        android:name="com.example.the_tarlords.ui.profile.ProfileViewFragment"
+        android:name="com.example.the_tarlords.ui.profile.ProfileFragment"
         android:label="ProfileViewFragment">
         <action
-            android:id="@+id/action_profileViewFragment_to_profileBrowseFragment"
-            app:destination="@+id/profileBrowseFragment"
-            app:popUpTo="@+id/profileBrowseFragment"/>
+            android:id="@+id/action_profileViewFragment_pop"
+            app:popUpTo="@id/profileViewFragment"
+            app:popUpToInclusive="true" />
     </fragment>
+
     <fragment
         android:id="@+id/imageBrowseFragment"
         android:name="com.example.the_tarlords.ui.image.ImageBrowseFragment"

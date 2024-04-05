@@ -16,7 +16,7 @@
         tools:context=".ui.event.EventEditFragment">
 
         <ImageView
-            android:id="@+id/imageView3"
+            android:id="@+id/edit_iv_poster"
             android:layout_width="382dp"
             android:layout_height="157dp"
             android:layout_marginTop="28dp"
@@ -294,7 +294,7 @@
             app:layout_constraintVertical_bias="0.965" />
 
         <TextView
-            android:id="@+id/textView6"
+            android:id="@+id/tv_event_detail_QR_label"
             android:layout_width="261dp"
             android:layout_height="42dp"
             android:layout_marginTop="182dp"
@@ -324,19 +324,6 @@
             app:layout_constraintHorizontal_bias="0.479"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/et_event_name" />
-
-        <ImageView
-            android:id="@+id/iv_poster"
-            android:layout_width="159dp"
-            android:layout_height="227dp"
-            android:layout_marginTop="416dp"
-            android:src="@drawable/ic_menu_gallery"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.148"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/et_event_name"
-            app:layout_constraintVertical_bias="0.151" />
 
         <ImageView
             android:id="@+id/mapImage"

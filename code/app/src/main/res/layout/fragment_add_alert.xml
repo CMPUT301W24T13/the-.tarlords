@@ -3,14 +3,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_marginStart="15dp"
+    android:layout_marginEnd="15dp"
+    android:layout_marginTop="15dp"
+    android:layout_marginBottom="15dp">
 
 
     <TextView
         android:id="@+id/add_alert_title_display"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Alert Title: " />
+        android:text="@string/alert_title"
+        android:fontFamily="@font/helvetica_bold"
+        android:textSize="18sp"
+        android:textColor="@color/plum_dark" />
 
     <EditText
         android:id="@+id/edit_text_alert_title"
@@ -18,20 +25,31 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/alert_title"
-        android:inputType="text" />
+        android:inputType="text"
+        android:fontFamily="@font/helvetica"
+        android:textSize="18sp"
+        android:textColor="@color/bordeaux_medium" />
 
     <TextView
         android:id="@+id/add_alert_message_display"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Message: " />
+        android:layout_marginTop="10dp"
+        android:text="@string/alert_message"
+        android:fontFamily="@font/helvetica_bold"
+        android:textSize="18sp"
+        android:textColor="@color/plum_dark" />
 
     <EditText
         android:id="@+id/edit_text_alert_message"
         android:padding="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Alert message"
-        android:inputType="textMultiLine" />
+        android:layout_marginBottom="10dp"
+        android:hint="@string/alert_message_hint"
+        android:inputType="textMultiLine"
+        android:fontFamily="@font/helvetica"
+        android:textSize="18sp"
+        android:textColor="@color/bordeaux_medium" />
 
 </LinearLayout>

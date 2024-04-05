@@ -23,6 +23,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
@@ -47,8 +48,13 @@ public class ProfileFragment extends Fragment implements MenuProvider {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (MainActivity.user != null) {
+        if (getArguments() != null) {
+            user = (User) getArguments().getParcelable("user");
+
+        }
+        else if (MainActivity.user != null) {
             user = MainActivity.user;
+
             Log.d("profile", "user.getFirstName()");
         }
 
@@ -142,6 +148,7 @@ public class ProfileFragment extends Fragment implements MenuProvider {
      */
     @Override
     public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+
         if (isAdded() && getContext() != null) {
             menu.clear();
             menuInflater.inflate(R.menu.options_menu, menu);
@@ -161,7 +168,7 @@ public class ProfileFragment extends Fragment implements MenuProvider {
                 lastNameEditText.setEnabled(true);
                 phoneEditText.setEnabled(true);
                 emailEditText.setEnabled(true);
-            } else {
+            } else if (user == MainActivity.user){
                 menu.findItem(R.id.editOptionsMenu).setVisible(true);
                 menu.findItem(R.id.saveOptionsMenu).setVisible(false);
                 menu.findItem(R.id.cancelOptionsMenu).setVisible(false);
@@ -182,7 +189,7 @@ public class ProfileFragment extends Fragment implements MenuProvider {
                 menu.findItem(R.id.editOptionsMenu).setVisible(false);
                 menu.findItem(R.id.saveOptionsMenu).setVisible(true);
                 menu.findItem(R.id.cancelOptionsMenu).setVisible(true);
-            } else {
+            } else if (user ==MainActivity.user){
                 menu.findItem(R.id.editOptionsMenu).setVisible(true);
                 menu.findItem(R.id.saveOptionsMenu).setVisible(false);
                 menu.findItem(R.id.cancelOptionsMenu).setVisible(false);
@@ -221,6 +228,7 @@ public class ProfileFragment extends Fragment implements MenuProvider {
                     lastNameEditText.setEnabled(false);
                     phoneEditText.setEnabled(false);
                     emailEditText.setEnabled(false);
+                    Navigation.findNavController(getActivity(),R.id.eventListFragment);
 
                     }
                 if (menuItem.getItemId() == R.id.cancelOptionsMenu) {
@@ -233,6 +241,7 @@ public class ProfileFragment extends Fragment implements MenuProvider {
                     user.setLastName(lastNameEditText.getText().toString());
                     user.setPhoneNum(phoneEditText.getText().toString());
                     user.setEmail(emailEditText.getText().toString());
+
                     displayProfilePhoto(profilePhotoImageView);
                     MainActivity.user.sendToFireStore();
                     //update navigation header (slide out menu) with newly updated information
@@ -325,6 +334,7 @@ public class ProfileFragment extends Fragment implements MenuProvider {
     public void displayProfilePhoto(ImageView profilePhotoImageView) {
         if (user.getProfilePhoto() != null) { //display user's profile photo if not null
             profilePhotoImageView.setImageBitmap(user.getProfilePhoto().getBitmap());
+
         } else if (user.getLastName()!=null){ //if user does not have a profile photo, generate one
             ProfilePhoto profilePhoto = new ProfilePhoto(user.getFirstName() + user.getLastName(),
                     null, user.getFirstName(), user.getLastName());

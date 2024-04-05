@@ -7,9 +7,14 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="fab_colour">#b4d3c4</color>
+    <color name="fab_colour">#FFC107</color>
     <color name="actionBar">#018B8A</color>
-    <color name="list_item_background">#E2DCD8CB</color>
+    <color name="list_item_background">#94E7DF</color>
+
+    <color name="aubergine_main">#481222</color>
+    <color name="bordeaux_medium">#4D0A2A</color>
+    <color name="plum_dark">#2D030F</color>
+    <color name="cold_grey_light">#EAE8ED</color>
+    <color name="mauve_medium_light">#9D9197</color>
+    <color name="peach_contrast">#EEA38C</color>
 </resources>
-<!--    f5f1ed-->
-<!--    EDE9E1-->

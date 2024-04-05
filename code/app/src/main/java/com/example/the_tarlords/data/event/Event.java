@@ -85,6 +85,9 @@ public class Event implements Parcelable {
         maxSignUps = in.readInt();
         signUps = in.readInt();
         checkIns = in.readInt();
+        additionalInfo = in.readString();
+        endDate = in.readString();
+        posterData = in.readString();
     }
     public Event (){};
 
@@ -173,7 +176,7 @@ public class Event implements Parcelable {
 
     public EventPoster getPoster() {
       if (poster == null && posterData!=null) {
-            setPosterFromData(posterData);
+            setPosterFromData();
         }
         return poster;
     }
@@ -206,10 +209,10 @@ public class Event implements Parcelable {
     public String getPosterData() {
         return posterData;
     }
-    public void setPosterFromData(String photoB64) {
+    public void setPosterFromData() {
         poster = new EventPoster(id,null,this);
-        poster.setBitmapFromPhotoData(photoB64);
-        posterData=photoB64;
+        poster.setBitmapFromPhotoData(posterData);
+        posterData=posterData;
     }
     public boolean reachedMaxCap() {
         if (signUps == null || maxSignUps ==-1){
@@ -229,6 +232,7 @@ public class Event implements Parcelable {
                     for (QueryDocumentSnapshot alertDoc : task.getResult()) {
                         Alert alert = new Alert(alertDoc.getString("title"), alertDoc.getString("message"), alertDoc.getString("currentDateTime"));
                         //alert.setCurrentDateTime(alertDoc.getString("currentDateTime"));
+                        alert.setId(alertDoc.getId());
                         alertList.add(alert);
 
                     }
@@ -286,6 +290,9 @@ public class Event implements Parcelable {
         dest.writeInt(maxSignUps);
         dest.writeInt(signUps);
         dest.writeInt(checkIns);
+        dest.writeString(additionalInfo);
+        dest.writeString(endDate);
+        dest.writeString(posterData);
     }
 
     /**
@@ -316,6 +323,7 @@ public class Event implements Parcelable {
         docData.put("name", name);
         docData.put("location", location);
         docData.put("startDate", startDate);
+        docData.put("endDate",endDate);
         docData.put("startTime", startTime);
         docData.put("endTime", endTime);
         docData.put("organizerId",organizerId);
@@ -325,6 +333,8 @@ public class Event implements Parcelable {
         docData.put("qrCode",qrCode);
         docData.put("posterData",poster.getPhotoDataFromBitmap());
         docData.put("posterIsDefault", posterIsDefault);
+        docData.put("addtionalInfo",additionalInfo);
+        docData.put("posterData",poster.getPhotoDataFromBitmap());
 
         eventsRef.document(id).set(docData)
                 .addOnSuccessListener(aVoid -> {

@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -30,14 +31,16 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
             view = convertView;
         }
         Event event = (Event) getItem(position);
-        TextView name = view.findViewById(R.id.titleTextView);
+        TextView name = view.findViewById(R.id.tv_eventList_title);
         name.setText(event.getName());
-        TextView location = view.findViewById(R.id.locationTextView);
+        TextView location = view.findViewById(R.id.tv_eventList_location);
         location.setText(event.getLocation());
-        //TextView startDate = view.findViewById(R.id.startDateTextView);
-        //startDate.setText(event.getStartDate());
-        TextView startTime = view.findViewById(R.id.startTimeTextView);
-        startTime.setText(event.getStartTime());
+        TextView startDate = view.findViewById(R.id.tv_eventList_start_date);
+        startDate.setText(event.getStartDate());
+        ImageView poster = view.findViewById(R.id.iv_event_poster_list);
+        if (event.getPoster()!=null){
+            poster.setImageBitmap(event.getPoster().getBitmap());
+        }
         return view;
     }
 }

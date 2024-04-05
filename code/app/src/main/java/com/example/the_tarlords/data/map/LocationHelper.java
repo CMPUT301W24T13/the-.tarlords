@@ -24,9 +24,9 @@ import com.google.android.gms.tasks.Task;
 import java.util.HashMap;
 
 public class LocationHelper {
+    public static final int REQUEST_LOCATION_PERMISSION = 123;
     private Context context;
     private String eventId;
-    private static final int REQUEST_LOCATION_PERMISSION = 123; // You can choose any unique value
     private FusedLocationProviderClient client;
 
     // Constructor to initialize the context
@@ -55,26 +55,18 @@ public class LocationHelper {
         }
     }
 
-    private boolean checkLocationPermission() {
+    public boolean checkLocationPermission() {
         if ( ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // Permission not granted, request it
-            ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_LOCATION_PERMISSION);
             return false;
         }
         return true;
     }
-
-
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == REQUEST_LOCATION_PERMISSION) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                getMyLocation(eventId);
-            } else {
-                Log.d("maps", "location permissions denied");
-            }
-        }
+    public void requestLocationPermission() {
+        ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_LOCATION_PERMISSION);
     }
+
+
 
     public void checkInLocation(Double lat, Double lon, String eventId) {
         java.util.Map<String, Object> checkInData = new HashMap<>();
@@ -101,6 +93,17 @@ public class LocationHelper {
                         Log.w("maps", "Error adding check-in", e);
                     }
                 });
+    }
+
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == REQUEST_LOCATION_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                MainActivity.locationGranted = true;
+            } else {
+                MainActivity.locationGranted = false;
+            }
+        }
+
     }
 }
 
