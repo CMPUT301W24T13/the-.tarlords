@@ -63,7 +63,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        Event event = (Event) data.getExtras().get("event");
+        Event event = (Event) data.getParcelableExtra("event");
 
         if (resultCode == RESULT_OK && requestCode == REQUEST_IMAGE_PICK && data != null) {
             Bitmap photoUpload;

@@ -47,7 +47,7 @@ public class TakePhotoActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        Event event = (Event) data.getExtras().get("event");
+        Event event = (Event) data.getParcelableExtra("event");
 
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bitmap capturedPhoto = (Bitmap) (data.getExtras().get("data"));
