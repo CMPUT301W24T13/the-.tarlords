@@ -88,6 +88,7 @@ public class Event implements Parcelable {
         additionalInfo = in.readString();
         endDate = in.readString();
         posterData = in.readString();
+        organizerId = in.readString();
     }
     public Event (){};
 
@@ -293,6 +294,7 @@ public class Event implements Parcelable {
         dest.writeString(additionalInfo);
         dest.writeString(endDate);
         dest.writeString(posterData);
+        dest.writeString(organizerId);
     }
 
     /**
