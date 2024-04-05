@@ -51,15 +51,15 @@ public class AlertListAdapter extends ArrayAdapter<Alert> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent){
         View view;
         if (convertView == null) {
-            view = LayoutInflater.from(super.getContext()).inflate(R.layout.content_alerts, parent, false);
+            view = LayoutInflater.from(super.getContext()).inflate(R.layout.fragment_alert_list_item, parent, false);
         } else {
             view = convertView;
         }
         Alert alert = super.getItem(position);
 
-        TextView message = view.findViewById(R.id.message_text);
-        TextView title = view.findViewById(R.id.title_text);
-        TextView ldt = view.findViewById(R.id.ldt_text);
+        TextView message = view.findViewById(R.id.tv_alert_message);
+        TextView title = view.findViewById(R.id.tv_alert_title);
+        TextView ldt = view.findViewById(R.id.tv_alert_timestamp);
 
         message.setText(alert.getMessage());
         title.setText(alert.getTitle());

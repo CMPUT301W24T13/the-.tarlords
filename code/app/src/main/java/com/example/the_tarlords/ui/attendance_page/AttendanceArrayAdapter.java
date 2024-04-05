@@ -5,7 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,35 +18,51 @@ import java.util.ArrayList;
 
 public class AttendanceArrayAdapter extends ArrayAdapter<Attendee> {
     ArrayList<Attendee> attendees;
+    private LayoutInflater inflater;
     public AttendanceArrayAdapter(Context context, ArrayList<Attendee> attendees) {
         super(context, 0, attendees);
         this.attendees = attendees;
-
+        inflater = LayoutInflater.from(context);
     }
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup
-            parent) {
-        View view;
-        if (convertView == null) {
-            view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_attendance_list_item, parent, false);
+    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        View view = convertView;
+        AttendanceArrayAdapter.ViewHolder holder;
+
+        if (view == null) {
+            view = inflater.inflate(R.layout.fragment_profile_list_item, parent, false);
+            holder = new AttendanceArrayAdapter.ViewHolder();
+            //getting the textviews
+            holder.name = view.findViewById(R.id.nameTV);
+            holder.email = view.findViewById(R.id.emailTV);
+            holder.phoneNum = view.findViewById(R.id.phoneNumberTV);
+            holder.profilePic = view.findViewById(R.id.profile_photo_image_view);
+            view.setTag(holder);
         } else {
-            view = convertView;
-        }
-        Attendee attendee = (Attendee) getItem(position);
-        if (attendee != null) {
-            TextView firstName = view.findViewById(R.id.item_first_name);
-            firstName.setText(attendee.getFirstName());
-            TextView lastName = view.findViewById(R.id.item_phone_num);
-            lastName.setText(attendee.getLastName());
-            TextView phoneNum = view.findViewById(R.id.item_phone_num);
-            phoneNum.setText(attendee.getPhoneNum());
-            CheckBox checkInStatus = view.findViewById(R.id.item_check_in_box);
-            checkInStatus.setChecked(attendee.getCheckInStatus());
+            holder = (AttendanceArrayAdapter.ViewHolder) view.getTag();
         }
 
+        Attendee attendee = attendees.get(position);
+        //setting the textviews
+        holder.name.setText(attendee.getFirstName()+" "+attendee.getLastName());
+        holder.email.setText(attendee.getEmail());
+        holder.phoneNum.setText(attendee.getPhoneNum());
+        if (attendee.getProfilePhoto()!=null) {
+            holder.profilePic.setImageBitmap(attendee.getProfilePhoto().getBitmap());
+        }
 
         return view;
+    }
+
+    /**
+     * Add the text views you want to display here
+     */
+    static class ViewHolder {
+        TextView name;
+        TextView email;
+        TextView phoneNum;
+        ImageView profilePic;
     }
 
     public int getItemCount() {

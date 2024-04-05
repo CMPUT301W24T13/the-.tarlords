@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.view.MenuProvider;
@@ -85,6 +86,9 @@ public class ImageBrowseFragment extends Fragment implements MenuProvider {
         ListView listView = view.findViewById(R.id.imageListView);
         adapter = new ImageListAdapter(getContext(), images);
         listView.setAdapter(adapter);
+
+        TextView pageHeader = view.findViewById(R.id.tv_browse_images_header);
+        pageHeader.setText(getResources().getString(R.string.browse_images));
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

@@ -1,5 +1,6 @@
 package com.example.the_tarlords.ui.event;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,15 +21,19 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
+import com.example.the_tarlords.data.QR.QRScanActivity;
 import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.event.EventListCallback;
 import com.example.the_tarlords.data.event.EventListDBHelper;
 import com.example.the_tarlords.databinding.FragmentEventListBinding;
-import com.example.the_tarlords.ui.home.EventArrayAdapter;
+import com.example.the_tarlords.ui.home.EventPosterBrowseAdapter;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -36,7 +42,7 @@ public class EventBrowseFragment extends Fragment implements MenuProvider {
     private FragmentEventListBinding binding;
     private CollectionReference eventsRef = MainActivity.db.collection("Events");
     ListView eventListView;
-    EventArrayAdapter adapter;
+    EventPosterBrowseAdapter adapter;
     ArrayList<Event> events = new ArrayList<>();
 
 
@@ -65,9 +71,13 @@ public class EventBrowseFragment extends Fragment implements MenuProvider {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         requireActivity().addMenuProvider(this);
+
         eventListView = view.findViewById(R.id.eventListView);
-        adapter = new EventArrayAdapter(getContext(),events);
+        adapter = new com.example.the_tarlords.ui.home.EventPosterBrowseAdapter(getContext(),events);
         eventListView.setAdapter(adapter);
+
+        TextView pageTitle = view.findViewById(R.id.tv_event_list_header);
+        pageTitle.setText(getResources().getString(R.string.poster_browse_header));
 
         eventsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -91,7 +101,22 @@ public class EventBrowseFragment extends Fragment implements MenuProvider {
                 navigateToDetails(events.get(position));
             }
         });
+
+        //QR code scanner button set up
+        FloatingActionButton scanQrButton = view.findViewById(R.id.scan_qr_button);
+        scanQrButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //passes in user info in case of check-in QR scan
+                Intent intent = new Intent(MainActivity.context, QRScanActivity.class);
+                intent.putExtra("userId", MainActivity.user.getUserId());
+
+                startActivity(intent);
+            }
+        });
+
     }
+
     public void refreshList(){
         EventListDBHelper.getEventsList( new EventListCallback() {
             @Override

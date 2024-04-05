@@ -44,7 +44,7 @@ public class AttendanceFragment extends Fragment implements MenuProvider {
     private ArrayList<Attendee> attendees = new ArrayList<>();
     private ArrayList<Alert> milestoneList = new ArrayList<>();
     private AlertListAdapter milestoneListAdapter;
-    private AttendanceArrayAdapter attendanceArrayAdapter;
+    private AttendanceArrayAdapter attendanceListAdapter;
 
     private CollectionReference attendanceRef;
     private CollectionReference usersRef = MainActivity.db.collection("Users");
@@ -95,10 +95,10 @@ public class AttendanceFragment extends Fragment implements MenuProvider {
         attendanceRef = MainActivity.db.collection("Events/"+event.getId()+"/Attendance");
 
         // Set the adapter
-        attendanceArrayAdapter = new AttendanceArrayAdapter(getContext(), attendees);
-        attendanceListView.setAdapter(attendanceArrayAdapter);
+        attendanceListAdapter = new AttendanceArrayAdapter(getContext(), attendees);
+        attendanceListView.setAdapter(attendanceListAdapter);
 
-        totalCount = view.findViewById(R.id.attendee_count);
+        totalCount = view.findViewById(R.id.attendee_signup_count);
         checkInCount = view.findViewById(R.id.attendee_checkin_count);
 
 
@@ -124,9 +124,9 @@ public class AttendanceFragment extends Fragment implements MenuProvider {
             public void onAttendanceLoaded(ArrayList<Attendee> attendanceList) {
                 attendees.clear();
                 attendees.addAll(attendanceList);
-                attendanceArrayAdapter.notifyDataSetChanged();
-                totalCount.setText("Total: " + attendanceArrayAdapter.getItemCount());
-                checkInCount.setText("Checked In: " + attendanceArrayAdapter.getCheckInCount());
+                attendanceListAdapter.notifyDataSetChanged();
+                totalCount.setText("Total: " + attendanceListAdapter.getItemCount());
+                checkInCount.setText("Checked In: " + attendanceListAdapter.getCheckInCount());
             }
         });
 
