@@ -44,11 +44,10 @@ public class QRCode {
      * @param eventID The ID of the event associated with the QR code
      * @return The generated QR code's ID
      */
-    public String makeQR(String eventID) {
+    public void makeQR(String eventID) {
         //Generate new QR code ID and store its details in Firebase
         makeNewDocID();
         sendToFirebase(eventID);
-        return qrID;
     }
 
     /**
@@ -147,8 +146,8 @@ public class QRCode {
                     try {
                         if (Objects.equals(doc.getString("organizerId"), user) && Objects.equals(doc.getString("name"), sel_event)) {
                             //Found event
-                            String QRId = (doc.getString("qrCodePromo")).substring(2);
-                            QRRef.document(eventID).update("qrCodePromo", "NULL");
+                            String QRId = doc.getString("qrCode");
+                            EventsRef.document(eventID).update("qrCode", "NULL");
                             replaceQR(QRId, new_eventId);
                         }
                     } catch (Exception e) { }
@@ -213,7 +212,7 @@ public class QRCode {
                     try {
                         if (Objects.equals(doc.getString("organizerId"), user)  && pastEvent(doc.getString("startDate"), doc.getString("endTime"))) {
                             // Event has user = organizer AND event has passed
-                            Log.e("Event", eventID + " " + doc.getString("name") + " added");
+                            Log.e("Old Events", eventID + " " + doc.getString("name") + " added");
                             events.add(doc.getString("name"));
                         }
                     } catch (Exception e) {

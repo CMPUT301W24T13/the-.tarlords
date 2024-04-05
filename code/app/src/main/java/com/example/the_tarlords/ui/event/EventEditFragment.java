@@ -6,6 +6,7 @@ import android.app.TimePickerDialog;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.text.TextUtils;
 import android.util.Log;
@@ -35,6 +36,8 @@ import com.example.the_tarlords.data.QR.QRCode;
 import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.photo.EventPoster;
 import com.example.the_tarlords.databinding.FragmentEventEditBinding;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -47,7 +50,7 @@ import java.util.Objects;
  * linked to fragment_event_edit.xml
  * Will also take in an event as a parameter
  */
-public class EventEditFragment extends Fragment implements MenuProvider, AdapterView.OnItemSelectedListener {
+public class EventEditFragment extends Fragment implements MenuProvider {
 
     // the fragment initialization parameters
     private static Event event;
@@ -68,7 +71,7 @@ public class EventEditFragment extends Fragment implements MenuProvider, Adapter
     // Define a class member variable to hold the menu
     private Menu menu;
     private Spinner spinner;
-    private String spinnerText;
+    private ArrayList<String> eventsForReuse;
 
 
     public EventEditFragment() {
@@ -278,26 +281,21 @@ public class EventEditFragment extends Fragment implements MenuProvider, Adapter
         qrCode.findPastEvents(MainActivity.user.getUserId(), new QRCode.EventsCallback() {
             @Override
             public void onEventsLoaded(ArrayList<String> events) {
-                Log.e("Event", String.valueOf(events));   //list is loaded
-                events.add(0, "Optional Select Event QRCode for Reuse");
+                try {
+                    Log.e("Old Events", String.valueOf(events));   //list is loaded
+                    events.add(0, "Optional Reuse QRCode");
+                    eventsForReuse = events;
 
-                ArrayAdapter<String> adapter2 = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_dropdown_item, events);
-                spinner.setAdapter(adapter2);
-                spinner.setOnItemSelectedListener(EventEditFragment.this);
+                    ArrayAdapter<String> adapter2 = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_dropdown_item, events);
+                    spinner.setAdapter(adapter2);
 
-                Drawable spinnerDrawable = spinner.getBackground().getConstantState().newDrawable();
-                spinnerDrawable.setColorFilter(getResources().getColor(R.color.black), PorterDuff.Mode.SRC_ATOP);
-                spinner.setBackground(spinnerDrawable);
+                    Drawable spinnerDrawable = spinner.getBackground().getConstantState().newDrawable();
+                    spinnerDrawable.setColorFilter(getResources().getColor(R.color.black), PorterDuff.Mode.SRC_ATOP);
+                    spinner.setBackground(spinnerDrawable);
+                } catch(Exception e) { }
             }
         });
     }
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        spinnerText = parent.getItemAtPosition(position).toString();
-    }
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) { }
 
     /**
      * Mandatory MenuProvider interface method.
@@ -364,22 +362,30 @@ public class EventEditFragment extends Fragment implements MenuProvider, Adapter
                     event.setSignUps(0);
                 }*/
 
-                if (Objects.equals(spinnerText, "Select Event for Reuse")) {
+                int position = spinner.getSelectedItemPosition();
+                String eventToReuse = eventsForReuse.get(position);
+
+                if (Objects.equals(eventToReuse, "Optional Reuse QRCode") && event.getId() == null) {
                     //Normal event creation
-                    Log.e("SPINNER", "NORMAL");
+                    Log.e("SPINNERN", "NORMAL");
                     event.makeNewDocID(); //generate new event id
                     QRCode qr = new QRCode();
                     qr.makeQR(event.getId());
                     event.setQrCode(qr.getQrID()); //generate check in QR
                     event.setSignUps(0);
-                } else {
+                } else if (event.getId() == null) {
                     //Reuse QR code event creation
-                    Log.e("SPINNER", "REUSE");
+                    Log.e("SPINNERR", "REUSE");
                     event.makeNewDocID(); //generate new event id
                     QRCode qr = new QRCode();
-                    qr.reuseQR(MainActivity.user.getUserId(), spinnerText, event.getId());
-                    event.setQrCode(qr.getQrID()); //generate check in QR
-                    event.setSignUps(0);
+                    qr.reuseQR(MainActivity.user.getUserId(), eventToReuse, event.getId());
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        public void run() {
+                            event.setQrCode(qr.getQrID()); //generate check in QR
+                            event.setSignUps(0);
+                        }
+                    }, 1000);
                 }
 
                 if (event.getPoster()==null){
