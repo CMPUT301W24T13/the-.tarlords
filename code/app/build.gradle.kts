@@ -110,7 +110,6 @@ dependencies {
     implementation("com.google.firebase:firebase-database:20.3.1")
     implementation("androidx.databinding:databinding-runtime:8.3.1")
     testImplementation("junit:junit:4.13.2")
-
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.3.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.3.2")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
@@ -118,9 +117,7 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation("androidx.test.espresso:espresso-intents:3.5.1")
-    androidTestImplementation("androidx.test.espresso:espresso-contrib:3.5.1"){
-        exclude(group = "com.google.protobuf", module = "protobuf-lite")
-    }
+    androidTestImplementation("androidx.test.espresso:espresso-contrib:3.5.1")
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.08.00"))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
@@ -129,7 +126,7 @@ dependencies {
 
     implementation("androidx.viewpager2:viewpager2:1.0.0")
     implementation("com.makeramen:roundedimageview:2.3.0")
-
+    testImplementation("org.mockito:mockito-core:3.5.13")
     implementation("com.github.bumptech.glide:glide:4.12.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
 
