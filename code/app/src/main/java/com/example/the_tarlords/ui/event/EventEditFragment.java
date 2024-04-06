@@ -6,7 +6,6 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.TextUtils;
@@ -31,15 +30,14 @@ import androidx.annotation.NonNull;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.QR.QRCode;
-import com.example.the_tarlords.data.QR.TakePhotoActivity;
 import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.photo.EventPoster;
 import com.example.the_tarlords.databinding.FragmentEventEditBinding;
+import com.example.the_tarlords.ui.profile.TakePhotoActivity;
 import com.example.the_tarlords.ui.profile.UploadPhotoActivity;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -62,12 +60,13 @@ public class EventEditFragment extends Fragment implements MenuProvider {
     private static Event event;
     // The views that the fragment will inflate
     private ImageView eventPosterImageView;
+    private TextView eventUploadPosterTextView;
+    private EditText eventNameEditText;
     private TextView eventStartDateTextView;
     private TextView eventEndDateTextView;
     private TextView eventStartTimeTextView;
     private TextView eventEndTimeTextView;
     private EditText eventLocationEditText;
-    private EditText eventNameEditText;
     private EditText maxAttendees;
     private CheckBox cbMaxAttendees;
     private ImageView checkInQR;
@@ -230,6 +229,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
 
         //Event id is a textview because user should not be able to edit it, assigned when event object created
         eventPosterImageView = view.findViewById(R.id.edit_iv_poster);
+        eventUploadPosterTextView = view.findViewById(R.id.tv_event_add_poster);
         eventNameEditText = view.findViewById(R.id.et_event_name);
         eventStartDateTextView = view.findViewById(R.id.tv_edit_event_startDate);
         eventEndDateTextView = view.findViewById(R.id.tv_edit_event_endDate);
@@ -248,6 +248,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
         if (event.getId() != null) {
             // Populate UI elements with event details
             eventPosterImageView.setImageBitmap(event.getPoster().getBitmap());
+            eventUploadPosterTextView.setVisibility(View.VISIBLE);
             eventNameEditText.setText(event.getName());
             eventLocationEditText.setText(event.getLocation());
             eventStartTimeTextView.setText(event.getStartTime());
@@ -388,13 +389,13 @@ public class EventEditFragment extends Fragment implements MenuProvider {
             boolean reuse = false;
             String eventID;
 
-
             //set clickability of views and edit texts
+            eventUploadPosterTextView.setVisibility(View.INVISIBLE);
             setTextViewsClickablity(false);
 
             //save changes to event details
             if (menuItem.getItemId() == R.id.saveOptionsMenu) {
-
+                eventUploadPosterTextView.setVisibility(View.INVISIBLE);
                 // Update the event details
                 event.setName(eventNameEditText.getText().toString());
                 event.setStartDate(eventStartDateTextView.getText().toString());

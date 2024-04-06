@@ -13,10 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.example.the_tarlords.MainActivity;
-<<<<<<< HEAD
 import com.example.the_tarlords.data.event.Event;
-=======
->>>>>>> master
 
 /**
  * The TakePhotoActivity class facilitates capturing photos using the device's camera.
@@ -50,8 +47,7 @@ public class TakePhotoActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-<<<<<<< HEAD
-        Event event = (Event) data.getExtras().get("event");
+        Event event = (Event) data.getParcelableExtra("event");
 
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bitmap capturedPhoto = (Bitmap) (data.getExtras().get("data"));
@@ -63,13 +59,6 @@ public class TakePhotoActivity extends AppCompatActivity {
                 event.getPoster().setBitmap(capturedPhoto);
                 event.setPosterIsDefault(false);
             }
-=======
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bitmap capturedPhoto = (Bitmap) (data.getExtras().get("data"));
-            MainActivity.user.getProfilePhoto().setBitmap(capturedPhoto);
-            MainActivity.user.setPhotoIsDefault(false);
-            MainActivity.updateNavigationDrawerHeader();
->>>>>>> master
             finish();
         }
         else {

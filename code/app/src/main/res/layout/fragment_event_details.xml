@@ -216,11 +216,7 @@
         <TextView
             android:id="@+id/additional_info"
             android:layout_width="0dp"
-<<<<<<< HEAD
             android:layout_height="wrap_content"
-=======
-            android:layout_height="100dp"
->>>>>>> master
             android:layout_marginHorizontal="15dp"
             android:background="@drawable/rounded_corners_r"
             android:fontFamily="@font/helvetica"
@@ -230,11 +226,7 @@
             android:textSize="18sp"
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
-<<<<<<< HEAD
             app:layout_constraintHeight_min="100dp"
-=======
-            app:layout_constraintHorizontal_bias="0.0"
->>>>>>> master
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_event_detail_additional_info_label" />
 
@@ -333,7 +325,7 @@
                     android:name="com.example.the_tarlords.ui.MapsFragment"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -350,7 +342,7 @@
             android:layout_marginBottom="24dp"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
-            app:layout_constraintBottom_toTopOf="@+id/tv_event_name"
+            app:layout_constraintBottom_toTopOf="@+id/event_main_info_constraint"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
