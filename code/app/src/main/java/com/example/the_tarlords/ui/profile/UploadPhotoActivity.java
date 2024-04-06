@@ -27,11 +27,11 @@ public class UploadPhotoActivity extends AppCompatActivity {
     private static final int REQUEST_GALLERY_PERMISSION = 1;
     private static final int REQUEST_IMAGE_PICK = 1000;
     private Uri uploadPath;
-
+    private Event event;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Event event = getIntent().getParcelableExtra("event");
         if (checkSelfPermission(android.Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED ) {
             ActivityCompat.requestPermissions((Activity) context, new String[]{android.Manifest.permission.READ_MEDIA_IMAGES}, REQUEST_GALLERY_PERMISSION);
         } else {
@@ -78,6 +78,7 @@ public class UploadPhotoActivity extends AppCompatActivity {
                 } else {
                     event.getPoster().setBitmap(photoUpload);
                     event.setPosterIsDefault(false);
+                    setResult(RESULT_OK,data);
                 }
                 finish();
             } catch (IOException e) {

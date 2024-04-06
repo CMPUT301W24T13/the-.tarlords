@@ -22,11 +22,12 @@ import com.example.the_tarlords.data.event.Event;
 public class TakePhotoActivity extends AppCompatActivity {
     private static final int REQUEST_CAMERA_PERMISSION = 1;
     private static final int REQUEST_IMAGE_CAPTURE = 100;
+    private Event event;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        event =getIntent().getParcelableExtra("event");
         // Check camera permission and initiate photo capture if permission is granted
         if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(TakePhotoActivity.this, new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
@@ -56,9 +57,9 @@ public class TakePhotoActivity extends AppCompatActivity {
                 MainActivity.user.setPhotoIsDefault(false);
                 MainActivity.updateNavigationDrawerHeader();
             } else {
-                event.getPoster().setBitmap(capturedPhoto);
-                event.setPosterIsDefault(false);
+                setResult(RESULT_OK,data);
             }
+
             finish();
         }
         else {
