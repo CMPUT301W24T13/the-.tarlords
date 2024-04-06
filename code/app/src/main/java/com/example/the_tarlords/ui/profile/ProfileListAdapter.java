@@ -15,6 +15,11 @@ import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.users.User;
 
 import java.util.ArrayList;
+
+/**
+ * Responsible for displaying the Users in ListView ProfileList
+ * Handles changes in the list
+ */
 public class ProfileListAdapter extends ArrayAdapter<User> {
 
     private ArrayList<User> userList;
@@ -58,7 +63,7 @@ public class ProfileListAdapter extends ArrayAdapter<User> {
     }
 
     /**
-     * Add the text views you want to display here
+     * Add the text views you want to display into the ViewHolder
      */
     static class ViewHolder {
         TextView name;

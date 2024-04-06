@@ -16,6 +16,9 @@ import com.example.the_tarlords.data.event.Event;
 
 import java.util.ArrayList;
 
+/**
+ * Adapter for ListView in EventListFragment
+ */
 public class EventArrayAdapter extends ArrayAdapter<Event> {
     public EventArrayAdapter(@NonNull Context context,ArrayList<Event> events) {
         super(context, 0, events);

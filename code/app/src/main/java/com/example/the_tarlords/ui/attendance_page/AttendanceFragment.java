@@ -35,7 +35,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
 /**
- * A fragment representing a list of Items.
+ * A fragment representing a list of Items related to attendence of an event
+ * eg. how many attendees checked in or signed up
  */
 public class AttendanceFragment extends Fragment implements MenuProvider {
 
@@ -130,6 +131,10 @@ public class AttendanceFragment extends Fragment implements MenuProvider {
 
 
     }
+
+    /**
+     * Real-time updates to attendance information
+     */
     public void refreshAttendance(){
         AttendanceDBHelper.getAttendanceList(event, new AttendanceListCallback() {
             @Override

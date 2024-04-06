@@ -18,6 +18,12 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Represents a User
+ * Stores their ids, name, contact information
+ * and uploaded or generated profile photos
+ */
+
 public class User implements Profile , Parcelable {
     private String userId;
     private String firstName;

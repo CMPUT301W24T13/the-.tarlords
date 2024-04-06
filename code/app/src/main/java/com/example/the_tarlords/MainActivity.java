@@ -236,7 +236,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     /**
      * This is the back button stuff.
-     * @return no fucking clue
+     * @return true if successful
      */
     @Override
     public boolean onSupportNavigateUp() {
@@ -278,9 +278,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     /**
-     * User id generator for the sharedPreferences stuff.
-     *
-     * Side note: Should probably be in User class, tried to put it there, but Settings was bugging
+     * User id generator for the sharedPreferences
      * @return randomly generated userId string
      */
     @SuppressLint("HardwareIds")
@@ -308,14 +306,24 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     /**
      * Mandatory empty method here because MainActivity implements OnMapReadyCallBack
-     * the function is implemented and used in MapsFragment.java
-     * This needs to stay in main activity
+     * @see com.example.the_tarlords.ui.MapsFragment
      * @param googleMap
      */
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
 
     }
+
+    /**
+     * Requests Location Permissions from User on Start
+     * @param requestCode The request code passed in {@link #requestPermissions(
+     * android.app.Activity, String[], int)}
+     * @param permissions The requested permissions. Never null.
+     * @param grantResults The grant results for the corresponding permissions
+     *     which is either {@link android.content.pm.PackageManager#PERMISSION_GRANTED}
+     *     or {@link android.content.pm.PackageManager#PERMISSION_DENIED}. Never null.
+     *
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
