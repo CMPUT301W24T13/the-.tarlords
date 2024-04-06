@@ -23,7 +23,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
 
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
@@ -207,7 +206,6 @@ public class ProfileFragment extends Fragment implements MenuProvider {
     public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
         if (isAdded() && getContext() != null) { //bug fix for IllegalStateException: Fragment not attached to an activity
             if (menuItem.getItemId() == R.id.editOptionsMenu) {
-                profilePhotoImageView.setVisibility(View.INVISIBLE);
                 addProfilePhotoButton.setVisibility(View.VISIBLE);
                 firstNameEditText.setEnabled(true);
                 lastNameEditText.setEnabled(true);
@@ -220,13 +218,11 @@ public class ProfileFragment extends Fragment implements MenuProvider {
             else if (menuItem.getItemId() == R.id.saveOptionsMenu || menuItem.getItemId() == R.id.cancelOptionsMenu) {
                 if (checkValidInput(this.getView())) {
                     // if the profile info has been filled out they can leave edit mode
-                    profilePhotoImageView.setVisibility(View.VISIBLE);
                     addProfilePhotoButton.setVisibility(View.GONE);
                     firstNameEditText.setEnabled(false);
                     lastNameEditText.setEnabled(false);
                     phoneEditText.setEnabled(false);
                     emailEditText.setEnabled(false);
-                    Navigation.findNavController(getActivity(),R.id.eventListFragment);
 
                     }
                 if (menuItem.getItemId() == R.id.cancelOptionsMenu) {
