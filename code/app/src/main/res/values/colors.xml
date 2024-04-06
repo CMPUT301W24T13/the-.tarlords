@@ -17,4 +17,5 @@
     <color name="cold_grey_light">#EAE8ED</color>
     <color name="mauve_medium_light">#9D9197</color>
     <color name="peach_contrast">#EEA38C</color>
+    <color name="peach_contrast_translucent">#0FEEA38C</color>
 </resources>
