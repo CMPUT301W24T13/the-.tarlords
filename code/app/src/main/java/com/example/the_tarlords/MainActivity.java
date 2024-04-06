@@ -290,7 +290,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
-
+    /**
+     * gets and sets the FCM token for each device and user and stores it into firebase
+     */
     private void setDeviceFCMToken(){
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task ->{
            if(task.isSuccessful()){
