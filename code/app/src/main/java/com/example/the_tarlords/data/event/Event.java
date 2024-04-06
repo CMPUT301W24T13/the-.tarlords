@@ -114,8 +114,6 @@ public class Event implements Parcelable {
     public void setId(String id) {
         this.id = id;
     }
-
-
     public String getId() {
         return id;
     }
@@ -198,6 +196,7 @@ public class Event implements Parcelable {
     }
     public Integer getCheckIns(){return checkIns;}
     public Integer getSignUps() {return signUps;}
+    public void setPosterData(String posterData){this.posterData = posterData;}
 
     public void setSignUps(Integer signUps) {
         this.signUps = signUps;
@@ -341,7 +340,7 @@ public class Event implements Parcelable {
         eventsRef.document(id).set(docData)
                 .addOnSuccessListener(aVoid -> {
                     // Document successfully added
-                    Log.d("debug", "User added successfully to Firestore");
+                    Log.d("debug", "Event added successfully to Firestore");
                 })
                 .addOnFailureListener(e -> {
                     // Handle the failure

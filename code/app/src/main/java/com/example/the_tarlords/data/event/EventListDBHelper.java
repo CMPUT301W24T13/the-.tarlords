@@ -14,6 +14,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * This class has an List of events
@@ -76,8 +77,10 @@ public class EventListDBHelper {
     }
 
     public static void getEventsList(EventListCallback callback){
+        Date d = new Date();
         ArrayList<Event> events = new ArrayList<>();
-        eventsRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        eventsRef
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()){
