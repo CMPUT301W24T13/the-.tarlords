@@ -1,10 +1,14 @@
 package com.example.the_tarlords.data.users;
 
-import com.example.the_tarlords.data.Alert.AlertList;
 import com.example.the_tarlords.data.event.Event;
 
 import java.io.IOException;
 import java.util.List;
+
+/**
+ * Extends User class, has special attendee permissions
+ * Have check-in status and events
+ */
 
 public class Attendee extends User{
     private Event event;

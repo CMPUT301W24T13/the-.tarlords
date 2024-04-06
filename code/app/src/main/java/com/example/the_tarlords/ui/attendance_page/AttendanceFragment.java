@@ -35,7 +35,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
 /**
- * A fragment representing a list of Items.
+ * A fragment representing a list of Items related to attendence of an event
+ * eg. how many attendees checked in or signed up
  */
 public class AttendanceFragment extends Fragment implements MenuProvider {
 
@@ -114,10 +115,26 @@ public class AttendanceFragment extends Fragment implements MenuProvider {
                 }
             }
         });
-        refreshMilestoneList();
+        CollectionReference milestoneRef = MainActivity.db.collection("Events/"+event.getId()+"/milestones");
+        milestoneRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    Log.e("Firestore", error.toString());
+                    return;
+                }
+                if (value != null) {
+                    refreshMilestoneList();
+                }
+            }
+        });
 
 
     }
+
+    /**
+     * Real-time updates to attendance information
+     */
     public void refreshAttendance(){
         AttendanceDBHelper.getAttendanceList(event, new AttendanceListCallback() {
             @Override
@@ -132,6 +149,9 @@ public class AttendanceFragment extends Fragment implements MenuProvider {
 
     }
 
+    /**
+     * refreshes the milestone list view
+     */
     private void refreshMilestoneList(){
         MilestoneHelper helper = new MilestoneHelper(event.getId());
         milestoneList = helper.getMilestoneList(new AlertCallback() {

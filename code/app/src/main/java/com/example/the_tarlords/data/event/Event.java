@@ -26,16 +26,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This class defines an event
- * UUID type for event attribute makes sure that everytime an event object is created it has a unique id
- * Not sure how QRcode will work , is it initialized when the event is created, or can it be set after being created
+ * This class represents an event
+ * has name, location, start and end date and time
+ * poster, organizer and QR codes related to it
  */
 
-
-/* NOTE FOR KHUSHI AND GRACE:
-
-    2. Need to connect event location to the Map Class.
-*/
 public class Event implements Parcelable {
     String name;
     String location;
@@ -88,6 +83,7 @@ public class Event implements Parcelable {
         additionalInfo = in.readString();
         endDate = in.readString();
         posterData = in.readString();
+        organizerId = in.readString();
     }
     public Event (){};
 
@@ -113,8 +109,6 @@ public class Event implements Parcelable {
     public void setId(String id) {
         this.id = id;
     }
-
-
     public String getId() {
         return id;
     }
@@ -197,6 +191,7 @@ public class Event implements Parcelable {
     }
     public Integer getCheckIns(){return checkIns;}
     public Integer getSignUps() {return signUps;}
+    public void setPosterData(String posterData){this.posterData = posterData;}
 
     public void setSignUps(Integer signUps) {
         this.signUps = signUps;
@@ -293,6 +288,7 @@ public class Event implements Parcelable {
         dest.writeString(additionalInfo);
         dest.writeString(endDate);
         dest.writeString(posterData);
+        dest.writeString(organizerId);
     }
 
     /**
@@ -339,7 +335,7 @@ public class Event implements Parcelable {
         eventsRef.document(id).set(docData)
                 .addOnSuccessListener(aVoid -> {
                     // Document successfully added
-                    Log.d("debug", "User added successfully to Firestore");
+                    Log.d("debug", "Event added successfully to Firestore");
                 })
                 .addOnFailureListener(e -> {
                     // Handle the failure

@@ -37,6 +37,11 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
+/**
+ * Browse events by the event posters
+ * Represents list of events with ImageViews
+ */
+
 public class EventBrowseFragment extends Fragment implements MenuProvider {
 
     private FragmentEventListBinding binding;
@@ -117,6 +122,10 @@ public class EventBrowseFragment extends Fragment implements MenuProvider {
 
     }
 
+    /**
+     * Real-time updates list of events
+     */
+
     public void refreshList(){
         EventListDBHelper.getEventsList( new EventListCallback() {
             @Override
@@ -129,6 +138,10 @@ public class EventBrowseFragment extends Fragment implements MenuProvider {
         });
     }
 
+    /**
+     * Naviagtes to fragment with the details of selected Event object from list
+     * @param event
+     */
     public void navigateToDetails(Event event){
         Bundle args = new Bundle();
         args.putParcelable("event",event);

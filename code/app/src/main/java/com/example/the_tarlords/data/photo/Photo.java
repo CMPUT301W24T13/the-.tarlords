@@ -6,6 +6,11 @@ import android.util.Base64;
 
 import java.io.ByteArrayOutputStream;
 
+/**
+ * Represents all types of images in the app
+ * Has bitmaps, bit strings, and the collection reference
+ */
+
 public class Photo {
     private String fileName;
     private Bitmap bitmap;

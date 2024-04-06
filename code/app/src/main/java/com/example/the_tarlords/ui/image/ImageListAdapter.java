@@ -17,6 +17,11 @@ import com.example.the_tarlords.data.photo.Photo;
 
 import java.util.ArrayList;
 
+/**
+ * List Adapter for ImageBrowseFragments's ListView
+ * Each list item is a Photo object
+ * @see Photo
+ */
 public class ImageListAdapter extends ArrayAdapter<Photo> {
 
     private ArrayList<Photo> imageList;
@@ -57,7 +62,8 @@ public class ImageListAdapter extends ArrayAdapter<Photo> {
         return view;
     }
     /**
-     * Add the text views you want to display here
+     * Represents view of single list item
+     * Add the text views you want to display in ViewHolder
      */
     static class ViewHolder {
         ImageView imageViewTV;

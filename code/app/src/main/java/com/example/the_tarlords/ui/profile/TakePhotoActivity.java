@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.example.the_tarlords.MainActivity;
+import com.example.the_tarlords.data.event.Event;
 
 /**
  * The TakePhotoActivity class facilitates capturing photos using the device's camera.
@@ -21,11 +22,12 @@ import com.example.the_tarlords.MainActivity;
 public class TakePhotoActivity extends AppCompatActivity {
     private static final int REQUEST_CAMERA_PERMISSION = 1;
     private static final int REQUEST_IMAGE_CAPTURE = 100;
+    private Event event;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        event =getIntent().getParcelableExtra("event");
         // Check camera permission and initiate photo capture if permission is granted
         if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(TakePhotoActivity.this, new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
@@ -48,9 +50,14 @@ public class TakePhotoActivity extends AppCompatActivity {
 
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bitmap capturedPhoto = (Bitmap) (data.getExtras().get("data"));
-            MainActivity.user.getProfilePhoto().setBitmap(capturedPhoto);
-            MainActivity.user.setPhotoIsDefault(false);
-            MainActivity.updateNavigationDrawerHeader();
+            if (event == null) {
+                MainActivity.user.getProfilePhoto().setBitmap(capturedPhoto);
+                MainActivity.user.setPhotoIsDefault(false);
+                MainActivity.updateNavigationDrawerHeader();
+            } else {
+                setResult(RESULT_OK,data);
+            }
+
             finish();
         }
         else {

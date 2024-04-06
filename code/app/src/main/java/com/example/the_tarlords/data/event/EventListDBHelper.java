@@ -14,6 +14,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * This class has an List of events
@@ -24,6 +25,11 @@ import java.util.ArrayList;
 public class EventListDBHelper {
     private static CollectionReference eventsRef = MainActivity.db.collection("Events");
 
+    /**
+     * Gets the list of events that a specific user is attending
+     * @param user
+     * @param callback
+     */
     public static void getEventsAttendingList(User user, EventListCallback callback){
         ArrayList<Event> events = new ArrayList<>();
         eventsRef
@@ -53,6 +59,12 @@ public class EventListDBHelper {
                 });
     }
 
+    /**
+     * Gets the list of events a specfic User has organized
+     * @param user
+     * @param callback
+     */
+
     public static void getEventsOrganizingList(User user, EventListCallback callback){
         ArrayList<Event> events = new ArrayList<>();
         eventsRef
@@ -75,9 +87,16 @@ public class EventListDBHelper {
                 });
     }
 
+    /**
+     * Gets the list of all events in app
+     * @param callback
+     */
+
     public static void getEventsList(EventListCallback callback){
+        Date d = new Date();
         ArrayList<Event> events = new ArrayList<>();
-        eventsRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        eventsRef
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()){

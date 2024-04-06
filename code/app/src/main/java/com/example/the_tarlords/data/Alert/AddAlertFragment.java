@@ -17,6 +17,11 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.the_tarlords.R;
 
+/**
+ * Dialog Fragment for Organizers to create and send alerts
+ * Alerts have titles and a message
+ */
+
 public class AddAlertFragment extends DialogFragment {
 
 
@@ -54,22 +59,8 @@ public class AddAlertFragment extends DialogFragment {
         this.listener = listener;
     }
 
-    /*
-    @Override
-    public void onAttach(@NonNull Context context) {
-        context = getContext();
-        super.onAttach(context);
-        if (context instanceof AddAlertDialogListener) {
-            listener = (AddAlertDialogListener)context;
-        } else {
-            throw new RuntimeException(context + "must implement AddAlertListener");
-        }
-    }
-
-     */
-
     /**
-     *
+     *  Creates a dialog for adding, editing or deleting alerts
      * @param savedInstanceState The last saved instance state of the Fragment,
      * or null if this is a freshly created Fragment.
      *
@@ -116,11 +107,15 @@ public class AddAlertFragment extends DialogFragment {
 
                     })
 
-
-
                     .setNeutralButton("Edit",(dialog, which) -> {
-                        // TODO: fix edit alert and update firebase
-                        //listener.deleteAlert(alert);
+                        String title = editTitle.getText().toString();
+                        String message = editMessage.getText().toString();
+                        if(title.length()>0 && message.length()>0){
+                            listener.editAlert(alert,title,message);
+
+                        }else{
+                            Toast.makeText(getContext(), "Must fill all fields",Toast.LENGTH_SHORT).show();
+                        }
                     })
                     .create();
         }

@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
+import com.example.the_tarlords.data.Notification.Notification;
 import com.example.the_tarlords.data.event.Event;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -26,9 +27,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,6 +47,11 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+/**
+ * Represents a list of alerts that the Organizer sent out
+ * Organizers can see these
+ * @see Alert
+ */
 
 public class AlertFragment extends Fragment implements AddAlertDialogListener,MenuProvider {
 
@@ -53,6 +60,7 @@ public class AlertFragment extends Fragment implements AddAlertDialogListener,Me
     private static Event event;
     private boolean isOrganizer;
     private ArrayList<Alert> alertList = new ArrayList<>();
+    private Notification notification = new Notification();
     public AlertFragment(ArrayList<Alert> alertDataList){
         Collections.sort(alertList);
         this.alertList = alertDataList;
@@ -104,7 +112,22 @@ public class AlertFragment extends Fragment implements AddAlertDialogListener,Me
                 refreshList();
             }
         });
-        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.button_add_alert);
+
+        CollectionReference alertRef = MainActivity.db.collection("Events/"+event.getId()+"/alerts");
+        alertRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    Log.e("Firestore", error.toString());
+                    return;
+                }
+                if (value != null) {
+                    refreshList();
+                }
+            }
+        });
+
+        FloatingActionButton fab = view.findViewById(R.id.button_add_alert);
         if (!isOrganizer){
             fab.setVisibility(View.GONE);
         }else{
@@ -118,13 +141,11 @@ public class AlertFragment extends Fragment implements AddAlertDialogListener,Me
 
         });
 
-        ListView alertListView = (ListView) view.findViewById(R.id.alert_listView);
+        ListView alertListView = view.findViewById(R.id.alert_listView);
         if(isOrganizer){
             alertListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    //new AddAlertFragment(alertList.get(position)).show(getChildFragmentManager(),"Edit / delete alert" );
-                    //addAlertFragment.setAddAlertDialogListener(this);
                     AddAlertFragment addAlertFragment = new AddAlertFragment(alertList.get(position));
                     addAlertFragment.setAddAlertDialogListener(AlertFragment.this);
                     addAlertFragment.show(getChildFragmentManager(), "Add alert");
@@ -172,18 +193,18 @@ public class AlertFragment extends Fragment implements AddAlertDialogListener,Me
     }
 
     /**
-     *
+     * adds a new alert
      * @param alert --> alert object
      */
     @Override
     public void addAlert(Alert alert) {
         event.setAlert(alert);
-        sendAnnouncementNotification(event,"New Announcement");
+        sendAnnouncementNotification();
         refreshList();
     }
 
     /**
-     *
+     * deletes the given alert
      * @param alert
      */
     @Override
@@ -208,15 +229,16 @@ public class AlertFragment extends Fragment implements AddAlertDialogListener,Me
     }
 
     /**
-     *
+     * edits an alert with the new message and title
      * @param oldAlert --> alert to be editted
      * @param newTitle
      * @param newMessage
      */
     @Override
     public void editAlert(Alert oldAlert, String newTitle, String newMessage) {
-        oldAlert.setTitle(newTitle);
-        oldAlert.setMessage(newMessage);
+        DocumentReference alertRef = MainActivity.db.collection("Events/"+event.getId()+"/alerts").document(oldAlert.getId());
+        alertRef.update("title",newTitle);
+        alertRef.update("message",newMessage);
         refreshList();
     }
 
@@ -243,16 +265,13 @@ public class AlertFragment extends Fragment implements AddAlertDialogListener,Me
             }
         });
 
-
-
-
     }
 
     /**
-     * sends a notification for the corresponding event
-     * @param event
+     * sends a notification to all attendees for the corresponding event
+     *
      */
-    void sendAnnouncementNotification(Event event,String text){
+    void sendAnnouncementNotification(){
 
         CollectionReference attendanceRef = MainActivity.db.collection("Events/"+event.getId()+"/Attendance");
         attendanceRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -269,8 +288,7 @@ public class AlertFragment extends Fragment implements AddAlertDialogListener,Me
                                         String fcmToken = userDoc.getString("FCM");
                                         if(fcmToken != null){
                                             Log.d("fcm Token? ",fcmToken);
-                                            JSONObject jsonObject = getJsonObject(fcmToken,text);
-                                            callApi(jsonObject);
+                                            notification.sendNotification(fcmToken, "New Announcement",event);
                                         }
 
                                     }catch (JSONException e){
@@ -286,56 +304,5 @@ public class AlertFragment extends Fragment implements AddAlertDialogListener,Me
         });
 
     }
-
-    /**
-     * creates a JSONObject representation of a notification
-     * @param fcmToken
-     * @param text
-     * @return JSONObject representation
-     * @throws JSONException
-     */
-    @NonNull
-    private static JSONObject getJsonObject(String fcmToken,String text) throws JSONException {
-        JSONObject jsonObject = new JSONObject();
-        JSONObject notificationObject = new JSONObject();
-        JSONObject dataObject = new JSONObject();
-        JSONObject androidPriorityObject = new JSONObject();
-        notificationObject.put("title", event.getName());
-        notificationObject.put("body",text);
-        dataObject.put("event",event.getId());
-        androidPriorityObject.put("priority","high");
-        jsonObject.put("notification",notificationObject);
-        jsonObject.put("data",dataObject);
-        jsonObject.put("to", fcmToken);
-        jsonObject.put("android",androidPriorityObject);
-        return jsonObject;
-    }
-
-    /**
-     * sends the notification using OkHttpClient
-     * @param jsonObject object containing all necessary information of an event
-     */
-    void callApi(JSONObject jsonObject){
-        MediaType JSON = MediaType.get("application/json");
-
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url("https://fcm.googleapis.com/fcm/send")
-                .post(RequestBody.create(jsonObject.toString(),JSON))
-                .header("Authorization", "Bearer AAAA9JmSg9Q:APA91bG_VZRBkbQa1whOowc_R2F1P8M_RUcDERhZa-YRM-EgSiAaoHBxSV4UO0bETyAvHh7d7P9fPjgIlfPqZcU-_xRKrIW71swZCu-uLSzdf6cravZN6zhs1HvtDt28afiwDevDnJ7b")
-                .build();
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-
-            }
-
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-
-            }
-        });
-    }
-
 
 }

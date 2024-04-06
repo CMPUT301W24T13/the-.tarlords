@@ -9,6 +9,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.the_tarlords.R;
 
+/**
+ * Adapter for ImageSlider at the top of the Organizer list fragment
+ */
+
 public class ImageSliderAdapter extends RecyclerView.Adapter<ImageSliderAdapter.ImageSliderViewHolder> {
 
     private int[] images;

@@ -16,6 +16,10 @@ import com.example.the_tarlords.data.users.Attendee;
 
 import java.util.ArrayList;
 
+/**
+ * Adapter for ListView in AttendanceFragment
+ */
+
 public class AttendanceArrayAdapter extends ArrayAdapter<Attendee> {
     ArrayList<Attendee> attendees;
     private LayoutInflater inflater;
@@ -65,6 +69,10 @@ public class AttendanceArrayAdapter extends ArrayAdapter<Attendee> {
         ImageView profilePic;
     }
 
+    /**
+     * Get size of attendees sign-up list
+     * @return number of attendees in list
+     */
     public int getItemCount() {
         if (attendees == null) {
             return 0;
@@ -72,6 +80,10 @@ public class AttendanceArrayAdapter extends ArrayAdapter<Attendee> {
         return attendees.size();
     }
 
+    /**
+     * Get size of attendees check-in list
+     * @return number of attendees in list
+     */
     public int getCheckInCount() {
         int checkInCount = 0;
         for (Attendee a: attendees) {

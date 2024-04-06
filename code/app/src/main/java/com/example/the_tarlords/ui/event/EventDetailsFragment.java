@@ -1,7 +1,7 @@
 package com.example.the_tarlords.ui.event;
 
 import static com.example.the_tarlords.MainActivity.context;
-
+import static com.example.the_tarlords.MainActivity.toolbar;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -22,11 +22,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.PermissionChecker;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentContainerView;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.the_tarlords.MainActivity;
@@ -44,10 +46,10 @@ import com.example.the_tarlords.databinding.FragmentEventDetailsBinding;
  * create an instance of this fragment.
  * This fragment inflates the event details when an event is clicked on
  * from the attendee/homepage list view.
- * The nav bar should handle going back to the listview????
  */
 public class EventDetailsFragment extends Fragment implements MenuProvider {
-    private Button shareQrCode;
+    private Button shareQrCodeCI;
+    private Button shareQrCodeEI;
     private static Event event;
     private boolean isOrganizer;
 
@@ -159,8 +161,9 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
             if (event.getMaxSignUps()==(Integer) (-1)){
                 eventMaxAttendees.setText("Max Capacity: Unlimited");
             } else {
-                eventMaxAttendees.setText("Max Capacity: "+event.getMaxSignUps()+"");
+                eventMaxAttendees.setText("Max Capacity: "+event.getMaxSignUps());
             }
+
             signUps.setText("  "+event.getSignUps()+" Sign Ups");
             checkIns.setText("  "+event.getCheckIns()+" Check Ins");
 
@@ -176,36 +179,82 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
                 eventPosterImageView.setImageBitmap(eventPoster.getBitmap());
             }
 
-            try {
-                //TODO: this is kinda broken
-                eventMaxAttendees.setText(event.getMaxSignUps().toString());
-            } catch (Exception ignored) {
-            }
         }
 
         //display event QR codes if user has organizer perms
         if (isOrganizer == true) {
+            FragmentContainerView miniMap = view.findViewById(R.id.event_details_mini_map);
+            miniMap.setVisibility(view.VISIBLE);
+            CardView map = view.findViewById(R.id.miniMapCardView);
+            map.setVisibility(view.VISIBLE);
+            View mapClick = view.findViewById(R.id.miniMapClickView);
+            mapClick.setClickable(true);
+            mapClick.bringToFront();
+            mapClick.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle args = new Bundle();
+                    args.putParcelable("event",event);
+                    try {
+                        NavHostFragment.findNavController(EventDetailsFragment.this)
+                                .navigate(R.id.action_eventDetailsFragment_to_MapsFragment, args);
+                    }catch(Exception e)
+                    {
+                        Log.e("maps", Log.getStackTraceString(e));
+                    }
+                }
+            });
+            View attendance = view.findViewById(R.id.attendanceConstraint);
+            attendance.setClickable(true);
+            view.findViewById(R.id.view_attendance_details).setVisibility(view.VISIBLE);
+            attendance.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //navigate to attendance fragment
+                    Bundle args = new Bundle();
+                    args.putParcelable("event",event);
+                    try {
+                        NavHostFragment.findNavController(EventDetailsFragment.this)
+                                .navigate(R.id.action_eventDetailsFragment_to_attendanceFragment, args);
+                    } catch (Exception ignored) {}
+                }
+            });
+
             if (event.getQrCode()!=null){
-                view.findViewById(R.id.tv_checkin_details).setVisibility(view.VISIBLE);
-                view.findViewById(R.id.tv_info_details).setVisibility(view.VISIBLE);
+                view.findViewById(R.id.tv_event_detail_QR_label).setVisibility(view.VISIBLE);
+                view.findViewById(R.id.QRconstraintLayout).setVisibility(view.VISIBLE);
                 ImageView checkInQr = view.findViewById(R.id.iv_checkin_details);
                 ImageView eventInfoQr = view.findViewById(R.id.iv_info_details);
-                checkInQr.setVisibility(view.VISIBLE);
-                eventInfoQr.setVisibility(view.VISIBLE);
                 QRCode.generateQR("CI"+event.getQrCode(),checkInQr);
                 QRCode.generateQR("EI"+event.getQrCode(),eventInfoQr);
             }
         }
 
-        ImageView imageView = view.findViewById(R.id.iv_checkin_details);
-        shareQrCode = view.findViewById(R.id.shareQrCode);
-        shareQrCode.setOnClickListener(new View.OnClickListener() {
+        ImageView imageViewCI = view.findViewById(R.id.iv_checkin_details);
+        shareQrCodeCI = view.findViewById(R.id.shareQrCodeCI);
+        shareQrCodeCI.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 QRCode qrcode = new QRCode();
-                qrcode.shareQR(imageView, getActivity());
+                qrcode.shareQR(imageViewCI, getActivity());
             }
         });
+
+        ImageView imageViewEI = view.findViewById(R.id.iv_info_details);
+        shareQrCodeEI = view.findViewById(R.id.shareQrCodeEI);
+        shareQrCodeEI.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                QRCode qrcode = new QRCode();
+                qrcode.shareQR(imageViewEI, getActivity());
+            }
+        });
+    }
+
+    @Override
+    public void onDestroyView(){
+        onCreateMenu(toolbar.getMenu(), new MenuInflater(getContext()));
+        super.onDestroyView();
     }
 
     /**
@@ -224,9 +273,7 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
         //if user is the organizer, display edit and attendance icons
         if (isOrganizer) {
             menu.findItem(R.id.editOptionsMenu).setVisible(true);
-            menu.findItem(R.id.attendanceOptionsMenu).setVisible(true);
             menu.findItem(R.id.deleteOptionsMenu).setVisible(true);
-            menu.findItem(R.id.mapOptionsMenu).setVisible(true);
         }
         //if user came from browse fragment display sign up button
         if (browse) {
@@ -259,15 +306,6 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
             try {
                 NavHostFragment.findNavController(EventDetailsFragment.this)
                         .navigate(R.id.action_eventDetailsFragment_to_eventEditFragment, args);
-            } catch (Exception ignored) {}
-        }
-        //navigate to attendance fragment
-        else if (menuItem.getItemId()==R.id.attendanceOptionsMenu) {
-            Bundle args = new Bundle();
-            args.putParcelable("event",event);
-            try {
-                NavHostFragment.findNavController(EventDetailsFragment.this)
-                        .navigate(R.id.action_eventDetailsFragment_to_attendanceFragment, args);
             } catch (Exception ignored) {}
         }
         //navigate to announcements fragment
@@ -308,18 +346,6 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
                 // Fragment is not attached to an activity, handle the situation accordingly
                 Log.d("admin", "fragment not attached to activity");
             }
-        }
-        //Navigate to Maps Fragment
-        else if(menuItem.getItemId()==R.id.mapOptionsMenu) {
-            Bundle args = new Bundle();
-            args.putParcelable("event",event);
-            try {
-                NavHostFragment.findNavController(EventDetailsFragment.this)
-                        .navigate(R.id.action_eventDetailsFragment_to_MapsFragment, args);
-            }catch(Exception e)
-                {
-                    Log.e("maps", Log.getStackTraceString(e));
-                }
         } else if (menuItem.getItemId()==R.id.signUpOptionsMenu) {
 
             AttendanceDBHelper.signUp(event, MainActivity.user, new AttendanceQueryCallback() {

@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.event.Event;
+import com.example.the_tarlords.databinding.FragmentMapsBinding;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -29,11 +30,17 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
+/**
+ * The GoogleMaps for each event where
+ * Organizers can see where each attendee checks in from
+ */
 public class MapsFragment extends Fragment implements MenuProvider {
 
 
     public static Event event;
     private String eventId;
+    private FragmentMapsBinding binding;
+    private Boolean hasParent=false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,6 +53,10 @@ public class MapsFragment extends Fragment implements MenuProvider {
             }else{
                 Log.d("maps", "null event");
             }
+        } else if (getParentFragment()!=null&&getParentFragment().getArguments()!=null){
+            event = getParentFragment().getArguments().getParcelable("event");
+            eventId = event.getId();
+            hasParent=true;
         }
 
     }
@@ -74,20 +85,24 @@ public class MapsFragment extends Fragment implements MenuProvider {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_maps, container, false);
+        //return inflater.inflate(R.layout.fragment_maps, container, false);
+        binding = FragmentMapsBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //MANDATORY: required for MenuProvider options menu
-        requireActivity().addMenuProvider(this);
-
+        if (!hasParent) {
+            requireActivity().addMenuProvider(this);
+        }
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         if (mapFragment != null) {
             mapFragment.getMapAsync(callback);
         }
+
     }
     // TODO: not disabling the menu options, should not should any of them
     @Override
@@ -111,8 +126,8 @@ public class MapsFragment extends Fragment implements MenuProvider {
     }
 
     /**
-     * Adds location markers of all the check-in attendees
-     * at that event
+     * Fetches coordinates of check-ins from Firebase
+     * Adds location markers of all the check-in attendees at that event
      * @param googleMap
      */
 
