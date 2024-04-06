@@ -397,6 +397,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
             boolean reuse = false;
             String eventID;
 
+
             //set clickability of views and edit texts
             eventUploadPosterTextView.setVisibility(View.INVISIBLE);
             setTextViewsClickablity(false);
