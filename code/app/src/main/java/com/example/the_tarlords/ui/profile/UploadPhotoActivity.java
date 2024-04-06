@@ -23,6 +23,10 @@ import com.example.the_tarlords.data.event.Event;
 
 import java.io.IOException;
 
+/**
+ * Activity that allows you to upload profile photos or event posters
+ */
+
 public class UploadPhotoActivity extends AppCompatActivity {
     private static final int REQUEST_GALLERY_PERMISSION = 1;
     private static final int REQUEST_IMAGE_PICK = 1000;

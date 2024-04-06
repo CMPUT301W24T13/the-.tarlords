@@ -15,6 +15,10 @@ import com.example.the_tarlords.R;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+/**
+ * Responsisble for displayed messages/notifications on the device
+ */
+
 public class FCMService extends FirebaseMessagingService {
 // https://stackoverflow.com/questions/38451235/how-to-handle-the-firebase-notification-when-app-is-in-foreground
     @Override

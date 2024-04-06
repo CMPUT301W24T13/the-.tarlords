@@ -26,16 +26,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This class defines an event
- * UUID type for event attribute makes sure that everytime an event object is created it has a unique id
- * Not sure how QRcode will work , is it initialized when the event is created, or can it be set after being created
+ * This class represents an event
+ * has name, location, start and end date and time
+ * poster, organizer and QR codes related to it
  */
 
-
-/* NOTE FOR KHUSHI AND GRACE:
-
-    2. Need to connect event location to the Map Class.
-*/
 public class Event implements Parcelable {
     String name;
     String location;

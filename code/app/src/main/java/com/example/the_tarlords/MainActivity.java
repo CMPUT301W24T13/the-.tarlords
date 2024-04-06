@@ -34,6 +34,11 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+/**
+ * Main Activity , responsible for getting stored User Id
+ * Granting location permissions
+ * Hosting the navigation bar and most of the fragments
+ */
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
