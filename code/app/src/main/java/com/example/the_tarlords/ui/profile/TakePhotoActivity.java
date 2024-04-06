@@ -22,11 +22,12 @@ import com.example.the_tarlords.data.event.Event;
 public class TakePhotoActivity extends AppCompatActivity {
     private static final int REQUEST_CAMERA_PERMISSION = 1;
     private static final int REQUEST_IMAGE_CAPTURE = 100;
+    private Event event;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        event =getIntent().getParcelableExtra("event");
         // Check camera permission and initiate photo capture if permission is granted
         if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(TakePhotoActivity.this, new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
@@ -47,8 +48,6 @@ public class TakePhotoActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        Event event = (Event) data.getParcelableExtra("event");
-
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bitmap capturedPhoto = (Bitmap) (data.getExtras().get("data"));
             if (event == null) {
@@ -56,12 +55,10 @@ public class TakePhotoActivity extends AppCompatActivity {
                 MainActivity.user.setPhotoIsDefault(false);
                 MainActivity.updateNavigationDrawerHeader();
             } else {
-                event.getPoster().setBitmap(capturedPhoto);
-                event.setPosterIsDefault(false);
+                setResult(RESULT_OK,data);
             }
-            Intent i = new Intent();
-            i.putExtra("posterData",event.getPoster().getPhotoDataFromBitmap());
-            setResult(RESULT_OK,i);
+
+            finish();
         }
         else {
             finish();

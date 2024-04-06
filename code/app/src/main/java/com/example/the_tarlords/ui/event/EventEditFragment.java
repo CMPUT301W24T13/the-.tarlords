@@ -6,10 +6,13 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -45,7 +48,12 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.io.IOException;
+import java.time.MonthDay;
+import java.time.Year;
+import java.time.YearMonth;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Objects;
 
 /**
@@ -172,7 +180,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
                 // Format the date components into a string "YYYY.MonthName.DD"
                 @SuppressLint("DefaultLocale")
 
-                String formattedDate = String.format("%s %02d, %04d", monthNames[month], dayOfMonth,year);
+                String formattedDate = String.format("%.3s %02d, %04d", monthNames[month], dayOfMonth,year);
 
                 // Update the text view
                 if (s == "start") {
@@ -180,10 +188,8 @@ public class EventEditFragment extends Fragment implements MenuProvider {
                 }else{
                     eventEndDateTextView.setText(formattedDate);
                 }
-
-
             }
-        }, 2024, 0, 15);
+        }, Year.now().getValue(), YearMonth.now().getMonthValue()-1, MonthDay.now().getDayOfMonth());
         //show the dialog
         dialog.show();
     }
@@ -298,13 +304,13 @@ public class EventEditFragment extends Fragment implements MenuProvider {
                         //take photo
                         Intent eventPosterCapture = new Intent(getActivity(), TakePhotoActivity.class);
                         eventPosterCapture.putExtra("event", event);
-                        startActivityForResult(eventPosterCapture,RESULT_OK);
+                        startActivityForResult(eventPosterCapture,1000);
                         return true;
                     } else if (item.getItemId() == R.id.gallery_open) {
                         //upload photo
                         Intent eventPosterUpload = new Intent(getActivity(), UploadPhotoActivity.class);
                         eventPosterUpload.putExtra("event", event);
-                        startActivity(eventPosterUpload);
+                        startActivityForResult(eventPosterUpload,1001);
                         return true;
                     } else if (item.getItemId() == R.id.remove_current_photo) {
                         //remove current photo:
@@ -507,10 +513,23 @@ public class EventEditFragment extends Fragment implements MenuProvider {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (data != null){
-            event.getPoster().setBitmapFromPhotoData(data.getStringExtra("posterData"));
+        if ( resultCode==RESULT_OK){
+            Bitmap capturedPhoto = event.getPoster().getBitmap();
+            if (requestCode==1000) {
+                capturedPhoto = (Bitmap) (data.getExtras().get("data"));
+            } else if (requestCode == 1001){
+                Uri uploadPath = data.getData();
+                try {
+                    capturedPhoto = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(),uploadPath);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            event.getPoster().setBitmap(capturedPhoto);
+            event.setPosterIsDefault(false);
             ImageView poster = getView().findViewById(R.id.edit_iv_poster);
-            poster.setImageBitmap(event.getPoster().getBitmap());
+            poster.setImageBitmap(capturedPhoto);
+
         }
     }
 }
