@@ -1,5 +1,8 @@
 package com.example.the_tarlords.data.Alert;
 
+/**
+ * alert dialog implements addAlert , editAlert and deleteAlert
+ */
 public interface AddAlertDialogListener {
     /**
      * adds an alert to the adapter

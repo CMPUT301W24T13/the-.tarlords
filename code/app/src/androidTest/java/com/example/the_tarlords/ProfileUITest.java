@@ -17,6 +17,9 @@ import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+/**
+ * Tests the UI for the profile Fragment 
+ */
 @RunWith(AndroidJUnit4.class)
 public class ProfileUITest {
 

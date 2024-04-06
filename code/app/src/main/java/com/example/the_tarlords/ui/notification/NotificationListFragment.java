@@ -17,7 +17,7 @@ import com.example.the_tarlords.placeholder.PlaceholderContent;
 import com.example.the_tarlords.placeholder.PlaceholderEventContent;
 
 /**
- * A fragment representing a list of Items.
+ * A fragment representing a list of notfications
  */
 public class NotificationListFragment extends Fragment {
 
