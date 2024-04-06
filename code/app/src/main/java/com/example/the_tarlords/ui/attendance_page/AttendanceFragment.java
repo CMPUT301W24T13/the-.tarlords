@@ -114,7 +114,19 @@ public class AttendanceFragment extends Fragment implements MenuProvider {
                 }
             }
         });
-        refreshMilestoneList();
+        CollectionReference milestoneRef = MainActivity.db.collection("Events/"+event.getId()+"/milestones");
+        milestoneRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    Log.e("Firestore", error.toString());
+                    return;
+                }
+                if (value != null) {
+                    refreshMilestoneList();
+                }
+            }
+        });
 
 
     }
@@ -132,6 +144,9 @@ public class AttendanceFragment extends Fragment implements MenuProvider {
 
     }
 
+    /**
+     * refreshes the milestone list view
+     */
     private void refreshMilestoneList(){
         MilestoneHelper helper = new MilestoneHelper(event.getId());
         milestoneList = helper.getMilestoneList(new AlertCallback() {
