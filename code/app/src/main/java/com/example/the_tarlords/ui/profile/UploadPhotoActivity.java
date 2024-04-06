@@ -79,7 +79,9 @@ public class UploadPhotoActivity extends AppCompatActivity {
                     event.getPoster().setBitmap(photoUpload);
                     event.setPosterIsDefault(false);
                 }
-                finish();
+                Intent i = new Intent();
+                i.putExtra("posterData",event.getPoster().getPhotoDataFromBitmap());
+                setResult(RESULT_OK);
             } catch (IOException e) {
                 e.printStackTrace();
             }

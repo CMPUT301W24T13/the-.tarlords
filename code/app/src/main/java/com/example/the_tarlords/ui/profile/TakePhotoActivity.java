@@ -59,7 +59,9 @@ public class TakePhotoActivity extends AppCompatActivity {
                 event.getPoster().setBitmap(capturedPhoto);
                 event.setPosterIsDefault(false);
             }
-            finish();
+            Intent i = new Intent();
+            i.putExtra("posterData",event.getPoster().getPhotoDataFromBitmap());
+            setResult(RESULT_OK,i);
         }
         else {
             finish();

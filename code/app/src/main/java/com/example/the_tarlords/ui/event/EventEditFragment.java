@@ -1,5 +1,7 @@
 package com.example.the_tarlords.ui.event;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -296,7 +298,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
                         //take photo
                         Intent eventPosterCapture = new Intent(getActivity(), TakePhotoActivity.class);
                         eventPosterCapture.putExtra("event", event);
-                        startActivity(eventPosterCapture);
+                        startActivityForResult(eventPosterCapture,RESULT_OK);
                         return true;
                     } else if (item.getItemId() == R.id.gallery_open) {
                         //upload photo
@@ -499,5 +501,16 @@ public class EventEditFragment extends Fragment implements MenuProvider {
         }
 
         return false;
+    }
+
+    //TODO: not working
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (data != null){
+            event.getPoster().setBitmapFromPhotoData(data.getStringExtra("posterData"));
+            ImageView poster = getView().findViewById(R.id.edit_iv_poster);
+            poster.setImageBitmap(event.getPoster().getBitmap());
+        }
     }
 }
