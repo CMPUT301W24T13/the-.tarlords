@@ -19,6 +19,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.the_tarlords.MainActivity;
+import com.example.the_tarlords.data.event.Event;
 
 import java.io.IOException;
 
@@ -26,11 +27,11 @@ public class UploadPhotoActivity extends AppCompatActivity {
     private static final int REQUEST_GALLERY_PERMISSION = 1;
     private static final int REQUEST_IMAGE_PICK = 1000;
     private Uri uploadPath;
-
+    private Event event;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Event event = getIntent().getParcelableExtra("event");
         if (checkSelfPermission(android.Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED ) {
             ActivityCompat.requestPermissions((Activity) context, new String[]{android.Manifest.permission.READ_MEDIA_IMAGES}, REQUEST_GALLERY_PERMISSION);
         } else {
@@ -68,9 +69,15 @@ public class UploadPhotoActivity extends AppCompatActivity {
 
             try {
                 photoUpload = MediaStore.Images.Media.getBitmap(getContentResolver(),uploadPath);
-                MainActivity.user.getProfilePhoto().setBitmap(photoUpload);
-                MainActivity.user.setPhotoIsDefault(false);
-                MainActivity.updateNavigationDrawerHeader();
+                if (event == null) {
+                    MainActivity.user.getProfilePhoto().setBitmap(photoUpload);
+                    MainActivity.user.setPhotoIsDefault(false);
+                    MainActivity.updateNavigationDrawerHeader();
+                } else {
+                    event.getPoster().setBitmap(photoUpload);
+                    event.setPosterIsDefault(false);
+                    setResult(RESULT_OK,data);
+                }
                 finish();
             } catch (IOException e) {
                 e.printStackTrace();

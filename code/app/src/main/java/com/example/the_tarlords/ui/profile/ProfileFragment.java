@@ -108,15 +108,13 @@ public class ProfileFragment extends Fragment implements MenuProvider {
                 public boolean onMenuItemClick(MenuItem item) {
                     if (item.getItemId() == R.id.camera_open) {
                         //take photo
-                        Intent intent = new Intent(getActivity(), TakePhotoActivity.class);
-                        startActivity(intent);
-
+                        Intent profilePhotoCapture = new Intent(getActivity(), TakePhotoActivity.class);
+                        startActivity(profilePhotoCapture);
                         return true;
                     } else if (item.getItemId() == R.id.gallery_open) {
                         //upload photo
-                        Intent intent = new Intent(getActivity(), UploadPhotoActivity.class);
-                        startActivity(intent);
-
+                        Intent profilePhotoUpload = new Intent(getActivity(), UploadPhotoActivity.class);
+                        startActivity(profilePhotoUpload);
                         return true;
                     } else if (item.getItemId() == R.id.remove_current_photo) {
                         //remove current photo:
