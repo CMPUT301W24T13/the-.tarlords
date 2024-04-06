@@ -5,7 +5,9 @@ import static com.example.the_tarlords.MainActivity.context;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -127,6 +129,22 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
         ImageView eventPosterImageView = view.findViewById(R.id.iv_poster);
         //add additional views here as desired
 
+        TextView additionalInfoText = view.findViewById(R.id.additional_info);
+        additionalInfoText.setText(event.getAdditionalInfo());
+        TextView readMoreText = view.findViewById(R.id.tv_read_more);
+        readMoreText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (additionalInfoText.getMaxLines() == 2) {
+                    additionalInfoText.setMaxLines(Integer.MAX_VALUE);
+                    readMoreText.setText("Read Less");
+                } else {
+                    additionalInfoText.setMaxLines(2);
+                    readMoreText.setText("Read More");
+                }
+            }
+        });
+
         // Check if event is not null before accessing its attributes
         if (event != null) {
             eventNameTextView.setText(event.getName());
@@ -191,7 +209,7 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
     }
 
     /**
-     * Mandatory MenuProvider interface method.
+     * Mandatory Provider interface method.
      * Displays options menu for details fragment dependant on user status (organizer or attendee)
      * @param menu         the menu to inflate the new menu items into
      * @param menuInflater the inflater to be used to inflate the updated menu
