@@ -1,12 +1,14 @@
 package com.example.the_tarlords.data.Alert;
 
 import static java.lang.Math.floor;
+import static java.lang.Math.max;
 
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import com.example.the_tarlords.MainActivity;
+import com.example.the_tarlords.data.Notification.Notification;
 import com.example.the_tarlords.data.event.Event;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -34,37 +36,44 @@ public class MilestoneManager {
     private int currentCount;
     private int maxCount;
     private static Event event;
+    private Notification notification = new Notification();
 
+    /**
+     * constructor for the milestone manager class
+     * @param event
+     */
     public MilestoneManager(Event event){
         this.event = event;
         this.maxCount = event.getMaxSignUps();
         this.currentCount = event.getCheckIns();
 
     }
+
+    /**
+     * checks if a milestone checkpoint is passed. If a checkpoint is passed, create a new milestone and
+     * sends a notification to the organizer
+     */
     public void updateMilestone() {
-        sendMilestoneNotification();
 
-        if(currentCount == 1){
-            setMilestone(new Milestone("First milestone","First attendee checked in",String.valueOf(currentCount)));
+        if (currentCount == 1) {
+            setMilestone(new Milestone("First milestone", "First attendee checked in", String.valueOf(currentCount)));
             sendMilestoneNotification();
 
-        } else if (currentCount == maxCount / 2) {
-            setMilestone(new Milestone("Half capacity milestone","Half of the attendees,"+String.valueOf(currentCount)+"/"+String.valueOf(maxCount)+", are checked in",String.valueOf(currentCount)));
+        }if (maxCount > 0 && currentCount == Math.floorDiv(maxCount,2)) {
+            setMilestone(new Milestone("Half capacity milestone", "Half of the attendees," + String.valueOf(currentCount) + " of " + String.valueOf(maxCount) + ", are now checked in", String.valueOf(currentCount)));
             sendMilestoneNotification();
-
-        }else if(currentCount >0 && currentCount % 5 == 0){
-            setMilestone(new Milestone("Checkpoint Milestone",String.valueOf(currentCount)+" attendees now are checked in",String.valueOf(currentCount)));
+        }else if (maxCount > 0 && currentCount == maxCount) {
+            setMilestone(new Milestone("Full capacity milestone", "All " + String.valueOf(currentCount) + " attendees now are checked in", String.valueOf(currentCount)));
             sendMilestoneNotification();
-
-        }else if(currentCount == maxCount){
-            setMilestone(new Milestone("Full capacity milestone","All attendees "+ String.valueOf(currentCount)+", now are checked in",String.valueOf(currentCount)));
+        }else if (currentCount > 0 && currentCount % 5 == 0) {
+            setMilestone(new Milestone("Checkpoint Milestone", String.valueOf(currentCount) + " attendees now are checked in", String.valueOf(currentCount)));
             sendMilestoneNotification();
-
         }
-
-
     }
 
+    /**
+     * sends a notification to the organizer when a milestone is passed
+     */
     void sendMilestoneNotification(){
 
         MainActivity.db.collection("Users").document(event.getOrganizerId()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -75,8 +84,7 @@ public class MilestoneManager {
                     if(fcmToken != null){
                         Log.d("fcm Token organizer ",fcmToken);
                         try {
-                            JSONObject jsonObject = getJsonObject(fcmToken,"New Milestone");
-                            callApi(jsonObject);
+                            notification.sendNotification(fcmToken,"New Milestone",event);
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
                         }
@@ -86,6 +94,11 @@ public class MilestoneManager {
         });
 
     }
+
+    /**
+     * stores a new milestone in firestore
+     * @param milestone the milestone to be put
+     */
     public void setMilestone(Milestone milestone){
         CollectionReference milestoneRef = MainActivity.db.collection("Events/"+event.getId()+"/milestones");
         Map<String, Object> milestoneMap = new HashMap<>();
@@ -98,51 +111,5 @@ public class MilestoneManager {
         Log.d("milestone adding","working");
 
     }
-
-    /**
-     * creates a JSONObject representation of a notification
-     * @param fcmToken
-     * @param text
-     * @return JSONObject representation
-     * @throws JSONException
-     */
-    @NonNull
-    private static JSONObject getJsonObject(String fcmToken, String text) throws JSONException {
-        JSONObject jsonObject = new JSONObject();
-        JSONObject notificationObject = new JSONObject();
-        JSONObject dataObject = new JSONObject();
-        JSONObject androidPriorityObject = new JSONObject();
-        notificationObject.put("title", event.getName());
-        notificationObject.put("body",text);
-        dataObject.put("event",event.getId());
-        androidPriorityObject.put("priority","high");
-        jsonObject.put("notification",notificationObject);
-        jsonObject.put("data",dataObject);
-        jsonObject.put("to", fcmToken);
-        jsonObject.put("android",androidPriorityObject);
-        return jsonObject;
-    }
-    void callApi(JSONObject jsonObject){
-        MediaType JSON = MediaType.get("application/json");
-
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url("https://fcm.googleapis.com/fcm/send")
-                .post(RequestBody.create(jsonObject.toString(),JSON))
-                .header("Authorization", "Bearer AAAA9JmSg9Q:APA91bG_VZRBkbQa1whOowc_R2F1P8M_RUcDERhZa-YRM-EgSiAaoHBxSV4UO0bETyAvHh7d7P9fPjgIlfPqZcU-_xRKrIW71swZCu-uLSzdf6cravZN6zhs1HvtDt28afiwDevDnJ7b")
-                .build();
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-
-            }
-
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-
-            }
-        });
-    }
-
 
 }

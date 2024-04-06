@@ -15,9 +15,20 @@ import java.util.ArrayList;
 
 public class MilestoneHelper {
     String id;
+
+    /**
+     * constructor of milstoneHelper
+     * @param id id of the event
+     */
     public MilestoneHelper(String id){
         this.id = id;
     }
+
+    /**
+     * queries the milestones for the given event and returns it as a array list
+     * @param callback
+     * @return Array list of milestones
+     */
     public ArrayList<Alert> getMilestoneList(AlertCallback callback) {
         CollectionReference milestoneRef = MainActivity.db.collection("Events/" + id + "/milestones");
         ArrayList<Alert> milestoneList = new ArrayList<>();
@@ -39,9 +50,6 @@ public class MilestoneHelper {
                 }
             }
         });
-        // placeholder
-        milestoneList.add(new Milestone("Milestone title","Milestone message","0"));
-        milestoneList.add(new Milestone("Milestone title2", "Milestone message 2","1"));
         return milestoneList;
     }
     
