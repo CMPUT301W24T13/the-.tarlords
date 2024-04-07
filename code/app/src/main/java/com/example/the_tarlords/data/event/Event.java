@@ -18,6 +18,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -198,7 +200,7 @@ public class Event implements Parcelable {
     }
     /**
      * Gets profile photo data firestore by converting the base 64 string stored in firestore
-     * to a bitmask, then setting the profile photo to have that bitmask.
+   if (maxAttendees.getText().toString().length()!=0){   * to a bitmask, then setting the profile photo to have that bitmask.
      * @return String base 64 profile photo data
      */
     public String getPosterData() {
@@ -210,7 +212,7 @@ public class Event implements Parcelable {
         posterData=posterData;
     }
     public boolean reachedMaxCap() {
-        if (signUps == null || maxSignUps ==-1||maxSignUps==null){
+        if (signUps == null||maxSignUps==null||maxSignUps==-1){
             return false;
         } else {
             return maxSignUps <= signUps;
@@ -220,7 +222,7 @@ public class Event implements Parcelable {
     public ArrayList<Alert> getAlertList(AlertCallback callback){
         CollectionReference alertRef = MainActivity.db.collection("Events/"+ id +"/alerts");
         ArrayList<Alert> alertList = new ArrayList<>();
-        alertRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        alertRef.orderBy("timestamp", Query.Direction.DESCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -249,6 +251,7 @@ public class Event implements Parcelable {
         alertMap.put("title", alert.getTitle());
         alertMap.put("message", alert.getMessage());
         alertMap.put("currentDateTime", alert.getCurrentDateTime());
+        alertMap.put("timestamp", FieldValue.serverTimestamp());
         alertRef.add(alertMap);
 
         Log.d("alert adding","working");

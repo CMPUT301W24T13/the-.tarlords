@@ -48,7 +48,7 @@
     <!-- strings related to profile xml -->
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
-    <string name="phone_number">Phone Number (XXX) XXX-XXXX</string>
+    <string name="phone_number">Phone # (XXX) XXX-XXXX</string>
     <string name="email">Email Address</string>
     <string name="profile_picture">profile picture</string>
     <string name="upload_photo">upload photo</string>

@@ -8,12 +8,14 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+
 /**
  * Represents an alert
  * has title, message, event its related to, and date
  */
+public class Alert{
 
-public class Alert implements Comparable{
+
     private String title;
     private String message;
     private Event event;
@@ -120,20 +122,6 @@ public class Alert implements Comparable{
      */
     public void setEvent(Event event) {
         this.event = event;
-    }
-
-    /**
-     * Makes the alerts comparable by their local date time
-     * @param o the object to be compared.
-     * @return
-     */
-    @Override
-    public int compareTo(Object o) {
-        Alert obj = (Alert) o;
-        //return obj.getLdt().compareTo(this.ldt);
-        return 0;
-
-
     }
 
     public String getId() {

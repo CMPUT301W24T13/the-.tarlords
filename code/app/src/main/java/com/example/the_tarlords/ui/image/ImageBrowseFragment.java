@@ -168,7 +168,7 @@ public class ImageBrowseFragment extends Fragment implements MenuProvider {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 // Access the posterData field for each document
                                 String profilePhotoData = document.getString("profilePhotoData");
-                                String name = document.getString("firstName");
+                                String name = document.getString("firstName")+" "+document.getString("lastName");
                                 String docId = document.getId(); // Get document ID
                                 Boolean photoIsDefault = document.getBoolean("photoIsDefault");
                                 if (photoIsDefault!=null&&!photoIsDefault){
@@ -233,5 +233,13 @@ public class ImageBrowseFragment extends Fragment implements MenuProvider {
     @Override
     public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
         return false;
+    }
+
+    public ArrayList<Photo> getImages() {
+        return images;
+    }
+
+    public void setImages(ArrayList<Photo> images) {
+        this.images = images;
     }
 }
