@@ -1,6 +1,10 @@
 package com.example.the_tarlords;
 
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.intent.Intents.intending;
+
+import android.app.Activity;
+import android.app.Instrumentation;
 
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.action.ViewActions;
@@ -30,6 +34,8 @@ public class MainActivityTest {
     @Before
     public void setUp() {
         Intents.init();
+        // Grant location permissions when requested
+        // intending(IntentMatchers.hasAction("android.settings.APPLICATION_DETAILS_SETTINGS")).respondWith(new Instrumentation.ActivityResult(Activity.RESULT_OK, null));
     }
 
     @After
