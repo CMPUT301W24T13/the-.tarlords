@@ -58,15 +58,25 @@ public class Photo {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         //bitmap from user image file
         //too much increase in quality may result in firebase errors (ie string too long)
-        if (bitmap.getAllocationByteCount() >= 10000000){
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);
-        }
-        else {
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        }
+        int quality = 100/getPhotoCompressionFactor(bitmap,1);
+        bitmap.compress(Bitmap.CompressFormat.JPEG,quality , baos);
         byte[] byteArray = baos.toByteArray();
         String photoB64 = Base64.encodeToString(byteArray,0,byteArray.length,Base64.URL_SAFE);
         return photoB64;
+    }
+
+    /**
+     * Gets compression factor such that the image will fit in firebase.
+     * @param bitmap
+     * @param compressionFactor
+     * @return
+     */
+    public int getPhotoCompressionFactor(Bitmap bitmap, int compressionFactor) {
+        if (bitmap.getAllocationByteCount()/compressionFactor >= 10000000){
+            return getPhotoCompressionFactor(bitmap, compressionFactor*2);
+        } else {
+            return  compressionFactor;
+        }
     }
 
     /**
