@@ -2,6 +2,11 @@ package com.example.the_tarlords.data.Alert;
 
 import com.example.the_tarlords.data.event.Event;
 
+/**
+ * Special type of Alert sent out to the Organizers
+ * @see Alert
+ */
+
 public class Milestone extends Alert{
     private String title;
     private String message;

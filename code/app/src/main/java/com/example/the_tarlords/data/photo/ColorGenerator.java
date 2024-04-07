@@ -2,6 +2,9 @@ package com.example.the_tarlords.data.photo;
 
 import java.util.Random;
 
+/**
+ * Generations a random colour for generated profile pictures
+ */
 public class ColorGenerator {
 
     private static Integer[] colors =
@@ -18,6 +21,11 @@ public class ColorGenerator {
                 0xFFCF5722, 0xFF795548, 0xFF607D8B, 0xFF333333)
         );
     }*/
+
+    /**
+     * Gets random colour from a set of colours
+     * @return index of colour
+     */
 
     public static int getRandomColor() {
         Random rand = new Random();

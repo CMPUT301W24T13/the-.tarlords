@@ -9,11 +9,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.provider.MediaStore;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -38,6 +35,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
+import com.example.the_tarlords.data.DateHelper;
 import com.example.the_tarlords.data.QR.QRCode;
 import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.photo.EventPoster;
@@ -45,10 +43,8 @@ import com.example.the_tarlords.databinding.FragmentEventEditBinding;
 import com.example.the_tarlords.ui.profile.TakePhotoActivity;
 import com.example.the_tarlords.ui.profile.UploadPhotoActivity;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
-import java.io.IOException;
 import java.time.MonthDay;
 import java.time.Year;
 import java.time.YearMonth;
@@ -60,7 +56,7 @@ import java.util.Objects;
  * A simple {@link Fragment} subclass.
  * Use the {@link EventEditFragment#newInstance} factory method to
  * create an instance of this fragment.
- * This inflates the event details and allows for user to edit
+ * This inflates the event details and allows for user to edit details
  * linked to fragment_event_edit.xml
  * Will also take in an event as a parameter
  */
@@ -72,6 +68,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
     private ImageView eventPosterImageView;
     private TextView eventUploadPosterTextView;
     private EditText eventNameEditText;
+    private EditText eventAdditionalInfo;
     private TextView eventStartDateTextView;
     private TextView eventEndDateTextView;
     private TextView eventStartTimeTextView;
@@ -81,15 +78,14 @@ public class EventEditFragment extends Fragment implements MenuProvider {
     private CheckBox cbMaxAttendees;
     private ImageView checkInQR;
     private ImageView eventInfoQR;
+
+    private  Menu menu;
+
+    private EditText additionalInfoEditText;
+
     private FragmentEventEditBinding binding;
-    //add the event poster to be able to edit the poster
-    //event poster doenst need to be connected to event details. Make poster connected to event so
-    //when QR -> event <- event detials
-    // Define a class member variable to hold the menu
-    private Menu menu;
     private Spinner spinner;
     private ArrayList<String> eventsForReuse;
-    private FirebaseFirestore db;
     private static CollectionReference QRRef = MainActivity.db.collection("QRCodes");
     private static CollectionReference EventsRef = MainActivity.db.collection("Events");
 
@@ -160,9 +156,31 @@ public class EventEditFragment extends Fragment implements MenuProvider {
         }
     }
 
-    //For both of these dialogs you can change the theme using dialog theme in layout folder
+    /**
+     * Helps user pick a valid start or end date for their event
+     * @param s, string repsentation of date stored
+     */
     private void showDatePickerDialog(String s) {
         // logic for showing a date picker dialog
+        int year = Year.now().getValue();
+        int month = YearMonth.now().getMonthValue()-1;
+        int dayOfMonth = MonthDay.now().getDayOfMonth();
+        if (s == "start"){
+            if (event.getStartDate()!=null){
+                year = DateHelper.getYear(event.getStartDate());
+                month = DateHelper.getMonth(event.getStartDate());
+                dayOfMonth = DateHelper.getDayOfMonth(event.getStartDate());
+            }
+        } else {
+            if (event.getEndDate()!=null){
+                if (event.getStartDate()!=null&&DateHelper.getTimestamp(event.getEndDate()) >= DateHelper.getTimestamp(event.getStartDate())){
+                    year = DateHelper.getYear(event.getEndDate());
+                    month = DateHelper.getMonth(event.getEndDate());
+                    dayOfMonth = DateHelper.getDayOfMonth(event.getEndDate());
+                }
+            }
+
+        }
         DatePickerDialog dialog = new DatePickerDialog(requireContext(), new DatePickerDialog.OnDateSetListener() {
             /**
              * Sets the startDate attribute using a built-in date picker
@@ -190,10 +208,15 @@ public class EventEditFragment extends Fragment implements MenuProvider {
                     eventEndDateTextView.setText(formattedDate);
                 }
             }
-        }, Year.now().getValue(), YearMonth.now().getMonthValue()-1, MonthDay.now().getDayOfMonth());
+        }, year, month, dayOfMonth);
         //show the dialog
         dialog.show();
     }
+
+    /**
+     * Dialog that helps user pick a start ond endtime for thier event
+     * @param s, string representation of time stored
+     */
 
     private void showTimePickerDialog(String s) {
         // logic for showing a time picker dialog
@@ -226,7 +249,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
                 }
 
             }
-        }, 7, 30, true);
+        }, 7, 30, false);
         //show the dialog
         dialog.show();
     }
@@ -244,58 +267,62 @@ public class EventEditFragment extends Fragment implements MenuProvider {
         eventStartTimeTextView = view.findViewById(R.id.tv_edit_event_startTime);
         eventEndTimeTextView = view.findViewById(R.id.tv_edit_event_endTime);
         eventLocationEditText = view.findViewById(R.id.et_event_location);
+        eventAdditionalInfo = view.findViewById(R.id.et_additional_info);
         maxAttendees = view.findViewById(R.id.et_max_attendees);
         cbMaxAttendees = view.findViewById(R.id.cb_max_attendees);
-        checkInQR = view.findViewById(R.id.iv_checkin);
-        eventInfoQR = view.findViewById(R.id.iv_info);
-
+        additionalInfoEditText = view.findViewById(R.id.et_additional_info);
+        additionalInfoEditText.setText(event.getAdditionalInfo());
 
         //add more attributes as desired
 
         //check event is not null
-        if (event.getId() != null) {
+        if (event != null) {
             // Populate UI elements with event details
+<<<<<<< HEAD
             eventPosterImageView.setImageBitmap(event.getPoster().getBitmap());
             eventUploadPosterTextView.setVisibility(View.VISIBLE);
+=======
+>>>>>>> faf25dd7e160015f6b8815f13d6c9c68f503c5ac
             eventNameEditText.setText(event.getName());
             eventLocationEditText.setText(event.getLocation());
             eventStartTimeTextView.setText(event.getStartTime());
             eventStartDateTextView.setText(event.getStartDate());
             eventEndDateTextView.setText(event.getEndDate());
             eventEndTimeTextView.setText(event.getEndTime());
-            //maxAttendees.setText(event.getMaxSignUps().toString());
-            maxAttendees.setEnabled(false);
+            eventAdditionalInfo.setText(event.getAdditionalInfo());
+            if (event.getPoster()!=null){
+                eventPosterImageView.setImageBitmap(event.getPoster().getBitmap());
+            }
+            if (event.getMaxSignUps()!=-1) {
+                cbMaxAttendees.setChecked(true);
+                maxAttendees.setEnabled(true);
+                maxAttendees.setText(event.getMaxSignUps().toString());
+            } else {
+                cbMaxAttendees.setChecked(false);
+                maxAttendees.setVisibility(view.GONE);
+            }
             cbMaxAttendees.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 maxAttendees.setEnabled(isChecked);
                 if (isChecked) {
+                    maxAttendees.setText("");
                     maxAttendees.setFocusableInTouchMode(true);
                     maxAttendees.setFocusable(true);
                     maxAttendees.setClickable(true);
-                    maxAttendees.setText(event.getMaxSignUps().toString());
+                    maxAttendees.setVisibility(view.VISIBLE);
+                    if (event.getMaxSignUps()!=null) {
+                        maxAttendees.setText(event.getMaxSignUps().toString());
+                    }
                 } else {
-                    maxAttendees.setFocusableInTouchMode(false);
-                    maxAttendees.setFocusable(false);
-                    maxAttendees.setClickable(false);
-                    maxAttendees.setText(""); // Clear the text when the checkbox is unchecked
+                    maxAttendees.setText("-1"); // Clear the text when the checkbox is unchecked
+                    maxAttendees.setVisibility(view.GONE);
                 }
             });
+            if (event.getId()!=null) {
+                view.findViewById(R.id.edit_tv_event_detail_QR_label).setVisibility(view.GONE);
+                view.findViewById(R.id.editQRconstraintLayout).setVisibility(view.GONE);
+            }
             // Populate more attributes as desired
         }
-
-        //check if QR codes have already been generated
-        if (event.getQrCode() == null) {
-            //hide QR code placeholder views
-            view.findViewById(R.id.tv_checkin).setVisibility(view.GONE);
-            view.findViewById(R.id.tv_info).setVisibility(view.GONE);
-            checkInQR.setVisibility(view.GONE);
-            eventInfoQR.setVisibility(view.GONE);
-        } else {
-            //display QR codes
-            QRCode.generateQR("CI" + event.getQrCode(), checkInQR);
-            QRCode.generateQR("EI" + event.getQrCode(), eventInfoQR);
-        }
-
-
 
         // Set an OnClickListener for the eventPosterImageView
         eventPosterImageView.setOnClickListener(v -> {
@@ -334,10 +361,8 @@ public class EventEditFragment extends Fragment implements MenuProvider {
         eventStartDateTextView.setOnClickListener(v -> showDatePickerDialog("start"));
         // Set an OnClickListener for the eventStartDateTextView
         eventEndDateTextView.setOnClickListener(v -> showDatePickerDialog("end"));
-
         // Set an OnClickListener for the eventStartTimeTextView
         eventStartTimeTextView.setOnClickListener(v -> showTimePickerDialog("start"));
-
         // Set an OnClickListener for the eventEndDateTextView
         eventEndTimeTextView.setOnClickListener(v -> showTimePickerDialog("end"));
 
@@ -393,10 +418,6 @@ public class EventEditFragment extends Fragment implements MenuProvider {
     @Override
     public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
         if (menuItem.getItemId() == R.id.saveOptionsMenu || menuItem.getItemId() == R.id.cancelOptionsMenu) {
-
-            boolean reuse = false;
-            String eventID;
-
 
             //set clickability of views and edit texts
             eventUploadPosterTextView.setVisibility(View.INVISIBLE);
@@ -480,55 +501,120 @@ public class EventEditFragment extends Fragment implements MenuProvider {
                         Log.e("Firestore", error.toString());
                         return;
                     }
-                    if (querySnapshots != null) {
-                        for (QueryDocumentSnapshot doc: querySnapshots) {
-                            String DocCodeID = doc.getId();
-                            try {
-                                if (Objects.equals(doc.getString("EventId"), eventID)) {
-                                    //Replace and put in new EventID
-                                    EventsRef.document(eventID).update("qrCode", DocCodeID);
-                                }
-                            } catch (Exception e) { }
-                        }
+
+                    boolean reuse = false;
+                    String eventID;
+
+                    int position = spinner.getSelectedItemPosition();
+                    String eventToReuse = eventsForReuse.get(position);
+
+                    if (Objects.equals(eventToReuse, "Optional Reuse QRCode") && event.getId() == null) {
+                        //Normal event creation
+                        Log.e("SPINNERN", "NORMAL");
+                        event.makeNewDocID(); //generate new event id
+                        QRCode qr = new QRCode();
+                        qr.makeQR(event.getId());
+                        event.setQrCode(qr.getQrID()); //generate check in QR
+                    } else if (event.getId() == null) {
+                        //Reuse QR code event creation
+                        Log.e("SPINNERR", "REUSE");
+                        event.makeNewDocID(); //generate new event id
+                        QRCode qr = new QRCode();
+                        qr.reuseQR(MainActivity.user.getUserId(), eventToReuse, event.getId());
+                        event.setQrCode(qr.getQrID()); //generate check in QR
+                        reuse = true;
                     }
-                });
-                reuse = false;
+
+                    //upload event in firebase
+                    event.sendToFirebase();
+
+                        if (reuse) {
+                            //find event id in qr collection, get qrid, set in original event
+                            QRRef.addSnapshotListener((querySnapshots, error) -> {
+                                if (error != null) {
+                                    Log.e("Firestore", error.toString());
+                                    return;
+                                }
+                                if (querySnapshots != null) {
+                                    for (QueryDocumentSnapshot doc : querySnapshots) {
+                                        String DocCodeID = doc.getId();
+                                        try {
+                                            if (Objects.equals(doc.getString("EventId"), event.getId())) {
+                                                //Replace and put in new EventID
+                                                EventsRef.document(event.getId()).update("qrCode", DocCodeID);
+                                            }
+                                        } catch (Exception e) {
+                                        }
+                                    }
+                                }
+                            });
+                            reuse = false;
+                        }
+
+                    }
+                    //create event bundle to pass to details fragment
+                    Bundle args = new Bundle();
+                    args.putParcelable("event", event);
+                    args.putBoolean("isOrganizer", true);
+
+                    //navigate to event details fragment
+                    //try catch to prevent crashes
+                    try {
+                        NavHostFragment.findNavController(EventEditFragment.this)
+                                .navigate(R.id.action_eventEditFragment_pop, args);
+                    } catch (Exception ignored) {}
+                    return false; //required to prevent crashes
+                } else {
+                    setTextViewsClickablity(true);
+                }
             }
 
 
-            //create event bundle to pass to details fragment
-            Bundle args = new Bundle();
-            args.putParcelable("event", event);
-            args.putBoolean("isOrganizer", true);
-
-            //navigate to event details fragment
-            //try catch to prevent crashes
-            try {
-                NavHostFragment.findNavController(EventEditFragment.this)
-                        .navigate(R.id.action_eventEditFragment_pop, args);
-            } catch (Exception ignored) {}
-            return false; //required to prevent crashes
-        }
-
         return false;
     }
+    public boolean validateInput(){
+        boolean validInput =true;
 
+        if (eventNameEditText.getText().toString().length() == 0) {
+            eventNameEditText.setError("Required Field.");
+            validInput = false;
+        }
+        if (eventLocationEditText.getText().toString().length() == 0) {
+            eventLocationEditText.setError("Required Field.");
+            validInput = false;
+        }
+        if (eventStartDateTextView.getText().toString().length() == 0) {
+            eventStartDateTextView.setError("Required Field.");
+            validInput = false;
+        } if (eventEndDateTextView.getText().toString().length() == 0) {
+            eventEndDateTextView.setText(eventStartDateTextView.getText().toString());
+        }if (DateHelper.getTimestamp(eventStartDateTextView.getText().toString()) > DateHelper.getTimestamp(eventEndDateTextView.getText().toString())) {
+            eventEndDateTextView.setError("Invalid Date.");
+            validInput = false;
+        } if (eventStartTimeTextView.getText().toString().length() == 0) {
+            eventStartTimeTextView.setError("Required Field.");
+            validInput = false;
+        }if (eventEndTimeTextView.getText().toString().length() == 0) {
+            eventEndTimeTextView.setError("Required Field.");
+            validInput = false;
+        }
+        if (maxAttendees.getText().toString().length() == 0) {
+            maxAttendees.setError("Required Field.");
+            validInput = false;
+        }
+        return validInput;
+    }
     //TODO: not working
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if ( resultCode==RESULT_OK){
             Bitmap capturedPhoto = event.getPoster().getBitmap();
-            if (requestCode==1000) {
+            //if (requestCode==1000) {
                 capturedPhoto = (Bitmap) (data.getExtras().get("data"));
-            } else if (requestCode == 1001){
-                Uri uploadPath = data.getData();
-                try {
-                    capturedPhoto = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(),uploadPath);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
+            //} else if (requestCode == 1001){
+
+            //}
             event.getPoster().setBitmap(capturedPhoto);
             event.setPosterIsDefault(false);
             ImageView poster = getView().findViewById(R.id.edit_iv_poster);

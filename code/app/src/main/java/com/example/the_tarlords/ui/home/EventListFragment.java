@@ -43,6 +43,7 @@ import java.util.ArrayList;
 
 /**
  * A fragment representing a list of Event items
+ * @see Event
  */
 public class  EventListFragment extends Fragment implements MenuProvider {
 
@@ -128,6 +129,11 @@ public class  EventListFragment extends Fragment implements MenuProvider {
 
     }
 
+    /**
+     * Updates list real-time
+     * eg. new event created when viewing list
+     */
+
     public void refreshList(){
         EventListDBHelper.getEventsAttendingList(MainActivity.user, new EventListCallback() {
             @Override
@@ -138,6 +144,12 @@ public class  EventListFragment extends Fragment implements MenuProvider {
             }
         });
     }
+
+    /**
+     * Nagvigates to eventDeatilsFragment to display the details
+     * of the selected Event object in list
+     * @param event
+     */
 
     public void navigateToDetails(Event event){
         Bundle args = new Bundle();

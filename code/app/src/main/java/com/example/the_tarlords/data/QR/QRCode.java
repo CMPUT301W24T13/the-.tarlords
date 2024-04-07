@@ -147,7 +147,7 @@ public class QRCode {
                         if (Objects.equals(doc.getString("organizerId"), user) && Objects.equals(doc.getString("name"), sel_event)) {
                             //Found event
                             String QRId = doc.getString("qrCode");
-                            EventsRef.document(eventID).update("qrCode", "NULL");
+                            EventsRef.document(eventID).update("qrCode", null);
                             replaceQR(QRId, new_eventId);
                         }
                     } catch (Exception e) { }
@@ -210,7 +210,7 @@ public class QRCode {
                 for (QueryDocumentSnapshot doc: querySnapshots) {
                     String eventID = doc.getId();
                     try {
-                        if (Objects.equals(doc.getString("organizerId"), user)  && pastEvent(doc.getString("startDate"), doc.getString("endTime"))) {
+                        if (Objects.equals(doc.getString("organizerId"), user)  && pastEvent(doc.getString("endDate"), doc.getString("endTime"))) {
                             // Event has user = organizer AND event has passed
                             Log.e("Old Events", eventID + " " + doc.getString("name") + " added");
                             events.add(doc.getString("name"));
@@ -231,7 +231,7 @@ public class QRCode {
      * @return           True if the event has passed; otherwise, false
      */
     public boolean pastEvent(String startDate, String endTime) {
-        DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("MMMM d, yyyy", Locale.ENGLISH);
+        DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("MMM dd, yyyy", Locale.ENGLISH);
         LocalDate date = LocalDate.parse(startDate, formatter1);
 
         DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("hh:mm a", Locale.ENGLISH);

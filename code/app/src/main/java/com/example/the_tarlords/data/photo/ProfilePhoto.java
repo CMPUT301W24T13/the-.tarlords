@@ -8,6 +8,12 @@ import android.graphics.Typeface;
 
 import com.example.the_tarlords.R;
 
+/**
+ * Specifically represents Profile photos
+ * Extends Photo class
+ * @see Photo
+ */
+
 public class ProfilePhoto extends Photo {
     private String photoFirstName;
     private String photoLastName;

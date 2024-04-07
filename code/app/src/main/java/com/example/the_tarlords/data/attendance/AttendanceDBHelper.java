@@ -23,6 +23,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Handles the check-ins and signups
+ * and keeps track of the number of checkins and signups per event
+ * and per user
+ */
 public class AttendanceDBHelper {
     private static CollectionReference eventsRef = MainActivity.db.collection("Events");
     private static CollectionReference usersRef = MainActivity.db.collection("Users");
@@ -56,6 +61,7 @@ public class AttendanceDBHelper {
                                     DocumentSnapshot userDoc = task.getResult();
                                     Attendee attendee = userDoc.toObject(Attendee.class);
                                     attendee.setCheckInStatus(attendeeDoc.getBoolean("checkedInStatus"));
+                                    attendee.setCheckInCount(Integer.valueOf(attendeeDoc.get("checkInCount").toString()));
 
                                     attendees.add(attendee);
                                     Log.d("attendance query", attendees.toString());
@@ -144,6 +150,7 @@ public class AttendanceDBHelper {
                     docData.put("user", user.getUserId());
                     docData.put("event", event.getId());
                     docData.put("checkedInStatus", false);
+                    docData.put("checkIns",0);
                     attendanceRef
                             .document(user.getUserId())
                             .set(docData)

@@ -226,22 +226,36 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/event_main_info_constraint" />
 
+
         <TextView
             android:id="@+id/additional_info"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="15dp"
             android:background="@drawable/rounded_corners_r"
+            android:ellipsize="end"
             android:fontFamily="@font/helvetica"
-            android:hint="This event is about..."
-            android:padding="15dp"
-            android:textColor="#4d0a2a"
+            android:maxLines="2"
+            android:padding="10dp"
+            android:textColor="@color/bordeaux_medium"
+            android:textColorHint="@color/mauve_medium_light"
             android:textSize="18sp"
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_min="100dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_event_detail_additional_info_label" />
+
+        <TextView
+            android:id="@+id/tv_read_more"
+            android:layout_width="86dp"
+            android:layout_height="20dp"
+            android:clickable="true"
+            android:text="Read More"
+            android:textColor="#2d030f"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.042"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/additional_info" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/attendanceConstraint"

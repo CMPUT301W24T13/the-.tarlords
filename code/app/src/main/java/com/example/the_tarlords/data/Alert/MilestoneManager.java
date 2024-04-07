@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,6 +32,9 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+/**
+ * Responsible for sending out milestones to organizers of events
+ */
 public class MilestoneManager {
 
     private int currentCount;
@@ -106,6 +110,8 @@ public class MilestoneManager {
         milestoneMap.put("message", milestone.getMessage());
         milestoneMap.put("currentDateTime", milestone.getCurrentDateTime());
         milestoneMap.put("milestoneCount",milestone.getCount());
+        milestoneMap.put("timestamp", FieldValue.serverTimestamp());
+
         milestoneRef.add(milestoneMap);
 
         Log.d("milestone adding","working");

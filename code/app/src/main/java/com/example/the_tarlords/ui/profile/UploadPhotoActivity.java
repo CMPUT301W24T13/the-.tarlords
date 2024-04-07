@@ -20,8 +20,13 @@ import androidx.core.content.ContextCompat;
 
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.data.event.Event;
+import com.example.the_tarlords.data.photo.ProfilePhoto;
 
 import java.io.IOException;
+
+/**
+ * Activity that allows you to upload profile photos or event posters
+ */
 
 public class UploadPhotoActivity extends AppCompatActivity {
     private static final int REQUEST_GALLERY_PERMISSION = 1;
@@ -72,12 +77,13 @@ public class UploadPhotoActivity extends AppCompatActivity {
             try {
                 photoUpload = MediaStore.Images.Media.getBitmap(getContentResolver(),uploadPath);
                 if (event == null) {
-                    MainActivity.user.getProfilePhoto().setBitmap(photoUpload);
+                    MainActivity.user.setProfilePhoto(new ProfilePhoto(MainActivity.user.getUserId(),photoUpload));
                     MainActivity.user.setPhotoIsDefault(false);
                     MainActivity.updateNavigationDrawerHeader();
                 } else {
                     event.getPoster().setBitmap(photoUpload);
                     event.setPosterIsDefault(false);
+                    data.putExtra("data", photoUpload);
                     setResult(RESULT_OK,data);
                 }
                 finish();

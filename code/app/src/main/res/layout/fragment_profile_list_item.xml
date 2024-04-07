@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="150dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="wrap_content">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
+        android:layout_height="wrap_content"
         app:cardBackgroundColor="@color/cold_grey_light"
         app:cardCornerRadius="15dp"
         app:cardElevation="10dp"
-        app:contentPadding="15dp" >
+        app:contentPadding="15dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="wrap_content">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profile_photo_image_view"
@@ -39,38 +38,60 @@
 
                 android:textAppearance="?attr/textAppearanceListItem"
                 android:textSize="24sp"
-                app:layout_constraintBottom_toTopOf="@+id/phoneNumberTV"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/profile_photo_image_view"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="spread" />
 
             <TextView
                 android:id="@+id/phoneNumberTV"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
 
-                android:text="@string/phone_number"
                 android:fontFamily="@font/helvetica"
+                android:gravity="center_vertical"
+                android:text="@string/phone_number"
                 android:textAppearance="?attr/textAppearanceListItem"
-                android:textSize="18sp"
 
+                android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="@+id/nameTV"
-                app:layout_constraintTop_toBottomOf="@+id/nameTV"
-                app:layout_constraintBottom_toTopOf="@+id/emailTV" />
+                app:layout_constraintTop_toBottomOf="@+id/nameTV" />
 
             <TextView
                 android:id="@+id/emailTV"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
 
-                android:text="@string/email"
                 android:fontFamily="@font/helvetica"
+                android:gravity="center_vertical"
+                android:text="@string/email"
                 android:textAppearance="?attr/textAppearanceListItem"
-                android:textSize="18sp"
 
+                android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="@id/nameTV"
-                app:layout_constraintTop_toBottomOf="@id/phoneNumberTV"
-                app:layout_constraintBottom_toBottomOf="parent" />
+                app:layout_constraintTop_toBottomOf="@id/phoneNumberTV" />
+
+            <CheckBox
+                android:id="@+id/cb_checkInStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:layout_editor_absoluteY="38dp"
+                tools:visibility="visible" />
+
+            <TextView
+                android:id="@+id/tv_noCheckIns"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:fontFamily="@font/helvetica"
+                android:gravity="center_vertical"
+                android:text="# of check ins"
+                android:textStyle="italic"
+                android:visibility="gone"
+                app:layout_constraintStart_toEndOf="@id/profile_photo_image_view"
+                app:layout_constraintTop_toBottomOf="@+id/emailTV"
+                tools:visibility="visible" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

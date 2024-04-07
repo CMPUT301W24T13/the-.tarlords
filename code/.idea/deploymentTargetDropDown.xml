@@ -2,7 +2,13 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="EventTest">
+        <State />
+      </entry>
       <entry key="MainActivity">
+        <State />
+      </entry>
+      <entry key="Tests in 'com.example.the_tarlords'">
         <State />
       </entry>
       <entry key="app">
@@ -20,6 +26,9 @@
           </targetSelectedWithDropDown>
           <timeTargetWasSelectedWithDropDown value="2024-03-18T00:24:21.081807400Z" />
         </State>
+      </entry>
+      <entry key="testSetFirstName()">
+        <State />
       </entry>
     </value>
   </component>

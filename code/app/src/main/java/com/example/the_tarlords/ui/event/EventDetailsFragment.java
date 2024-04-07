@@ -5,7 +5,9 @@ import static com.example.the_tarlords.MainActivity.toolbar;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -44,7 +46,6 @@ import com.example.the_tarlords.databinding.FragmentEventDetailsBinding;
  * create an instance of this fragment.
  * This fragment inflates the event details when an event is clicked on
  * from the attendee/homepage list view.
- * The nav bar should handle going back to the listview????
  */
 public class EventDetailsFragment extends Fragment implements MenuProvider {
     private Button shareQrCodeCI;
@@ -130,6 +131,22 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
         ImageView eventPosterImageView = view.findViewById(R.id.iv_poster);
         //add additional views here as desired
 
+        TextView additionalInfoText = view.findViewById(R.id.additional_info);
+        additionalInfoText.setText(event.getAdditionalInfo());
+        TextView readMoreText = view.findViewById(R.id.tv_read_more);
+        readMoreText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (additionalInfoText.getMaxLines() == 2) {
+                    additionalInfoText.setMaxLines(Integer.MAX_VALUE);
+                    readMoreText.setText("Read Less");
+                } else {
+                    additionalInfoText.setMaxLines(2);
+                    readMoreText.setText("Read More");
+                }
+            }
+        });
+
         // Check if event is not null before accessing its attributes
         if (event != null) {
             eventNameTextView.setText(event.getName());
@@ -141,7 +158,7 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
                 date = String.format("  %s %s -\n  %s %s", event.getStartDate(), event.getStartTime(), event.getEndDate(), event.getEndTime());
             }
             eventStartDateTextView.setText(date);
-            if (event.getMaxSignUps()==(Integer) (-1)){
+            if (event.getMaxSignUps()==null){
                 eventMaxAttendees.setText("Max Capacity: Unlimited");
             } else {
                 eventMaxAttendees.setText("Max Capacity: "+event.getMaxSignUps());
@@ -241,7 +258,7 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
     }
 
     /**
-     * Mandatory MenuProvider interface method.
+     * Mandatory Provider interface method.
      * Displays options menu for details fragment dependant on user status (organizer or attendee)
      * @param menu         the menu to inflate the new menu items into
      * @param menuInflater the inflater to be used to inflate the updated menu

@@ -18,6 +18,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -26,16 +28,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This class defines an event
- * UUID type for event attribute makes sure that everytime an event object is created it has a unique id
- * Not sure how QRcode will work , is it initialized when the event is created, or can it be set after being created
+ * This class represents an event
+ * has name, location, start and end date and time
+ * poster, organizer and QR codes related to it
  */
 
-
-/* NOTE FOR KHUSHI AND GRACE:
-
-    2. Need to connect event location to the Map Class.
-*/
 public class Event implements Parcelable {
     String name;
     String location;
@@ -203,7 +200,7 @@ public class Event implements Parcelable {
     }
     /**
      * Gets profile photo data firestore by converting the base 64 string stored in firestore
-     * to a bitmask, then setting the profile photo to have that bitmask.
+   if (maxAttendees.getText().toString().length()!=0){   * to a bitmask, then setting the profile photo to have that bitmask.
      * @return String base 64 profile photo data
      */
     public String getPosterData() {
@@ -215,7 +212,7 @@ public class Event implements Parcelable {
         posterData=posterData;
     }
     public boolean reachedMaxCap() {
-        if (signUps == null || maxSignUps ==-1){
+        if (signUps == null||maxSignUps==null||maxSignUps==-1){
             return false;
         } else {
             return maxSignUps <= signUps;
@@ -225,7 +222,7 @@ public class Event implements Parcelable {
     public ArrayList<Alert> getAlertList(AlertCallback callback){
         CollectionReference alertRef = MainActivity.db.collection("Events/"+ id +"/alerts");
         ArrayList<Alert> alertList = new ArrayList<>();
-        alertRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        alertRef.orderBy("timestamp", Query.Direction.DESCENDING).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -254,6 +251,7 @@ public class Event implements Parcelable {
         alertMap.put("title", alert.getTitle());
         alertMap.put("message", alert.getMessage());
         alertMap.put("currentDateTime", alert.getCurrentDateTime());
+        alertMap.put("timestamp", FieldValue.serverTimestamp());
         alertRef.add(alertMap);
 
         Log.d("alert adding","working");
@@ -334,7 +332,7 @@ public class Event implements Parcelable {
         docData.put("qrCode",qrCode);
         docData.put("posterData",poster.getPhotoDataFromBitmap());
         docData.put("posterIsDefault", posterIsDefault);
-        docData.put("addtionalInfo",additionalInfo);
+        docData.put("additionalInfo", additionalInfo);
         docData.put("posterData",poster.getPhotoDataFromBitmap());
 
         eventsRef.document(id).set(docData)

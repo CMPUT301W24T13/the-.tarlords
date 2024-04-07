@@ -16,6 +16,11 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.the_tarlords.R;
 
+/**
+ * Dialog Fragment for Organizers to create and send alerts
+ * Alerts have titles and a message
+ */
+
 public class AddAlertFragment extends DialogFragment {
 
 
