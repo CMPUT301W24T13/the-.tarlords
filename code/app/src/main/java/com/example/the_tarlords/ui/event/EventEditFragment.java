@@ -122,6 +122,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
      */
     private void setTextViewsClickablity(Boolean isEditable) {
         eventPosterImageView.setClickable(isEditable);
+        eventUploadPosterTextView.setVisibility(View.VISIBLE);
         eventNameEditText.setEnabled(isEditable);
         eventStartDateTextView.setClickable(isEditable);
         eventEndDateTextView.setClickable(isEditable);
@@ -278,6 +279,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
         //check event is not null
         if (event != null) {
             // Populate UI elements with event details
+            eventUploadPosterTextView.setVisibility(View.VISIBLE);
             eventNameEditText.setText(event.getName());
             eventLocationEditText.setText(event.getLocation());
             eventStartTimeTextView.setText(event.getStartTime());
@@ -287,8 +289,6 @@ public class EventEditFragment extends Fragment implements MenuProvider {
             eventAdditionalInfo.setText(event.getAdditionalInfo());
             if (event.getPoster()!=null){
                 eventPosterImageView.setImageBitmap(event.getPoster().getBitmap());
-            } else {
-                eventUploadPosterTextView.setVisibility(View.VISIBLE);
             }
             if (event.getMaxSignUps()!=-1) {
                 cbMaxAttendees.setChecked(true);
