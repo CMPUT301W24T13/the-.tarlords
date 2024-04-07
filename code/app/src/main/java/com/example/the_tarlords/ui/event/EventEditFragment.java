@@ -60,7 +60,7 @@ import java.util.Objects;
  * A simple {@link Fragment} subclass.
  * Use the {@link EventEditFragment#newInstance} factory method to
  * create an instance of this fragment.
- * This inflates the event details and allows for user to edit
+ * This inflates the event details and allows for user to edit details
  * linked to fragment_event_edit.xml
  * Will also take in an event as a parameter
  */
@@ -80,6 +80,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
     private CheckBox cbMaxAttendees;
     private ImageView checkInQR;
     private ImageView eventInfoQR;
+    private EditText additionalInfoEditText;
     private FragmentEventEditBinding binding;
     //add the event poster to be able to edit the poster
     //event poster doenst need to be connected to event details. Make poster connected to event so
@@ -159,7 +160,10 @@ public class EventEditFragment extends Fragment implements MenuProvider {
         }
     }
 
-    //For both of these dialogs you can change the theme using dialog theme in layout folder
+    /**
+     * Helps user pick a valid start or end date for their event
+     * @param s, string repsentation of date stored
+     */
     private void showDatePickerDialog(String s) {
         // logic for showing a date picker dialog
         DatePickerDialog dialog = new DatePickerDialog(requireContext(), new DatePickerDialog.OnDateSetListener() {
@@ -193,6 +197,11 @@ public class EventEditFragment extends Fragment implements MenuProvider {
         //show the dialog
         dialog.show();
     }
+
+    /**
+     * Dialog that helps user pick a start ond endtime for thier event
+     * @param s, string representation of time stored
+     */
 
     private void showTimePickerDialog(String s) {
         // logic for showing a time picker dialog
@@ -246,8 +255,8 @@ public class EventEditFragment extends Fragment implements MenuProvider {
         cbMaxAttendees = view.findViewById(R.id.cb_max_attendees);
         checkInQR = view.findViewById(R.id.iv_checkin);
         eventInfoQR = view.findViewById(R.id.iv_info);
-
-
+        additionalInfoEditText = view.findViewById(R.id.et_additional_info);
+        additionalInfoEditText.setText(event.getAdditionalInfo());
         //add more attributes as desired
 
         //check event is not null
@@ -410,6 +419,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
                 event.setLocation(eventLocationEditText.getText().toString());
                 event.setOrganizerId(MainActivity.user.getUserId());
                 String max = maxAttendees.getText().toString();
+                event.setAdditionalInfo(additionalInfoEditText.getText().toString());
 
                 // Check if the input string is empty or contains non-integer values
                 if (TextUtils.isEmpty(max) || !isInteger(max)) {

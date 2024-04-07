@@ -14,6 +14,10 @@ import com.example.the_tarlords.R;
 
 import java.util.ArrayList;
 
+/**
+ * List adapter for ListView in AlertFragment
+ */
+
 public class AlertListAdapter extends ArrayAdapter<Alert> {
 
     private int layoutResource;

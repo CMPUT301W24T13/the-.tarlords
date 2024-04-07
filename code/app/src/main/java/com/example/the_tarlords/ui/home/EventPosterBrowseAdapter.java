@@ -17,6 +17,10 @@ import com.example.the_tarlords.data.photo.EventPoster;
 
 import java.util.ArrayList;
 
+/**
+ * Adapter for ListView in EventPosterFragment
+ */
+
 public class EventPosterBrowseAdapter extends ArrayAdapter<Event> {
     private ArrayList<Event> eventList;
     private LayoutInflater inflater;

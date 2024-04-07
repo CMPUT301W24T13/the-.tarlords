@@ -47,6 +47,11 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+/**
+ * Represents a list of alerts that the Organizer sent out
+ * Organizers can see these
+ * @see Alert
+ */
 
 public class AlertFragment extends Fragment implements AddAlertDialogListener,MenuProvider {
 

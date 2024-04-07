@@ -10,8 +10,8 @@ import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.event.Event;
 
 /**
- * This class Handles event Poster
- * Private attribute that holds an image?
+ * This class Handles displaying an eventPoster
+ * with the information stored in an Event object
  */
 public class EventPoster extends Photo{
     private Event event;
@@ -20,6 +20,10 @@ public class EventPoster extends Photo{
         super(fileName, bitmap);
         this.event = event;
     }
+
+    /**
+     * Creates the bitmap of the image from the bit string
+     */
     public void autoGenerate() {
         Bitmap bitmap = Bitmap.createBitmap(600, 800, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);

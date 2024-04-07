@@ -38,6 +38,7 @@ import java.util.ArrayList;
 
 /**
  * A fragment representing a list of Image Items.
+ * Images are event posters or profile photos
  */
 public class ImageBrowseFragment extends Fragment implements MenuProvider {
 
@@ -189,6 +190,10 @@ public class ImageBrowseFragment extends Fragment implements MenuProvider {
 
     }
 
+    /**
+     * Removes selected image from list and from database
+     * @param image
+     */
     private void removeFromFirestore(Photo image) {
         String collection = image.getCollection();
         String docId = image.getDocId();

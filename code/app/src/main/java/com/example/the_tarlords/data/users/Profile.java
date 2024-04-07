@@ -5,6 +5,10 @@ import com.example.the_tarlords.data.photo.ProfilePhoto;
 
 import java.io.IOException;
 
+/**
+ * Profiles implement setters and getters for name, data, and personal information
+ */
+
 public interface Profile {
     public String getFirstName();
     public void setFirstName(String firstName);
