@@ -44,7 +44,6 @@ import com.example.the_tarlords.databinding.FragmentEventDetailsBinding;
  * create an instance of this fragment.
  * This fragment inflates the event details when an event is clicked on
  * from the attendee/homepage list view.
- * The nav bar should handle going back to the listview????
  */
 public class EventDetailsFragment extends Fragment implements MenuProvider {
     private Button shareQrCodeCI;

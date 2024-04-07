@@ -23,6 +23,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Handles the check-ins and signups
+ * and keeps track of the number of checkins and signups per event
+ * and per user
+ */
 public class AttendanceDBHelper {
     private static CollectionReference eventsRef = MainActivity.db.collection("Events");
     private static CollectionReference usersRef = MainActivity.db.collection("Users");

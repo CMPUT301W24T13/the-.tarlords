@@ -23,6 +23,12 @@ import com.google.android.gms.tasks.Task;
 
 import java.util.HashMap;
 
+/**
+ * Responsible for getting device location permissions
+ * Checks if permissions are granted then gets device location
+ * Sends information to firebase
+ */
+
 public class LocationHelper {
     public static final int REQUEST_LOCATION_PERMISSION = 123;
     private Context context;

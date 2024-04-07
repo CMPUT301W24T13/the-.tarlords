@@ -60,7 +60,7 @@ import java.util.Objects;
  * A simple {@link Fragment} subclass.
  * Use the {@link EventEditFragment#newInstance} factory method to
  * create an instance of this fragment.
- * This inflates the event details and allows for user to edit
+ * This inflates the event details and allows for user to edit details
  * linked to fragment_event_edit.xml
  * Will also take in an event as a parameter
  */
@@ -159,7 +159,10 @@ public class EventEditFragment extends Fragment implements MenuProvider {
         }
     }
 
-    //For both of these dialogs you can change the theme using dialog theme in layout folder
+    /**
+     * Helps user pick a valid start or end date for their event
+     * @param s, string repsentation of date stored
+     */
     private void showDatePickerDialog(String s) {
         // logic for showing a date picker dialog
         DatePickerDialog dialog = new DatePickerDialog(requireContext(), new DatePickerDialog.OnDateSetListener() {
@@ -193,6 +196,11 @@ public class EventEditFragment extends Fragment implements MenuProvider {
         //show the dialog
         dialog.show();
     }
+
+    /**
+     * Dialog that helps user pick a start ond endtime for thier event
+     * @param s, string representation of time stored
+     */
 
     private void showTimePickerDialog(String s) {
         // logic for showing a time picker dialog

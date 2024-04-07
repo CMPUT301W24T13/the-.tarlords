@@ -6,6 +6,10 @@ import androidx.preference.PreferenceFragmentCompat;
 
 import com.example.the_tarlords.R;
 
+/**
+ * Responsible for getting notifications permissions for the device
+ */
+
 public class NotificationSettingsFragment extends PreferenceFragmentCompat {
 
     @Override
