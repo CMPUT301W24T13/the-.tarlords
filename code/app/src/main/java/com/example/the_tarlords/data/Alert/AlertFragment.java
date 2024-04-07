@@ -33,19 +33,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 /**
  * Represents a list of alerts that the Organizer sent out
@@ -62,6 +51,7 @@ public class AlertFragment extends Fragment implements AddAlertDialogListener,Me
     private ArrayList<Alert> alertList = new ArrayList<>();
     private Notification notification = new Notification();
     public AlertFragment(ArrayList<Alert> alertDataList){
+        //Collections.sort(alertList);
         this.alertList = alertDataList;
     }
     public AlertFragment() {
