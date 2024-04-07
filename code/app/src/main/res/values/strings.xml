@@ -122,5 +122,8 @@
     <string name="end_date">End Date</string>
     <string name="add_info_hint">This event is about...</string>
     <string name="upload_poster_prompt">Click here to edd/edit event poster.</string>
+    <string name="milestones">Milestones</string>
+    <string name="no_milestones_label">No milestones to display yet.</string>
+    <string name="attendees">Attendees</string>
 
 </resources>

@@ -2,21 +2,15 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle" >
     <size
-        android:height="100dp"
-        android:width="200dp" />
-
-    <stroke
-        android:dashGap="0.01dp" />
-
-    <padding
-        android:top="75dp" />
+        android:height="200dp"
+        android:width="800dp" />
 
     <gradient
         android:type="linear"
         android:angle="90"
-        android:centerY="0.2"
+        android:centerY="0.75"
         android:startColor="@color/cold_grey_light"
-        android:centerColor="@color/cold_grey_light"
-        android:endColor="#00EAE8ED" />
+        android:centerColor="#9FEAE8ED"
+        android:endColor="@color/zxing_transparent" />
 
 </shape>

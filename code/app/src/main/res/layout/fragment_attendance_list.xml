@@ -18,7 +18,7 @@
         android:layout_marginTop="15dp"
         android:layout_marginBottom="5dp"
 
-        android:text="Attendees"
+        android:text="@string/attendees"
         android:fontFamily="@font/helvetica_bold"
         android:textSize="30sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,11 +31,23 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="25dp"
         android:layout_marginVertical="5dp"
-        android:text="Milestones"
+        android:text="@string/milestones"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_attendance_page_header" />
+
+    <TextView
+        android:id="@+id/tv_milestones_empty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="25dp"
+        android:layout_marginVertical="5dp"
+        android:fontFamily="@font/helvetica"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/milestone_text_view" />
 
     <ListView
         android:id="@+id/milestone_list_view"
@@ -45,7 +57,7 @@
         android:layout_marginVertical="5dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/milestone_text_view"
+        app:layout_constraintTop_toBottomOf="@id/tv_milestones_empty"
         tools:listitem="@layout/content_milestone" />
 
     <TextView
