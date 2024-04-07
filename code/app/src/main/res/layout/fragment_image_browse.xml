@@ -27,10 +27,8 @@
         android:id="@+id/imageListView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginVertical="5dp"
         android:paddingBottom="100dp"
 
         tools:listitem="@layout/fragment_image_list_item"
