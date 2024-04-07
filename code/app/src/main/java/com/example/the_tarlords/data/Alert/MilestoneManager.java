@@ -32,6 +32,9 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+/**
+ * Responsible for sending out milestones to organizers of events
+ */
 public class MilestoneManager {
 
     private int currentCount;

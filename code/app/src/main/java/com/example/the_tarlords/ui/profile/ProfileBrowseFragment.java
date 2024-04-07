@@ -29,9 +29,8 @@ import com.google.firebase.firestore.CollectionReference;
 import java.util.ArrayList;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link ProfileBrowseFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Represents a list of all existing users
+ * only users with admin permissions have access
  */
 public class ProfileBrowseFragment extends Fragment implements MenuProvider{
 
@@ -45,11 +44,6 @@ public class ProfileBrowseFragment extends Fragment implements MenuProvider{
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment
-     * @return A new instance of fragment ProfileBrowseFragment.
-     */
     public static ProfileBrowseFragment newInstance() {
         ProfileBrowseFragment fragment = new ProfileBrowseFragment();
         Bundle args = new Bundle();
@@ -87,6 +81,12 @@ public class ProfileBrowseFragment extends Fragment implements MenuProvider{
         return view;
     }
 
+    /**
+     * Navigates from this fragment to the ProfileFragment
+     * to view details of selected user from list
+     * @param user
+     */
+
     private void navigateToProfilePage(User user) {
         Bundle args = new Bundle();
         args.putParcelable("user", user);
@@ -94,6 +94,11 @@ public class ProfileBrowseFragment extends Fragment implements MenuProvider{
         NavHostFragment.findNavController(ProfileBrowseFragment.this).navigate(R.id.action_profileBrowseFragment_to_profileViewFragment, args);
 
     }
+
+    /**
+     * Fetches the users from Firebase collection Users
+     * to display in the ListView in this Fragment
+     */
     private void fetchUsersFromFirebase() {
         usersRef.get().addOnSuccessListener(queryDocumentSnapshots -> {
             users.clear();

@@ -8,7 +8,14 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+
+/**
+ * Represents an alert
+ * has title, message, event its related to, and date
+ */
 public class Alert{
+
+
     private String title;
     private String message;
     private Event event;

@@ -14,6 +14,11 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
+/**
+ * Represents a list of Milestone objects
+ * @see Milestone
+ */
+
 public class MilestoneHelper {
     String id;
 

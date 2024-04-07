@@ -2,6 +2,10 @@ package com.example.the_tarlords.data.Alert;
 
 import com.example.the_tarlords.data.event.Event;
 
+/**
+ * Special type of Alert
+ * @see Alert
+ */
 public class Announcement extends Alert{
     /**
      * Constructor for an announcement class

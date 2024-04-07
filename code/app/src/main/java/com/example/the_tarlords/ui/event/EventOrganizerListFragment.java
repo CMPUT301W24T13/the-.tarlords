@@ -35,6 +35,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
+/**
+ * Represents the list of events that a User organized themselves
+ */
 public class EventOrganizerListFragment extends Fragment implements MenuProvider {
     private FragmentEventListBinding binding;
     private CollectionReference eventsRef = MainActivity.db.collection("Events");
@@ -115,6 +118,11 @@ public class EventOrganizerListFragment extends Fragment implements MenuProvider
 
     }
 
+    /**
+     * Navigates to fragment that displayes deatils of selected event from list
+     * @param event
+     */
+
     public void navigateToDetails(Event event){
         Bundle args = new Bundle();
         args.putParcelable("event",event);
@@ -125,6 +133,9 @@ public class EventOrganizerListFragment extends Fragment implements MenuProvider
         } catch (Exception ignore) {}
     }
 
+    /**
+     * Updates list real-time
+     */
     public void refreshList(){
         EventListDBHelper.getEventsOrganizingList(MainActivity.user, new EventListCallback() {
             @Override

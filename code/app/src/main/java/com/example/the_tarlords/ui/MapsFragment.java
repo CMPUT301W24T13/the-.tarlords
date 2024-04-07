@@ -30,6 +30,10 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
+/**
+ * The GoogleMaps for each event where
+ * Organizers can see where each attendee checks in from
+ */
 public class MapsFragment extends Fragment implements MenuProvider {
 
 
@@ -122,8 +126,8 @@ public class MapsFragment extends Fragment implements MenuProvider {
     }
 
     /**
-     * Adds location markers of all the check-in attendees
-     * at that event
+     * Fetches coordinates of check-ins from Firebase
+     * Adds location markers of all the check-in attendees at that event
      * @param googleMap
      */
 

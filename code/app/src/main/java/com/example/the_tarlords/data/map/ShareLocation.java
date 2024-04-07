@@ -7,6 +7,9 @@ import android.os.Bundle;
 
 import androidx.fragment.app.DialogFragment;
 
+/**
+ * Dialog that asks for location permissions for each event a user checks-in to
+ */
 public class ShareLocation extends DialogFragment {
 
     private String eventId;
