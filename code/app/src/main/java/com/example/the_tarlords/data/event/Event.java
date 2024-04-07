@@ -210,7 +210,7 @@ public class Event implements Parcelable {
         posterData=posterData;
     }
     public boolean reachedMaxCap() {
-        if (signUps == null || maxSignUps ==-1){
+        if (signUps == null || maxSignUps ==-1||maxSignUps==null){
             return false;
         } else {
             return maxSignUps <= signUps;
