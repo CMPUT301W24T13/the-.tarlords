@@ -2,6 +2,7 @@ package com.example.the_tarlords;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -22,12 +23,14 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.the_tarlords.data.Notification.FCMService;
 import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.map.LocationHelper;
 import com.example.the_tarlords.data.users.User;
 import com.example.the_tarlords.databinding.ActivityMainBinding;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -340,5 +343,21 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         locationGranted = locationHelper.checkLocationPermission();
     }
 
+    /**
+     * navigates to the corresponding fragment with the given intent
+     * @param intent The new intent that was started for the activity.
+     *
+     */
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (intent != null && intent.getAction() != null && intent.getAction().equals("OPEN_EVENT_DETAILS")) {
+            if (intent.hasExtra("event")) {
+                Event event = (Event) intent.getSerializableExtra("event");
+                navigateToEventDetailsFragment(event);
+
+            }
+        }
+    }
 
 }
