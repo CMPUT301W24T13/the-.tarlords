@@ -77,7 +77,11 @@ public class EventEditFragment extends Fragment implements MenuProvider {
     private CheckBox cbMaxAttendees;
     private ImageView checkInQR;
     private ImageView eventInfoQR;
+
     private  Menu menu;
+
+    private EditText additionalInfoEditText;
+
     private FragmentEventEditBinding binding;
     private Spinner spinner;
     private ArrayList<String> eventsForReuse;
@@ -264,6 +268,8 @@ public class EventEditFragment extends Fragment implements MenuProvider {
         eventAdditionalInfo = view.findViewById(R.id.et_additional_info);
         maxAttendees = view.findViewById(R.id.et_max_attendees);
         cbMaxAttendees = view.findViewById(R.id.cb_max_attendees);
+        additionalInfoEditText = view.findViewById(R.id.et_additional_info);
+        additionalInfoEditText.setText(event.getAdditionalInfo());
 
         //add more attributes as desired
 
