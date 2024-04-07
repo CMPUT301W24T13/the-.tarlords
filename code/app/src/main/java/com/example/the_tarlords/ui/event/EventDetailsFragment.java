@@ -158,7 +158,7 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
                 date = String.format("  %s %s -\n  %s %s", event.getStartDate(), event.getStartTime(), event.getEndDate(), event.getEndTime());
             }
             eventStartDateTextView.setText(date);
-            if (event.getMaxSignUps()==(Integer) (-1)){
+            if (event.getMaxSignUps()==null){
                 eventMaxAttendees.setText("Max Capacity: Unlimited");
             } else {
                 eventMaxAttendees.setText("Max Capacity: "+event.getMaxSignUps());

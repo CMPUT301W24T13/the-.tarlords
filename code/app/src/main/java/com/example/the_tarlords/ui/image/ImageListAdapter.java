@@ -1,8 +1,5 @@
 package com.example.the_tarlords.ui.image;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,8 +8,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.the_tarlords.R;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
+import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.photo.Photo;
 
 import java.util.ArrayList;
@@ -45,8 +44,9 @@ public class ImageListAdapter extends ArrayAdapter<Photo> {
 
             //getting the textviews
             holder.imageViewTV = view.findViewById(R.id.iv_image_browse_item);
-            //holder.collectionTV = view.findViewById(R.id.collectionTV);
-            //holder.nameTV = view.findViewById(R.id.nameTV);
+            holder.collectionTV = view.findViewById(R.id.tv_imageBrowse_subtitle);
+            holder.nameTV = view.findViewById(R.id.tv_imageBrowse_title);
+            holder.id = view.findViewById(R.id.tv_imageBrowse_subtext);
             view.setTag(holder);
         } else {
             holder = (ViewHolder) view.getTag();
@@ -55,9 +55,11 @@ public class ImageListAdapter extends ArrayAdapter<Photo> {
 
         Photo image = imageList.get(position);
         // setting the textviews to the first 5 characters of the posterData
+        image.setBitmapFromPhotoData(image.getImageData());
         holder.imageViewTV.setImageBitmap(image.getBitmap());
-        //holder.collectionTV.setText(image.getCollection());
-        //holder.nameTV.setText(image.getName());
+        holder.collectionTV.setText(image.getCollection());
+        holder.nameTV.setText(image.getName());
+        holder.id.setText(image.getDocId());
 
         return view;
     }
@@ -69,5 +71,6 @@ public class ImageListAdapter extends ArrayAdapter<Photo> {
         ImageView imageViewTV;
         TextView collectionTV;
         TextView nameTV;
+        TextView id;
     }
 }
