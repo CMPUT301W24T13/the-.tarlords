@@ -90,6 +90,8 @@ public class EventListFragment extends Fragment implements MenuProvider {
 
         TextView pageTitle = view.findViewById(R.id.tv_event_list_header);
         pageTitle.setText(getResources().getString(R.string.event_list_header));
+        TextView pageSubtitle = view.findViewById(R.id.tv_event_list_subheader);
+        pageSubtitle.setText("Events you've signed up for.");
 
         // This updates the displayed list on an event
         eventsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {

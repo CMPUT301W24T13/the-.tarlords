@@ -68,7 +68,7 @@
         android:layout_marginVertical="5dp"
 
         android:fontFamily="@font/helvetica"
-        android:text="@string/attendee_count"
+        android:text="Sign Ups: "
         android:textColor="@color/bordeaux_medium"
         android:textSize="18sp"
 
@@ -85,7 +85,7 @@
         android:layout_marginVertical="5dp"
 
         android:fontFamily="@font/helvetica"
-        android:text="@string/attendee_checkin_count"
+        android:text="Check Ins: "
         android:textColor="@color/bordeaux_medium"
         android:textSize="16sp"
 

@@ -142,10 +142,19 @@ public class AttendanceFragment extends Fragment implements MenuProvider {
                 attendees.clear();
                 attendees.addAll(attendanceList);
                 attendanceListAdapter.notifyDataSetChanged();
-
-                String signUps = "Signed Up: " + attendanceListAdapter.getItemCount();
+                String signUps;
+                String checkIns;
+                if (attendanceListAdapter.getItemCount() == 0) {
+                    signUps = "Signed Up: 0";
+                } else {
+                    signUps = "Signed Up: " + attendanceListAdapter.getItemCount();
+                }
+                if (attendanceListAdapter.getCheckInCount() == 0) {
+                    checkIns = "Checked In: 0";
+                } else {
+                    checkIns = "Checked In: ";
+                }
                 totalCount.setText(signUps);
-                String checkIns = "Checked In: " + attendanceListAdapter.getCheckInCount();
                 checkInCount.setText(checkIns);
             }
         });
