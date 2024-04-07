@@ -168,7 +168,7 @@ public class ImageBrowseFragment extends Fragment implements MenuProvider {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 // Access the posterData field for each document
                                 String profilePhotoData = document.getString("profilePhotoData");
-                                String name = document.getString("firstName");
+                                String name = document.getString("firstName")+" "+document.getString("lastName");
                                 String docId = document.getId(); // Get document ID
                                 Boolean photoIsDefault = document.getBoolean("photoIsDefault");
                                 if (photoIsDefault!=null&&!photoIsDefault){

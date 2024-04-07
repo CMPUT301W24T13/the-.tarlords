@@ -234,6 +234,7 @@ public class ProfileFragment extends Fragment implements MenuProvider {
 
                 //if save button selected, update user info and send to firestore
                 if (menuItem.getItemId() == R.id.saveOptionsMenu) {
+                    String firstName = user.getFirstName();
                     user.setFirstName(firstNameEditText.getText().toString());
                     user.setLastName(lastNameEditText.getText().toString());
                     user.setPhoneNum(phoneEditText.getText().toString());
@@ -241,6 +242,11 @@ public class ProfileFragment extends Fragment implements MenuProvider {
 
                     displayProfilePhoto(profilePhotoImageView);
                     MainActivity.user.sendToFireStore();
+                    if (firstName == null){
+                        Intent i = new Intent(getActivity(), MainActivity.class);
+                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(i);
+                    }
                     //update navigation header (slide out menu) with newly updated information
                     MainActivity.updateNavigationDrawerHeader();
                     requireActivity().invalidateMenu(); //required in order to call onPrepareMenu() and repopulate menu with new options

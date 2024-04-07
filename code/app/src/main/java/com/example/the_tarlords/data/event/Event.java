@@ -198,7 +198,7 @@ public class Event implements Parcelable {
     }
     /**
      * Gets profile photo data firestore by converting the base 64 string stored in firestore
-     * to a bitmask, then setting the profile photo to have that bitmask.
+   if (maxAttendees.getText().toString().length()!=0){   * to a bitmask, then setting the profile photo to have that bitmask.
      * @return String base 64 profile photo data
      */
     public String getPosterData() {
@@ -210,7 +210,7 @@ public class Event implements Parcelable {
         posterData=posterData;
     }
     public boolean reachedMaxCap() {
-        if (signUps == null || maxSignUps ==-1||maxSignUps==null){
+        if (signUps == null||maxSignUps==null||maxSignUps==-1){
             return false;
         } else {
             return maxSignUps <= signUps;

@@ -162,7 +162,7 @@ public class User implements Profile , Parcelable {
         docData.put("phoneNum", phoneNum);
         docData.put("FCM",fCMToken);
         docData.put("profilePhotoData", profilePhoto.getPhotoDataFromBitmap()); //stores profile photo data as base 64 string
-        docData.put("photoIsDefualt", photoIsDefault);
+        docData.put("photoIsDefault", photoIsDefault);
         docData.put("isAdmin", isAdmin);
         usersRef.document(userId).set(docData)
                 .addOnSuccessListener(aVoid -> {
