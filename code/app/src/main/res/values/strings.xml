@@ -125,5 +125,14 @@
     <string name="milestones">Milestones</string>
     <string name="no_milestones_label">No milestones to display yet.</string>
     <string name="attendees">Attendees</string>
+    <string name="qr_codes">QR Codes</string>
+    <string name="date_and_time">Date and Time</string>
+    <string name="add_info">Additional Information</string>
+    <string name="read_more">Read More</string>
+    <string name="sign_ups">Sign Ups</string>
+    <string name="check_ins">Check Ins</string>
+    <string name="max_capacity">Max Capacity:</string>
+    <string name="see_more">see more</string>
+    <string name="share_qr_code">SHARE QR CODE</string>
 
 </resources>
