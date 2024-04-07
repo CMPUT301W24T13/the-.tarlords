@@ -20,6 +20,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
@@ -28,6 +29,7 @@ import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.map.LocationHelper;
 import com.example.the_tarlords.data.users.User;
 import com.example.the_tarlords.databinding.ActivityMainBinding;
+import com.example.the_tarlords.ui.event.EventOrganizerListFragment;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -357,7 +359,18 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 navigateToEventDetailsFragment(event);
 
             }
+        } else if (intent != null && intent.getAction() != null && intent.getAction().equals("OPEN_EVENT_DETAILS_ORGANIZER")) {
+            if (intent.hasExtra("event")) {
+                Event event = (Event) intent.getSerializableExtra("event");
+                Bundle args = new Bundle();
+                args.putParcelable("event", event);
+                args.putBoolean("isOrganizer", true);
+                try {
+                    Navigation.findNavController(this, R.id.nav_host_fragment_content_main)
+                            .navigate(R.id.action_eventFragment_to_eventDetailsFragment, args);
+                } catch (Exception ignore) {
+                }
+            }
         }
     }
-
 }

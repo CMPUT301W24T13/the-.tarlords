@@ -54,10 +54,17 @@ public class FCMService extends FirebaseMessagingService {
     private void notificationBuilder(RemoteMessage message, Event event){
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("event", event);
-        intent.setAction("OPEN_EVENT_DETAILS");
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        if(message.getNotification().getBody().equals("New Announcement")){
+            intent.setAction("OPEN_EVENT_DETAILS");
+            //intent.setAction("OPEN_EVENT_DETAILS_ORGANIZER");
 
+
+
+        } else if (message.getNotification().getBody().equals("New Milestone")){
+            intent.setAction("OPEN_EVENT_DETAILS_ORGANIZER");
+        }
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
         String channelId = "Default";
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, channelId)
                 .setSmallIcon(R.mipmap.ic_launcher)
