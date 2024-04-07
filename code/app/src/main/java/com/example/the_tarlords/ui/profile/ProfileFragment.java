@@ -2,6 +2,8 @@ package com.example.the_tarlords.ui.profile;
 
 import static java.lang.Character.isAlphabetic;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -23,6 +25,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
@@ -153,7 +156,10 @@ public class ProfileFragment extends Fragment implements MenuProvider {
             menu.clear();
             menuInflater.inflate(R.menu.options_menu, menu);
 
-            if (!checkValidInput(this.getView())) {
+            if (MainActivity.isAdmin){
+                menu.findItem(R.id.deleteOptionsMenu).setVisible(true);
+            }
+            else if (!checkValidInput(this.getView())) {
                 Toast toast = Toast.makeText(getContext(), "Complete profile information to continue.", Toast.LENGTH_SHORT);
                 toast.setGravity(Gravity.TOP, 0, 0);
                 toast.show();
@@ -168,7 +174,7 @@ public class ProfileFragment extends Fragment implements MenuProvider {
                 lastNameEditText.setEnabled(true);
                 phoneEditText.setEnabled(true);
                 emailEditText.setEnabled(true);
-            } else if (user == MainActivity.user){
+            } if (user == MainActivity.user){
                 menu.findItem(R.id.editOptionsMenu).setVisible(true);
                 menu.findItem(R.id.saveOptionsMenu).setVisible(false);
                 menu.findItem(R.id.cancelOptionsMenu).setVisible(false);
@@ -193,6 +199,9 @@ public class ProfileFragment extends Fragment implements MenuProvider {
                 menu.findItem(R.id.editOptionsMenu).setVisible(true);
                 menu.findItem(R.id.saveOptionsMenu).setVisible(false);
                 menu.findItem(R.id.cancelOptionsMenu).setVisible(false);
+            }
+            if (MainActivity.isAdmin){
+                menu.findItem(R.id.deleteOptionsMenu).setVisible(true);
             }
             displayProfilePhoto(getView().findViewById(R.id.image_view_profile));
 
@@ -253,6 +262,28 @@ public class ProfileFragment extends Fragment implements MenuProvider {
                     checkNameChanged();
                 }
                 return false;
+            } else if (menuItem.getItemId()==R.id.deleteOptionsMenu){
+                AlertDialog dialog = new AlertDialog.Builder(requireContext())
+                        .setMessage("Are you sure you would like to delete the user " + user.getFirstName()+" "+user.getLastName() + "?")
+                        .setNegativeButton("Delete", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                user.removeFromFirestore();
+                                try {
+                                    // Return to event organizer list fragment
+                                    NavHostFragment.findNavController(ProfileFragment.this)
+                                            .navigate(R.id.action_profileViewFragment_pop);
+                                } catch (Exception ignored) {
+                                }
+                            }
+                        })
+                        .setCancelable(true)
+                        .setPositiveButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Handle cancel action if needed
+                            }
+                        }).show();
             }
             return false;
         }
