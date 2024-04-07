@@ -234,4 +234,12 @@ public class ImageBrowseFragment extends Fragment implements MenuProvider {
     public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
         return false;
     }
+
+    public ArrayList<Photo> getImages() {
+        return images;
+    }
+
+    public void setImages(ArrayList<Photo> images) {
+        this.images = images;
+    }
 }
