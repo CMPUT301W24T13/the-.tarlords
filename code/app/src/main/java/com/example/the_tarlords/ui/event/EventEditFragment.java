@@ -286,12 +286,14 @@ public class EventEditFragment extends Fragment implements MenuProvider {
             if (event.getPoster()!=null){
                 eventPosterImageView.setImageBitmap(event.getPoster().getBitmap());
             }
-            if (event.getMaxSignUps()!=-1) {
+            if (event.getMaxSignUps()!=null&&event.getMaxSignUps()!=-1) {
                 cbMaxAttendees.setChecked(true);
                 maxAttendees.setEnabled(true);
                 maxAttendees.setText(event.getMaxSignUps().toString());
             } else {
                 cbMaxAttendees.setChecked(false);
+                event.setMaxSignUps(-1);
+                maxAttendees.setText("-1");
                 maxAttendees.setVisibility(view.GONE);
             }
             cbMaxAttendees.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -543,12 +545,12 @@ public class EventEditFragment extends Fragment implements MenuProvider {
         super.onActivityResult(requestCode, resultCode, data);
         if ( resultCode==RESULT_OK){
             Bitmap capturedPhoto = event.getPoster().getBitmap();
-            //if (requestCode==1000) {
+            if (requestCode==1000) {
                 capturedPhoto = (Bitmap) (data.getExtras().get("data"));
-            //} else if (requestCode == 1001){
-
-            //}
-            event.getPoster().setBitmap(capturedPhoto);
+            } else if (requestCode == 1001){
+                event.setPosterData(data.getStringExtra("imageUpload"));
+            }
+            //event.getPoster().setBitmap(capturedPhoto);
             event.setPosterIsDefault(false);
             ImageView poster = getView().findViewById(R.id.edit_iv_poster);
             poster.setImageBitmap(capturedPhoto);
