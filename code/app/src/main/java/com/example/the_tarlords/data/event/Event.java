@@ -329,7 +329,7 @@ public class Event implements Parcelable {
         docData.put("qrCode",qrCode);
         docData.put("posterData",poster.getPhotoDataFromBitmap());
         docData.put("posterIsDefault", posterIsDefault);
-        docData.put("addtionalInfo",additionalInfo);
+        docData.put("additionalInfo", additionalInfo);
         docData.put("posterData",poster.getPhotoDataFromBitmap());
 
         eventsRef.document(id).set(docData)
