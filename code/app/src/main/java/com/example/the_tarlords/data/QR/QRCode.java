@@ -210,7 +210,7 @@ public class QRCode {
                 for (QueryDocumentSnapshot doc: querySnapshots) {
                     String eventID = doc.getId();
                     try {
-                        if (Objects.equals(doc.getString("organizerId"), user)  && pastEvent(doc.getString("startDate"), doc.getString("endTime"))) {
+                        if (Objects.equals(doc.getString("organizerId"), user)  && pastEvent(doc.getString("endDate"), doc.getString("endTime"))) {
                             // Event has user = organizer AND event has passed
                             Log.e("Old Events", eventID + " " + doc.getString("name") + " added");
                             events.add(doc.getString("name"));
