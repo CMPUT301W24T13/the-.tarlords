@@ -45,7 +45,7 @@ import java.util.ArrayList;
  * A fragment representing a list of Event items
  * @see Event
  */
-public class  EventListFragment extends Fragment implements MenuProvider {
+public class EventListFragment extends Fragment implements MenuProvider {
 
     private FragmentEventListBinding binding;
     private CollectionReference eventsRef = MainActivity.db.collection("Events");

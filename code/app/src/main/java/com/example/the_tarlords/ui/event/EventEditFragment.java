@@ -11,6 +11,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -278,11 +279,6 @@ public class EventEditFragment extends Fragment implements MenuProvider {
         //check event is not null
         if (event != null) {
             // Populate UI elements with event details
-<<<<<<< HEAD
-            eventPosterImageView.setImageBitmap(event.getPoster().getBitmap());
-            eventUploadPosterTextView.setVisibility(View.VISIBLE);
-=======
->>>>>>> faf25dd7e160015f6b8815f13d6c9c68f503c5ac
             eventNameEditText.setText(event.getName());
             eventLocationEditText.setText(event.getLocation());
             eventStartTimeTextView.setText(event.getStartTime());
@@ -292,6 +288,8 @@ public class EventEditFragment extends Fragment implements MenuProvider {
             eventAdditionalInfo.setText(event.getAdditionalInfo());
             if (event.getPoster()!=null){
                 eventPosterImageView.setImageBitmap(event.getPoster().getBitmap());
+            } else {
+                eventUploadPosterTextView.setVisibility(View.VISIBLE);
             }
             if (event.getMaxSignUps()!=-1) {
                 cbMaxAttendees.setChecked(true);
@@ -425,81 +423,22 @@ public class EventEditFragment extends Fragment implements MenuProvider {
 
             //save changes to event details
             if (menuItem.getItemId() == R.id.saveOptionsMenu) {
-                eventUploadPosterTextView.setVisibility(View.INVISIBLE);
-                // Update the event details
-                event.setName(eventNameEditText.getText().toString());
-                event.setStartDate(eventStartDateTextView.getText().toString());
-                event.setEndDate(eventEndDateTextView.getText().toString());
-                event.setStartTime(eventStartTimeTextView.getText().toString());
-                event.setEndTime(eventEndTimeTextView.getText().toString());
-                event.setLocation(eventLocationEditText.getText().toString());
-                event.setOrganizerId(MainActivity.user.getUserId());
-                String max = maxAttendees.getText().toString();
+                if (validateInput()) {
 
-                // Check if the input string is empty or contains non-integer values
-                if (TextUtils.isEmpty(max) || !isInteger(max)) {
-                    // Set it to "infinity" if empty or non-integer
-                    event.setMaxSignUps(-1);
-                    maxAttendees.setText("unlimited");
-                } else {
-                    // If the string represents a valid integer, parse int
-                    event.setMaxSignUps(Integer.parseInt(max));
-                }
-
-                //if eventId is null, treat as new event and generate a new id
-                /*if (event.getId() == null) {
-                    event.makeNewDocID(); //generate new event id
-                    QRCode qr = new QRCode();
-                    qr.makeQR(event.getId());
-                    event.setQrCode(qr.getQrID()); //generate check in QR
-                    event.setSignUps(0);
-                }*/
-
-                int position = spinner.getSelectedItemPosition();
-                String eventToReuse = eventsForReuse.get(position);
-
-                if (Objects.equals(eventToReuse, "Optional Reuse QRCode") && event.getId() == null) {
-                    eventID = "";
-                    //Normal event creation
-                    Log.e("SPINNERN", "NORMAL");
-                    event.makeNewDocID(); //generate new event id
-                    QRCode qr = new QRCode();
-                    qr.makeQR(event.getId());
-                    event.setQrCode(qr.getQrID()); //generate check in QR
-                    event.setSignUps(0);
-                } else if (event.getId() == null) {
-                    //Reuse QR code event creation
-                    Log.e("SPINNERR", "REUSE");
-                    event.makeNewDocID(); //generate new event id
-                    QRCode qr = new QRCode();
-                    qr.reuseQR(MainActivity.user.getUserId(), eventToReuse, event.getId());
-                    event.setQrCode(qr.getQrID()); //generate check in QR
-                    event.setSignUps(0);
-                    reuse = true;
-                    eventID = event.getId();
-                } else {
-                    eventID = "";
-                }
-
-                if (event.getPoster()==null){
-                    EventPoster poster = new EventPoster(event.getId(), null,event);
-                    poster.autoGenerate();
-                    event.setPoster(poster);
-                }
-                //upload event in firebase
-                event.sendToFirebase();
-
-                //TODO : check valid input
-            } else {
-                eventID = "";
-            }
-
-            if (reuse) {
-                //find event id in qr collection, get qrid, set in original event
-                QRRef.addSnapshotListener((querySnapshots, error) -> {
-                    if (error != null) {
-                        Log.e("Firestore", error.toString());
-                        return;
+                    // Update the event details
+                    event.setName(eventNameEditText.getText().toString());
+                    event.setStartDate(eventStartDateTextView.getText().toString());
+                    event.setEndDate(eventEndDateTextView.getText().toString());
+                    event.setStartTime(eventStartTimeTextView.getText().toString());
+                    event.setEndTime(eventEndTimeTextView.getText().toString());
+                    event.setLocation(eventLocationEditText.getText().toString());
+                    event.setOrganizerId(MainActivity.user.getUserId());
+                    event.setAdditionalInfo(eventAdditionalInfo.getText().toString());
+                    event.setMaxSignUps(Integer.valueOf(maxAttendees.getText().toString()));
+                    if (event.getPoster() == null) {
+                        EventPoster poster = new EventPoster(event.getId(), null, event);
+                        poster.autoGenerate();
+                        event.setPoster(poster);
                     }
 
                     boolean reuse = false;
