@@ -133,19 +133,19 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
 
         TextView additionalInfoText = view.findViewById(R.id.additional_info);
         additionalInfoText.setText(event.getAdditionalInfo());
-//        TextView readMoreText = view.findViewById(R.id.tv_read_more);
-//        readMoreText.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (additionalInfoText.getMaxLines() == 2) {
-//                    additionalInfoText.setMaxLines(Integer.MAX_VALUE);
-//                    readMoreText.setText("Read Less");
-//                } else {
-//                    additionalInfoText.setMaxLines(2);
-//                    readMoreText.setText("Read More");
-//                }
-//            }
-//        });
+        TextView readMoreText = view.findViewById(R.id.tv_read_more);
+        readMoreText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (additionalInfoText.getMaxLines() == 2) {
+                    additionalInfoText.setMaxLines(Integer.MAX_VALUE);
+                    readMoreText.setText("Read Less");
+                } else {
+                    additionalInfoText.setMaxLines(2);
+                    readMoreText.setText("Read More");
+                }
+            }
+        });
 
         // Check if event is not null before accessing its attributes
         if (event != null) {
