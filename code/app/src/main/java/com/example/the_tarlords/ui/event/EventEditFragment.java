@@ -256,7 +256,6 @@ public class EventEditFragment extends Fragment implements MenuProvider {
         checkInQR = view.findViewById(R.id.iv_checkin);
         eventInfoQR = view.findViewById(R.id.iv_info);
         additionalInfoEditText = view.findViewById(R.id.et_additional_info);
-        additionalInfoEditText.setText(event.getAdditionalInfo());
         //add more attributes as desired
 
         //check event is not null
@@ -285,6 +284,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
                     maxAttendees.setText(""); // Clear the text when the checkbox is unchecked
                 }
             });
+            additionalInfoEditText.setText(event.getAdditionalInfo());
             // Populate more attributes as desired
         }
 
