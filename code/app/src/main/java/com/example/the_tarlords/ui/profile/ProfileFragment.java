@@ -263,32 +263,20 @@ public class ProfileFragment extends Fragment implements MenuProvider {
                     lastNameEditText.setEnabled(false);
                     phoneEditText.setEnabled(false);
                     emailEditText.setEnabled(false);
-                }
-                if (firstNameEditText.getText().toString().length()!=0) {
-                    user.setFirstName(firstNameEditText.getText().toString());
-                } else {
-                    user.setFirstName(null);
-                } if (lastNameEditText.getText().toString().length()!=0) {
-                    user.setLastName(lastNameEditText.getText().toString());
-                } else {
-                    user.setLastName(null);
-                } if (phoneEditText.getText().toString().length()!=0) {
-                    user.setPhoneNum(phoneEditText.getText().toString());
-                } else {
-                    user.setPhoneNum(null);
-                } if (emailEditText.getText().toString().length()!=0) {
                     user.setEmail(emailEditText.getText().toString());
-                } else {
-                    user.setEmail(null);
+                    user.setFirstName(firstNameEditText.getText().toString());
+                    user.setLastName(lastNameEditText.getText().toString());
+                    user.setPhoneNum(phoneEditText.getText().toString());
+
+
+                    displayProfilePhoto(profilePhotoImageView);
+                    MainActivity.user.sendToFireStore();
+
+                    //update navigation header (slide out menu) with newly updated information
+                    MainActivity.updateNavigationDrawerHeader();
+                    requireActivity().invalidateMenu(); //required in order to call onPrepareMenu() and repopulate menu with new options
+                    checkNameChanged();
                 }
-
-                displayProfilePhoto(profilePhotoImageView);
-                MainActivity.user.sendToFireStore();
-
-                //update navigation header (slide out menu) with newly updated information
-                MainActivity.updateNavigationDrawerHeader();
-                requireActivity().invalidateMenu(); //required in order to call onPrepareMenu() and repopulate menu with new options
-                checkNameChanged();
             }
             else if (menuItem.getItemId()==R.id.deleteOptionsMenu){
                 AlertDialog dialog = new AlertDialog.Builder(requireContext())
@@ -333,7 +321,7 @@ public class ProfileFragment extends Fragment implements MenuProvider {
         if (user.getPhotoIsDefault()) {
             if (!firstNamePostEdit.equals(user.getProfilePhoto().getPhotoFirstName()) || !lastNamePostEdit.equals(user.getProfilePhoto().getPhotoLastName())) {
                 ProfilePhoto profilePhoto = new ProfilePhoto(user.getUserId(),
-                        null, firstNamePostEdit, lastNamePostEdit);
+                        null, user.getFirstName(), user.getLastName());
 
                 profilePhoto.autoGenerate();
                 user.setProfilePhoto(profilePhoto);
@@ -394,5 +382,6 @@ public class ProfileFragment extends Fragment implements MenuProvider {
             user.setPhotoIsDefault(true);
         }
         profilePhotoImageView.setImageBitmap(user.getProfilePhoto().getBitmap());
+        MainActivity.updateNavigationDrawerHeader();
     }
 }
