@@ -23,6 +23,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
+    <TextView
+        android:id="@+id/tv_profile_browse_subheader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="15dp"
+        android:text="@string/admin_browse_profiles_subtitle"
+        android:fontFamily="@font/helvetica"
+        android:textSize="18sp"
+        android:textColor="@color/bordeaux_medium"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_profile_browse_header"/>
+
     <ListView
         android:id="@+id/profileListView"
         android:layout_width="match_parent"
@@ -34,6 +47,6 @@
         tools:listitem="@layout/fragment_profile_list_item"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_profile_browse_header"/>
+        app:layout_constraintTop_toBottomOf="@+id/tv_profile_browse_subheader"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

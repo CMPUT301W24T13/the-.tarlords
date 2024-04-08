@@ -75,14 +75,25 @@
                 app:layout_constraintStart_toStartOf="@id/nameTV"
                 app:layout_constraintTop_toBottomOf="@id/phoneNumberTV" />
 
+            <CheckBox
+                android:id="@+id/cb_checkInStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:visibility="gone"
+                app:layout_constraintStart_toEndOf="@+id/tv_noOfCheckIns"
+                app:layout_constraintTop_toTopOf="@+id/tv_noOfCheckIns"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_noOfCheckIns"
+                tools:visibility="visible" />
+
             <TextView
-                android:id="@+id/tv_noCheckIns"
+                android:id="@+id/tv_noOfCheckIns"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
                 android:fontFamily="@font/helvetica"
                 android:gravity="center_vertical"
-                android:text="# of check ins"
+                android:text="@string/no_of_check_ins"
                 android:textStyle="italic"
                 android:visibility="gone"
                 app:layout_constraintStart_toEndOf="@id/profile_photo_image_view"

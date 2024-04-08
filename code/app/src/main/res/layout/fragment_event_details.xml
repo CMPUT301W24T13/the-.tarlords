@@ -287,6 +287,7 @@
                 android:layout_height="150dp"
                 android:layout_marginTop="5dp"
                 android:src="@drawable/qr_code_scan_svgrepo_com"
+                app:layout_constraintHorizontal_chainStyle="spread"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/iv_info_details"
                 app:layout_constraintTop_toBottomOf="@+id/tv_checkin_details"

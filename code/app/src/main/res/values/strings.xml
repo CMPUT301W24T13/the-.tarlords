@@ -134,5 +134,8 @@
     <string name="max_capacity">Max Capacity:</string>
     <string name="see_more">see more</string>
     <string name="share_qr_code">SHARE QR CODE</string>
+    <string name="no_of_check_ins"># of check ins</string>
+    <string name="admin_image_browse_subheader">Click to remove photos from the app.</string>
+    <string name="admin_browse_profiles_subtitle">Click to remove profiles from app.</string>
 
 </resources>
