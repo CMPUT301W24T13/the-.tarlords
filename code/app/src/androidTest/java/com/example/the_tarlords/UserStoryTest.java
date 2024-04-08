@@ -195,7 +195,7 @@ public class UserStoryTest {
     }
 
     @Test
-    public void testBrowseEventPostersAndDetails() {
+    public void testUS_02_08_01() {
         ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class);
 
         FragmentScenario<ImageBrowseFragment> fragmentScenario = FragmentScenario.launchInContainer(ImageBrowseFragment.class);
@@ -203,7 +203,7 @@ public class UserStoryTest {
     }
 
     @Test
-    public void testViewSignedUpEvents() {
+    public void testUS_02_09_01() {
         ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class);
         scenario.onActivity(activity -> {
             NavigationView nav = activity.findViewById(R.id.nav_view);
