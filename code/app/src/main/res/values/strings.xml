@@ -1,6 +1,6 @@
 <resources>
     <!-- main strings -->
-    <string name="app_name">the-.tarlords</string>
+    <string name="app_name">Event Horizon</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -37,11 +37,7 @@
     <string name="announcements">Announcements</string>
     <string name="alert_message">Alert Message</string>
     <string name="alert_message_hint">
-        "My alert message"
-        "
-        "
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt"
-        "ut labore et dolore magna aliqua."
+        "New message..."
     </string>
     <string name="alert_title">Alert Title</string>
 
