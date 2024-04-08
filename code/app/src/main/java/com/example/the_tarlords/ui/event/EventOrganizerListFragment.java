@@ -82,6 +82,8 @@ public class EventOrganizerListFragment extends Fragment implements MenuProvider
 
         TextView pageTitle = view.findViewById(R.id.tv_event_list_header);
         pageTitle.setText(getResources().getString(R.string.my_events));
+        TextView pageSubtitle = view.findViewById(R.id.tv_event_list_subheader);
+        pageSubtitle.setText("Events you're organizing.");
 
         // This updates the displayed list on an event
         eventsRef.addSnapshotListener(new EventListener<QuerySnapshot>() {

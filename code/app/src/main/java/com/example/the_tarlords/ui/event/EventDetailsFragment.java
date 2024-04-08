@@ -5,9 +5,7 @@ import static com.example.the_tarlords.MainActivity.toolbar;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -158,7 +156,7 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
                 date = String.format("  %s %s -\n  %s %s", event.getStartDate(), event.getStartTime(), event.getEndDate(), event.getEndTime());
             }
             eventStartDateTextView.setText(date);
-            if (event.getMaxSignUps()==(Integer) (-1)){
+            if (event.getMaxSignUps()==null||event.getMaxSignUps()==-1){
                 eventMaxAttendees.setText("Max Capacity: Unlimited");
             } else {
                 eventMaxAttendees.setText("Max Capacity: "+event.getMaxSignUps());

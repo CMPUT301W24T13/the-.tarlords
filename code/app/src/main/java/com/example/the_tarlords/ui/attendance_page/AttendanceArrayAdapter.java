@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -42,6 +43,10 @@ public class AttendanceArrayAdapter extends ArrayAdapter<Attendee> {
             holder.email = view.findViewById(R.id.emailTV);
             holder.phoneNum = view.findViewById(R.id.phoneNumberTV);
             holder.profilePic = view.findViewById(R.id.profile_photo_image_view);
+            holder.checkInStatus = view.findViewById(R.id.cb_checkInStatus);
+            holder.checkInStatus.setVisibility(view.VISIBLE);
+            holder.checkInCount = view.findViewById(R.id.tv_noOfCheckIns);
+            holder.checkInCount.setVisibility(view.VISIBLE);
             view.setTag(holder);
         } else {
             holder = (AttendanceArrayAdapter.ViewHolder) view.getTag();
@@ -52,6 +57,8 @@ public class AttendanceArrayAdapter extends ArrayAdapter<Attendee> {
         holder.name.setText(attendee.getFirstName()+" "+attendee.getLastName());
         holder.email.setText(attendee.getEmail());
         holder.phoneNum.setText(attendee.getPhoneNum());
+        holder.checkInStatus.setChecked(attendee.getCheckInStatus());
+        holder.checkInCount.setText(attendee.getCheckInCount()+" check ins");
         if (attendee.getProfilePhoto()!=null) {
             holder.profilePic.setImageBitmap(attendee.getProfilePhoto().getBitmap());
         }
@@ -66,7 +73,10 @@ public class AttendanceArrayAdapter extends ArrayAdapter<Attendee> {
         TextView name;
         TextView email;
         TextView phoneNum;
+        TextView checkInCount;
         ImageView profilePic;
+        CheckBox checkInStatus;
+
     }
 
     /**

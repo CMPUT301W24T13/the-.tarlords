@@ -132,9 +132,8 @@ public class MapsFragment extends Fragment implements MenuProvider {
      */
 
     public void addMarkers(GoogleMap googleMap) {
-        LatLng sydney = new LatLng(-34, 151);
-        googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(53.526,-113.5)));
+        googleMap.setMinZoomPreference(5);
         // get one from firebase
         
          // Query Firestore to get documents from events collection where eventId matches

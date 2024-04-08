@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -70,14 +69,14 @@ public class AddAlertFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_add_alert, null);
-        EditText editTitle = view.findViewById(R.id.edit_text_alert_title);
-        EditText editMessage = view.findViewById(R.id.edit_text_alert_message);
+        EditText editTitle = view.findViewById(R.id.et_add_alert_title);
+        EditText editMessage = view.findViewById(R.id.et_add_alert_message);
 
         editTitle.setText(titleTemp);
         editMessage.setText(messageTemp);
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         if (alert == null) {
-            return builder
+             return builder
                     .setView(view)
                     .setTitle("Send Alert")
                     .setNegativeButton("Cancel", null)

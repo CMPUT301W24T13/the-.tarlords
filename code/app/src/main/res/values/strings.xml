@@ -1,6 +1,6 @@
 <resources>
     <!-- main strings -->
-    <string name="app_name">the-.tarlords</string>
+    <string name="app_name">Event Horizon</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -37,18 +37,14 @@
     <string name="announcements">Announcements</string>
     <string name="alert_message">Alert Message</string>
     <string name="alert_message_hint">
-        "My alert message"
-        "
-        "
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt"
-        "ut labore et dolore magna aliqua."
+        "New message..."
     </string>
     <string name="alert_title">Alert Title</string>
 
     <!-- strings related to profile xml -->
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
-    <string name="phone_number">Phone Number (XXX) XXX-XXXX</string>
+    <string name="phone_number">Phone # (XXX) XXX-XXXX</string>
     <string name="email">Email Address</string>
     <string name="profile_picture">profile picture</string>
     <string name="upload_photo">upload photo</string>
@@ -121,5 +117,21 @@
     <string name="event_add_info">Additional Information</string>
     <string name="end_date">End Date</string>
     <string name="add_info_hint">This event is about...</string>
+    <string name="upload_poster_prompt">Click here to edd/edit event poster.</string>
+    <string name="milestones">Milestones</string>
+    <string name="no_milestones_label">No milestones to display yet.</string>
+    <string name="attendees">Attendees</string>
+    <string name="qr_codes">QR Codes</string>
+    <string name="date_and_time">Date and Time</string>
+    <string name="add_info">Additional Information</string>
+    <string name="read_more">Read More</string>
+    <string name="sign_ups">Sign Ups</string>
+    <string name="check_ins">Check Ins</string>
+    <string name="max_capacity">Max Capacity:</string>
+    <string name="see_more">see more</string>
+    <string name="share_qr_code">SHARE QR CODE</string>
+    <string name="no_of_check_ins"># of check ins</string>
+    <string name="admin_image_browse_subheader">Click to remove photos from the app.</string>
+    <string name="admin_browse_profiles_subtitle">Click to remove profiles from app.</string>
 
 </resources>

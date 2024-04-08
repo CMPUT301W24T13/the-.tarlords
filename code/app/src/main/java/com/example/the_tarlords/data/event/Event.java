@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.data.Alert.Alert;
 import com.example.the_tarlords.data.Alert.AlertCallback;
+import com.example.the_tarlords.data.DateHelper;
 import com.example.the_tarlords.data.photo.EventPoster;
 import com.example.the_tarlords.data.users.Attendee;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -24,6 +25,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -200,7 +202,7 @@ public class Event implements Parcelable {
     }
     /**
      * Gets profile photo data firestore by converting the base 64 string stored in firestore
-     * to a bitmask, then setting the profile photo to have that bitmask.
+   if (maxAttendees.getText().toString().length()!=0){   * to a bitmask, then setting the profile photo to have that bitmask.
      * @return String base 64 profile photo data
      */
     public String getPosterData() {
@@ -212,7 +214,7 @@ public class Event implements Parcelable {
         posterData=posterData;
     }
     public boolean reachedMaxCap() {
-        if (signUps == null || maxSignUps ==-1||maxSignUps==null){
+        if (signUps == null||maxSignUps==null||maxSignUps==-1){
             return false;
         } else {
             return maxSignUps <= signUps;
@@ -279,6 +281,13 @@ public class Event implements Parcelable {
         //add additional fields as necessary
         //additional fields must be added to the Event(Parcelable) constructor
         //all fields must be in the same order as the Event(Parcelable) constructor
+        if (signUps==null){
+            signUps=0;
+        } if (checkIns==null){
+            checkIns=0;
+        } if (maxSignUps==null){
+            maxSignUps=0;
+        }
         dest.writeString(name);
         dest.writeString(location);
         dest.writeString(id);
@@ -333,8 +342,8 @@ public class Event implements Parcelable {
         docData.put("posterData",poster.getPhotoDataFromBitmap());
         docData.put("posterIsDefault", posterIsDefault);
         docData.put("additionalInfo", additionalInfo);
-        docData.put("posterData",poster.getPhotoDataFromBitmap());
 
+        docData.put("timestamp", DateHelper.getTimestamp(startDate));
         eventsRef.document(id).set(docData)
                 .addOnSuccessListener(aVoid -> {
                     // Document successfully added

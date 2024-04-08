@@ -1,55 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginStart="15dp"
-    android:layout_marginEnd="15dp"
-    android:layout_marginTop="15dp"
-    android:layout_marginBottom="15dp">
+    android:layout_marginVertical="5dp" >
 
-
-    <TextView
-        android:id="@+id/add_alert_title_display"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/alert_title"
-        android:fontFamily="@font/helvetica_bold"
-        android:textSize="18sp"
-        android:textColor="@color/plum_dark" />
+        android:layout_height="match_parent"
+        android:paddingHorizontal="25dp"
+        android:paddingVertical="10dp">
 
-    <EditText
-        android:id="@+id/edit_text_alert_title"
-        android:padding="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/alert_title"
-        android:inputType="text"
-        android:fontFamily="@font/helvetica"
-        android:textSize="18sp"
-        android:textColor="@color/bordeaux_medium" />
+        <TextView
+            android:id="@+id/tv_add_alert_title_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/alert_title"
+            android:fontFamily="@font/helvetica_bold"
+            android:textSize="18sp"
+            android:textColor="@color/plum_dark"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
-    <TextView
-        android:id="@+id/add_alert_message_display"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="@string/alert_message"
-        android:fontFamily="@font/helvetica_bold"
-        android:textSize="18sp"
-        android:textColor="@color/plum_dark" />
+        <EditText
+            android:id="@+id/et_add_alert_title"
+            android:padding="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_corners_r"
+            android:hint="@string/alert_title"
+            android:inputType="text"
+            android:fontFamily="@font/helvetica"
+            android:textSize="18sp"
+            android:textColorHint="@color/mauve_medium_light"
+            android:textColor="@color/bordeaux_medium"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_add_alert_title_label"/>
 
-    <EditText
-        android:id="@+id/edit_text_alert_message"
-        android:padding="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:hint="@string/alert_message_hint"
-        android:inputType="textMultiLine"
-        android:fontFamily="@font/helvetica"
-        android:textSize="18sp"
-        android:textColor="@color/bordeaux_medium" />
+        <TextView
+            android:id="@+id/tv_add_alert_message_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/alert_message"
+            android:fontFamily="@font/helvetica_bold"
+            android:textSize="18sp"
+            android:textColor="@color/plum_dark"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_add_alert_title"/>
+
+        <EditText
+            android:id="@+id/et_add_alert_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_corners_r"
+            android:fontFamily="@font/helvetica"
+            android:gravity="top|left"
+            android:hint="@string/alert_message_hint"
+            android:inputType="textMultiLine"
+            android:minLines="3"
+            android:padding="10dp"
+            android:textColor="@color/bordeaux_medium"
+            android:textColorHint="@color/mauve_medium_light"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_add_alert_message_label" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>
