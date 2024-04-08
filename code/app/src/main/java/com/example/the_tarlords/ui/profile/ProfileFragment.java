@@ -2,13 +2,16 @@ package com.example.the_tarlords.ui.profile;
 
 import static java.lang.Character.isAlphabetic;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,8 +22,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
-import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.MenuProvider;
@@ -32,6 +36,8 @@ import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.photo.ProfilePhoto;
 import com.example.the_tarlords.data.users.User;
 import com.example.the_tarlords.databinding.FragmentProfileBinding;
+
+import java.io.IOException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -74,6 +80,27 @@ public class ProfileFragment extends Fragment implements MenuProvider {
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
+
+    private final ActivityResultLauncher<Intent> launcher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                    Uri photoUri = result.getData().getData();
+                    try {
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), photoUri);
+                        ProfilePhoto profilePhoto = new ProfilePhoto(user.getUserId(),bitmap);
+                        profilePhoto.compressPhoto();
+                        user.setProfilePhoto(profilePhoto);
+                        profilePhotoImageView.setImageBitmap(bitmap);
+                        user.setPhotoIsDefault(false);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                }
+            }
+
+    );
 
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
@@ -118,13 +145,13 @@ public class ProfileFragment extends Fragment implements MenuProvider {
                         return true;
                     } else if (item.getItemId() == R.id.gallery_open) {
                         //upload photo
-                        Intent profilePhotoUpload = new Intent(getActivity(), UploadPhotoActivity.class);
-                        startActivity(profilePhotoUpload);
+                        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        launcher.launch(intent);
                         return true;
                     } else if (item.getItemId() == R.id.remove_current_photo) {
                         //remove current photo:
-                        user.getProfilePhoto().autoGenerate();
-                        user.setPhotoIsDefault(true);
+                        user.setProfilePhoto(null);
+                        displayProfilePhoto(profilePhotoImageView);
                         return true;
                     } else {
                         return false;
@@ -159,22 +186,7 @@ public class ProfileFragment extends Fragment implements MenuProvider {
             if (MainActivity.isAdmin){
                 menu.findItem(R.id.deleteOptionsMenu).setVisible(true);
             }
-            else if (!checkValidInput(this.getView())) {
-                Toast toast = Toast.makeText(getContext(), "Complete profile information to continue.", Toast.LENGTH_SHORT);
-                toast.setGravity(Gravity.TOP, 0, 0);
-                toast.show();
-
-                menu.findItem(R.id.editOptionsMenu).setVisible(false);
-                menu.findItem(R.id.saveOptionsMenu).setVisible(true);
-                menu.findItem(R.id.cancelOptionsMenu).setVisible(true);
-
-                profilePhotoImageView.setVisibility(View.INVISIBLE);
-                addProfilePhotoButton.setVisibility(View.VISIBLE);
-                firstNameEditText.setEnabled(true);
-                lastNameEditText.setEnabled(true);
-                phoneEditText.setEnabled(true);
-                emailEditText.setEnabled(true);
-            } if (user == MainActivity.user){
+            if (user == MainActivity.user){
                 menu.findItem(R.id.editOptionsMenu).setVisible(true);
                 menu.findItem(R.id.saveOptionsMenu).setVisible(false);
                 menu.findItem(R.id.cancelOptionsMenu).setVisible(false);
@@ -225,9 +237,17 @@ public class ProfileFragment extends Fragment implements MenuProvider {
                 emailEditText.setEnabled(true);
 
                 requireActivity().invalidateMenu(); //required in order to call onPrepareMenu() and repopulate menu with new options
-                return false;
             }
-            else if (menuItem.getItemId() == R.id.saveOptionsMenu || menuItem.getItemId() == R.id.cancelOptionsMenu) {
+            else if (menuItem.getItemId() == R.id.cancelOptionsMenu) {
+                addProfilePhotoButton.setVisibility(View.GONE);
+                firstNameEditText.setEnabled(false);
+                lastNameEditText.setEnabled(false);
+                phoneEditText.setEnabled(false);
+                emailEditText.setEnabled(false);
+                requireActivity().invalidateMenu(); //required in order to call onPrepareMenu() and repopulate menu with new options
+            }
+            //if save button selected, update user info and send to firestore
+            else if (menuItem.getItemId() == R.id.saveOptionsMenu) {
                 if (checkValidInput(this.getView())) {
                     // if the profile info has been filled out they can leave edit mode
                     addProfilePhotoButton.setVisibility(View.GONE);
@@ -235,34 +255,21 @@ public class ProfileFragment extends Fragment implements MenuProvider {
                     lastNameEditText.setEnabled(false);
                     phoneEditText.setEnabled(false);
                     emailEditText.setEnabled(false);
-
-                    }
-                if (menuItem.getItemId() == R.id.cancelOptionsMenu) {
-                    requireActivity().invalidateMenu(); //required in order to call onPrepareMenu() and repopulate menu with new options
                 }
+                user.setFirstName(firstNameEditText.getText().toString());
+                user.setLastName(lastNameEditText.getText().toString());
+                user.setPhoneNum(phoneEditText.getText().toString());
+                user.setEmail(emailEditText.getText().toString());
 
-                //if save button selected, update user info and send to firestore
-                if (menuItem.getItemId() == R.id.saveOptionsMenu) {
-                    String firstName = user.getFirstName();
-                    user.setFirstName(firstNameEditText.getText().toString());
-                    user.setLastName(lastNameEditText.getText().toString());
-                    user.setPhoneNum(phoneEditText.getText().toString());
-                    user.setEmail(emailEditText.getText().toString());
+                displayProfilePhoto(profilePhotoImageView);
+                MainActivity.user.sendToFireStore();
 
-                    displayProfilePhoto(profilePhotoImageView);
-                    MainActivity.user.sendToFireStore();
-                    if (firstName == null){
-                        Intent i = new Intent(getActivity(), MainActivity.class);
-                        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(i);
-                    }
-                    //update navigation header (slide out menu) with newly updated information
-                    MainActivity.updateNavigationDrawerHeader();
-                    requireActivity().invalidateMenu(); //required in order to call onPrepareMenu() and repopulate menu with new options
-                    checkNameChanged();
-                }
-                return false;
-            } else if (menuItem.getItemId()==R.id.deleteOptionsMenu){
+                //update navigation header (slide out menu) with newly updated information
+                MainActivity.updateNavigationDrawerHeader();
+                requireActivity().invalidateMenu(); //required in order to call onPrepareMenu() and repopulate menu with new options
+                checkNameChanged();
+            }
+            else if (menuItem.getItemId()==R.id.deleteOptionsMenu){
                 AlertDialog dialog = new AlertDialog.Builder(requireContext())
                         .setMessage("Are you sure you would like to delete the user " + user.getFirstName()+" "+user.getLastName() + "?")
                         .setNegativeButton("Delete", new DialogInterface.OnClickListener() {
@@ -285,7 +292,6 @@ public class ProfileFragment extends Fragment implements MenuProvider {
                             }
                         }).show();
             }
-            return false;
         }
         return false;
     }
@@ -303,14 +309,15 @@ public class ProfileFragment extends Fragment implements MenuProvider {
 
         EditText lastNameEditText = v.findViewById(R.id.edit_text_last_name);
         String lastNamePostEdit = lastNameEditText.getText().toString();
+        if (user.getPhotoIsDefault()) {
+            if (!firstNamePostEdit.equals(user.getProfilePhoto().getPhotoFirstName()) || !lastNamePostEdit.equals(user.getProfilePhoto().getPhotoLastName())) {
+                ProfilePhoto profilePhoto = new ProfilePhoto(user.getUserId(),
+                        null, firstNamePostEdit, lastNamePostEdit);
 
-        if (!firstNamePostEdit.equals(user.getProfilePhoto().getPhotoFirstName()) || !lastNamePostEdit.equals(user.getProfilePhoto().getPhotoLastName())) {
-            ProfilePhoto profilePhoto = new ProfilePhoto(firstNamePostEdit + lastNamePostEdit,
-                    null, firstNamePostEdit, lastNamePostEdit);
-
-            profilePhoto.autoGenerate();
-            user.setProfilePhoto(profilePhoto);
-            profilePhotoImageView.setImageBitmap(profilePhoto.getBitmap());
+                profilePhoto.autoGenerate();
+                user.setProfilePhoto(profilePhoto);
+                profilePhotoImageView.setImageBitmap(profilePhoto.getBitmap());
+            }
         }
     }
 
@@ -320,39 +327,26 @@ public class ProfileFragment extends Fragment implements MenuProvider {
      * @param v, any view on the fragment
      * @return true if user input is valid , false otherwise
      */
-    // TODO : Doesn't work
     public boolean checkValidInput(View v) {
         boolean validInput = true;
         firstNameEditText = v.findViewById(R.id.edit_text_first_name);
-        if (firstNameEditText.getText().toString().length() == 0) {
-            firstNameEditText.setError("Required Field.");
-            validInput = false;
-        } else if (!isAlphabetic(firstNameEditText.getText().toString().charAt(0))) {
+        if (firstNameEditText.getText().toString().length()!=0&&!isAlphabetic(firstNameEditText.getText().toString().charAt(0))) {
             firstNameEditText.setError("Invalid entry. Name must start with a letter.");
             validInput = false;
         }
         lastNameEditText = v.findViewById(R.id.edit_text_last_name);
-        if (lastNameEditText.getText().toString().length() == 0) {
-            lastNameEditText.setError("Required Field.");
-            validInput = false;
-        } else if (!isAlphabetic(lastNameEditText.getText().toString().charAt(0))) {
+        if (lastNameEditText.getText().toString().length()!=0&&!isAlphabetic(lastNameEditText.getText().toString().charAt(0))) {
             lastNameEditText.setError("Invalid entry. Name must start with a letter.");
             validInput = false;
         }
         phoneEditText = v.findViewById(R.id.edit_text_phone);
-        if (phoneEditText.getText().toString().length() == 0) {
-            phoneEditText.setError("Required Field.");
-            validInput = false;
-        } else if (phoneEditText.getText().toString().length() < 9 || phoneEditText.getText().toString().length() > 20) {
+       if (phoneEditText.getText().toString().length()!=0&&(phoneEditText.getText().toString().length() < 9 || phoneEditText.getText().toString().length() > 20)) {
             // 9 digits for local code, up to 20 poss digits by ITU standards
             phoneEditText.setError("Invalid phone number.");
             validInput = false;
         }
         emailEditText = v.findViewById(R.id.edit_text_email);
-        if (emailEditText.getText().toString().length() == 0) {
-            emailEditText.setError("Required Field.");
-            validInput = false;
-        } else {
+        if (emailEditText.getText().toString().length()!=0) {
             String email_string = emailEditText.getText().toString();
             boolean validEmailFormat = true;
             int emailMiddle = email_string.indexOf('@');
@@ -381,16 +375,13 @@ public class ProfileFragment extends Fragment implements MenuProvider {
      * @param profilePhotoImageView
      */
     public void displayProfilePhoto(ImageView profilePhotoImageView) {
-        if (user.getProfilePhoto() != null) { //display user's profile photo if not null
-            profilePhotoImageView.setImageBitmap(user.getProfilePhoto().getBitmap());
-
-        } else if (user.getLastName()!=null){ //if user does not have a profile photo, generate one
-            ProfilePhoto profilePhoto = new ProfilePhoto(user.getFirstName() + user.getLastName(),
+        if (user.getProfilePhoto() == null || user.getProfilePhoto().getBitmap() == null) {//if user does not have a profile photo, generate one
+            ProfilePhoto profilePhoto = new ProfilePhoto(user.getUserId(),
                     null, user.getFirstName(), user.getLastName());
             profilePhoto.autoGenerate();
             user.setProfilePhoto(profilePhoto);
             user.setPhotoIsDefault(true);
-            profilePhotoImageView.setImageBitmap(profilePhoto.getBitmap());
         }
+        profilePhotoImageView.setImageBitmap(user.getProfilePhoto().getBitmap());
     }
 }
