@@ -79,10 +79,11 @@ public class UploadPhotoActivity extends AppCompatActivity {
                     MainActivity.user.setPhotoIsDefault(false);
                     MainActivity.updateNavigationDrawerHeader();
                 } else {
+                    /*Intent i = new
                     event.getPoster().setBitmap(photoUpload);
                     event.setPosterIsDefault(false);
-                    data.putExtra("imageUpload", event.getPoster().getPhotoDataFromBitmap());
-                    setResult(RESULT_OK,data);
+                    data.putExtra("imageUpload", event.getPoster().getPhotoDataFromBitmap());*/
+                    setResult(RESULT_OK);
                 }
                 finish();
             } catch (IOException e) {

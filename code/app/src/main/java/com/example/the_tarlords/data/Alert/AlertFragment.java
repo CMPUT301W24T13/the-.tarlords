@@ -51,7 +51,6 @@ public class AlertFragment extends Fragment implements AddAlertDialogListener,Me
     private ArrayList<Alert> alertList = new ArrayList<>();
     private Notification notification = new Notification();
     public AlertFragment(ArrayList<Alert> alertDataList){
-        //Collections.sort(alertList);
         this.alertList = alertDataList;
     }
     public AlertFragment() {

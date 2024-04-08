@@ -9,8 +9,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -416,10 +418,9 @@ public class EventEditFragment extends Fragment implements MenuProvider {
 
             //set clickability of views and edit texts
             setTextViewsClickablity(false);
-
+            if(validateInput()){
             //save changes to event details
-            if (menuItem.getItemId() == R.id.saveOptionsMenu) {
-                if (validateInput()) {
+                if (menuItem.getItemId() == R.id.saveOptionsMenu) {
 
                     // Update the event details
                     event.setName(eventNameEditText.getText().toString());
@@ -547,8 +548,16 @@ public class EventEditFragment extends Fragment implements MenuProvider {
             Bitmap capturedPhoto = event.getPoster().getBitmap();
             if (requestCode==1000) {
                 capturedPhoto = (Bitmap) (data.getExtras().get("data"));
+                event.setPoster(new EventPoster(event.getId(),capturedPhoto,event));
             } else if (requestCode == 1001){
-                event.setPosterData(data.getStringExtra("imageUpload"));
+                Bitmap photoUpload;
+                Uri uploadPath = data.getData();
+
+                try {
+                    photoUpload = MediaStore.Images.Media.getBitmap(requireActivity().getContentResolver(), uploadPath);
+                    event.setPoster(new EventPoster(event.getId(),photoUpload,event));
+
+                } catch (Exception e){}
             }
             //event.getPoster().setBitmap(capturedPhoto);
             event.setPosterIsDefault(false);
