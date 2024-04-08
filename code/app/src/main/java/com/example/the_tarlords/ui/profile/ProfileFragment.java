@@ -264,6 +264,9 @@ public class ProfileFragment extends Fragment implements MenuProvider {
                     phoneEditText.setEnabled(false);
                     emailEditText.setEnabled(false);
                     user.setEmail(emailEditText.getText().toString());
+                    user.setFirstName(firstNameEditText.getText().toString());
+                    user.setLastName(lastNameEditText.getText().toString());
+                    user.setPhoneNum(phoneEditText.getText().toString());
 
 
                     displayProfilePhoto(profilePhotoImageView);
