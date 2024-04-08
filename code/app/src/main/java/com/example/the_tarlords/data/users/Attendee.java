@@ -12,7 +12,7 @@ import java.io.IOException;
 public class Attendee extends User{
     private Event event;
     private Integer checkInCount;
-    private boolean checkInStatus;
+    private Boolean checkInStatus;
     public Attendee(String userId, String firstName, String lastName, String phoneNum, String email, Event event) throws IOException {
         super(userId, firstName, lastName, phoneNum, email);
         this.event = event;
@@ -33,6 +33,6 @@ public class Attendee extends User{
     }
 
     public Boolean getCheckInStatus() { return checkInStatus; }
-    public void setCheckInStatus(boolean checkInStatus) { this.checkInStatus = checkInStatus; }
+    public void setCheckInStatus(Boolean checkInStatus) { this.checkInStatus = checkInStatus; }
 
 }
