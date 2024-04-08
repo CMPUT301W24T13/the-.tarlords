@@ -32,9 +32,9 @@ public class ProfilePhoto extends Photo {
         String firstInitial = "";
         String lastInitial = "";
         //get profile info - using initials for photo
-        if (photoFirstName != null&&photoFirstName.length()==0) {
+        if (photoFirstName != null&&photoFirstName.length()!=0) {
             firstInitial = photoFirstName.substring(0, 1);
-        } if (photoLastName != null&&photoLastName.length()==0) {
+        } if (photoLastName != null&&photoLastName.length()!=0) {
             lastInitial = photoLastName.substring(0,1);
         }
         String initials = firstInitial + lastInitial;

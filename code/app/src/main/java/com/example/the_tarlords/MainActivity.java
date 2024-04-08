@@ -103,15 +103,31 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {
                             if (task.getResult().exists()) {
+                                Log.d("Get user", "User doc found");
                                 user = task.getResult().toObject(User.class);
-                                isAdmin = user.getIsAdmin();
+                                if (user == null) {
+                                    user = new User();
+                                    user.setUserId(userId);
+                                    user.setIsAdmin(false);
+                                    user.sendToFireStore();
+                                } else {
+                                    isAdmin = user.getIsAdmin();
+                                }
                             } else {
                                 user = new User();
                                 user.setUserId(userId);
                                 user.setIsAdmin(false);
+                                ProfilePhoto profilePhoto = new ProfilePhoto(userId, null, null, null);
+                                profilePhoto.autoGenerate();
+                                user.setProfilePhoto(profilePhoto);
+                                user.setFirstName("");
+                                user.setPhoneNum("");
+                                user.setEmail("");
+                                user.setLastName("");
+                                user.setPhotoIsDefault(true);
                                 user.sendToFireStore();
+                                Log.d("Get user", "New user created");
                             }
-
                             //sets content binding now that userId is no longer null (must stay above updateNavigationDrawerHeader()
                             setBinding();
 
@@ -123,9 +139,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                             //request location permissions
                             locationHelper = new LocationHelper(MainActivity.this);
-                            if(!locationHelper.checkLocationPermission()){
+                            if (!locationHelper.checkLocationPermission()) {
                                 locationHelper.requestLocationPermission();
-                            }else{
+                            } else {
                                 locationGranted = true;
                             }
 
@@ -135,11 +151,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 //opens event detail fragment of scanned event
                                 navigateToEventDetailsFragment(event);
                             }
+
+
                         } else {
-                            Log.d("Get user","Error fetching user: "+userId+" from Firestore");
+                            Log.d("Get user", "Error fetching user: " + userId + " from Firestore");
+
                         }
                     }
-                });
+            });
     }
 
     /**
@@ -220,9 +239,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             TextView email = hView.findViewById(R.id.email);
             ImageView profilePic = hView.findViewById(R.id.profilePic);
 
-            if (user.getFirstName()==null&& user.getLastName()==null){
+            if (user.getFirstName().isEmpty()&& user.getLastName().isEmpty()){
                 name.setText("user@"+userId);
-            } else if (user.getFirstName()==null||user.getLastName()==null){
+            } else if (user.getFirstName().isEmpty()||user.getLastName().isEmpty()){
                 name.setText(user.getFirstName() + " " + user.getLastName());
             } else {
                 name.setText(user.getFirstName()+" "+user.getLastName());
