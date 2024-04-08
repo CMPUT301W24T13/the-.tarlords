@@ -70,8 +70,8 @@ public class AddAlertFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_add_alert, null);
-        EditText editTitle = view.findViewById(R.id.edit_text_alert_title);
-        EditText editMessage = view.findViewById(R.id.edit_text_alert_message);
+        EditText editTitle = view.findViewById(R.id.et_add_alert_title);
+        EditText editMessage = view.findViewById(R.id.et_add_alert_message);
 
         editTitle.setText(titleTemp);
         editMessage.setText(messageTemp);

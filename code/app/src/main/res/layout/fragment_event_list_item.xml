@@ -9,8 +9,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginVertical="5dp"
         app:cardBackgroundColor="@color/cold_grey_light"
         app:cardCornerRadius="15dp"
         app:cardElevation="10dp"
@@ -31,6 +30,7 @@
                 android:src="@drawable/ic_menu_gallery"
                 android:adjustViewBounds="true"
                 android:scaleType="centerCrop"
+                android:layout_marginBottom="5dp"
 
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -38,9 +38,9 @@
 
             <TextView
                 android:id="@+id/tv_eventList_title"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="15dp"
 
                 android:text="@string/event_name"
@@ -57,8 +57,8 @@
                 android:id="@+id/tv_eventList_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginBottom="15dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginVertical="5dp"
 
                 android:text="@string/location"
                 android:fontFamily="@font/helvetica"
@@ -66,15 +66,16 @@
                 android:textSize="18sp"
 
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_eventList_title" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_eventList_title"
+                app:layout_constraintBottom_toTopOf="@id/tv_eventList_start_date"
+                app:drawableStartCompat="@drawable/map" />
 
             <TextView
                 android:id="@+id/tv_eventList_start_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
-                android:layout_marginBottom="15dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginVertical="5dp"
 
                 android:text="@string/start_date"
                 android:fontFamily="@font/helvetica_oblique"
@@ -83,7 +84,8 @@
 
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_eventList_title"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:drawableStartCompat="@drawable/events" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>

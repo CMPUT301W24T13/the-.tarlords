@@ -43,9 +43,9 @@ public class AttendanceArrayAdapter extends ArrayAdapter<Attendee> {
             holder.email = view.findViewById(R.id.emailTV);
             holder.phoneNum = view.findViewById(R.id.phoneNumberTV);
             holder.profilePic = view.findViewById(R.id.profile_photo_image_view);
-            holder.checkInStatus = view.findViewById(R.id.cb_checkInStatus);
+            //holder.checkInStatus = view.findViewById(R.id.cb_checkInStatus);
             holder.checkInStatus.setVisibility(view.VISIBLE);
-            holder.checkInCount = view.findViewById(R.id.tv_noCheckIns);
+            holder.checkInCount = view.findViewById(R.id.tv_noOfCheckIns);
             holder.checkInCount.setVisibility(view.VISIBLE);
             view.setTag(holder);
         } else {
