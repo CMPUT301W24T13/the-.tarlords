@@ -37,7 +37,6 @@ public class User implements Profile , Parcelable {
     private String phoneNum;
     private String email;
     private CollectionReference usersRef = MainActivity.db.collection("Users");
-
     private String fCMToken;
     private Boolean isAdmin;
     private Boolean photoIsDefault;
@@ -165,9 +164,9 @@ public class User implements Profile , Parcelable {
         docData.put("email", email);
         docData.put("phoneNum", phoneNum);
         docData.put("FCM",fCMToken);
-        docData.put("profilePhotoData", profilePhoto.getPhotoDataFromBitmap()); //stores profile photo data as base 64 string
         docData.put("photoIsDefault", photoIsDefault);
         docData.put("isAdmin", isAdmin);
+        docData.put("profilePhotoData", profilePhoto.getPhotoDataFromBitmap()); //stores profile photo data as base 64 string
         usersRef.document(userId).set(docData)
                 .addOnSuccessListener(aVoid -> {
                     // Document successfully added
