@@ -9,6 +9,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -19,6 +20,7 @@ import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.example.the_tarlords.BuildConfig;
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.R;
 import com.example.the_tarlords.data.QR.QRScanActivity;
@@ -58,6 +60,7 @@ public class EventOrganizerListFragment extends Fragment implements MenuProvider
         if (getArguments() != null) {
             //parse any args here
         }
+
     }
 
     @Override

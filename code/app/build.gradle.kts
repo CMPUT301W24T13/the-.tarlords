@@ -48,11 +48,14 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
     }
-    packaging {
+    packagingOptions {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            merges += "META-INF/LICENSE.md"
+            merges += "META-INF/LICENSE-notice.md"
         }
     }
+
     secrets {
         // Optionally specify a different file name containing your secrets.
         // The plugin defaults to "local.properties"
@@ -111,11 +114,11 @@ dependencies {
     implementation("androidx.databinding:databinding-runtime:8.3.1")
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.3.2")
+    androidTestImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.3.2")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+
     androidTestImplementation("androidx.test.espresso:espresso-intents:3.5.1")
     androidTestImplementation("androidx.test.espresso:espresso-contrib:3.5.1"){
         exclude(group = "com.google.protobuf", module = "protobuf-lite")
@@ -132,5 +135,22 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:4.12.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
 
+    debugImplementation("androidx.fragment:fragment-testing:1.4.1")
+    debugImplementation("androidx.fragment:fragment-testing:1.1.0-beta01")
+    debugImplementation("androidx.fragment:fragment-ktx:1.1.0-beta01")
+    debugImplementation("androidx.test:core:1.2.0")
+    testImplementation("org.hamcrest:hamcrest:2.2")
+    testImplementation("org.mockito:mockito-core:3.12.4")
+    androidTestImplementation("org.mockito:mockito-android:3.12.4")
+    androidTestImplementation("org.hamcrest:hamcrest:2.2")
+
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
+    androidTestImplementation("androidx.test:runner:1.4.0")
+    androidTestImplementation("androidx.test:rules:1.4.0")
+    androidTestImplementation("androidx.test.ext:junit:1.1.3")
+
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("androidx.test:core:1.4.0")
+    testImplementation("org.robolectric:robolectric:4.6.1")
 
 }

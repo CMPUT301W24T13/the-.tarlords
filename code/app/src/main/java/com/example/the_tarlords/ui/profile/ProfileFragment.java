@@ -45,6 +45,10 @@ public class ProfileFragment extends Fragment implements MenuProvider {
     EditText phoneEditText;
     EditText emailEditText;
     FragmentProfileBinding binding;
+
+    public void setUser(User user) {
+        this.user = user;
+    }
     public ProfileFragment(){
     }
     @Override
