@@ -27,15 +27,17 @@ import java.util.Map;
 
 public class FCMService extends FirebaseMessagingService {
 // https://stackoverflow.com/questions/38451235/how-to-handle-the-firebase-notification-when-app-is-in-foreground
+
+    /**
+     * runs code when a message is received
+     * @param message Remote message that has been received.
+     */
     @Override
     public void onMessageReceived(@NonNull RemoteMessage message) {
         super.onMessageReceived(message);
-        Log.d("msg", "onMessageReceived: " + message.getData().get("message"));
 
         Map<String, String> data = message.getData();
         String eventId = data.get("event");
-        String title = data.get("title");
-        String body = data.get("body");
 
         MainActivity.db.collection("Events").document(eventId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -48,17 +50,18 @@ public class FCMService extends FirebaseMessagingService {
             }
         });
 
-
-
     }
+
+    /**
+     * builds a notification
+     * @param message message recieved from firebase
+     * @param event event object
+     */
     private void notificationBuilder(RemoteMessage message, Event event){
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("event", event);
         if(message.getNotification().getBody().equals("New Announcement")){
             intent.setAction("OPEN_EVENT_DETAILS");
-            //intent.setAction("OPEN_EVENT_DETAILS_ORGANIZER");
-
-
 
         } else if (message.getNotification().getBody().equals("New Milestone")){
             intent.setAction("OPEN_EVENT_DETAILS_ORGANIZER");
