@@ -2,6 +2,7 @@ package com.example.the_tarlords.data.photo;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.util.Base64;
 
 import java.io.ByteArrayOutputStream;
@@ -59,7 +60,11 @@ public class Photo {
         //bitmap from user image file
         //too much increase in quality may result in firebase errors (ie string too long)
         int quality = 100/getPhotoCompressionFactor(bitmap,1);
-        bitmap.compress(Bitmap.CompressFormat.JPEG,quality , baos);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            bitmap.compress(Bitmap.CompressFormat.WEBP_LOSSY,quality , baos);
+        } else {
+            bitmap.compress(Bitmap.CompressFormat.WEBP,quality , baos);
+        }
         byte[] byteArray = baos.toByteArray();
         String photoB64 = Base64.encodeToString(byteArray,0,byteArray.length,Base64.URL_SAFE);
         return photoB64;
@@ -72,11 +77,19 @@ public class Photo {
      * @return
      */
     public int getPhotoCompressionFactor(Bitmap bitmap, int compressionFactor) {
-        if (bitmap.getAllocationByteCount()/compressionFactor >= 10000000){
+        if (bitmap.getAllocationByteCount()/compressionFactor >= 500000){
             return getPhotoCompressionFactor(bitmap, compressionFactor*2);
         } else {
             return  compressionFactor;
         }
+    }
+
+    /**
+     * Compresses photo to better manage fragment transaction size.
+     */
+    public void compressPhoto(){
+        setImageData(getPhotoDataFromBitmap());
+        setBitmapFromPhotoData(imageData);
     }
 
     /**

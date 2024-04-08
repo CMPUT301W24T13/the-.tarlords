@@ -95,13 +95,15 @@ public class EventEditFragment extends Fragment implements MenuProvider {
     private final ActivityResultLauncher<Intent> launcher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
-                if (result.getResultCode() == Activity.RESULT_OK
-                        && result.getData() != null) {
+                if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
                     Uri photoUri = result.getData().getData();
                     try {
                         Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), photoUri);
-                        event.setPoster(new EventPoster(event.getId(),bitmap,event));
+                        EventPoster poster= new EventPoster(event.getId(),bitmap,event);
+                        poster.compressPhoto();
+                        event.setPoster(poster);
                         eventPosterImageView.setImageBitmap(bitmap);
+                        event.setPosterIsDefault(false);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
@@ -139,7 +141,6 @@ public class EventEditFragment extends Fragment implements MenuProvider {
 
     /**
      * Method to set all text and edit views to "Non editable" or "editable"
-     * TODO are the QR codes ever editable?
      */
     private void setTextViewsClickablity(Boolean isEditable) {
         eventPosterImageView.setClickable(isEditable);
@@ -362,6 +363,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
                         //remove current photo:
                         event.getPoster().autoGenerate();
                         event.setPosterIsDefault(true);
+                        eventPosterImageView.setImageBitmap(null);
                         return true;
                     } else {
                         return false;
