@@ -56,15 +56,15 @@
         android:id="@+id/scan_qr_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="15dp"
-        android:layout_marginBottom="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-
+        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="25dp"
         android:contentDescription="@string/qr_scan_fab"
         app:backgroundTint="@color/peach_contrast"
+
         app:fabCustomSize="70dp"
         app:fabSize="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:maxImageSize="35dp"
         app:srcCompat="@drawable/qr_scan" />
 

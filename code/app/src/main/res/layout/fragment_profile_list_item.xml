@@ -12,7 +12,7 @@
         app:cardBackgroundColor="@color/cold_grey_light"
         app:cardCornerRadius="15dp"
         app:cardElevation="3dp"
-        app:contentPadding="15dp"
+        app:contentPadding="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -37,12 +37,12 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
 
-                android:layout_marginStart="25dp"
+                android:layout_marginStart="20dp"
                 android:fontFamily="@font/helvetica_bold"
                 android:text="@string/name"
 
                 android:textAppearance="?attr/textAppearanceListItem"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 app:layout_constraintStart_toEndOf="@+id/profile_photo_image_view"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_chainStyle="spread" />
@@ -54,10 +54,11 @@
 
                 android:fontFamily="@font/helvetica"
                 android:gravity="center_vertical"
+                android:hint="no phone # set"
                 android:text="@string/phone_number"
-                android:textAppearance="?attr/textAppearanceListItem"
 
-                android:textSize="18sp"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="@+id/nameTV"
                 app:layout_constraintTop_toBottomOf="@+id/nameTV" />
 
@@ -68,10 +69,11 @@
 
                 android:fontFamily="@font/helvetica"
                 android:gravity="center_vertical"
+                android:hint="no email set"
                 android:text="@string/email"
-                android:textAppearance="?attr/textAppearanceListItem"
 
-                android:textSize="18sp"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="@id/nameTV"
                 app:layout_constraintTop_toBottomOf="@id/phoneNumberTV" />
 
@@ -79,6 +81,7 @@
                 android:id="@+id/cb_checkInStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:clickable="false"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -89,7 +92,7 @@
                 android:id="@+id/tv_noOfCheckIns"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="25dp"
+                android:layout_marginStart="20dp"
                 android:fontFamily="@font/helvetica"
                 android:gravity="center_vertical"
                 android:text="@string/no_of_check_ins"
