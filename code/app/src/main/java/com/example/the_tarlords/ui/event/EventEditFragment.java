@@ -331,9 +331,6 @@ public class EventEditFragment extends Fragment implements MenuProvider {
                     maxAttendees.setFocusable(true);
                     maxAttendees.setClickable(true);
                     maxAttendees.setVisibility(view.VISIBLE);
-                    if (event.getMaxSignUps()!=null) {
-                        maxAttendees.setText(event.getMaxSignUps().toString());
-                    }
                 } else {
                     maxAttendees.setText("-1"); // Clear the text when the checkbox is unchecked
                     maxAttendees.setVisibility(view.GONE);
@@ -571,14 +568,14 @@ public class EventEditFragment extends Fragment implements MenuProvider {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if ( resultCode==RESULT_OK){
-            Bitmap capturedPhoto = event.getPoster().getBitmap();
+            Bitmap capturedPhoto;
             if (requestCode==1000) {
                 capturedPhoto = (Bitmap) (data.getExtras().get("data"));
                 event.setPoster(new EventPoster(event.getId(),capturedPhoto,event));
                 event.setPosterIsDefault(false);
+                ImageView poster = getView().findViewById(R.id.edit_iv_poster);
+                poster.setImageBitmap(capturedPhoto);
             }
-            ImageView poster = getView().findViewById(R.id.edit_iv_poster);
-            poster.setImageBitmap(capturedPhoto);
 
         }
     }

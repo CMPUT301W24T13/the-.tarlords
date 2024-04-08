@@ -61,7 +61,7 @@ public class AttendanceDBHelper {
                                     DocumentSnapshot userDoc = task.getResult();
                                     Attendee attendee = userDoc.toObject(Attendee.class);
                                     attendee.setCheckInStatus(attendeeDoc.getBoolean("checkedInStatus"));
-                                    attendee.setCheckInCount(Integer.valueOf(attendeeDoc.get("checkInCount").toString()));
+                                    attendee.setCheckInCount(Integer.valueOf(attendeeDoc.get("checkIns").toString()));
 
                                     attendees.add(attendee);
                                     Log.d("attendance query", attendees.toString());

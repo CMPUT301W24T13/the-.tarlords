@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     app:layoutManager="LinearLayoutManager"
     tools:context=".ui.attendance_page.AttendanceFragment"
-    tools:listitem="@layout/fragment_attendance_list_item">
+    tools:listitem="@layout/fragment_profile_list_item">
 
     <TextView
         android:id="@+id/tv_attendance_page_header"
@@ -16,13 +16,12 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="25dp"
         android:layout_marginTop="15dp"
-        android:layout_marginBottom="5dp"
 
-        android:text="@string/attendees"
         android:fontFamily="@font/helvetica_bold"
+        android:text="@string/attendance"
         android:textSize="30sp"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -55,8 +54,10 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="10dp"
         android:layout_marginVertical="5dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:divider="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_max="165dp"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_milestones_empty"
         tools:listitem="@layout/content_milestone" />
 
@@ -81,18 +82,18 @@
         android:id="@+id/attendee_checkin_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="25dp"
         android:layout_marginVertical="5dp"
+        android:layout_marginEnd="25dp"
 
         android:fontFamily="@font/helvetica"
         android:text="Check Ins: "
         android:textColor="@color/bordeaux_medium"
-        android:textSize="16sp"
+        android:textSize="18sp"
 
-        app:layout_constraintTop_toBottomOf="@+id/milestone_list_view"
         app:layout_constraintBottom_toTopOf="@+id/attendanceListView"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/attendee_signup_count"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/milestone_list_view" />
 
     <ListView
         android:id="@+id/attendanceListView"
@@ -101,6 +102,7 @@
         android:layout_marginHorizontal="10dp"
         android:layout_marginVertical="5dp"
 
+        android:divider="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

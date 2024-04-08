@@ -102,7 +102,8 @@ public class AttendanceFragment extends Fragment implements MenuProvider {
         totalCount = view.findViewById(R.id.attendee_signup_count);
         checkInCount = view.findViewById(R.id.attendee_checkin_count);
 
-
+        totalCount.setText("Signed Up: "+event.getSignUps());
+        checkInCount.setText("Checked In: "+event.getCheckIns());
         attendanceRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot querySnapshots, @Nullable FirebaseFirestoreException error) {
@@ -147,15 +148,15 @@ public class AttendanceFragment extends Fragment implements MenuProvider {
                 if (attendanceListAdapter.getItemCount() == 0) {
                     signUps = "Signed Up: 0";
                 } else {
-                    signUps = "Signed Up: " + attendanceListAdapter.getItemCount();
+                    signUps = "Signed Up: " + Integer.valueOf(attendanceListAdapter.getItemCount()).toString();
                 }
                 if (attendanceListAdapter.getCheckInCount() == 0) {
                     checkIns = "Checked In: 0";
                 } else {
-                    checkIns = "Checked In: ";
+                    checkIns = "Checked In: "+Integer.valueOf(attendanceListAdapter.getCheckInCount()).toString();
                 }
-                totalCount.setText(signUps);
-                checkInCount.setText(checkIns);
+                totalCount.setText("Signed Up: "+attendanceListAdapter.getItemCount());
+                checkInCount.setText("Checked In: "+Integer.valueOf(attendanceListAdapter.getItemCount()));
             }
         });
 

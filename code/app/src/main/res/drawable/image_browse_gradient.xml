@@ -8,9 +8,9 @@
     <gradient
         android:type="linear"
         android:angle="90"
-        android:centerY="0.75"
+        android:centerY="0.60"
         android:startColor="@color/cold_grey_light"
-        android:centerColor="#9FEAE8ED"
-        android:endColor="@color/zxing_transparent" />
+        android:centerColor="#CFEAE8ED"
+        android:endColor="#0FEAE8ED" />
 
 </shape>

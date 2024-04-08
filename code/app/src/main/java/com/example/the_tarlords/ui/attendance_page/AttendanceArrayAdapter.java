@@ -43,7 +43,7 @@ public class AttendanceArrayAdapter extends ArrayAdapter<Attendee> {
             holder.email = view.findViewById(R.id.emailTV);
             holder.phoneNum = view.findViewById(R.id.phoneNumberTV);
             holder.profilePic = view.findViewById(R.id.profile_photo_image_view);
-            //holder.checkInStatus = view.findViewById(R.id.cb_checkInStatus);
+            holder.checkInStatus = view.findViewById(R.id.cb_checkInStatus);
             holder.checkInStatus.setVisibility(view.VISIBLE);
             holder.checkInCount = view.findViewById(R.id.tv_noOfCheckIns);
             holder.checkInCount.setVisibility(view.VISIBLE);
@@ -58,7 +58,7 @@ public class AttendanceArrayAdapter extends ArrayAdapter<Attendee> {
         holder.email.setText(attendee.getEmail());
         holder.phoneNum.setText(attendee.getPhoneNum());
         holder.checkInStatus.setChecked(attendee.getCheckInStatus());
-        holder.checkInCount.setText(attendee.getCheckInCount());
+        holder.checkInCount.setText(attendee.getCheckInCount()+" check ins");
         if (attendee.getProfilePhoto()!=null) {
             holder.profilePic.setImageBitmap(attendee.getProfilePhoto().getBitmap());
         }

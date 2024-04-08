@@ -42,15 +42,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
         android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
-        android:paddingBottom="100dp"
+        android:layout_marginEnd="10dp"
+        android:divider="@color/white"
 
-        tools:listitem="@layout/fragment_event_list_item"
-        app:layout_constraintStart_toStartOf="parent"
+        android:paddingBottom="100dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_event_list_subheader" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_event_list_subheader"
+        tools:listitem="@layout/fragment_event_list_item" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/scan_qr_button"
