@@ -3,6 +3,7 @@ package com.example.the_tarlords.ui.event;
 import static android.app.Activity.RESULT_OK;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
@@ -30,6 +31,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
@@ -43,10 +46,10 @@ import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.photo.EventPoster;
 import com.example.the_tarlords.databinding.FragmentEventEditBinding;
 import com.example.the_tarlords.ui.profile.TakePhotoActivity;
-import com.example.the_tarlords.ui.profile.UploadPhotoActivity;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.io.IOException;
 import java.time.MonthDay;
 import java.time.Year;
 import java.time.YearMonth;
@@ -68,6 +71,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
     private static Event event;
     // The views that the fragment will inflate
     private ImageView eventPosterImageView;
+    private TextView eventUploadPosterTextView;
     private EditText eventNameEditText;
     private EditText eventAdditionalInfo;
     private TextView eventStartDateTextView;
@@ -89,7 +93,26 @@ public class EventEditFragment extends Fragment implements MenuProvider {
     private ArrayList<String> eventsForReuse;
     private static CollectionReference QRRef = MainActivity.db.collection("QRCodes");
     private static CollectionReference EventsRef = MainActivity.db.collection("Events");
+    private final ActivityResultLauncher<Intent> launcher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                    Uri photoUri = result.getData().getData();
+                    try {
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), photoUri);
+                        EventPoster poster= new EventPoster(event.getId(),bitmap,event);
+                        poster.compressPhoto();
+                        event.setPoster(poster);
+                        eventPosterImageView.setImageBitmap(bitmap);
+                        event.setPosterIsDefault(false);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
 
+                }
+            }
+
+    );
 
     public EventEditFragment() {
         // Required empty public constructor
@@ -119,10 +142,10 @@ public class EventEditFragment extends Fragment implements MenuProvider {
 
     /**
      * Method to set all text and edit views to "Non editable" or "editable"
-     * TODO are the QR codes ever editable?
      */
     private void setTextViewsClickablity(Boolean isEditable) {
         eventPosterImageView.setClickable(isEditable);
+        eventUploadPosterTextView.setVisibility(View.VISIBLE);
         eventNameEditText.setEnabled(isEditable);
         eventStartDateTextView.setClickable(isEditable);
         eventEndDateTextView.setClickable(isEditable);
@@ -261,6 +284,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
 
         //Event id is a textview because user should not be able to edit it, assigned when event object created
         eventPosterImageView = view.findViewById(R.id.edit_iv_poster);
+        eventUploadPosterTextView = view.findViewById(R.id.tv_event_add_poster);
         eventNameEditText = view.findViewById(R.id.et_event_name);
         eventStartDateTextView = view.findViewById(R.id.tv_edit_event_startDate);
         eventEndDateTextView = view.findViewById(R.id.tv_edit_event_endDate);
@@ -278,6 +302,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
         //check event is not null
         if (event != null) {
             // Populate UI elements with event details
+            eventUploadPosterTextView.setVisibility(View.VISIBLE);
             eventNameEditText.setText(event.getName());
             eventLocationEditText.setText(event.getLocation());
             eventStartTimeTextView.setText(event.getStartTime());
@@ -335,14 +360,14 @@ public class EventEditFragment extends Fragment implements MenuProvider {
                         return true;
                     } else if (item.getItemId() == R.id.gallery_open) {
                         //upload photo
-                        Intent eventPosterUpload = new Intent(getActivity(), UploadPhotoActivity.class);
-                        eventPosterUpload.putExtra("event", event);
-                        startActivityForResult(eventPosterUpload,1001);
+                        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        launcher.launch(intent);
                         return true;
                     } else if (item.getItemId() == R.id.remove_current_photo) {
                         //remove current photo:
                         event.getPoster().autoGenerate();
                         event.setPosterIsDefault(true);
+                        eventPosterImageView.setImageBitmap(null);
                         return true;
                     } else {
                         return false;
@@ -417,6 +442,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
         if (menuItem.getItemId() == R.id.saveOptionsMenu || menuItem.getItemId() == R.id.cancelOptionsMenu) {
 
             //set clickability of views and edit texts
+            eventUploadPosterTextView.setVisibility(View.INVISIBLE);
             setTextViewsClickablity(false);
             if(validateInput()){
             //save changes to event details
@@ -524,7 +550,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
             validInput = false;
         } if (eventEndDateTextView.getText().toString().length() == 0) {
             eventEndDateTextView.setText(eventStartDateTextView.getText().toString());
-        }if (DateHelper.getTimestamp(eventStartDateTextView.getText().toString()) > DateHelper.getTimestamp(eventEndDateTextView.getText().toString())) {
+        }else if (DateHelper.getTimestamp(eventStartDateTextView.getText().toString()) > DateHelper.getTimestamp(eventEndDateTextView.getText().toString())) {
             eventEndDateTextView.setError("Invalid Date.");
             validInput = false;
         } if (eventStartTimeTextView.getText().toString().length() == 0) {
@@ -540,7 +566,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
         }
         return validInput;
     }
-    //TODO: not working
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -549,18 +575,8 @@ public class EventEditFragment extends Fragment implements MenuProvider {
             if (requestCode==1000) {
                 capturedPhoto = (Bitmap) (data.getExtras().get("data"));
                 event.setPoster(new EventPoster(event.getId(),capturedPhoto,event));
-            } else if (requestCode == 1001){
-                Bitmap photoUpload;
-                Uri uploadPath = data.getData();
-
-                try {
-                    photoUpload = MediaStore.Images.Media.getBitmap(requireActivity().getContentResolver(), uploadPath);
-                    event.setPoster(new EventPoster(event.getId(),photoUpload,event));
-
-                } catch (Exception e){}
+                event.setPosterIsDefault(false);
             }
-            //event.getPoster().setBitmap(capturedPhoto);
-            event.setPosterIsDefault(false);
             ImageView poster = getView().findViewById(R.id.edit_iv_poster);
             poster.setImageBitmap(capturedPhoto);
 

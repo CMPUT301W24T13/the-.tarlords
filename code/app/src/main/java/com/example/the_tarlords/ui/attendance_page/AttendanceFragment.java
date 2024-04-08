@@ -142,8 +142,20 @@ public class AttendanceFragment extends Fragment implements MenuProvider {
                 attendees.clear();
                 attendees.addAll(attendanceList);
                 attendanceListAdapter.notifyDataSetChanged();
-                totalCount.setText("Total: " + attendanceListAdapter.getItemCount());
-                checkInCount.setText("Checked In: " + attendanceListAdapter.getCheckInCount());
+                String signUps;
+                String checkIns;
+                if (attendanceListAdapter.getItemCount() == 0) {
+                    signUps = "Signed Up: 0";
+                } else {
+                    signUps = "Signed Up: " + attendanceListAdapter.getItemCount();
+                }
+                if (attendanceListAdapter.getCheckInCount() == 0) {
+                    checkIns = "Checked In: 0";
+                } else {
+                    checkIns = "Checked In: ";
+                }
+                totalCount.setText(signUps);
+                checkInCount.setText(checkIns);
             }
         });
 
@@ -157,8 +169,15 @@ public class AttendanceFragment extends Fragment implements MenuProvider {
         milestoneList = helper.getMilestoneList(new AlertCallback() {
             @Override
             public void onAlertsLoaded(ArrayList<Alert> alertList) {
+                TextView milestonesEmptyTV = getView().findViewById(R.id.tv_milestones_empty);
                 ListView milestoneListView = getView().findViewById(R.id.milestone_list_view);
                 milestoneListAdapter = new AlertListAdapter(requireContext(),milestoneList,1);
+                if (milestoneList.isEmpty()) {
+                    milestonesEmptyTV.setText(getResources().getString(R.string.no_milestones_label));
+                } else {
+                    milestonesEmptyTV.setText("");
+                    milestonesEmptyTV.setHeight(1);
+                }
                 milestoneListView.setAdapter(milestoneListAdapter);
                 milestoneListAdapter.notifyDataSetChanged();
             }

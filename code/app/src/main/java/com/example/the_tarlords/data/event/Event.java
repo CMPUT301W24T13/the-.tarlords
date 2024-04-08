@@ -279,6 +279,13 @@ public class Event implements Parcelable {
         //add additional fields as necessary
         //additional fields must be added to the Event(Parcelable) constructor
         //all fields must be in the same order as the Event(Parcelable) constructor
+        if (signUps==null){
+            signUps=0;
+        } if (checkIns==null){
+            checkIns=0;
+        } if (maxSignUps==null){
+            maxSignUps=0;
+        }
         dest.writeString(name);
         dest.writeString(location);
         dest.writeString(id);
@@ -333,7 +340,6 @@ public class Event implements Parcelable {
         docData.put("posterData",poster.getPhotoDataFromBitmap());
         docData.put("posterIsDefault", posterIsDefault);
         docData.put("additionalInfo", additionalInfo);
-        docData.put("posterData",poster.getPhotoDataFromBitmap());
 
         eventsRef.document(id).set(docData)
                 .addOnSuccessListener(aVoid -> {
