@@ -109,6 +109,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 user = new User();
                                 user.setUserId(userId);
                                 user.setIsAdmin(false);
+                                user.sendToFireStore();
                             }
 
                             //sets content binding now that userId is no longer null (must stay above updateNavigationDrawerHeader()
@@ -219,10 +220,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             TextView email = hView.findViewById(R.id.email);
             ImageView profilePic = hView.findViewById(R.id.profilePic);
 
-            if ((user.getFirstName()==null ||user.getFirstName().length()==0)&& (user.getLastName()==null||user.getLastName().length()==0)){
+            if (user.getFirstName()==null&& user.getLastName()==null){
                 name.setText("user@"+userId);
-            } else if ((user.getFirstName()==null ||user.getFirstName().length()==0)||(user.getLastName()==null||user.getLastName().length()==0)){
+            } else if (user.getFirstName()==null||user.getLastName()==null){
                 name.setText(user.getFirstName() + " " + user.getLastName());
+            } else {
+                name.setText(user.getFirstName()+" "+user.getLastName());
             }
             phoneNum.setText(user.getPhoneNum());
             email.setText(user.getEmail());
