@@ -1,6 +1,7 @@
 package com.example.the_tarlords.ui.profile;
 
-import static java.lang.Character.isAlphabetic;
+import static androidx.core.content.PermissionChecker.checkSelfPermission;
+import static com.example.the_tarlords.MainActivity.context;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -27,6 +28,8 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.PermissionChecker;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
@@ -48,6 +51,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class ProfileFragment extends Fragment implements MenuProvider {
     private User user;
     CircleImageView profilePhotoImageView;
+    private static final int REQUEST_GALLERY_PERMISSION = 1;
     Button addProfilePhotoButton;
     EditText firstNameEditText;
     EditText lastNameEditText;
@@ -144,9 +148,13 @@ public class ProfileFragment extends Fragment implements MenuProvider {
                         startActivity(profilePhotoCapture);
                         return true;
                     } else if (item.getItemId() == R.id.gallery_open) {
-                        //upload photo
-                        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                        launcher.launch(intent);
+                        if (checkSelfPermission(getContext(),android.Manifest.permission.READ_MEDIA_IMAGES) != PermissionChecker.PERMISSION_GRANTED ) {
+                            ActivityCompat.requestPermissions((Activity) context, new String[]{android.Manifest.permission.READ_MEDIA_IMAGES}, REQUEST_GALLERY_PERMISSION);
+                        } else {
+                            //upload photo
+                            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                            launcher.launch(intent);
+                        }
                         return true;
                     } else if (item.getItemId() == R.id.remove_current_photo) {
                         //remove current photo:
@@ -256,10 +264,23 @@ public class ProfileFragment extends Fragment implements MenuProvider {
                     phoneEditText.setEnabled(false);
                     emailEditText.setEnabled(false);
                 }
-                user.setFirstName(firstNameEditText.getText().toString());
-                user.setLastName(lastNameEditText.getText().toString());
-                user.setPhoneNum(phoneEditText.getText().toString());
-                user.setEmail(emailEditText.getText().toString());
+                if (firstNameEditText.getText().toString().length()!=0) {
+                    user.setFirstName(firstNameEditText.getText().toString());
+                } else {
+                    user.setFirstName(null);
+                } if (lastNameEditText.getText().toString().length()!=0) {
+                    user.setLastName(lastNameEditText.getText().toString());
+                } else {
+                    user.setLastName(null);
+                } if (phoneEditText.getText().toString().length()!=0) {
+                    user.setPhoneNum(phoneEditText.getText().toString());
+                } else {
+                    user.setPhoneNum(null);
+                } if (emailEditText.getText().toString().length()!=0) {
+                    user.setEmail(emailEditText.getText().toString());
+                } else {
+                    user.setEmail(null);
+                }
 
                 displayProfilePhoto(profilePhotoImageView);
                 MainActivity.user.sendToFireStore();
@@ -329,16 +350,6 @@ public class ProfileFragment extends Fragment implements MenuProvider {
      */
     public boolean checkValidInput(View v) {
         boolean validInput = true;
-        firstNameEditText = v.findViewById(R.id.edit_text_first_name);
-        if (firstNameEditText.getText().toString().length()!=0&&!isAlphabetic(firstNameEditText.getText().toString().charAt(0))) {
-            firstNameEditText.setError("Invalid entry. Name must start with a letter.");
-            validInput = false;
-        }
-        lastNameEditText = v.findViewById(R.id.edit_text_last_name);
-        if (lastNameEditText.getText().toString().length()!=0&&!isAlphabetic(lastNameEditText.getText().toString().charAt(0))) {
-            lastNameEditText.setError("Invalid entry. Name must start with a letter.");
-            validInput = false;
-        }
         phoneEditText = v.findViewById(R.id.edit_text_phone);
        if (phoneEditText.getText().toString().length()!=0&&(phoneEditText.getText().toString().length() < 9 || phoneEditText.getText().toString().length() > 20)) {
             // 9 digits for local code, up to 20 poss digits by ITU standards
