@@ -9,9 +9,13 @@ import androidx.annotation.NonNull;
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.photo.ProfilePhoto;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -162,7 +166,7 @@ public class User implements Profile , Parcelable {
         docData.put("phoneNum", phoneNum);
         docData.put("FCM",fCMToken);
         docData.put("profilePhotoData", profilePhoto.getPhotoDataFromBitmap()); //stores profile photo data as base 64 string
-        docData.put("photoIsDefualt", photoIsDefault);
+        docData.put("photoIsDefault", photoIsDefault);
         docData.put("isAdmin", isAdmin);
         usersRef.document(userId).set(docData)
                 .addOnSuccessListener(aVoid -> {
@@ -201,21 +205,24 @@ public class User implements Profile , Parcelable {
                 });
 
         //delete user's attendance docs
-        attendanceRef.whereEqualTo("user",userId).get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        for (QueryDocumentSnapshot attendeeDoc : queryDocumentSnapshots) {
-                            attendeeDoc.getReference().delete();
-                        }
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d("Firestore", e.getMessage());
-                    }
-                });
+        eventsRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                for (DocumentSnapshot doc : task.getResult()){
+                    DocumentReference attendeeDoc = MainActivity.db.document("Events/"+doc.getId()+"/Attendance/"+userId);
+                    attendeeDoc
+                            .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    if (task.isSuccessful()&&task.getResult().exists()) {
+                                        attendeeDoc.delete();
+                                    }
+                                }
+                            });
+                }
+
+            }
+        });
 
         //delete events created by user
         eventsRef.whereEqualTo("organizerId", userId).get()

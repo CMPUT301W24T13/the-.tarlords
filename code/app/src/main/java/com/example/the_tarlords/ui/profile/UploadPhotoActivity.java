@@ -20,6 +20,7 @@ import androidx.core.content.ContextCompat;
 
 import com.example.the_tarlords.MainActivity;
 import com.example.the_tarlords.data.event.Event;
+import com.example.the_tarlords.data.photo.ProfilePhoto;
 
 import java.io.IOException;
 
@@ -74,13 +75,15 @@ public class UploadPhotoActivity extends AppCompatActivity {
             try {
                 photoUpload = MediaStore.Images.Media.getBitmap(getContentResolver(),uploadPath);
                 if (event == null) {
-                    MainActivity.user.getProfilePhoto().setBitmap(photoUpload);
+                    MainActivity.user.setProfilePhoto(new ProfilePhoto(MainActivity.user.getUserId(),photoUpload));
                     MainActivity.user.setPhotoIsDefault(false);
                     MainActivity.updateNavigationDrawerHeader();
                 } else {
+                    /*Intent i = new
                     event.getPoster().setBitmap(photoUpload);
                     event.setPosterIsDefault(false);
-                    setResult(RESULT_OK,data);
+                    data.putExtra("imageUpload", event.getPoster().getPhotoDataFromBitmap());*/
+                    setResult(RESULT_OK);
                 }
                 finish();
             } catch (IOException e) {
