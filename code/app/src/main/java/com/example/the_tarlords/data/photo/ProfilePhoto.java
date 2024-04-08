@@ -38,7 +38,7 @@ public class ProfilePhoto extends Photo {
             lastInitial = photoLastName.substring(0,1);
         }
         String initials = firstInitial + lastInitial;
-        if (initials.length()==0){
+        if (initials.length() == 0){
             initials = "\uD83D\uDC64";
         }
 
