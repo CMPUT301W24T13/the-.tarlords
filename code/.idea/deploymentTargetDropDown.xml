@@ -5,6 +5,9 @@
       <entry key="OrganizerTest">
         <State />
       </entry>
+      <entry key="UserStoryTest">
+        <State />
+      </entry>
       <entry key="app">
         <State>
           <targetSelectedWithDropDown>
@@ -21,19 +24,16 @@
           <timeTargetWasSelectedWithDropDown value="2024-03-18T00:24:21.081807400Z" />
         </State>
       </entry>
-      <entry key="testProfilePictureGeneratedFromName()">
+      <entry key="testCreateEventAndGenerateQRCode()">
         <State />
       </entry>
-      <entry key="testSignUpForEvent()">
-        <State />
-      </entry>
-      <entry key="testUS_02_02_02()">
+      <entry key="testUS_02_02_03()">
         <State />
       </entry>
       <entry key="testUS_02_07_01()">
         <State />
       </entry>
-      <entry key="testUploadProfilePicture()">
+      <entry key="testViewSignedUpEvents()">
         <State />
       </entry>
     </value>
