@@ -86,12 +86,12 @@
             android:background="@drawable/rounded_corners_r"
             android:ellipsize="end"
             android:fontFamily="@font/helvetica"
-            android:maxLines="2"
             android:padding="10dp"
             android:textColor="@color/bordeaux_medium"
             android:textColorHint="@color/mauve_medium_light"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_min="100dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_event_detail_additional_info_label" />
 
@@ -100,6 +100,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="25dp"
+
             android:clickable="true"
             android:text="@string/read_more"
             android:fontFamily="@font/helvetica_bold_oblique"
@@ -124,6 +125,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/additional_info" />
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/attendanceConstraint"

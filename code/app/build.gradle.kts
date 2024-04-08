@@ -71,7 +71,7 @@ android {
 }
 
 dependencies {
-    val splashScreenVersion = "1.0.0"
+
     implementation("androidx.fragment:fragment-ktx:1.6.2")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
