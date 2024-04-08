@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
@@ -20,19 +19,18 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.example.the_tarlords.data.Notification.FCMService;
 import com.example.the_tarlords.data.event.Event;
 import com.example.the_tarlords.data.map.LocationHelper;
+import com.example.the_tarlords.data.photo.ProfilePhoto;
 import com.example.the_tarlords.data.users.User;
 import com.example.the_tarlords.databinding.ActivityMainBinding;
-import com.example.the_tarlords.ui.event.EventOrganizerListFragment;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -98,51 +96,37 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             SharedPreferences.Editor editor = preferences.edit();
             editor.putString("user_id", userId);
             editor.apply();
-
-
-            user = new User();
-            user.setUserId(userId);
-            isAdmin = false;
-            setDeviceFCMToken();
-
-            //sets content binding now that userId is no longer null (must stay above updateNavigationDrawerHeader()
-            setBinding();
-
-
-            // Update UI with default user information
-            updateNavigationDrawerHeader();
-
-            // If it's the first launch, navigate to profile fragment to get user info
-            navigateToProfileFragment();
-
-        } else {
-            //user has been here before
-
-            String finalUserId = userId;
-            Log.d("debug", userId);
-
-            //queries firebase for user info associated with the userId
-            usersRef.whereEqualTo("userId", userId).get()
-                    .addOnSuccessListener(querySnapshot -> {
-                        if (!querySnapshot.isEmpty()) {
-                            // User found, documentSnapshot contains user data
-                            DocumentSnapshot documentSnapshot = querySnapshot.getDocuments().get(0);
-
-                            //creates 'user' object from firestore data, now you can use 'user' object
-                            user = documentSnapshot.toObject(User.class);
-
-
-                            // needs to be above the setBinding()
-                            if (user.getIsAdmin() != null){
+        }
+        usersRef.document(userId).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            if (task.getResult().exists()) {
+                                user = task.getResult().toObject(User.class);
                                 isAdmin = user.getIsAdmin();
+                            } else {
+                                user = new User();
+                                user.setUserId(userId);
+                                user.setIsAdmin(false);
                             }
-                            setDeviceFCMToken();
 
                             //sets content binding now that userId is no longer null (must stay above updateNavigationDrawerHeader()
                             setBinding();
 
-                            //updates navigation UI header
+                            // Update UI with default user information
                             updateNavigationDrawerHeader();
+
+                            //setsDeviceFCMToken for notification functionality
+                            setDeviceFCMToken();
+
+                            //request location permissions
+                            locationHelper = new LocationHelper(MainActivity.this);
+                            if(!locationHelper.checkLocationPermission()){
+                                locationHelper.requestLocationPermission();
+                            }else{
+                                locationGranted = true;
+                            }
 
                             //checks if user is returning from QR activity
                             if (getIntent().getParcelableExtra("event") != null) {
@@ -151,34 +135,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 navigateToEventDetailsFragment(event);
                             }
                         } else {
-                            Log.d("debug", "didn't find a user");
-
-                            // This is a case where user has used app on device but user info is not on firebase yet (my case, developer)
-                            user = new User(finalUserId, "khushi", "lad", "780-111-1111", "john.doe@ualberta.ca");
-                            isAdmin = false;
-                            // Update UI with default user information
-                            updateNavigationDrawerHeader();
-
-                            // Navigate to profile fragment
-                            navigateToProfileFragment();
+                            Log.d("Get user","Error fetching user: "+userId+" from Firestore");
                         }
-                    })
-                    .addOnFailureListener(e -> {
-                        // Handle failure
-                        Log.e("debug", "failed to get the document", e);
-                    });
-
-
-
-        }
-        //request location permissions
-        locationHelper = new LocationHelper(this);
-        if(!locationHelper.checkLocationPermission()){
-            locationHelper.requestLocationPermission();
-        }else{
-            locationGranted = true;
-        }
-
+                    }
+                });
     }
 
     /**
@@ -237,14 +197,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     /**
-     * Redirects user to profile fragment.
-     */
-    private void navigateToProfileFragment() {
-        Navigation.findNavController(this, R.id.nav_host_fragment_content_main)
-                .navigate(R.id.action_eventListFragment_to_profileFragment);
-    }
-
-    /**
      * This is the back button stuff.
      * @return true if successful
      */
@@ -267,17 +219,20 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             TextView email = hView.findViewById(R.id.email);
             ImageView profilePic = hView.findViewById(R.id.profilePic);
 
-            name.setText(user.getFirstName() + " " + user.getLastName());
+            if ((user.getFirstName()==null ||user.getFirstName().length()==0)&& (user.getLastName()==null||user.getLastName().length()==0)){
+                name.setText("user@"+userId);
+            } else if ((user.getFirstName()==null ||user.getFirstName().length()==0)||(user.getLastName()==null||user.getLastName().length()==0)){
+                name.setText(user.getFirstName() + " " + user.getLastName());
+            }
             phoneNum.setText(user.getPhoneNum());
             email.setText(user.getEmail());
-            if (user != null && user.getProfilePhoto() != null && user.getProfilePhoto().getBitmap() != null) {
-                Bitmap bitmap = user.getProfilePhoto().getBitmap();
-                profilePic.setImageBitmap(bitmap);
-            } else if (user.getProfilePhotoData() != null) {
-                user.setProfilePhotoFromData(user.getProfilePhotoData());
-                Bitmap bitmap = user.getProfilePhoto().getBitmap();
-                profilePic.setImageBitmap(bitmap);
+             if (user.getProfilePhoto()==null||user.getProfilePhoto().getBitmap()==null) {
+                ProfilePhoto profilePhoto = new ProfilePhoto(userId,null,null,null);
+                profilePhoto.autoGenerate();
+                user.setProfilePhoto(profilePhoto);
+                user.setPhotoIsDefault(true);
             }
+            profilePic.setImageBitmap(user.getProfilePhoto().getBitmap());
 
         } else {
             Log.e("debug", "User object is null");

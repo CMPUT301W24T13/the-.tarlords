@@ -29,10 +29,18 @@ public class ProfilePhoto extends Photo {
     }
 
     public void autoGenerate() {
+        String firstInitial = "";
+        String lastInitial = "";
         //get profile info - using initials for photo
-        String firstInitial = photoFirstName.substring(0,1);
-        String lastInitial = photoLastName.substring(0,1);
+        if (photoFirstName != null&&photoFirstName.length()==0) {
+            firstInitial = photoFirstName.substring(0, 1);
+        } if (photoLastName != null&&photoLastName.length()==0) {
+            lastInitial = photoLastName.substring(0,1);
+        }
         String initials = firstInitial + lastInitial;
+        if (initials.length()==0){
+            initials = "\uD83D\uDC64";
+        }
 
         Bitmap bitmap = Bitmap.createBitmap(400, 400, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
