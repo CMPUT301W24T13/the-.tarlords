@@ -12,47 +12,47 @@
 
         app:cardBackgroundColor="@color/cold_grey_light"
         app:cardCornerRadius="15dp"
-        app:cardElevation="10dp"
+        app:cardElevation="3dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" >
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/iv_image_browse_item"
-            android:layout_height="match_parent"
             android:layout_width="match_parent"
-            android:src="@drawable/ic_menu_gallery"
+            android:layout_height="match_parent"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
+            android:src="@drawable/ic_menu_gallery"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_browse_event_details"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent">
 
             <ImageView
                 android:id="@+id/iv_image_browse_gradient"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:src="@drawable/image_browse_gradient"
+                android:layout_height="175dp"
                 android:adjustViewBounds="true"
-                android:scaleType="fitStart"
-                app:layout_constraintStart_toStartOf="parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/image_browse_gradient"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
                 android:id="@+id/tv_imageBrowse_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="25dp"
-                android:text="@string/event_name"
                 android:fontFamily="@font/helvetica_bold"
+                android:text="@string/event_name"
                 android:textSize="24sp"
                 app:layout_constraintBottom_toTopOf="@+id/tv_imageBrowse_subtitle"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -62,8 +62,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="25dp"
-                android:text="@string/location"
                 android:fontFamily="@font/helvetica"
+                android:text="@string/location"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toTopOf="@id/tv_imageBrowse_subtext"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -74,8 +74,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="25dp"
                 android:layout_marginBottom="15dp"
-                android:text="@string/date"
                 android:fontFamily="@font/helvetica_oblique"
+                android:text="@string/date"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />

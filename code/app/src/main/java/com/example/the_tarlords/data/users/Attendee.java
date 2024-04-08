@@ -11,7 +11,7 @@ import java.io.IOException;
 
 public class Attendee extends User{
     private Event event;
-    private int checkInCount;
+    private Integer checkInCount;
     private boolean checkInStatus;
     public Attendee(String userId, String firstName, String lastName, String phoneNum, String email, Event event) throws IOException {
         super(userId, firstName, lastName, phoneNum, email);
@@ -21,8 +21,8 @@ public class Attendee extends User{
 
     public Attendee(){}
 
-    public int getCheckInCount(){return checkInCount;}
-    public void setCheckInCount(int checkInCount){
+    public Integer getCheckInCount(){return checkInCount;}
+    public void setCheckInCount(Integer checkInCount){
         this.checkInCount = checkInCount;
     }
     public Event getEvent() {

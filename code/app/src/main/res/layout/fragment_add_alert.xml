@@ -55,20 +55,21 @@
 
         <EditText
             android:id="@+id/et_add_alert_message"
-            android:padding="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
             android:background="@drawable/rounded_corners_r"
+            android:fontFamily="@font/helvetica"
+            android:gravity="top|left"
             android:hint="@string/alert_message_hint"
             android:inputType="textMultiLine"
-            android:fontFamily="@font/helvetica"
-            android:textSize="18sp"
-            android:textColorHint="@color/mauve_medium_light"
+            android:minLines="3"
+            android:padding="10dp"
             android:textColor="@color/bordeaux_medium"
-            app:layout_constraintStart_toStartOf="parent"
+            android:textColorHint="@color/mauve_medium_light"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_add_alert_message_label"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_add_alert_message_label" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

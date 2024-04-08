@@ -37,11 +37,7 @@
     <string name="announcements">Announcements</string>
     <string name="alert_message">Alert Message</string>
     <string name="alert_message_hint">
-        "My alert message"
-        "
-        "
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt"
-        "ut labore et dolore magna aliqua."
+        "New message..."
     </string>
     <string name="alert_title">Alert Title</string>
 

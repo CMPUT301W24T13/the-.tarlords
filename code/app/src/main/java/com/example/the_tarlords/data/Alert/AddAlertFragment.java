@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -77,7 +76,7 @@ public class AddAlertFragment extends DialogFragment {
         editMessage.setText(messageTemp);
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         if (alert == null) {
-            return builder
+             return builder
                     .setView(view)
                     .setTitle("Send Alert")
                     .setNegativeButton("Cancel", null)
