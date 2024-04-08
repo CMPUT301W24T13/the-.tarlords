@@ -1,0 +1,17 @@
+com.example.the_tarlords
+com.example.the_tarlords.data
+com.example.the_tarlords.data.Alert
+com.example.the_tarlords.data.attendance
+com.example.the_tarlords.data.event
+com.example.the_tarlords.data.map
+com.example.the_tarlords.data.Notification
+com.example.the_tarlords.data.photo
+com.example.the_tarlords.data.QR
+com.example.the_tarlords.data.users
+com.example.the_tarlords.ui
+com.example.the_tarlords.ui.attendance_page
+com.example.the_tarlords.ui.event
+com.example.the_tarlords.ui.home
+com.example.the_tarlords.ui.image
+com.example.the_tarlords.ui.image.placeholder
+com.example.the_tarlords.ui.profile

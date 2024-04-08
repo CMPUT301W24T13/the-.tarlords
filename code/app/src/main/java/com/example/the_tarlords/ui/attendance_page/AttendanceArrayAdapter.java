@@ -54,7 +54,13 @@ public class AttendanceArrayAdapter extends ArrayAdapter<Attendee> {
 
         Attendee attendee = attendees.get(position);
         //setting the textviews
-        holder.name.setText(attendee.getFirstName()+" "+attendee.getLastName());
+        if (attendee.getFirstName().isEmpty()&&attendee.getLastName().isEmpty()) {
+            holder.name.setText("user@"+attendee.getUserId());
+        } else if (attendee.getFirstName().isEmpty()||attendee.getLastName().isEmpty()){
+            holder.name.setText(attendee.getFirstName()+attendee.getLastName());
+        } else {
+            holder.name.setText(attendee.getFirstName() + " " + attendee.getLastName());
+        }
         holder.email.setText(attendee.getEmail());
         holder.phoneNum.setText(attendee.getPhoneNum());
         holder.checkInStatus.setChecked(attendee.getCheckInStatus());

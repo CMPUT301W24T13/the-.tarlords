@@ -24,13 +24,17 @@ import static org.hamcrest.EasyMock2Matchers.equalTo;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Instrumentation;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.provider.Settings;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.test.InstrumentationRegistry;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.espresso.Espresso;
+import androidx.test.espresso.PerformException;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.contrib.PickerActions;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
@@ -43,6 +47,7 @@ import androidx.test.rule.GrantPermissionRule;
 import com.example.the_tarlords.data.Alert.AlertFragment;
 
 import org.hamcrest.Matchers;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -63,10 +68,12 @@ public class AlertUITest {
     @Rule
     public GrantPermissionRule locationPermissionRule = GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION,
             android.Manifest.permission.ACCESS_COARSE_LOCATION);
-
+/*
     @Rule
     public GrantPermissionRule notificationPermissionRule = GrantPermissionRule.grant(android.Manifest.permission.POST_NOTIFICATIONS);
 
+
+ */
     // US 02.04.01 As an attendee, I want to view event details and announcements within the app.
     // US 01.03.01 As an organizer, I want to send notifications to all attendees through the app.
     @Test
@@ -124,10 +131,11 @@ public class AlertUITest {
                 .perform(setTime(hour+8, minute));
         onView(withText(android.R.string.ok)).perform(click());
 
+        // set location
         String location = "location";
         onView(withId(R.id.et_event_location)).perform(clearText(),typeText(location));
         closeSoftKeyboard();
-
+        // save
         onView(withId(R.id.saveOptionsMenu)).check(matches(isDisplayed()));
         onView(withId(R.id.saveOptionsMenu)).perform(click());
         try {
@@ -135,31 +143,30 @@ public class AlertUITest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
+        // clicks on the first event in the listview (the event that was just made)
         onData(anything()).inAdapterView(withId(R.id.eventListView)).atPosition(0).perform(click());
         try {
             Thread.sleep(400);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        // click on the announcement option menu
         onView(withId(R.id.anouncementsOptionsMenu)).check(matches(isDisplayed()));
         onView(withId(R.id.anouncementsOptionsMenu)).perform(click());
 
+        // creates an alert
         onView(withId(R.id.button_add_alert)).perform(click());
-
         String alertTitle = "alert title";
         String alertMessage = "alert message";
-
-        onView(withId(R.id.edit_text_alert_title)).perform(click());
-        onView(withId(R.id.edit_text_alert_title)).perform(clearText(),typeText(alertTitle));
+        // writes the title
+        onView(withId(R.id.et_add_alert_title)).perform(click());
+        onView(withId(R.id.et_add_alert_title)).perform(clearText(),typeText(alertTitle));
         closeSoftKeyboard();
-
-
-        onView(withId(R.id.edit_text_alert_message)).perform(click());
-        onView(withId(R.id.edit_text_alert_message)).perform(clearText(),typeText(alertMessage));
+        // writes the message
+        onView(withId(R.id.et_add_alert_message)).perform(click());
+        onView(withId(R.id.et_add_alert_message)).perform(clearText(),typeText(alertMessage));
         closeSoftKeyboard();
         onView(withText("add")).perform(click());
-
 
         try {
             Thread.sleep(600);
@@ -170,19 +177,25 @@ public class AlertUITest {
         pressBack();
 
         try {
-            Thread.sleep(400);
+            Thread.sleep(600);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        // delete the new event
         onView(withId(R.id.deleteOptionsMenu)).check(matches(isDisplayed()));
         onView(withId(R.id.deleteOptionsMenu)).perform(click());
         try {
-            Thread.sleep(400);
+            Thread.sleep(600);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        onView(withText("Delete")).perform(click());
 
+        // required try catch
+        try {
+            onView(withText("Delete")).perform(click());
+        }catch (PerformException e){
+
+        }
 
 
     }

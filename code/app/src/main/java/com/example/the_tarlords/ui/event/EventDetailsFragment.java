@@ -162,8 +162,26 @@ public class EventDetailsFragment extends Fragment implements MenuProvider {
                 eventMaxAttendees.setText("Max Capacity: "+event.getMaxSignUps());
             }
 
-            signUps.setText("  "+event.getSignUps()+" Sign Ups");
-            checkIns.setText("  "+event.getCheckIns()+" Check Ins");
+            AttendanceDBHelper.getCheckInCount(event, new AttendanceQueryCallback() {
+                @Override
+                public void onQueryComplete(int result) {
+                    if ((Integer)result==null){
+                        result =0;
+                    }
+                    checkIns.setText("  "+result+" Check Ins");
+                }
+            });
+            AttendanceDBHelper.getSignUpCount(event, new AttendanceQueryCallback() {
+                @Override
+                public void onQueryComplete(int result) {
+                    if (Integer.valueOf(result)==null){
+                        result =0;
+                    }
+                    signUps.setText("  "+Integer.valueOf(result)+" Sign Ups");
+                }
+            });
+            /*signUps.setText("  "+event.getSignUps()+" Sign Ups");
+            checkIns.setText("  "+event.getCheckIns()+" Check Ins");*/
 
             // set additional fields here as desired
 
