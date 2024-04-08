@@ -48,7 +48,7 @@ public class User implements Profile , Parcelable {
      */
     public User() {
     }
-    //TODO : automatically sets isAdmin to false in constructor, should we have a constructor that allows us to choose, or we changing in firebase directly?
+
     public User(String userId, String firstName, String lastName, String phoneNum, String email) {
         this.userId = userId;
         this.firstName = firstName;
