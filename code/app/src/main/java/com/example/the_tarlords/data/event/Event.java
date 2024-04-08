@@ -25,7 +25,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -339,11 +338,10 @@ public class Event implements Parcelable {
         docData.put("signUps", signUps);
         docData.put("checkIns", checkIns);
         docData.put("qrCode",qrCode);
-        docData.put("posterData",poster.getPhotoDataFromBitmap());
         docData.put("posterIsDefault", posterIsDefault);
         docData.put("additionalInfo", additionalInfo);
-
         docData.put("timestamp", DateHelper.getTimestamp(startDate));
+        docData.put("posterData",poster.getPhotoDataFromBitmap());
         eventsRef.document(id).set(docData)
                 .addOnSuccessListener(aVoid -> {
                     // Document successfully added
