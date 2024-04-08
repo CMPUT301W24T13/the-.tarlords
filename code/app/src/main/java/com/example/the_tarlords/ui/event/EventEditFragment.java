@@ -68,6 +68,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
     private static Event event;
     // The views that the fragment will inflate
     private ImageView eventPosterImageView;
+    private TextView eventUploadPosterTextView;
     private EditText eventNameEditText;
     private EditText eventAdditionalInfo;
     private TextView eventStartDateTextView;
@@ -123,6 +124,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
      */
     private void setTextViewsClickablity(Boolean isEditable) {
         eventPosterImageView.setClickable(isEditable);
+        eventUploadPosterTextView.setVisibility(View.VISIBLE);
         eventNameEditText.setEnabled(isEditable);
         eventStartDateTextView.setClickable(isEditable);
         eventEndDateTextView.setClickable(isEditable);
@@ -261,6 +263,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
 
         //Event id is a textview because user should not be able to edit it, assigned when event object created
         eventPosterImageView = view.findViewById(R.id.edit_iv_poster);
+        eventUploadPosterTextView = view.findViewById(R.id.tv_event_add_poster);
         eventNameEditText = view.findViewById(R.id.et_event_name);
         eventStartDateTextView = view.findViewById(R.id.tv_edit_event_startDate);
         eventEndDateTextView = view.findViewById(R.id.tv_edit_event_endDate);
@@ -278,6 +281,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
         //check event is not null
         if (event != null) {
             // Populate UI elements with event details
+            eventUploadPosterTextView.setVisibility(View.VISIBLE);
             eventNameEditText.setText(event.getName());
             eventLocationEditText.setText(event.getLocation());
             eventStartTimeTextView.setText(event.getStartTime());
@@ -417,6 +421,7 @@ public class EventEditFragment extends Fragment implements MenuProvider {
         if (menuItem.getItemId() == R.id.saveOptionsMenu || menuItem.getItemId() == R.id.cancelOptionsMenu) {
 
             //set clickability of views and edit texts
+            eventUploadPosterTextView.setVisibility(View.INVISIBLE);
             setTextViewsClickablity(false);
             if(validateInput()){
             //save changes to event details

@@ -8,8 +8,7 @@
         android:id="@+id/cv_image_list_item"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginVertical="5dp"
 
         app:cardBackgroundColor="@color/cold_grey_light"
         app:cardCornerRadius="15dp"
@@ -24,7 +23,6 @@
             android:layout_height="match_parent"
             android:layout_width="match_parent"
             android:src="@drawable/ic_menu_gallery"
-            android:foreground="@drawable/image_browse_gradient"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
@@ -35,15 +33,24 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_browse_event_details"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingStart="25dp"
-            android:paddingEnd="15dp"
-            android:paddingBottom="15dp">
+            android:layout_height="match_parent" >
+
+            <ImageView
+                android:id="@+id/iv_image_browse_gradient"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/image_browse_gradient"
+                android:adjustViewBounds="true"
+                android:scaleType="fitStart"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
             <TextView
                 android:id="@+id/tv_imageBrowse_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="25dp"
                 android:text="@string/event_name"
                 android:fontFamily="@font/helvetica_bold"
                 android:textSize="24sp"
@@ -54,6 +61,7 @@
                 android:id="@+id/tv_imageBrowse_subtitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="25dp"
                 android:text="@string/location"
                 android:fontFamily="@font/helvetica"
                 android:textSize="18sp"
@@ -64,8 +72,10 @@
                 android:id="@+id/tv_imageBrowse_subtext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="25dp"
+                android:layout_marginBottom="15dp"
                 android:text="@string/date"
-                android:fontFamily="@font/helvetica"
+                android:fontFamily="@font/helvetica_oblique"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
